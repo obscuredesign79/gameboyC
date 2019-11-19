@@ -1,0 +1,1256 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.5.0 #9253 (Mar 19 2016) (Linux)
+                              4 ; This file was generated Wed Oct 30 13:59:25 2019
+                              5 ;--------------------------------------------------------
+                              6 	.module main
+                              7 	.optsdcc -mgbz80
+                              8 	
+                              9 ;--------------------------------------------------------
+                             10 ; Public variables in this module
+                             11 ;--------------------------------------------------------
+                             12 	.globl _main
+                             13 	.globl _setupMata
+                             14 	.globl _setupIngot
+                             15 	.globl _moveGameCharacter
+                             16 	.globl _checkCollisions
+                             17 	.globl _performantDelay
+                             18 	.globl _printf
+                             19 	.globl _move_sprite
+                             20 	.globl _set_sprite_tile
+                             21 	.globl _set_sprite_data
+                             22 	.globl _wait_vbl_done
+                             23 	.globl _joypad
+                             24 	.globl _spriteSize
+                             25 	.globl _mata
+                             26 	.globl _ingot
+                             27 	.globl _gameSprite
+                             28 ;--------------------------------------------------------
+                             29 ; ram data
+                             30 ;--------------------------------------------------------
+                             31 	.area _DATA
+   0000                      32 _gameSprite::
+   0000                      33 	.ds 128
+   0080                      34 _ingot::
+   0080                      35 	.ds 8
+   0088                      36 _mata::
+   0088                      37 	.ds 8
+   0090                      38 _spriteSize::
+   0090                      39 	.ds 1
+                             40 ;--------------------------------------------------------
+                             41 ; absolute external ram data
+                             42 ;--------------------------------------------------------
+                             43 	.area _DABS (ABS)
+                             44 ;--------------------------------------------------------
+                             45 ; global & static initialisations
+                             46 ;--------------------------------------------------------
+                             47 	.area _HOME
+                             48 	.area _GSINIT
+                             49 	.area _GSFINAL
+                             50 	.area _GSINIT
+                             51 ;gameSprite.c:26: unsigned char gameSprite[] =
+   0000 21r00r00             52 	ld	hl,#_gameSprite
+   0003 36 1F                53 	ld	(hl),#0x1F
+   0005 21r01r00             54 	ld	hl,#(_gameSprite + 0x0001)
+   0008 36 1F                55 	ld	(hl),#0x1F
+   000A 21r02r00             56 	ld	hl,#(_gameSprite + 0x0002)
+   000D 36 3F                57 	ld	(hl),#0x3F
+   000F 21r03r00             58 	ld	hl,#(_gameSprite + 0x0003)
+   0012 36 3F                59 	ld	(hl),#0x3F
+   0014 21r04r00             60 	ld	hl,#(_gameSprite + 0x0004)
+   0017 36 6F                61 	ld	(hl),#0x6F
+   0019 21r05r00             62 	ld	hl,#(_gameSprite + 0x0005)
+   001C 36 6C                63 	ld	(hl),#0x6C
+   001E 21r06r00             64 	ld	hl,#(_gameSprite + 0x0006)
+   0021 36 0F                65 	ld	(hl),#0x0F
+   0023 21r07r00             66 	ld	hl,#(_gameSprite + 0x0007)
+   0026 36 0E                67 	ld	(hl),#0x0E
+   0028 21r08r00             68 	ld	hl,#(_gameSprite + 0x0008)
+   002B 36 6F                69 	ld	(hl),#0x6F
+   002D 21r09r00             70 	ld	hl,#(_gameSprite + 0x0009)
+   0030 36 6F                71 	ld	(hl),#0x6F
+   0032 21r0Ar00             72 	ld	hl,#(_gameSprite + 0x000a)
+   0035 36 7F                73 	ld	(hl),#0x7F
+   0037 21r0Br00             74 	ld	hl,#(_gameSprite + 0x000b)
+   003A 36 5C                75 	ld	(hl),#0x5C
+   003C 21r0Cr00             76 	ld	hl,#(_gameSprite + 0x000c)
+   003F 36 7F                77 	ld	(hl),#0x7F
+   0041 21r0Dr00             78 	ld	hl,#(_gameSprite + 0x000d)
+   0044 36 47                79 	ld	(hl),#0x47
+   0046 21r0Er00             80 	ld	hl,#(_gameSprite + 0x000e)
+   0049 36 7F                81 	ld	(hl),#0x7F
+   004B 21r0Fr00             82 	ld	hl,#(_gameSprite + 0x000f)
+   004E 36 43                83 	ld	(hl),#0x43
+   0050 21r10r00             84 	ld	hl,#(_gameSprite + 0x0010)
+   0053 36 C0                85 	ld	(hl),#0xC0
+   0055 21r11r00             86 	ld	hl,#(_gameSprite + 0x0011)
+   0058 36 C0                87 	ld	(hl),#0xC0
+   005A 21r12r00             88 	ld	hl,#(_gameSprite + 0x0012)
+   005D 36 E0                89 	ld	(hl),#0xE0
+   005F 21r13r00             90 	ld	hl,#(_gameSprite + 0x0013)
+   0062 36 E0                91 	ld	(hl),#0xE0
+   0064 21r14r00             92 	ld	hl,#(_gameSprite + 0x0014)
+   0067 36 F0                93 	ld	(hl),#0xF0
+   0069 21r15r00             94 	ld	hl,#(_gameSprite + 0x0015)
+   006C 36 30                95 	ld	(hl),#0x30
+   006E 21r16r00             96 	ld	hl,#(_gameSprite + 0x0016)
+   0071 36 F0                97 	ld	(hl),#0xF0
+   0073 21r17r00             98 	ld	hl,#(_gameSprite + 0x0017)
+   0076 36 50                99 	ld	(hl),#0x50
+   0078 21r18r00            100 	ld	hl,#(_gameSprite + 0x0018)
+   007B 36 FC               101 	ld	(hl),#0xFC
+   007D 21r19r00            102 	ld	hl,#(_gameSprite + 0x0019)
+   0080 36 1C               103 	ld	(hl),#0x1C
+   0082 21r1Ar00            104 	ld	hl,#(_gameSprite + 0x001a)
+   0085 36 F8               105 	ld	(hl),#0xF8
+   0087 21r1Br00            106 	ld	hl,#(_gameSprite + 0x001b)
+   008A 36 38               107 	ld	(hl),#0x38
+   008C 21r1Cr00            108 	ld	hl,#(_gameSprite + 0x001c)
+   008F 36 E3               109 	ld	(hl),#0xE3
+   0091 21r1Dr00            110 	ld	hl,#(_gameSprite + 0x001d)
+   0094 36 E3               111 	ld	(hl),#0xE3
+   0096 21r1Er00            112 	ld	hl,#(_gameSprite + 0x001e)
+   0099 36 FE               113 	ld	(hl),#0xFE
+   009B 21r1Fr00            114 	ld	hl,#(_gameSprite + 0x001f)
+   009E 36 FE               115 	ld	(hl),#0xFE
+   00A0 21r20r00            116 	ld	hl,#(_gameSprite + 0x0020)
+   00A3 36 3F               117 	ld	(hl),#0x3F
+   00A5 21r21r00            118 	ld	hl,#(_gameSprite + 0x0021)
+   00A8 36 3E               119 	ld	(hl),#0x3E
+   00AA 21r22r00            120 	ld	hl,#(_gameSprite + 0x0022)
+   00AD 36 03               121 	ld	(hl),#0x03
+   00AF 21r23r00            122 	ld	hl,#(_gameSprite + 0x0023)
+   00B2 36 02               123 	ld	(hl),#0x02
+   00B4 21r24r00            124 	ld	hl,#(_gameSprite + 0x0024)
+   00B7 36 03               125 	ld	(hl),#0x03
+   00B9 21r25r00            126 	ld	hl,#(_gameSprite + 0x0025)
+   00BC 36 02               127 	ld	(hl),#0x02
+   00BE 21r26r00            128 	ld	hl,#(_gameSprite + 0x0026)
+   00C1 36 07               129 	ld	(hl),#0x07
+   00C3 21r27r00            130 	ld	hl,#(_gameSprite + 0x0027)
+   00C6 36 07               131 	ld	(hl),#0x07
+   00C8 21r28r00            132 	ld	hl,#(_gameSprite + 0x0028)
+   00CB 36 2C               133 	ld	(hl),#0x2C
+   00CD 21r29r00            134 	ld	hl,#(_gameSprite + 0x0029)
+   00D0 36 2C               135 	ld	(hl),#0x2C
+   00D2 21r2Ar00            136 	ld	hl,#(_gameSprite + 0x002a)
+   00D5 36 78               137 	ld	(hl),#0x78
+   00D7 21r2Br00            138 	ld	hl,#(_gameSprite + 0x002b)
+   00DA 36 78               139 	ld	(hl),#0x78
+   00DC 21r2Cr00            140 	ld	hl,#(_gameSprite + 0x002c)
+   00DF 36 50               141 	ld	(hl),#0x50
+   00E1 21r2Dr00            142 	ld	hl,#(_gameSprite + 0x002d)
+   00E4 36 50               143 	ld	(hl),#0x50
+   00E6 01r2Er00            144 	ld	bc,#_gameSprite + 46
+   00E9 AF                  145 	xor	a, a
+   00EA 02                  146 	ld	(bc),a
+   00EB 01r2Fr00            147 	ld	bc,#_gameSprite + 47
+   00EE AF                  148 	xor	a, a
+   00EF 02                  149 	ld	(bc),a
+   00F0 21r30r00            150 	ld	hl,#(_gameSprite + 0x0030)
+   00F3 36 E0               151 	ld	(hl),#0xE0
+   00F5 21r31r00            152 	ld	hl,#(_gameSprite + 0x0031)
+   00F8 36 20               153 	ld	(hl),#0x20
+   00FA 21r32r00            154 	ld	hl,#(_gameSprite + 0x0032)
+   00FD 36 E0               155 	ld	(hl),#0xE0
+   00FF 21r33r00            156 	ld	hl,#(_gameSprite + 0x0033)
+   0102 36 20               157 	ld	(hl),#0x20
+   0104 21r34r00            158 	ld	hl,#(_gameSprite + 0x0034)
+   0107 36 F0               159 	ld	(hl),#0xF0
+   0109 21r35r00            160 	ld	hl,#(_gameSprite + 0x0035)
+   010C 36 70               161 	ld	(hl),#0x70
+   010E 21r36r00            162 	ld	hl,#(_gameSprite + 0x0036)
+   0111 36 D8               163 	ld	(hl),#0xD8
+   0113 21r37r00            164 	ld	hl,#(_gameSprite + 0x0037)
+   0116 36 D8               165 	ld	(hl),#0xD8
+   0118 21r38r00            166 	ld	hl,#(_gameSprite + 0x0038)
+   011B 36 08               167 	ld	(hl),#0x08
+   011D 21r39r00            168 	ld	hl,#(_gameSprite + 0x0039)
+   0120 36 08               169 	ld	(hl),#0x08
+   0122 21r3Ar00            170 	ld	hl,#(_gameSprite + 0x003a)
+   0125 36 18               171 	ld	(hl),#0x18
+   0127 21r3Br00            172 	ld	hl,#(_gameSprite + 0x003b)
+   012A 36 18               173 	ld	(hl),#0x18
+   012C 21r3Cr00            174 	ld	hl,#(_gameSprite + 0x003c)
+   012F 36 18               175 	ld	(hl),#0x18
+   0131 21r3Dr00            176 	ld	hl,#(_gameSprite + 0x003d)
+   0134 36 18               177 	ld	(hl),#0x18
+   0136 21r3Er00            178 	ld	hl,#(_gameSprite + 0x003e)
+   0139 36 0C               179 	ld	(hl),#0x0C
+   013B 21r3Fr00            180 	ld	hl,#(_gameSprite + 0x003f)
+   013E 36 0C               181 	ld	(hl),#0x0C
+   0140 01r40r00            182 	ld	bc,#_gameSprite + 64
+   0143 AF                  183 	xor	a, a
+   0144 02                  184 	ld	(bc),a
+   0145 01r41r00            185 	ld	bc,#_gameSprite + 65
+   0148 AF                  186 	xor	a, a
+   0149 02                  187 	ld	(bc),a
+   014A 21r42r00            188 	ld	hl,#(_gameSprite + 0x0042)
+   014D 36 01               189 	ld	(hl),#0x01
+   014F 21r43r00            190 	ld	hl,#(_gameSprite + 0x0043)
+   0152 36 01               191 	ld	(hl),#0x01
+   0154 21r44r00            192 	ld	hl,#(_gameSprite + 0x0044)
+   0157 36 0F               193 	ld	(hl),#0x0F
+   0159 21r45r00            194 	ld	hl,#(_gameSprite + 0x0045)
+   015C 36 0F               195 	ld	(hl),#0x0F
+   015E 21r46r00            196 	ld	hl,#(_gameSprite + 0x0046)
+   0161 36 18               197 	ld	(hl),#0x18
+   0163 21r47r00            198 	ld	hl,#(_gameSprite + 0x0047)
+   0166 36 1F               199 	ld	(hl),#0x1F
+   0168 21r48r00            200 	ld	hl,#(_gameSprite + 0x0048)
+   016B 36 10               201 	ld	(hl),#0x10
+   016D 21r49r00            202 	ld	hl,#(_gameSprite + 0x0049)
+   0170 36 1F               203 	ld	(hl),#0x1F
+   0172 21r4Ar00            204 	ld	hl,#(_gameSprite + 0x004a)
+   0175 36 30               205 	ld	(hl),#0x30
+   0177 21r4Br00            206 	ld	hl,#(_gameSprite + 0x004b)
+   017A 36 3F               207 	ld	(hl),#0x3F
+   017C 21r4Cr00            208 	ld	hl,#(_gameSprite + 0x004c)
+   017F 36 21               209 	ld	(hl),#0x21
+   0181 21r4Dr00            210 	ld	hl,#(_gameSprite + 0x004d)
+   0184 36 3F               211 	ld	(hl),#0x3F
+   0186 21r4Er00            212 	ld	hl,#(_gameSprite + 0x004e)
+   0189 36 27               213 	ld	(hl),#0x27
+   018B 21r4Fr00            214 	ld	hl,#(_gameSprite + 0x004f)
+   018E 36 3F               215 	ld	(hl),#0x3F
+   0190 01r50r00            216 	ld	bc,#_gameSprite + 80
+   0193 AF                  217 	xor	a, a
+   0194 02                  218 	ld	(bc),a
+   0195 01r51r00            219 	ld	bc,#_gameSprite + 81
+   0198 AF                  220 	xor	a, a
+   0199 02                  221 	ld	(bc),a
+   019A 21r52r00            222 	ld	hl,#(_gameSprite + 0x0052)
+   019D 36 C0               223 	ld	(hl),#0xC0
+   019F 21r53r00            224 	ld	hl,#(_gameSprite + 0x0053)
+   01A2 36 C0               225 	ld	(hl),#0xC0
+   01A4 21r54r00            226 	ld	hl,#(_gameSprite + 0x0054)
+   01A7 36 30               227 	ld	(hl),#0x30
+   01A9 21r55r00            228 	ld	hl,#(_gameSprite + 0x0055)
+   01AC 36 F0               229 	ld	(hl),#0xF0
+   01AE 21r56r00            230 	ld	hl,#(_gameSprite + 0x0056)
+   01B1 36 08               231 	ld	(hl),#0x08
+   01B3 21r57r00            232 	ld	hl,#(_gameSprite + 0x0057)
+   01B6 36 F8               233 	ld	(hl),#0xF8
+   01B8 21r58r00            234 	ld	hl,#(_gameSprite + 0x0058)
+   01BB 36 3C               235 	ld	(hl),#0x3C
+   01BD 21r59r00            236 	ld	hl,#(_gameSprite + 0x0059)
+   01C0 36 FC               237 	ld	(hl),#0xFC
+   01C2 21r5Ar00            238 	ld	hl,#(_gameSprite + 0x005a)
+   01C5 36 FC               239 	ld	(hl),#0xFC
+   01C7 21r5Br00            240 	ld	hl,#(_gameSprite + 0x005b)
+   01CA 36 E4               241 	ld	(hl),#0xE4
+   01CC 21r5Cr00            242 	ld	hl,#(_gameSprite + 0x005c)
+   01CF 36 FE               243 	ld	(hl),#0xFE
+   01D1 21r5Dr00            244 	ld	hl,#(_gameSprite + 0x005d)
+   01D4 36 86               245 	ld	(hl),#0x86
+   01D6 21r5Er00            246 	ld	hl,#(_gameSprite + 0x005e)
+   01D9 36 FE               247 	ld	(hl),#0xFE
+   01DB 21r5Fr00            248 	ld	hl,#(_gameSprite + 0x005f)
+   01DE 36 C2               249 	ld	(hl),#0xC2
+   01E0 21r60r00            250 	ld	hl,#(_gameSprite + 0x0060)
+   01E3 36 27               251 	ld	(hl),#0x27
+   01E5 21r61r00            252 	ld	hl,#(_gameSprite + 0x0061)
+   01E8 36 3C               253 	ld	(hl),#0x3C
+   01EA 21r62r00            254 	ld	hl,#(_gameSprite + 0x0062)
+   01ED 36 2F               255 	ld	(hl),#0x2F
+   01EF 21r63r00            256 	ld	hl,#(_gameSprite + 0x0063)
+   01F2 36 3C               257 	ld	(hl),#0x3C
+   01F4 21r64r00            258 	ld	hl,#(_gameSprite + 0x0064)
+   01F7 36 2F               259 	ld	(hl),#0x2F
+   01F9 21r65r00            260 	ld	hl,#(_gameSprite + 0x0065)
+   01FC 36 38               261 	ld	(hl),#0x38
+   01FE 21r66r00            262 	ld	hl,#(_gameSprite + 0x0066)
+   0201 36 3F               263 	ld	(hl),#0x3F
+   0203 21r67r00            264 	ld	hl,#(_gameSprite + 0x0067)
+   0206 36 38               265 	ld	(hl),#0x38
+   0208 21r68r00            266 	ld	hl,#(_gameSprite + 0x0068)
+   020B 36 1F               267 	ld	(hl),#0x1F
+   020D 21r69r00            268 	ld	hl,#(_gameSprite + 0x0069)
+   0210 36 18               269 	ld	(hl),#0x18
+   0212 21r6Ar00            270 	ld	hl,#(_gameSprite + 0x006a)
+   0215 36 0F               271 	ld	(hl),#0x0F
+   0217 21r6Br00            272 	ld	hl,#(_gameSprite + 0x006b)
+   021A 36 0E               273 	ld	(hl),#0x0E
+   021C 21r6Cr00            274 	ld	hl,#(_gameSprite + 0x006c)
+   021F 36 03               275 	ld	(hl),#0x03
+   0221 21r6Dr00            276 	ld	hl,#(_gameSprite + 0x006d)
+   0224 36 03               277 	ld	(hl),#0x03
+   0226 01r6Er00            278 	ld	bc,#_gameSprite + 110
+   0229 AF                  279 	xor	a, a
+   022A 02                  280 	ld	(bc),a
+   022B 01r6Fr00            281 	ld	bc,#_gameSprite + 111
+   022E AF                  282 	xor	a, a
+   022F 02                  283 	ld	(bc),a
+   0230 21r70r00            284 	ld	hl,#(_gameSprite + 0x0070)
+   0233 36 FE               285 	ld	(hl),#0xFE
+   0235 21r71r00            286 	ld	hl,#(_gameSprite + 0x0071)
+   0238 36 C2               287 	ld	(hl),#0xC2
+   023A 21r72r00            288 	ld	hl,#(_gameSprite + 0x0072)
+   023D 36 FE               289 	ld	(hl),#0xFE
+   023F 21r73r00            290 	ld	hl,#(_gameSprite + 0x0073)
+   0242 36 06               291 	ld	(hl),#0x06
+   0244 21r74r00            292 	ld	hl,#(_gameSprite + 0x0074)
+   0247 36 FC               293 	ld	(hl),#0xFC
+   0249 21r75r00            294 	ld	hl,#(_gameSprite + 0x0075)
+   024C 36 0C               295 	ld	(hl),#0x0C
+   024E 21r76r00            296 	ld	hl,#(_gameSprite + 0x0076)
+   0251 36 F8               297 	ld	(hl),#0xF8
+   0253 21r77r00            298 	ld	hl,#(_gameSprite + 0x0077)
+   0256 36 18               299 	ld	(hl),#0x18
+   0258 21r78r00            300 	ld	hl,#(_gameSprite + 0x0078)
+   025B 36 F0               301 	ld	(hl),#0xF0
+   025D 21r79r00            302 	ld	hl,#(_gameSprite + 0x0079)
+   0260 36 30               303 	ld	(hl),#0x30
+   0262 21r7Ar00            304 	ld	hl,#(_gameSprite + 0x007a)
+   0265 36 E0               305 	ld	(hl),#0xE0
+   0267 21r7Br00            306 	ld	hl,#(_gameSprite + 0x007b)
+   026A 36 E0               307 	ld	(hl),#0xE0
+   026C 21r7Cr00            308 	ld	hl,#(_gameSprite + 0x007c)
+   026F 36 80               309 	ld	(hl),#0x80
+   0271 21r7Dr00            310 	ld	hl,#(_gameSprite + 0x007d)
+   0274 36 80               311 	ld	(hl),#0x80
+   0276 01r7Er00            312 	ld	bc,#_gameSprite + 126
+   0279 AF                  313 	xor	a, a
+   027A 02                  314 	ld	(bc),a
+   027B 01r7Fr00            315 	ld	bc,#_gameSprite + 127
+   027E AF                  316 	xor	a, a
+   027F 02                  317 	ld	(bc),a
+                            318 ;main.c:8: UBYTE spriteSize=8;
+   0280 21r90r00            319 	ld	hl,#_spriteSize
+   0283 36 08               320 	ld	(hl),#0x08
+                            321 ;--------------------------------------------------------
+                            322 ; Home
+                            323 ;--------------------------------------------------------
+                            324 	.area _HOME
+                            325 	.area _HOME
+                            326 ;--------------------------------------------------------
+                            327 ; code
+                            328 ;--------------------------------------------------------
+                            329 	.area _CODE
+                            330 ;main.c:10: void performantDelay(UINT8 numloops){
+                            331 ;	---------------------------------
+                            332 ; Function performantDelay
+                            333 ; ---------------------------------
+   0000                     334 _performantDelay::
+                            335 ;main.c:13: for(i=0;i<numloops;i++){
+   0000 06 00               336 	ld	b,#0x00
+   0002                     337 00103$:
+   0002 78                  338 	ld	a,b
+   0003 F8 02               339 	ldhl	sp,#2
+   0005 96                  340 	sub	a, (hl)
+   0006 D0                  341 	ret	NC
+                            342 ;main.c:14: wait_vbl_done();
+   0007 C5                  343 	push	bc
+   0008 CDr00r00            344 	call	_wait_vbl_done
+   000B C1                  345 	pop	bc
+                            346 ;main.c:13: for(i=0;i<numloops;i++){
+   000C 04                  347 	inc	b
+   000D 18 F3               348 	jr	00103$
+   000F C9                  349 	ret
+                            350 ;main.c:18: UBYTE checkCollisions(gameCharacter* one, gameCharacter* two){
+                            351 ;	---------------------------------
+                            352 ; Function checkCollisions
+                            353 ; ---------------------------------
+   0010                     354 _checkCollisions::
+   0010 E8 ED               355 	add	sp, #-19
+                            356 ;main.c:19: return(one->x +4 >= two->x +4 && one->x +4 <= two->x + two->width -4) && (one->y +4 >= two->y +4 && one->y +4 <= two->y + two->height -4) || (two->x +4 >= one->x +4 && two->x +4 <= one->x + one->width -4) && (two->y +4 >= one->y +4 && two->y +4 <= one->y + one->height -4);
+   0012 F8 15               357 	ldhl	sp,#21
+   0014 2A                  358 	ld	a,(hl+)
+   0015 5E                  359 	ld	e, (hl)
+   0016 F8 11               360 	ldhl	sp,#17
+   0018 22                  361 	ld	(hl+),a
+   0019 73                  362 	ld	(hl),e
+   001A 2B                  363 	dec	hl
+   001B 5E                  364 	ld	e,(hl)
+   001C 23                  365 	inc	hl
+   001D 56                  366 	ld	d,(hl)
+   001E 21 04 00            367 	ld	hl,#0x0004
+   0021 19                  368 	add	hl,de
+   0022 4D                  369 	ld	c,l
+   0023 44                  370 	ld	b,h
+   0024 0A                  371 	ld	a,(bc)
+   0025 F8 04               372 	ldhl	sp,#4
+   0027 22                  373 	ld	(hl+),a
+   0028 36 00               374 	ld	(hl),#0x00
+   002A 2B                  375 	dec	hl
+   002B 5E                  376 	ld	e,(hl)
+   002C 23                  377 	inc	hl
+   002D 56                  378 	ld	d,(hl)
+   002E 21 04 00            379 	ld	hl,#0x0004
+   0031 19                  380 	add	hl,de
+   0032 7D                  381 	ld	a,l
+   0033 54                  382 	ld	d,h
+   0034 F8 02               383 	ldhl	sp,#2
+   0036 22                  384 	ld	(hl+),a
+   0037 72                  385 	ld	(hl),d
+   0038 F8 17               386 	ldhl	sp,#23
+   003A 2A                  387 	ld	a,(hl+)
+   003B 5E                  388 	ld	e, (hl)
+   003C F8 00               389 	ldhl	sp,#0
+   003E 22                  390 	ld	(hl+),a
+   003F 73                  391 	ld	(hl),e
+   0040 D1                  392 	pop	de
+   0041 D5                  393 	push	de
+   0042 21 04 00            394 	ld	hl,#0x0004
+   0045 19                  395 	add	hl,de
+   0046 4D                  396 	ld	c,l
+   0047 44                  397 	ld	b,h
+   0048 0A                  398 	ld	a,(bc)
+   0049 F8 0D               399 	ldhl	sp,#13
+   004B 22                  400 	ld	(hl+),a
+   004C 36 00               401 	ld	(hl),#0x00
+   004E 2B                  402 	dec	hl
+   004F 5E                  403 	ld	e,(hl)
+   0050 23                  404 	inc	hl
+   0051 56                  405 	ld	d,(hl)
+   0052 21 04 00            406 	ld	hl,#0x0004
+   0055 19                  407 	add	hl,de
+   0056 7D                  408 	ld	a,l
+   0057 54                  409 	ld	d,h
+   0058 F8 0B               410 	ldhl	sp,#11
+   005A 22                  411 	ld	(hl+),a
+   005B 72                  412 	ld	(hl),d
+   005C F8 12               413 	ldhl	sp,#18
+   005E 2B                  414 	dec	hl
+   005F 5E                  415 	ld	e,(hl)
+   0060 23                  416 	inc	hl
+   0061 56                  417 	ld	d,(hl)
+   0062 21 05 00            418 	ld	hl,#0x0005
+   0065 19                  419 	add	hl,de
+   0066 7D                  420 	ld	a,l
+   0067 54                  421 	ld	d,h
+   0068 F8 09               422 	ldhl	sp,#9
+   006A 22                  423 	ld	(hl+),a
+   006B 72                  424 	ld	(hl),d
+   006C D1                  425 	pop	de
+   006D D5                  426 	push	de
+   006E 21 05 00            427 	ld	hl,#0x0005
+   0071 19                  428 	add	hl,de
+   0072 7D                  429 	ld	a,l
+   0073 54                  430 	ld	d,h
+   0074 F8 07               431 	ldhl	sp,#7
+   0076 22                  432 	ld	(hl+),a
+   0077 72                  433 	ld	(hl),d
+   0078 F8 02               434 	ldhl	sp,#2
+   007A 54                  435 	ld	d, h
+   007B 5D                  436 	ld	e, l
+   007C F8 0B               437 	ldhl	sp,#11
+   007E 1A                  438 	ld	a, (de)
+   007F 96                  439 	sub	a, (hl)
+   0080 23                  440 	inc	hl
+   0081 13                  441 	inc	de
+   0082 1A                  442 	ld	a, (de)
+   0083 9E                  443 	sbc	a, (hl)
+   0084 1A                  444 	ld	a, (de)
+   0085 57                  445 	ld	d, a
+   0086 5E                  446 	ld	e, (hl)
+   0087 CB 7B               447 	bit	7, e
+   0089 28 07               448 	jr	Z,00146$
+   008B CB 7A               449 	bit	7, d
+   008D 20 08               450 	jr	NZ,00147$
+   008F BF                  451 	cp	a, a
+   0090 18 05               452 	jr	00147$
+   0092                     453 00146$:
+   0092 CB 7A               454 	bit	7, d
+   0094 28 01               455 	jr	Z,00147$
+   0096 37                  456 	scf
+   0097                     457 00147$:
+   0097 DAr53r01            458 	jp	C,00108$
+   009A D1                  459 	pop	de
+   009B D5                  460 	push	de
+   009C 21 06 00            461 	ld	hl,#0x0006
+   009F 19                  462 	add	hl,de
+   00A0 4D                  463 	ld	c,l
+   00A1 44                  464 	ld	b,h
+   00A2 0A                  465 	ld	a,(bc)
+   00A3 4F                  466 	ld	c,a
+   00A4 06 00               467 	ld	b,#0x00
+   00A6 F8 0D               468 	ldhl	sp,#13
+   00A8 2A                  469 	ld	a,(hl+)
+   00A9 66                  470 	ld	h,(hl)
+   00AA 6F                  471 	ld	l,a
+   00AB 09                  472 	add	hl,bc
+   00AC 4D                  473 	ld	c,l
+   00AD 44                  474 	ld	b,h
+   00AE 79                  475 	ld	a,c
+   00AF C6 FC               476 	add	a,#0xFC
+   00B1 4F                  477 	ld	c,a
+   00B2 78                  478 	ld	a,b
+   00B3 CE FF               479 	adc	a,#0xFF
+   00B5 47                  480 	ld	b,a
+   00B6 F8 02               481 	ldhl	sp,#2
+   00B8 79                  482 	ld	a,c
+   00B9 96                  483 	sub	a, (hl)
+   00BA 23                  484 	inc	hl
+   00BB 78                  485 	ld	a,b
+   00BC 9E                  486 	sbc	a, (hl)
+   00BD 78                  487 	ld	a,b
+   00BE 57                  488 	ld	d, a
+   00BF 5E                  489 	ld	e, (hl)
+   00C0 CB 7B               490 	bit	7, e
+   00C2 28 07               491 	jr	Z,00148$
+   00C4 CB 7A               492 	bit	7, d
+   00C6 20 08               493 	jr	NZ,00149$
+   00C8 BF                  494 	cp	a, a
+   00C9 18 05               495 	jr	00149$
+   00CB                     496 00148$:
+   00CB CB 7A               497 	bit	7, d
+   00CD 28 01               498 	jr	Z,00149$
+   00CF 37                  499 	scf
+   00D0                     500 00149$:
+   00D0 DAr53r01            501 	jp	C,00108$
+   00D3 F8 0A               502 	ldhl	sp,#10
+   00D5 2B                  503 	dec	hl
+   00D6 5E                  504 	ld	e,(hl)
+   00D7 23                  505 	inc	hl
+   00D8 56                  506 	ld	d,(hl)
+   00D9 1A                  507 	ld	a,(de)
+   00DA 4F                  508 	ld	c,a
+   00DB 06 00               509 	ld	b,#0x00
+   00DD 21 04 00            510 	ld	hl,#0x0004
+   00E0 09                  511 	add	hl,bc
+   00E1 7D                  512 	ld	a,l
+   00E2 54                  513 	ld	d,h
+   00E3 F8 0D               514 	ldhl	sp,#13
+   00E5 22                  515 	ld	(hl+),a
+   00E6 72                  516 	ld	(hl),d
+   00E7 F8 08               517 	ldhl	sp,#8
+   00E9 2B                  518 	dec	hl
+   00EA 5E                  519 	ld	e,(hl)
+   00EB 23                  520 	inc	hl
+   00EC 56                  521 	ld	d,(hl)
+   00ED 1A                  522 	ld	a,(de)
+   00EE F8 0F               523 	ldhl	sp,#15
+   00F0 22                  524 	ld	(hl+),a
+   00F1 36 00               525 	ld	(hl),#0x00
+   00F3 2B                  526 	dec	hl
+   00F4 5E                  527 	ld	e,(hl)
+   00F5 23                  528 	inc	hl
+   00F6 56                  529 	ld	d,(hl)
+   00F7 21 04 00            530 	ld	hl,#0x0004
+   00FA 19                  531 	add	hl,de
+   00FB 45                  532 	ld	b,l
+   00FC 4C                  533 	ld	c,h
+   00FD F8 0D               534 	ldhl	sp,#13
+   00FF 7E                  535 	ld	a, (hl)
+   0100 90                  536 	sub	a, b
+   0101 23                  537 	inc	hl
+   0102 7E                  538 	ld	a, (hl)
+   0103 99                  539 	sbc	a, c
+   0104 56                  540 	ld	d, (hl)
+   0105 79                  541 	ld	a,c
+   0106 5F                  542 	ld	e, a
+   0107 CB 7B               543 	bit	7, e
+   0109 28 07               544 	jr	Z,00150$
+   010B CB 7A               545 	bit	7, d
+   010D 20 08               546 	jr	NZ,00151$
+   010F BF                  547 	cp	a, a
+   0110 18 05               548 	jr	00151$
+   0112                     549 00150$:
+   0112 CB 7A               550 	bit	7, d
+   0114 28 01               551 	jr	Z,00151$
+   0116 37                  552 	scf
+   0117                     553 00151$:
+   0117 DAr53r01            554 	jp	C,00108$
+   011A D1                  555 	pop	de
+   011B D5                  556 	push	de
+   011C 21 07 00            557 	ld	hl,#0x0007
+   011F 19                  558 	add	hl,de
+   0120 4D                  559 	ld	c,l
+   0121 44                  560 	ld	b,h
+   0122 0A                  561 	ld	a,(bc)
+   0123 4F                  562 	ld	c,a
+   0124 06 00               563 	ld	b,#0x00
+   0126 F8 0F               564 	ldhl	sp,#15
+   0128 2A                  565 	ld	a,(hl+)
+   0129 66                  566 	ld	h,(hl)
+   012A 6F                  567 	ld	l,a
+   012B 09                  568 	add	hl,bc
+   012C 4D                  569 	ld	c,l
+   012D 44                  570 	ld	b,h
+   012E 79                  571 	ld	a,c
+   012F C6 FC               572 	add	a,#0xFC
+   0131 4F                  573 	ld	c,a
+   0132 78                  574 	ld	a,b
+   0133 CE FF               575 	adc	a,#0xFF
+   0135 47                  576 	ld	b,a
+   0136 F8 0D               577 	ldhl	sp,#13
+   0138 79                  578 	ld	a,c
+   0139 96                  579 	sub	a, (hl)
+   013A 23                  580 	inc	hl
+   013B 78                  581 	ld	a,b
+   013C 9E                  582 	sbc	a, (hl)
+   013D 78                  583 	ld	a,b
+   013E 57                  584 	ld	d, a
+   013F 5E                  585 	ld	e, (hl)
+   0140 CB 7B               586 	bit	7, e
+   0142 28 07               587 	jr	Z,00152$
+   0144 CB 7A               588 	bit	7, d
+   0146 20 08               589 	jr	NZ,00153$
+   0148 BF                  590 	cp	a, a
+   0149 18 05               591 	jr	00153$
+   014B                     592 00152$:
+   014B CB 7A               593 	bit	7, d
+   014D 28 01               594 	jr	Z,00153$
+   014F 37                  595 	scf
+   0150                     596 00153$:
+   0150 D2r73r02            597 	jp	NC,00104$
+   0153                     598 00108$:
+   0153 F8 0B               599 	ldhl	sp,#11
+   0155 54                  600 	ld	d, h
+   0156 5D                  601 	ld	e, l
+   0157 F8 02               602 	ldhl	sp,#2
+   0159 1A                  603 	ld	a, (de)
+   015A 96                  604 	sub	a, (hl)
+   015B 23                  605 	inc	hl
+   015C 13                  606 	inc	de
+   015D 1A                  607 	ld	a, (de)
+   015E 9E                  608 	sbc	a, (hl)
+   015F 1A                  609 	ld	a, (de)
+   0160 57                  610 	ld	d, a
+   0161 5E                  611 	ld	e, (hl)
+   0162 CB 7B               612 	bit	7, e
+   0164 28 07               613 	jr	Z,00154$
+   0166 CB 7A               614 	bit	7, d
+   0168 20 08               615 	jr	NZ,00155$
+   016A BF                  616 	cp	a, a
+   016B 18 05               617 	jr	00155$
+   016D                     618 00154$:
+   016D CB 7A               619 	bit	7, d
+   016F 28 01               620 	jr	Z,00155$
+   0171 37                  621 	scf
+   0172                     622 00155$:
+   0172 DAr6Dr02            623 	jp	C,00103$
+   0175 F8 12               624 	ldhl	sp,#18
+   0177 2B                  625 	dec	hl
+   0178 5E                  626 	ld	e,(hl)
+   0179 23                  627 	inc	hl
+   017A 56                  628 	ld	d,(hl)
+   017B 21 06 00            629 	ld	hl,#0x0006
+   017E 19                  630 	add	hl,de
+   017F 7D                  631 	ld	a,l
+   0180 54                  632 	ld	d,h
+   0181 F8 0F               633 	ldhl	sp,#15
+   0183 22                  634 	ld	(hl+),a
+   0184 72                  635 	ld	(hl),d
+   0185 2B                  636 	dec	hl
+   0186 5E                  637 	ld	e,(hl)
+   0187 23                  638 	inc	hl
+   0188 56                  639 	ld	d,(hl)
+   0189 1A                  640 	ld	a,(de)
+   018A 2B                  641 	dec	hl
+   018B 77                  642 	ld	(hl),a
+   018C 7E                  643 	ld	a,(hl)
+   018D 22                  644 	ld	(hl+),a
+   018E 36 00               645 	ld	(hl),#0x00
+   0190 2B                  646 	dec	hl
+   0191 5E                  647 	ld	e,(hl)
+   0192 23                  648 	inc	hl
+   0193 56                  649 	ld	d,(hl)
+   0194 F8 04               650 	ldhl	sp,#4
+   0196 2A                  651 	ld	a,(hl+)
+   0197 66                  652 	ld	h,(hl)
+   0198 6F                  653 	ld	l,a
+   0199 19                  654 	add	hl,de
+   019A 45                  655 	ld	b,l
+   019B 4C                  656 	ld	c,h
+   019C 78                  657 	ld	a,b
+   019D C6 FC               658 	add	a,#0xFC
+   019F 47                  659 	ld	b,a
+   01A0 79                  660 	ld	a,c
+   01A1 CE FF               661 	adc	a,#0xFF
+   01A3 4F                  662 	ld	c,a
+   01A4 F8 0B               663 	ldhl	sp,#11
+   01A6 78                  664 	ld	a,b
+   01A7 96                  665 	sub	a, (hl)
+   01A8 23                  666 	inc	hl
+   01A9 79                  667 	ld	a,c
+   01AA 9E                  668 	sbc	a, (hl)
+   01AB 79                  669 	ld	a,c
+   01AC 57                  670 	ld	d, a
+   01AD 5E                  671 	ld	e, (hl)
+   01AE CB 7B               672 	bit	7, e
+   01B0 28 07               673 	jr	Z,00156$
+   01B2 CB 7A               674 	bit	7, d
+   01B4 20 08               675 	jr	NZ,00157$
+   01B6 BF                  676 	cp	a, a
+   01B7 18 05               677 	jr	00157$
+   01B9                     678 00156$:
+   01B9 CB 7A               679 	bit	7, d
+   01BB 28 01               680 	jr	Z,00157$
+   01BD 37                  681 	scf
+   01BE                     682 00157$:
+   01BE DAr6Dr02            683 	jp	C,00103$
+   01C1 F8 08               684 	ldhl	sp,#8
+   01C3 2B                  685 	dec	hl
+   01C4 5E                  686 	ld	e,(hl)
+   01C5 23                  687 	inc	hl
+   01C6 56                  688 	ld	d,(hl)
+   01C7 1A                  689 	ld	a,(de)
+   01C8 F8 0F               690 	ldhl	sp,#15
+   01CA 22                  691 	ld	(hl+),a
+   01CB 36 00               692 	ld	(hl),#0x00
+   01CD 2B                  693 	dec	hl
+   01CE 5E                  694 	ld	e,(hl)
+   01CF 23                  695 	inc	hl
+   01D0 56                  696 	ld	d,(hl)
+   01D1 21 04 00            697 	ld	hl,#0x0004
+   01D4 19                  698 	add	hl,de
+   01D5 7D                  699 	ld	a,l
+   01D6 54                  700 	ld	d,h
+   01D7 F8 0F               701 	ldhl	sp,#15
+   01D9 22                  702 	ld	(hl+),a
+   01DA 72                  703 	ld	(hl),d
+   01DB F8 0A               704 	ldhl	sp,#10
+   01DD 2B                  705 	dec	hl
+   01DE 5E                  706 	ld	e,(hl)
+   01DF 23                  707 	inc	hl
+   01E0 56                  708 	ld	d,(hl)
+   01E1 1A                  709 	ld	a,(de)
+   01E2 F8 06               710 	ldhl	sp,#6
+   01E4 77                  711 	ld	(hl),a
+   01E5 2A                  712 	ld	a,(hl+)
+   01E6 22                  713 	ld	(hl+),a
+   01E7 36 00               714 	ld	(hl),#0x00
+   01E9 2B                  715 	dec	hl
+   01EA 5E                  716 	ld	e,(hl)
+   01EB 23                  717 	inc	hl
+   01EC 56                  718 	ld	d,(hl)
+   01ED 21 04 00            719 	ld	hl,#0x0004
+   01F0 19                  720 	add	hl,de
+   01F1 45                  721 	ld	b,l
+   01F2 4C                  722 	ld	c,h
+   01F3 F8 0F               723 	ldhl	sp,#15
+   01F5 7E                  724 	ld	a, (hl)
+   01F6 90                  725 	sub	a, b
+   01F7 23                  726 	inc	hl
+   01F8 7E                  727 	ld	a, (hl)
+   01F9 99                  728 	sbc	a, c
+   01FA 56                  729 	ld	d, (hl)
+   01FB 79                  730 	ld	a,c
+   01FC 5F                  731 	ld	e, a
+   01FD CB 7B               732 	bit	7, e
+   01FF 28 07               733 	jr	Z,00158$
+   0201 CB 7A               734 	bit	7, d
+   0203 20 08               735 	jr	NZ,00159$
+   0205 BF                  736 	cp	a, a
+   0206 18 05               737 	jr	00159$
+   0208                     738 00158$:
+   0208 CB 7A               739 	bit	7, d
+   020A 28 01               740 	jr	Z,00159$
+   020C 37                  741 	scf
+   020D                     742 00159$:
+   020D DAr6Dr02            743 	jp	C,00103$
+   0210 F8 12               744 	ldhl	sp,#18
+   0212 2B                  745 	dec	hl
+   0213 5E                  746 	ld	e,(hl)
+   0214 23                  747 	inc	hl
+   0215 56                  748 	ld	d,(hl)
+   0216 21 07 00            749 	ld	hl,#0x0007
+   0219 19                  750 	add	hl,de
+   021A 7D                  751 	ld	a,l
+   021B 54                  752 	ld	d,h
+   021C F8 09               753 	ldhl	sp,#9
+   021E 22                  754 	ld	(hl+),a
+   021F 72                  755 	ld	(hl),d
+   0220 2B                  756 	dec	hl
+   0221 5E                  757 	ld	e,(hl)
+   0222 23                  758 	inc	hl
+   0223 56                  759 	ld	d,(hl)
+   0224 1A                  760 	ld	a,(de)
+   0225 F8 06               761 	ldhl	sp,#6
+   0227 77                  762 	ld	(hl),a
+   0228 7E                  763 	ld	a,(hl)
+   0229 F8 09               764 	ldhl	sp,#9
+   022B 22                  765 	ld	(hl+),a
+   022C 36 00               766 	ld	(hl),#0x00
+   022E 2B                  767 	dec	hl
+   022F 5E                  768 	ld	e,(hl)
+   0230 23                  769 	inc	hl
+   0231 56                  770 	ld	d,(hl)
+   0232 F8 07               771 	ldhl	sp,#7
+   0234 2A                  772 	ld	a,(hl+)
+   0235 66                  773 	ld	h,(hl)
+   0236 6F                  774 	ld	l,a
+   0237 19                  775 	add	hl,de
+   0238 7D                  776 	ld	a,l
+   0239 54                  777 	ld	d,h
+   023A F8 07               778 	ldhl	sp,#7
+   023C 22                  779 	ld	(hl+),a
+   023D 72                  780 	ld	(hl),d
+   023E 2B                  781 	dec	hl
+   023F 5E                  782 	ld	e,(hl)
+   0240 23                  783 	inc	hl
+   0241 56                  784 	ld	d,(hl)
+   0242 21 04 00            785 	ld	hl,#0x0004
+   0245 7B                  786 	ld	a,e
+   0246 95                  787 	sub	a,l
+   0247 5F                  788 	ld	e,a
+   0248 7A                  789 	ld	a,d
+   0249 9C                  790 	sbc	a,h
+   024A F8 08               791 	ldhl	sp,#8
+   024C 32                  792 	ld	(hl-),a
+   024D 73                  793 	ld	(hl),e
+   024E 54                  794 	ld	d, h
+   024F 5D                  795 	ld	e, l
+   0250 F8 0F               796 	ldhl	sp,#15
+   0252 1A                  797 	ld	a, (de)
+   0253 96                  798 	sub	a, (hl)
+   0254 23                  799 	inc	hl
+   0255 13                  800 	inc	de
+   0256 1A                  801 	ld	a, (de)
+   0257 9E                  802 	sbc	a, (hl)
+   0258 1A                  803 	ld	a, (de)
+   0259 57                  804 	ld	d, a
+   025A 5E                  805 	ld	e, (hl)
+   025B CB 7B               806 	bit	7, e
+   025D 28 07               807 	jr	Z,00160$
+   025F CB 7A               808 	bit	7, d
+   0261 20 08               809 	jr	NZ,00161$
+   0263 BF                  810 	cp	a, a
+   0264 18 05               811 	jr	00161$
+   0266                     812 00160$:
+   0266 CB 7A               813 	bit	7, d
+   0268 28 01               814 	jr	Z,00161$
+   026A 37                  815 	scf
+   026B                     816 00161$:
+   026B 30 06               817 	jr	NC,00104$
+   026D                     818 00103$:
+   026D F8 0F               819 	ldhl	sp,#15
+   026F 36 00               820 	ld	(hl),#0x00
+   0271 18 04               821 	jr	00105$
+   0273                     822 00104$:
+   0273 F8 0F               823 	ldhl	sp,#15
+   0275 36 01               824 	ld	(hl),#0x01
+   0277                     825 00105$:
+   0277 F8 0F               826 	ldhl	sp,#15
+   0279 5E                  827 	ld	e,(hl)
+   027A E8 13               828 	add	sp, #19
+   027C C9                  829 	ret
+                            830 ;main.c:22: void moveGameCharacter(gameCharacter* character, UINT8 x, UINT8 y){
+                            831 ;	---------------------------------
+                            832 ; Function moveGameCharacter
+                            833 ; ---------------------------------
+   027D                     834 _moveGameCharacter::
+   027D E8 FC               835 	add	sp, #-4
+                            836 ;main.c:23: move_sprite(character->spriteId[0],x,y);
+   027F F8 06               837 	ldhl	sp,#6
+   0281 2A                  838 	ld	a,(hl+)
+   0282 5E                  839 	ld	e, (hl)
+   0283 F8 02               840 	ldhl	sp,#2
+   0285 22                  841 	ld	(hl+),a
+   0286 73                  842 	ld	(hl),e
+   0287 2B                  843 	dec	hl
+   0288 5E                  844 	ld	e,(hl)
+   0289 23                  845 	inc	hl
+   028A 56                  846 	ld	d,(hl)
+   028B 1A                  847 	ld	a,(de)
+   028C 47                  848 	ld	b,a
+   028D F8 09               849 	ldhl	sp,#9
+   028F 7E                  850 	ld	a,(hl)
+   0290 F5                  851 	push	af
+   0291 33                  852 	inc	sp
+   0292 2B                  853 	dec	hl
+   0293 7E                  854 	ld	a,(hl)
+   0294 F5                  855 	push	af
+   0295 33                  856 	inc	sp
+   0296 C5                  857 	push	bc
+   0297 33                  858 	inc	sp
+   0298 CDr00r00            859 	call	_move_sprite
+   029B E8 03               860 	add	sp, #3
+                            861 ;main.c:24: move_sprite(character->spriteId[1],x+spriteSize,y);
+   029D F8 08               862 	ldhl	sp,#8
+   029F 7E                  863 	ld	a,(hl)
+   02A0 21r90r00            864 	ld	hl,#_spriteSize
+   02A3 86                  865 	add	a, (hl)
+   02A4 F8 00               866 	ldhl	sp,#0
+   02A6 77                  867 	ld	(hl),a
+   02A7 F8 03               868 	ldhl	sp,#3
+   02A9 2B                  869 	dec	hl
+   02AA 4E                  870 	ld	c,(hl)
+   02AB 23                  871 	inc	hl
+   02AC 46                  872 	ld	b,(hl)
+   02AD 03                  873 	inc	bc
+   02AE 0A                  874 	ld	a,(bc)
+   02AF 57                  875 	ld	d,a
+   02B0 F8 09               876 	ldhl	sp,#9
+   02B2 7E                  877 	ld	a,(hl)
+   02B3 F5                  878 	push	af
+   02B4 33                  879 	inc	sp
+   02B5 F8 01               880 	ldhl	sp,#1
+   02B7 7E                  881 	ld	a,(hl)
+   02B8 F5                  882 	push	af
+   02B9 33                  883 	inc	sp
+   02BA D5                  884 	push	de
+   02BB 33                  885 	inc	sp
+   02BC CDr00r00            886 	call	_move_sprite
+   02BF E8 03               887 	add	sp, #3
+                            888 ;main.c:25: move_sprite(character->spriteId[2],x,y+spriteSize);
+   02C1 F8 09               889 	ldhl	sp,#9
+   02C3 7E                  890 	ld	a,(hl)
+   02C4 21r90r00            891 	ld	hl,#_spriteSize
+   02C7 86                  892 	add	a, (hl)
+   02C8 F8 00               893 	ldhl	sp,#0
+   02CA 77                  894 	ld	(hl),a
+   02CB F8 03               895 	ldhl	sp,#3
+   02CD 2B                  896 	dec	hl
+   02CE 4E                  897 	ld	c,(hl)
+   02CF 23                  898 	inc	hl
+   02D0 46                  899 	ld	b,(hl)
+   02D1 03                  900 	inc	bc
+   02D2 03                  901 	inc	bc
+   02D3 0A                  902 	ld	a,(bc)
+   02D4 57                  903 	ld	d,a
+   02D5 F8 00               904 	ldhl	sp,#0
+   02D7 7E                  905 	ld	a,(hl)
+   02D8 F5                  906 	push	af
+   02D9 33                  907 	inc	sp
+   02DA F8 09               908 	ldhl	sp,#9
+   02DC 7E                  909 	ld	a,(hl)
+   02DD F5                  910 	push	af
+   02DE 33                  911 	inc	sp
+   02DF D5                  912 	push	de
+   02E0 33                  913 	inc	sp
+   02E1 CDr00r00            914 	call	_move_sprite
+   02E4 E8 03               915 	add	sp, #3
+                            916 ;main.c:26: move_sprite(character->spriteId[3],x+spriteSize,y+spriteSize);
+   02E6 F8 09               917 	ldhl	sp,#9
+   02E8 7E                  918 	ld	a,(hl)
+   02E9 21r90r00            919 	ld	hl,#_spriteSize
+   02EC 86                  920 	add	a, (hl)
+   02ED F8 00               921 	ldhl	sp,#0
+   02EF 77                  922 	ld	(hl),a
+   02F0 F8 08               923 	ldhl	sp,#8
+   02F2 7E                  924 	ld	a,(hl)
+   02F3 21r90r00            925 	ld	hl,#_spriteSize
+   02F6 86                  926 	add	a, (hl)
+   02F7 F8 01               927 	ldhl	sp,#1
+   02F9 22                  928 	ld	(hl+),a
+   02FA 4E                  929 	ld	c,(hl)
+   02FB 23                  930 	inc	hl
+   02FC 46                  931 	ld	b,(hl)
+   02FD 03                  932 	inc	bc
+   02FE 03                  933 	inc	bc
+   02FF 03                  934 	inc	bc
+   0300 0A                  935 	ld	a,(bc)
+   0301 57                  936 	ld	d,a
+   0302 F8 00               937 	ldhl	sp,#0
+   0304 7E                  938 	ld	a,(hl)
+   0305 F5                  939 	push	af
+   0306 33                  940 	inc	sp
+   0307 23                  941 	inc	hl
+   0308 7E                  942 	ld	a,(hl)
+   0309 F5                  943 	push	af
+   030A 33                  944 	inc	sp
+   030B D5                  945 	push	de
+   030C 33                  946 	inc	sp
+   030D CDr00r00            947 	call	_move_sprite
+   0310 E8 03               948 	add	sp, #3
+   0312 E8 04               949 	add	sp, #4
+   0314 C9                  950 	ret
+                            951 ;main.c:30: void setupIngot(){
+                            952 ;	---------------------------------
+                            953 ; Function setupIngot
+                            954 ; ---------------------------------
+   0315                     955 _setupIngot::
+                            956 ;main.c:31: ingot.x=80;
+   0315 21r84r00            957 	ld	hl,#(_ingot + 0x0004)
+   0318 36 50               958 	ld	(hl),#0x50
+                            959 ;main.c:32: ingot.y=130;
+   031A 21r85r00            960 	ld	hl,#(_ingot + 0x0005)
+   031D 36 82               961 	ld	(hl),#0x82
+                            962 ;main.c:33: ingot.width=16;
+   031F 21r86r00            963 	ld	hl,#(_ingot + 0x0006)
+   0322 36 10               964 	ld	(hl),#0x10
+                            965 ;main.c:34: ingot.height=16;
+   0324 21r87r00            966 	ld	hl,#(_ingot + 0x0007)
+   0327 36 10               967 	ld	(hl),#0x10
+                            968 ;main.c:36: set_sprite_tile(0,0);
+   0329 21 00 00            969 	ld	hl,#0x0000
+   032C E5                  970 	push	hl
+   032D CDr00r00            971 	call	_set_sprite_tile
+   0330 E8 02               972 	add	sp, #2
+                            973 ;main.c:37: ingot.spriteId[0]=0;
+   0332 21r80r00            974 	ld	hl,#_ingot
+   0335 36 00               975 	ld	(hl),#0x00
+                            976 ;main.c:38: set_sprite_tile(1,1);
+   0337 21 01 01            977 	ld	hl,#0x0101
+   033A E5                  978 	push	hl
+   033B CDr00r00            979 	call	_set_sprite_tile
+   033E E8 02               980 	add	sp, #2
+                            981 ;main.c:39: ingot.spriteId[1]=1;
+   0340 21r81r00            982 	ld	hl,#(_ingot + 0x0001)
+   0343 36 01               983 	ld	(hl),#0x01
+                            984 ;main.c:40: set_sprite_tile(2,2);
+   0345 21 02 02            985 	ld	hl,#0x0202
+   0348 E5                  986 	push	hl
+   0349 CDr00r00            987 	call	_set_sprite_tile
+   034C E8 02               988 	add	sp, #2
+                            989 ;main.c:41: ingot.spriteId[2]=2;
+   034E 21r82r00            990 	ld	hl,#(_ingot + 0x0002)
+   0351 36 02               991 	ld	(hl),#0x02
+                            992 ;main.c:42: set_sprite_tile(3,3);
+   0353 21 03 03            993 	ld	hl,#0x0303
+   0356 E5                  994 	push	hl
+   0357 CDr00r00            995 	call	_set_sprite_tile
+   035A E8 02               996 	add	sp, #2
+                            997 ;main.c:43: ingot.spriteId[3]=3;
+   035C 21r83r00            998 	ld	hl,#(_ingot + 0x0003)
+   035F 36 03               999 	ld	(hl),#0x03
+                           1000 ;main.c:45: moveGameCharacter(&ingot,ingot.x,ingot.y);
+   0361 11r85r00           1001 	ld	de, #(_ingot + 0x0005) + 0
+   0364 1A                 1002 	ld	a,(de)
+   0365 4F                 1003 	ld	c,a
+   0366 11r84r00           1004 	ld	de, #(_ingot + 0x0004) + 0
+   0369 1A                 1005 	ld	a,(de)
+   036A 47                 1006 	ld	b,a
+   036B 11r80r00           1007 	ld	de,#_ingot
+   036E 79                 1008 	ld	a,c
+   036F F5                 1009 	push	af
+   0370 33                 1010 	inc	sp
+   0371 C5                 1011 	push	bc
+   0372 33                 1012 	inc	sp
+   0373 D5                 1013 	push	de
+   0374 CDr7Dr02           1014 	call	_moveGameCharacter
+   0377 E8 04              1015 	add	sp, #4
+   0379 C9                 1016 	ret
+                           1017 ;main.c:48: void setupMata(){
+                           1018 ;	---------------------------------
+                           1019 ; Function setupMata
+                           1020 ; ---------------------------------
+   037A                    1021 _setupMata::
+                           1022 ;main.c:49: mata.x=30;
+   037A 21r8Cr00           1023 	ld	hl,#(_mata + 0x0004)
+   037D 36 1E              1024 	ld	(hl),#0x1E
+                           1025 ;main.c:50: mata.y=0;
+   037F 21r8Dr00           1026 	ld	hl,#(_mata + 0x0005)
+   0382 36 00              1027 	ld	(hl),#0x00
+                           1028 ;main.c:51: mata.width=16;
+   0384 21r8Er00           1029 	ld	hl,#(_mata + 0x0006)
+   0387 36 10              1030 	ld	(hl),#0x10
+                           1031 ;main.c:52: mata.height=16;
+   0389 21r8Fr00           1032 	ld	hl,#(_mata + 0x0007)
+   038C 36 10              1033 	ld	(hl),#0x10
+                           1034 ;main.c:54: set_sprite_tile(4,4);
+   038E 21 04 04           1035 	ld	hl,#0x0404
+   0391 E5                 1036 	push	hl
+   0392 CDr00r00           1037 	call	_set_sprite_tile
+   0395 E8 02              1038 	add	sp, #2
+                           1039 ;main.c:55: mata.spriteId[0]=4;
+   0397 21r88r00           1040 	ld	hl,#_mata
+   039A 36 04              1041 	ld	(hl),#0x04
+                           1042 ;main.c:56: set_sprite_tile(5,5);
+   039C 21 05 05           1043 	ld	hl,#0x0505
+   039F E5                 1044 	push	hl
+   03A0 CDr00r00           1045 	call	_set_sprite_tile
+   03A3 E8 02              1046 	add	sp, #2
+                           1047 ;main.c:57: mata.spriteId[1]=5;
+   03A5 21r89r00           1048 	ld	hl,#(_mata + 0x0001)
+   03A8 36 05              1049 	ld	(hl),#0x05
+                           1050 ;main.c:58: set_sprite_tile(6,6);
+   03AA 21 06 06           1051 	ld	hl,#0x0606
+   03AD E5                 1052 	push	hl
+   03AE CDr00r00           1053 	call	_set_sprite_tile
+   03B1 E8 02              1054 	add	sp, #2
+                           1055 ;main.c:59: mata.spriteId[2]=6;
+   03B3 21r8Ar00           1056 	ld	hl,#(_mata + 0x0002)
+   03B6 36 06              1057 	ld	(hl),#0x06
+                           1058 ;main.c:60: set_sprite_tile(7,7);
+   03B8 21 07 07           1059 	ld	hl,#0x0707
+   03BB E5                 1060 	push	hl
+   03BC CDr00r00           1061 	call	_set_sprite_tile
+   03BF E8 02              1062 	add	sp, #2
+                           1063 ;main.c:61: mata.spriteId[3]=7;
+   03C1 21r8Br00           1064 	ld	hl,#(_mata + 0x0003)
+   03C4 36 07              1065 	ld	(hl),#0x07
+                           1066 ;main.c:63: moveGameCharacter(&mata,mata.x,mata.y);
+   03C6 11r8Dr00           1067 	ld	de, #(_mata + 0x0005) + 0
+   03C9 1A                 1068 	ld	a,(de)
+   03CA 4F                 1069 	ld	c,a
+   03CB 11r8Cr00           1070 	ld	de, #(_mata + 0x0004) + 0
+   03CE 1A                 1071 	ld	a,(de)
+   03CF 47                 1072 	ld	b,a
+   03D0 11r88r00           1073 	ld	de,#_mata
+   03D3 79                 1074 	ld	a,c
+   03D4 F5                 1075 	push	af
+   03D5 33                 1076 	inc	sp
+   03D6 C5                 1077 	push	bc
+   03D7 33                 1078 	inc	sp
+   03D8 D5                 1079 	push	de
+   03D9 CDr7Dr02           1080 	call	_moveGameCharacter
+   03DC E8 04              1081 	add	sp, #4
+   03DE C9                 1082 	ret
+                           1083 ;main.c:65: void main(){
+                           1084 ;	---------------------------------
+                           1085 ; Function main
+                           1086 ; ---------------------------------
+   03DF                    1087 _main::
+                           1088 ;main.c:66: set_sprite_data(0,8,gameSprite);
+   03DF 11r00r00           1089 	ld	de,#_gameSprite
+   03E2 D5                 1090 	push	de
+   03E3 21 00 08           1091 	ld	hl,#0x0800
+   03E6 E5                 1092 	push	hl
+   03E7 CDr00r00           1093 	call	_set_sprite_data
+   03EA E8 04              1094 	add	sp, #4
+                           1095 ;main.c:67: setupIngot();
+   03EC CDr15r03           1096 	call	_setupIngot
+                           1097 ;main.c:68: setupMata();
+   03EF CDr7Ar03           1098 	call	_setupMata
+                           1099 ;main.c:70: SHOW_SPRITES;
+   03F2 11 40 FF           1100 	ld	de,#0xFF40
+   03F5 1A                 1101 	ld	a,(de)
+   03F6 5F                 1102 	ld	e,a
+   03F7 16 00              1103 	ld	d,#0x00
+   03F9 7B                 1104 	ld	a,e
+   03FA CB CF              1105 	set	1, a
+   03FC 47                 1106 	ld	b,a
+   03FD 21 40 FF           1107 	ld	hl,#0xFF40
+   0400 70                 1108 	ld	(hl),b
+                           1109 ;main.c:71: DISPLAY_ON;
+   0401 11 40 FF           1110 	ld	de,#0xFF40
+   0404 1A                 1111 	ld	a,(de)
+   0405 5F                 1112 	ld	e,a
+   0406 16 00              1113 	ld	d,#0x00
+   0408 7B                 1114 	ld	a,e
+   0409 CB FF              1115 	set	7, a
+   040B 47                 1116 	ld	b,a
+   040C 2E 40              1117 	ld	l, #0x40
+   040E 70                 1118 	ld	(hl),b
+                           1119 ;main.c:73: while(!checkCollisions(&ingot, &mata)){
+   040F                    1120 00107$:
+   040F 11r80r00           1121 	ld	de,#_ingot
+   0412 21r88r00           1122 	ld	hl,#_mata
+   0415 E5                 1123 	push	hl
+   0416 D5                 1124 	push	de
+   0417 CDr10r00           1125 	call	_checkCollisions
+   041A E8 04              1126 	add	sp, #4
+   041C 4B                 1127 	ld	c,e
+   041D 79                 1128 	ld	a,c
+   041E B7                 1129 	or	a, a
+   041F C2rAEr04           1130 	jp	NZ,00109$
+                           1131 ;main.c:74: if(joypad() & J_LEFT){
+   0422 CDr00r00           1132 	call	_joypad
+   0425 43                 1133 	ld	b,e
+   0426 0E 00              1134 	ld	c,#0x00
+                           1135 ;main.c:75: ingot.x -= 4;
+                           1136 ;main.c:76: moveGameCharacter(&ingot,ingot.x,ingot.y);
+                           1137 ;main.c:74: if(joypad() & J_LEFT){
+   0428 CB 48              1138 	bit	1, b
+   042A 28 1D              1139 	jr	Z,00102$
+                           1140 ;main.c:75: ingot.x -= 4;
+   042C FAr84r00           1141 	ld	a, (#(_ingot + 0x0004) + 0)
+   042F C6 FC              1142 	add	a,#0xFC
+   0431 47                 1143 	ld	b,a
+   0432 21r84r00           1144 	ld	hl,#(_ingot + 0x0004)
+   0435 70                 1145 	ld	(hl),b
+                           1146 ;main.c:76: moveGameCharacter(&ingot,ingot.x,ingot.y);
+   0436 11r85r00           1147 	ld	de, #(_ingot + 0x0005) + 0
+   0439 1A                 1148 	ld	a,(de)
+   043A 4F                 1149 	ld	c,a
+   043B 11r80r00           1150 	ld	de,#_ingot
+   043E 79                 1151 	ld	a,c
+   043F F5                 1152 	push	af
+   0440 33                 1153 	inc	sp
+   0441 C5                 1154 	push	bc
+   0442 33                 1155 	inc	sp
+   0443 D5                 1156 	push	de
+   0444 CDr7Dr02           1157 	call	_moveGameCharacter
+   0447 E8 04              1158 	add	sp, #4
+   0449                    1159 00102$:
+                           1160 ;main.c:79: if(joypad() & J_RIGHT){
+   0449 CDr00r00           1161 	call	_joypad
+   044C 16 00              1162 	ld	d,#0x00
+   044E CB 43              1163 	bit	0, e
+   0450 28 1F              1164 	jr	Z,00104$
+                           1165 ;main.c:80: ingot.x += 4;
+   0452 FAr84r00           1166 	ld	a, (#(_ingot + 0x0004) + 0)
+   0455 47                 1167 	ld	b,a
+   0456 04                 1168 	inc	b
+   0457 04                 1169 	inc	b
+   0458 04                 1170 	inc	b
+   0459 04                 1171 	inc	b
+   045A 21r84r00           1172 	ld	hl,#(_ingot + 0x0004)
+   045D 70                 1173 	ld	(hl),b
+                           1174 ;main.c:81: moveGameCharacter(&ingot,ingot.x,ingot.y);
+   045E 11r85r00           1175 	ld	de, #(_ingot + 0x0005) + 0
+   0461 1A                 1176 	ld	a,(de)
+   0462 4F                 1177 	ld	c,a
+   0463 11r80r00           1178 	ld	de,#_ingot
+   0466 79                 1179 	ld	a,c
+   0467 F5                 1180 	push	af
+   0468 33                 1181 	inc	sp
+   0469 C5                 1182 	push	bc
+   046A 33                 1183 	inc	sp
+   046B D5                 1184 	push	de
+   046C CDr7Dr02           1185 	call	_moveGameCharacter
+   046F E8 04              1186 	add	sp, #4
+   0471                    1187 00104$:
+                           1188 ;main.c:84: mata.y+=5;
+   0471 FAr8Dr00           1189 	ld	a, (#(_mata + 0x0005) + 0)
+   0474 C6 05              1190 	add	a, #0x05
+   0476 47                 1191 	ld	b,a
+   0477 21r8Dr00           1192 	ld	hl,#(_mata + 0x0005)
+   047A 70                 1193 	ld	(hl),b
+                           1194 ;main.c:85: moveGameCharacter(&mata,mata.x,mata.y);
+   047B 11r8Cr00           1195 	ld	de, #(_mata + 0x0004) + 0
+   047E 1A                 1196 	ld	a,(de)
+   047F 4F                 1197 	ld	c,a
+   0480 11r88r00           1198 	ld	de,#_mata
+   0483 C5                 1199 	push	bc
+   0484 33                 1200 	inc	sp
+   0485 79                 1201 	ld	a,c
+   0486 F5                 1202 	push	af
+   0487 33                 1203 	inc	sp
+   0488 D5                 1204 	push	de
+   0489 CDr7Dr02           1205 	call	_moveGameCharacter
+   048C E8 04              1206 	add	sp, #4
+                           1207 ;main.c:87: if(mata.y>=144){
+   048E 11r8Dr00           1208 	ld	de, #(_mata + 0x0005) + 0
+   0491 1A                 1209 	ld	a,(de)
+   0492 47                 1210 	ld	b,a
+   0493 D6 90              1211 	sub	a, #0x90
+   0495 38 0C              1212 	jr	C,00106$
+                           1213 ;main.c:88: mata.y=0;
+   0497 21r8Dr00           1214 	ld	hl,#(_mata + 0x0005)
+   049A 36 00              1215 	ld	(hl),#0x00
+                           1216 ;main.c:89: mata.x=ingot.x;
+   049C FAr84r00           1217 	ld	a, (#(_ingot + 0x0004) + 0)
+   049F 11r8Cr00           1218 	ld	de,#(_mata + 0x0004)
+   04A2 12                 1219 	ld	(de),a
+   04A3                    1220 00106$:
+                           1221 ;main.c:93: performantDelay(2);
+   04A3 3E 02              1222 	ld	a,#0x02
+   04A5 F5                 1223 	push	af
+   04A6 33                 1224 	inc	sp
+   04A7 CDr00r00           1225 	call	_performantDelay
+   04AA 33                 1226 	inc	sp
+   04AB C3r0Fr04           1227 	jp	00107$
+   04AE                    1228 00109$:
+                           1229 ;main.c:95: printf("\n \n \n \n \n \n \n \n  ===Game Over===");
+   04AE 11rB8r04           1230 	ld	de,#___str_0+0
+   04B1 D5                 1231 	push	de
+   04B2 CDr00r00           1232 	call	_printf
+   04B5 E8 02              1233 	add	sp, #2
+   04B7 C9                 1234 	ret
+   04B8                    1235 ___str_0:
+   04B8 0A                 1236 	.db 0x0A
+   04B9 20                 1237 	.ascii " "
+   04BA 0A                 1238 	.db 0x0A
+   04BB 20                 1239 	.ascii " "
+   04BC 0A                 1240 	.db 0x0A
+   04BD 20                 1241 	.ascii " "
+   04BE 0A                 1242 	.db 0x0A
+   04BF 20                 1243 	.ascii " "
+   04C0 0A                 1244 	.db 0x0A
+   04C1 20                 1245 	.ascii " "
+   04C2 0A                 1246 	.db 0x0A
+   04C3 20                 1247 	.ascii " "
+   04C4 0A                 1248 	.db 0x0A
+   04C5 20                 1249 	.ascii " "
+   04C6 0A                 1250 	.db 0x0A
+   04C7 20 20 3D 3D 3D 47  1251 	.ascii "  ===Game Over==="
+        61 6D 65 20 4F 76
+        65 72 3D 3D 3D
+   04D8 00                 1252 	.db 0x00
+                           1253 	.area _CODE
+                           1254 	.area _CABS (ABS)

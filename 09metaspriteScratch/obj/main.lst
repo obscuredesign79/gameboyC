@@ -1,0 +1,336 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.5.0 #9253 (Mar 19 2016) (Linux)
+                              4 ; This file was generated Sat Nov 16 13:31:54 2019
+                              5 ;--------------------------------------------------------
+                              6 	.module main
+                              7 	.optsdcc -mgbz80
+                              8 	
+                              9 ;--------------------------------------------------------
+                             10 ; Public variables in this module
+                             11 ;--------------------------------------------------------
+                             12 	.globl _main
+                             13 	.globl _performantDelay
+                             14 	.globl _move_sprite
+                             15 	.globl _set_sprite_tile
+                             16 	.globl _set_sprite_data
+                             17 	.globl _wait_vbl_done
+                             18 	.globl _sprite
+                             19 ;--------------------------------------------------------
+                             20 ; ram data
+                             21 ;--------------------------------------------------------
+                             22 	.area _DATA
+   0000                      23 _sprite::
+   0000                      24 	.ds 80
+                             25 ;--------------------------------------------------------
+                             26 ; absolute external ram data
+                             27 ;--------------------------------------------------------
+                             28 	.area _DABS (ABS)
+                             29 ;--------------------------------------------------------
+                             30 ; global & static initialisations
+                             31 ;--------------------------------------------------------
+                             32 	.area _HOME
+                             33 	.area _GSINIT
+                             34 	.area _GSFINAL
+                             35 	.area _GSINIT
+                             36 ;gameSprite.c:26: unsigned char sprite[] =
+   0000 21r00r00             37 	ld	hl,#_sprite
+   0003 36 00                38 	ld	(hl),#0x00
+   0005 01r01r00             39 	ld	bc,#_sprite + 1
+   0008 AF                   40 	xor	a, a
+   0009 02                   41 	ld	(bc),a
+   000A 01r02r00             42 	ld	bc,#_sprite + 2
+   000D AF                   43 	xor	a, a
+   000E 02                   44 	ld	(bc),a
+   000F 01r03r00             45 	ld	bc,#_sprite + 3
+   0012 AF                   46 	xor	a, a
+   0013 02                   47 	ld	(bc),a
+   0014 01r04r00             48 	ld	bc,#_sprite + 4
+   0017 AF                   49 	xor	a, a
+   0018 02                   50 	ld	(bc),a
+   0019 01r05r00             51 	ld	bc,#_sprite + 5
+   001C AF                   52 	xor	a, a
+   001D 02                   53 	ld	(bc),a
+   001E 01r06r00             54 	ld	bc,#_sprite + 6
+   0021 AF                   55 	xor	a, a
+   0022 02                   56 	ld	(bc),a
+   0023 01r07r00             57 	ld	bc,#_sprite + 7
+   0026 AF                   58 	xor	a, a
+   0027 02                   59 	ld	(bc),a
+   0028 01r08r00             60 	ld	bc,#_sprite + 8
+   002B AF                   61 	xor	a, a
+   002C 02                   62 	ld	(bc),a
+   002D 01r09r00             63 	ld	bc,#_sprite + 9
+   0030 AF                   64 	xor	a, a
+   0031 02                   65 	ld	(bc),a
+   0032 01r0Ar00             66 	ld	bc,#_sprite + 10
+   0035 AF                   67 	xor	a, a
+   0036 02                   68 	ld	(bc),a
+   0037 01r0Br00             69 	ld	bc,#_sprite + 11
+   003A AF                   70 	xor	a, a
+   003B 02                   71 	ld	(bc),a
+   003C 01r0Cr00             72 	ld	bc,#_sprite + 12
+   003F AF                   73 	xor	a, a
+   0040 02                   74 	ld	(bc),a
+   0041 01r0Dr00             75 	ld	bc,#_sprite + 13
+   0044 AF                   76 	xor	a, a
+   0045 02                   77 	ld	(bc),a
+   0046 01r0Er00             78 	ld	bc,#_sprite + 14
+   0049 AF                   79 	xor	a, a
+   004A 02                   80 	ld	(bc),a
+   004B 01r0Fr00             81 	ld	bc,#_sprite + 15
+   004E AF                   82 	xor	a, a
+   004F 02                   83 	ld	(bc),a
+   0050 21r10r00             84 	ld	hl,#(_sprite + 0x0010)
+   0053 36 18                85 	ld	(hl),#0x18
+   0055 21r11r00             86 	ld	hl,#(_sprite + 0x0011)
+   0058 36 18                87 	ld	(hl),#0x18
+   005A 21r12r00             88 	ld	hl,#(_sprite + 0x0012)
+   005D 36 18                89 	ld	(hl),#0x18
+   005F 21r13r00             90 	ld	hl,#(_sprite + 0x0013)
+   0062 36 18                91 	ld	(hl),#0x18
+   0064 21r14r00             92 	ld	hl,#(_sprite + 0x0014)
+   0067 36 E7                93 	ld	(hl),#0xE7
+   0069 21r15r00             94 	ld	hl,#(_sprite + 0x0015)
+   006C 36 FF                95 	ld	(hl),#0xFF
+   006E 21r16r00             96 	ld	hl,#(_sprite + 0x0016)
+   0071 36 24                97 	ld	(hl),#0x24
+   0073 21r17r00             98 	ld	hl,#(_sprite + 0x0017)
+   0076 36 3C                99 	ld	(hl),#0x3C
+   0078 21r18r00            100 	ld	hl,#(_sprite + 0x0018)
+   007B 36 42               101 	ld	(hl),#0x42
+   007D 21r19r00            102 	ld	hl,#(_sprite + 0x0019)
+   0080 36 7E               103 	ld	(hl),#0x7E
+   0082 21r1Ar00            104 	ld	hl,#(_sprite + 0x001a)
+   0085 36 42               105 	ld	(hl),#0x42
+   0087 21r1Br00            106 	ld	hl,#(_sprite + 0x001b)
+   008A 36 7E               107 	ld	(hl),#0x7E
+   008C 21r1Cr00            108 	ld	hl,#(_sprite + 0x001c)
+   008F 36 99               109 	ld	(hl),#0x99
+   0091 21r1Dr00            110 	ld	hl,#(_sprite + 0x001d)
+   0094 36 FF               111 	ld	(hl),#0xFF
+   0096 21r1Er00            112 	ld	hl,#(_sprite + 0x001e)
+   0099 36 BD               113 	ld	(hl),#0xBD
+   009B 21r1Fr00            114 	ld	hl,#(_sprite + 0x001f)
+   009E 36 E7               115 	ld	(hl),#0xE7
+   00A0 21r20r00            116 	ld	hl,#(_sprite + 0x0020)
+   00A3 36 BD               117 	ld	(hl),#0xBD
+   00A5 21r21r00            118 	ld	hl,#(_sprite + 0x0021)
+   00A8 36 E7               119 	ld	(hl),#0xE7
+   00AA 21r22r00            120 	ld	hl,#(_sprite + 0x0022)
+   00AD 36 9A               121 	ld	(hl),#0x9A
+   00AF 21r23r00            122 	ld	hl,#(_sprite + 0x0023)
+   00B2 36 FE               123 	ld	(hl),#0xFE
+   00B4 21r24r00            124 	ld	hl,#(_sprite + 0x0024)
+   00B7 36 42               125 	ld	(hl),#0x42
+   00B9 21r25r00            126 	ld	hl,#(_sprite + 0x0025)
+   00BC 36 7E               127 	ld	(hl),#0x7E
+   00BE 21r26r00            128 	ld	hl,#(_sprite + 0x0026)
+   00C1 36 44               129 	ld	(hl),#0x44
+   00C3 21r27r00            130 	ld	hl,#(_sprite + 0x0027)
+   00C6 36 7C               131 	ld	(hl),#0x7C
+   00C8 21r28r00            132 	ld	hl,#(_sprite + 0x0028)
+   00CB 36 24               133 	ld	(hl),#0x24
+   00CD 21r29r00            134 	ld	hl,#(_sprite + 0x0029)
+   00D0 36 3C               135 	ld	(hl),#0x3C
+   00D2 21r2Ar00            136 	ld	hl,#(_sprite + 0x002a)
+   00D5 36 66               137 	ld	(hl),#0x66
+   00D7 21r2Br00            138 	ld	hl,#(_sprite + 0x002b)
+   00DA 36 7E               139 	ld	(hl),#0x7E
+   00DC 21r2Cr00            140 	ld	hl,#(_sprite + 0x002c)
+   00DF 36 99               141 	ld	(hl),#0x99
+   00E1 21r2Dr00            142 	ld	hl,#(_sprite + 0x002d)
+   00E4 36 99               143 	ld	(hl),#0x99
+   00E6 21r2Er00            144 	ld	hl,#(_sprite + 0x002e)
+   00E9 36 18               145 	ld	(hl),#0x18
+   00EB 21r2Fr00            146 	ld	hl,#(_sprite + 0x002f)
+   00EE 36 18               147 	ld	(hl),#0x18
+   00F0 21r30r00            148 	ld	hl,#(_sprite + 0x0030)
+   00F3 36 99               149 	ld	(hl),#0x99
+   00F5 21r31r00            150 	ld	hl,#(_sprite + 0x0031)
+   00F8 36 99               151 	ld	(hl),#0x99
+   00FA 21r32r00            152 	ld	hl,#(_sprite + 0x0032)
+   00FD 36 5A               153 	ld	(hl),#0x5A
+   00FF 21r33r00            154 	ld	hl,#(_sprite + 0x0033)
+   0102 36 5A               155 	ld	(hl),#0x5A
+   0104 21r34r00            156 	ld	hl,#(_sprite + 0x0034)
+   0107 36 24               157 	ld	(hl),#0x24
+   0109 21r35r00            158 	ld	hl,#(_sprite + 0x0035)
+   010C 36 3C               159 	ld	(hl),#0x3C
+   010E 21r36r00            160 	ld	hl,#(_sprite + 0x0036)
+   0111 36 24               161 	ld	(hl),#0x24
+   0113 21r37r00            162 	ld	hl,#(_sprite + 0x0037)
+   0116 36 3C               163 	ld	(hl),#0x3C
+   0118 21r38r00            164 	ld	hl,#(_sprite + 0x0038)
+   011B 36 42               165 	ld	(hl),#0x42
+   011D 21r39r00            166 	ld	hl,#(_sprite + 0x0039)
+   0120 36 7E               167 	ld	(hl),#0x7E
+   0122 21r3Ar00            168 	ld	hl,#(_sprite + 0x003a)
+   0125 36 42               169 	ld	(hl),#0x42
+   0127 21r3Br00            170 	ld	hl,#(_sprite + 0x003b)
+   012A 36 7E               171 	ld	(hl),#0x7E
+   012C 21r3Cr00            172 	ld	hl,#(_sprite + 0x003c)
+   012F 36 99               173 	ld	(hl),#0x99
+   0131 21r3Dr00            174 	ld	hl,#(_sprite + 0x003d)
+   0134 36 FF               175 	ld	(hl),#0xFF
+   0136 21r3Er00            176 	ld	hl,#(_sprite + 0x003e)
+   0139 36 BD               177 	ld	(hl),#0xBD
+   013B 21r3Fr00            178 	ld	hl,#(_sprite + 0x003f)
+   013E 36 E7               179 	ld	(hl),#0xE7
+   0140 21r40r00            180 	ld	hl,#(_sprite + 0x0040)
+   0143 36 BD               181 	ld	(hl),#0xBD
+   0145 21r41r00            182 	ld	hl,#(_sprite + 0x0041)
+   0148 36 E7               183 	ld	(hl),#0xE7
+   014A 21r42r00            184 	ld	hl,#(_sprite + 0x0042)
+   014D 36 9A               185 	ld	(hl),#0x9A
+   014F 21r43r00            186 	ld	hl,#(_sprite + 0x0043)
+   0152 36 FE               187 	ld	(hl),#0xFE
+   0154 21r44r00            188 	ld	hl,#(_sprite + 0x0044)
+   0157 36 42               189 	ld	(hl),#0x42
+   0159 21r45r00            190 	ld	hl,#(_sprite + 0x0045)
+   015C 36 7E               191 	ld	(hl),#0x7E
+   015E 21r46r00            192 	ld	hl,#(_sprite + 0x0046)
+   0161 36 44               193 	ld	(hl),#0x44
+   0163 21r47r00            194 	ld	hl,#(_sprite + 0x0047)
+   0166 36 7C               195 	ld	(hl),#0x7C
+   0168 21r48r00            196 	ld	hl,#(_sprite + 0x0048)
+   016B 36 24               197 	ld	(hl),#0x24
+   016D 21r49r00            198 	ld	hl,#(_sprite + 0x0049)
+   0170 36 3C               199 	ld	(hl),#0x3C
+   0172 21r4Ar00            200 	ld	hl,#(_sprite + 0x004a)
+   0175 36 66               201 	ld	(hl),#0x66
+   0177 21r4Br00            202 	ld	hl,#(_sprite + 0x004b)
+   017A 36 7E               203 	ld	(hl),#0x7E
+   017C 21r4Cr00            204 	ld	hl,#(_sprite + 0x004c)
+   017F 36 5A               205 	ld	(hl),#0x5A
+   0181 21r4Dr00            206 	ld	hl,#(_sprite + 0x004d)
+   0184 36 5A               207 	ld	(hl),#0x5A
+   0186 21r4Er00            208 	ld	hl,#(_sprite + 0x004e)
+   0189 36 5A               209 	ld	(hl),#0x5A
+   018B 21r4Fr00            210 	ld	hl,#(_sprite + 0x004f)
+   018E 36 5A               211 	ld	(hl),#0x5A
+                            212 ;--------------------------------------------------------
+                            213 ; Home
+                            214 ;--------------------------------------------------------
+                            215 	.area _HOME
+                            216 	.area _HOME
+                            217 ;--------------------------------------------------------
+                            218 ; code
+                            219 ;--------------------------------------------------------
+                            220 	.area _CODE
+                            221 ;main.c:4: void performantDelay(UINT8 numloops){
+                            222 ;	---------------------------------
+                            223 ; Function performantDelay
+                            224 ; ---------------------------------
+   0000                     225 _performantDelay::
+                            226 ;main.c:7: for(i=0;i<numloops;i++){
+   0000 06 00               227 	ld	b,#0x00
+   0002                     228 00103$:
+   0002 78                  229 	ld	a,b
+   0003 F8 02               230 	ldhl	sp,#2
+   0005 96                  231 	sub	a, (hl)
+   0006 D0                  232 	ret	NC
+                            233 ;main.c:8: wait_vbl_done();
+   0007 C5                  234 	push	bc
+   0008 CDr00r00            235 	call	_wait_vbl_done
+   000B C1                  236 	pop	bc
+                            237 ;main.c:7: for(i=0;i<numloops;i++){
+   000C 04                  238 	inc	b
+   000D 18 F3               239 	jr	00103$
+   000F C9                  240 	ret
+                            241 ;main.c:12: void main(){
+                            242 ;	---------------------------------
+                            243 ; Function main
+                            244 ; ---------------------------------
+   0010                     245 _main::
+                            246 ;main.c:13: set_sprite_data(0, 5, sprite);
+   0010 11r00r00            247 	ld	de,#_sprite+0
+   0013 D5                  248 	push	de
+   0014 21 00 05            249 	ld	hl,#0x0500
+   0017 E5                  250 	push	hl
+   0018 CDr00r00            251 	call	_set_sprite_data
+   001B E8 04               252 	add	sp, #4
+                            253 ;main.c:15: set_sprite_tile(1, 1);
+   001D 21 01 01            254 	ld	hl,#0x0101
+   0020 E5                  255 	push	hl
+   0021 CDr00r00            256 	call	_set_sprite_tile
+   0024 E8 02               257 	add	sp, #2
+                            258 ;main.c:16: set_sprite_tile(2, 2);
+   0026 21 02 02            259 	ld	hl,#0x0202
+   0029 E5                  260 	push	hl
+   002A CDr00r00            261 	call	_set_sprite_tile
+   002D E8 02               262 	add	sp, #2
+                            263 ;main.c:18: set_sprite_tile(3, 3);
+   002F 21 03 03            264 	ld	hl,#0x0303
+   0032 E5                  265 	push	hl
+   0033 CDr00r00            266 	call	_set_sprite_tile
+   0036 E8 02               267 	add	sp, #2
+                            268 ;main.c:19: set_sprite_tile(4, 4);
+   0038 21 04 04            269 	ld	hl,#0x0404
+   003B E5                  270 	push	hl
+   003C CDr00r00            271 	call	_set_sprite_tile
+   003F E8 02               272 	add	sp, #2
+                            273 ;main.c:21: move_sprite(1, 75, 75);
+   0041 21 4B 4B            274 	ld	hl,#0x4B4B
+   0044 E5                  275 	push	hl
+   0045 3E 01               276 	ld	a,#0x01
+   0047 F5                  277 	push	af
+   0048 33                  278 	inc	sp
+   0049 CDr00r00            279 	call	_move_sprite
+   004C E8 03               280 	add	sp, #3
+                            281 ;main.c:22: move_sprite(2, 75, 75+8);
+   004E 21 4B 53            282 	ld	hl,#0x534B
+   0051 E5                  283 	push	hl
+   0052 3E 02               284 	ld	a,#0x02
+   0054 F5                  285 	push	af
+   0055 33                  286 	inc	sp
+   0056 CDr00r00            287 	call	_move_sprite
+   0059 E8 03               288 	add	sp, #3
+                            289 ;main.c:25: SHOW_SPRITES;
+   005B 11 40 FF            290 	ld	de,#0xFF40
+   005E 1A                  291 	ld	a,(de)
+   005F 57                  292 	ld	d,a
+   0060 1E 00               293 	ld	e,#0x00
+   0062 7A                  294 	ld	a,d
+   0063 CB CF               295 	set	1, a
+   0065 47                  296 	ld	b,a
+   0066 21 40 FF            297 	ld	hl,#0xFF40
+   0069 70                  298 	ld	(hl),b
+                            299 ;main.c:27: while(1){
+   006A                     300 00102$:
+                            301 ;main.c:28: set_sprite_tile(1, 3);
+   006A 21 01 03            302 	ld	hl,#0x0301
+   006D E5                  303 	push	hl
+   006E CDr00r00            304 	call	_set_sprite_tile
+   0071 E8 02               305 	add	sp, #2
+                            306 ;main.c:29: set_sprite_tile(2, 4);
+   0073 21 02 04            307 	ld	hl,#0x0402
+   0076 E5                  308 	push	hl
+   0077 CDr00r00            309 	call	_set_sprite_tile
+   007A E8 02               310 	add	sp, #2
+                            311 ;main.c:30: performantDelay(5);
+   007C 3E 05               312 	ld	a,#0x05
+   007E F5                  313 	push	af
+   007F 33                  314 	inc	sp
+   0080 CDr00r00            315 	call	_performantDelay
+   0083 33                  316 	inc	sp
+                            317 ;main.c:32: set_sprite_tile(1, 1);
+   0084 21 01 01            318 	ld	hl,#0x0101
+   0087 E5                  319 	push	hl
+   0088 CDr00r00            320 	call	_set_sprite_tile
+   008B E8 02               321 	add	sp, #2
+                            322 ;main.c:33: set_sprite_tile(2, 2);
+   008D 21 02 02            323 	ld	hl,#0x0202
+   0090 E5                  324 	push	hl
+   0091 CDr00r00            325 	call	_set_sprite_tile
+   0094 E8 02               326 	add	sp, #2
+                            327 ;main.c:34: performantDelay(5);
+   0096 3E 05               328 	ld	a,#0x05
+   0098 F5                  329 	push	af
+   0099 33                  330 	inc	sp
+   009A CDr00r00            331 	call	_performantDelay
+   009D 33                  332 	inc	sp
+   009E 18 CA               333 	jr	00102$
+   00A0 C9                  334 	ret
+                            335 	.area _CODE
+                            336 	.area _CABS (ABS)

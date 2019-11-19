@@ -1,0 +1,551 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.5.0 #9253 (Mar 19 2016) (Linux)
+                              4 ; This file was generated Tue Nov 19 22:43:46 2019
+                              5 ;--------------------------------------------------------
+                              6 	.module main
+                              7 	.optsdcc -mgbz80
+                              8 	
+                              9 ;--------------------------------------------------------
+                             10 ; Public variables in this module
+                             11 ;--------------------------------------------------------
+                             12 	.globl _main
+                             13 	.globl _setupSpider
+                             14 	.globl _moveGameCharacter
+                             15 	.globl _moveGameCharAnim
+                             16 	.globl _updateSwitches
+                             17 	.globl _performantDelay
+                             18 	.globl _move_sprite
+                             19 	.globl _set_sprite_tile
+                             20 	.globl _set_sprite_data
+                             21 	.globl _wait_vbl_done
+                             22 	.globl _joypad
+                             23 	.globl _timer
+                             24 	.globl _spider
+                             25 	.globl _sprite
+                             26 ;--------------------------------------------------------
+                             27 ; ram data
+                             28 ;--------------------------------------------------------
+                             29 	.area _DATA
+   0000                      30 _sprite::
+   0000                      31 	.ds 80
+   0050                      32 _spider::
+   0050                      33 	.ds 9
+   0059                      34 _timer::
+   0059                      35 	.ds 1
+                             36 ;--------------------------------------------------------
+                             37 ; absolute external ram data
+                             38 ;--------------------------------------------------------
+                             39 	.area _DABS (ABS)
+                             40 ;--------------------------------------------------------
+                             41 ; global & static initialisations
+                             42 ;--------------------------------------------------------
+                             43 	.area _HOME
+                             44 	.area _GSINIT
+                             45 	.area _GSFINAL
+                             46 	.area _GSINIT
+                             47 ;gameSprite.c:26: unsigned char sprite[] =
+   0000 21r00r00             48 	ld	hl,#_sprite
+   0003 36 00                49 	ld	(hl),#0x00
+   0005 01r01r00             50 	ld	bc,#_sprite + 1
+   0008 AF                   51 	xor	a, a
+   0009 02                   52 	ld	(bc),a
+   000A 01r02r00             53 	ld	bc,#_sprite + 2
+   000D AF                   54 	xor	a, a
+   000E 02                   55 	ld	(bc),a
+   000F 01r03r00             56 	ld	bc,#_sprite + 3
+   0012 AF                   57 	xor	a, a
+   0013 02                   58 	ld	(bc),a
+   0014 01r04r00             59 	ld	bc,#_sprite + 4
+   0017 AF                   60 	xor	a, a
+   0018 02                   61 	ld	(bc),a
+   0019 01r05r00             62 	ld	bc,#_sprite + 5
+   001C AF                   63 	xor	a, a
+   001D 02                   64 	ld	(bc),a
+   001E 01r06r00             65 	ld	bc,#_sprite + 6
+   0021 AF                   66 	xor	a, a
+   0022 02                   67 	ld	(bc),a
+   0023 01r07r00             68 	ld	bc,#_sprite + 7
+   0026 AF                   69 	xor	a, a
+   0027 02                   70 	ld	(bc),a
+   0028 01r08r00             71 	ld	bc,#_sprite + 8
+   002B AF                   72 	xor	a, a
+   002C 02                   73 	ld	(bc),a
+   002D 01r09r00             74 	ld	bc,#_sprite + 9
+   0030 AF                   75 	xor	a, a
+   0031 02                   76 	ld	(bc),a
+   0032 01r0Ar00             77 	ld	bc,#_sprite + 10
+   0035 AF                   78 	xor	a, a
+   0036 02                   79 	ld	(bc),a
+   0037 01r0Br00             80 	ld	bc,#_sprite + 11
+   003A AF                   81 	xor	a, a
+   003B 02                   82 	ld	(bc),a
+   003C 01r0Cr00             83 	ld	bc,#_sprite + 12
+   003F AF                   84 	xor	a, a
+   0040 02                   85 	ld	(bc),a
+   0041 01r0Dr00             86 	ld	bc,#_sprite + 13
+   0044 AF                   87 	xor	a, a
+   0045 02                   88 	ld	(bc),a
+   0046 01r0Er00             89 	ld	bc,#_sprite + 14
+   0049 AF                   90 	xor	a, a
+   004A 02                   91 	ld	(bc),a
+   004B 01r0Fr00             92 	ld	bc,#_sprite + 15
+   004E AF                   93 	xor	a, a
+   004F 02                   94 	ld	(bc),a
+   0050 21r10r00             95 	ld	hl,#(_sprite + 0x0010)
+   0053 36 18                96 	ld	(hl),#0x18
+   0055 21r11r00             97 	ld	hl,#(_sprite + 0x0011)
+   0058 36 18                98 	ld	(hl),#0x18
+   005A 21r12r00             99 	ld	hl,#(_sprite + 0x0012)
+   005D 36 18               100 	ld	(hl),#0x18
+   005F 21r13r00            101 	ld	hl,#(_sprite + 0x0013)
+   0062 36 18               102 	ld	(hl),#0x18
+   0064 21r14r00            103 	ld	hl,#(_sprite + 0x0014)
+   0067 36 E7               104 	ld	(hl),#0xE7
+   0069 21r15r00            105 	ld	hl,#(_sprite + 0x0015)
+   006C 36 FF               106 	ld	(hl),#0xFF
+   006E 21r16r00            107 	ld	hl,#(_sprite + 0x0016)
+   0071 36 24               108 	ld	(hl),#0x24
+   0073 21r17r00            109 	ld	hl,#(_sprite + 0x0017)
+   0076 36 3C               110 	ld	(hl),#0x3C
+   0078 21r18r00            111 	ld	hl,#(_sprite + 0x0018)
+   007B 36 42               112 	ld	(hl),#0x42
+   007D 21r19r00            113 	ld	hl,#(_sprite + 0x0019)
+   0080 36 7E               114 	ld	(hl),#0x7E
+   0082 21r1Ar00            115 	ld	hl,#(_sprite + 0x001a)
+   0085 36 42               116 	ld	(hl),#0x42
+   0087 21r1Br00            117 	ld	hl,#(_sprite + 0x001b)
+   008A 36 7E               118 	ld	(hl),#0x7E
+   008C 21r1Cr00            119 	ld	hl,#(_sprite + 0x001c)
+   008F 36 99               120 	ld	(hl),#0x99
+   0091 21r1Dr00            121 	ld	hl,#(_sprite + 0x001d)
+   0094 36 FF               122 	ld	(hl),#0xFF
+   0096 21r1Er00            123 	ld	hl,#(_sprite + 0x001e)
+   0099 36 BD               124 	ld	(hl),#0xBD
+   009B 21r1Fr00            125 	ld	hl,#(_sprite + 0x001f)
+   009E 36 E7               126 	ld	(hl),#0xE7
+   00A0 21r20r00            127 	ld	hl,#(_sprite + 0x0020)
+   00A3 36 BD               128 	ld	(hl),#0xBD
+   00A5 21r21r00            129 	ld	hl,#(_sprite + 0x0021)
+   00A8 36 E7               130 	ld	(hl),#0xE7
+   00AA 21r22r00            131 	ld	hl,#(_sprite + 0x0022)
+   00AD 36 9A               132 	ld	(hl),#0x9A
+   00AF 21r23r00            133 	ld	hl,#(_sprite + 0x0023)
+   00B2 36 FE               134 	ld	(hl),#0xFE
+   00B4 21r24r00            135 	ld	hl,#(_sprite + 0x0024)
+   00B7 36 42               136 	ld	(hl),#0x42
+   00B9 21r25r00            137 	ld	hl,#(_sprite + 0x0025)
+   00BC 36 7E               138 	ld	(hl),#0x7E
+   00BE 21r26r00            139 	ld	hl,#(_sprite + 0x0026)
+   00C1 36 44               140 	ld	(hl),#0x44
+   00C3 21r27r00            141 	ld	hl,#(_sprite + 0x0027)
+   00C6 36 7C               142 	ld	(hl),#0x7C
+   00C8 21r28r00            143 	ld	hl,#(_sprite + 0x0028)
+   00CB 36 24               144 	ld	(hl),#0x24
+   00CD 21r29r00            145 	ld	hl,#(_sprite + 0x0029)
+   00D0 36 3C               146 	ld	(hl),#0x3C
+   00D2 21r2Ar00            147 	ld	hl,#(_sprite + 0x002a)
+   00D5 36 66               148 	ld	(hl),#0x66
+   00D7 21r2Br00            149 	ld	hl,#(_sprite + 0x002b)
+   00DA 36 7E               150 	ld	(hl),#0x7E
+   00DC 21r2Cr00            151 	ld	hl,#(_sprite + 0x002c)
+   00DF 36 99               152 	ld	(hl),#0x99
+   00E1 21r2Dr00            153 	ld	hl,#(_sprite + 0x002d)
+   00E4 36 99               154 	ld	(hl),#0x99
+   00E6 21r2Er00            155 	ld	hl,#(_sprite + 0x002e)
+   00E9 36 18               156 	ld	(hl),#0x18
+   00EB 21r2Fr00            157 	ld	hl,#(_sprite + 0x002f)
+   00EE 36 18               158 	ld	(hl),#0x18
+   00F0 21r30r00            159 	ld	hl,#(_sprite + 0x0030)
+   00F3 36 99               160 	ld	(hl),#0x99
+   00F5 21r31r00            161 	ld	hl,#(_sprite + 0x0031)
+   00F8 36 99               162 	ld	(hl),#0x99
+   00FA 21r32r00            163 	ld	hl,#(_sprite + 0x0032)
+   00FD 36 5A               164 	ld	(hl),#0x5A
+   00FF 21r33r00            165 	ld	hl,#(_sprite + 0x0033)
+   0102 36 5A               166 	ld	(hl),#0x5A
+   0104 21r34r00            167 	ld	hl,#(_sprite + 0x0034)
+   0107 36 24               168 	ld	(hl),#0x24
+   0109 21r35r00            169 	ld	hl,#(_sprite + 0x0035)
+   010C 36 3C               170 	ld	(hl),#0x3C
+   010E 21r36r00            171 	ld	hl,#(_sprite + 0x0036)
+   0111 36 24               172 	ld	(hl),#0x24
+   0113 21r37r00            173 	ld	hl,#(_sprite + 0x0037)
+   0116 36 3C               174 	ld	(hl),#0x3C
+   0118 21r38r00            175 	ld	hl,#(_sprite + 0x0038)
+   011B 36 42               176 	ld	(hl),#0x42
+   011D 21r39r00            177 	ld	hl,#(_sprite + 0x0039)
+   0120 36 7E               178 	ld	(hl),#0x7E
+   0122 21r3Ar00            179 	ld	hl,#(_sprite + 0x003a)
+   0125 36 42               180 	ld	(hl),#0x42
+   0127 21r3Br00            181 	ld	hl,#(_sprite + 0x003b)
+   012A 36 7E               182 	ld	(hl),#0x7E
+   012C 21r3Cr00            183 	ld	hl,#(_sprite + 0x003c)
+   012F 36 99               184 	ld	(hl),#0x99
+   0131 21r3Dr00            185 	ld	hl,#(_sprite + 0x003d)
+   0134 36 FF               186 	ld	(hl),#0xFF
+   0136 21r3Er00            187 	ld	hl,#(_sprite + 0x003e)
+   0139 36 BD               188 	ld	(hl),#0xBD
+   013B 21r3Fr00            189 	ld	hl,#(_sprite + 0x003f)
+   013E 36 E7               190 	ld	(hl),#0xE7
+   0140 21r40r00            191 	ld	hl,#(_sprite + 0x0040)
+   0143 36 BD               192 	ld	(hl),#0xBD
+   0145 21r41r00            193 	ld	hl,#(_sprite + 0x0041)
+   0148 36 E7               194 	ld	(hl),#0xE7
+   014A 21r42r00            195 	ld	hl,#(_sprite + 0x0042)
+   014D 36 9A               196 	ld	(hl),#0x9A
+   014F 21r43r00            197 	ld	hl,#(_sprite + 0x0043)
+   0152 36 FE               198 	ld	(hl),#0xFE
+   0154 21r44r00            199 	ld	hl,#(_sprite + 0x0044)
+   0157 36 42               200 	ld	(hl),#0x42
+   0159 21r45r00            201 	ld	hl,#(_sprite + 0x0045)
+   015C 36 7E               202 	ld	(hl),#0x7E
+   015E 21r46r00            203 	ld	hl,#(_sprite + 0x0046)
+   0161 36 44               204 	ld	(hl),#0x44
+   0163 21r47r00            205 	ld	hl,#(_sprite + 0x0047)
+   0166 36 7C               206 	ld	(hl),#0x7C
+   0168 21r48r00            207 	ld	hl,#(_sprite + 0x0048)
+   016B 36 24               208 	ld	(hl),#0x24
+   016D 21r49r00            209 	ld	hl,#(_sprite + 0x0049)
+   0170 36 3C               210 	ld	(hl),#0x3C
+   0172 21r4Ar00            211 	ld	hl,#(_sprite + 0x004a)
+   0175 36 66               212 	ld	(hl),#0x66
+   0177 21r4Br00            213 	ld	hl,#(_sprite + 0x004b)
+   017A 36 7E               214 	ld	(hl),#0x7E
+   017C 21r4Cr00            215 	ld	hl,#(_sprite + 0x004c)
+   017F 36 5A               216 	ld	(hl),#0x5A
+   0181 21r4Dr00            217 	ld	hl,#(_sprite + 0x004d)
+   0184 36 5A               218 	ld	(hl),#0x5A
+   0186 21r4Er00            219 	ld	hl,#(_sprite + 0x004e)
+   0189 36 5A               220 	ld	(hl),#0x5A
+   018B 21r4Fr00            221 	ld	hl,#(_sprite + 0x004f)
+   018E 36 5A               222 	ld	(hl),#0x5A
+                            223 ;main.c:8: UINT8 timer = 0;
+   0190 21r59r00            224 	ld	hl,#_timer
+   0193 36 00               225 	ld	(hl),#0x00
+                            226 ;--------------------------------------------------------
+                            227 ; Home
+                            228 ;--------------------------------------------------------
+                            229 	.area _HOME
+                            230 	.area _HOME
+                            231 ;--------------------------------------------------------
+                            232 ; code
+                            233 ;--------------------------------------------------------
+                            234 	.area _CODE
+                            235 ;main.c:10: void performantDelay(UINT8 numloops){
+                            236 ;	---------------------------------
+                            237 ; Function performantDelay
+                            238 ; ---------------------------------
+   0000                     239 _performantDelay::
+                            240 ;main.c:13: for(i=0;i<numloops;i++){
+   0000 06 00               241 	ld	b,#0x00
+   0002                     242 00103$:
+   0002 78                  243 	ld	a,b
+   0003 F8 02               244 	ldhl	sp,#2
+   0005 96                  245 	sub	a, (hl)
+   0006 D0                  246 	ret	NC
+                            247 ;main.c:14: wait_vbl_done();
+   0007 C5                  248 	push	bc
+   0008 CDr00r00            249 	call	_wait_vbl_done
+   000B C1                  250 	pop	bc
+                            251 ;main.c:13: for(i=0;i<numloops;i++){
+   000C 04                  252 	inc	b
+   000D 18 F3               253 	jr	00103$
+   000F C9                  254 	ret
+                            255 ;main.c:18: void updateSwitches(){
+                            256 ;	---------------------------------
+                            257 ; Function updateSwitches
+                            258 ; ---------------------------------
+   0010                     259 _updateSwitches::
+                            260 ;main.c:19: HIDE_WIN;
+   0010 11 40 FF            261 	ld	de,#0xFF40
+   0013 1A                  262 	ld	a,(de)
+   0014 47                  263 	ld	b,a
+   0015 16 00               264 	ld	d,#0x00
+   0017 CB A8               265 	res	5, b
+   0019 16 00               266 	ld	d,#0x00
+   001B 21 40 FF            267 	ld	hl,#0xFF40
+   001E 70                  268 	ld	(hl),b
+                            269 ;main.c:20: SHOW_SPRITES;
+   001F 11 40 FF            270 	ld	de,#0xFF40
+   0022 1A                  271 	ld	a,(de)
+   0023 5F                  272 	ld	e,a
+   0024 16 00               273 	ld	d,#0x00
+   0026 7B                  274 	ld	a,e
+   0027 CB CF               275 	set	1, a
+   0029 47                  276 	ld	b,a
+   002A 2E 40               277 	ld	l, #0x40
+   002C 70                  278 	ld	(hl),b
+                            279 ;main.c:21: SHOW_BKG;
+   002D 11 40 FF            280 	ld	de,#0xFF40
+   0030 1A                  281 	ld	a,(de)
+   0031 5F                  282 	ld	e,a
+   0032 16 00               283 	ld	d,#0x00
+   0034 7B                  284 	ld	a,e
+   0035 CB C7               285 	set	0, a
+   0037 47                  286 	ld	b,a
+   0038 2E 40               287 	ld	l, #0x40
+   003A 70                  288 	ld	(hl),b
+   003B C9                  289 	ret
+                            290 ;main.c:24: void moveGameCharAnim(){
+                            291 ;	---------------------------------
+                            292 ; Function moveGameCharAnim
+                            293 ; ---------------------------------
+   003C                     294 _moveGameCharAnim::
+                            295 ;main.c:26: if(timer == 5){
+   003C 21r59r00            296 	ld	hl,#_timer
+   003F 7E                  297 	ld	a,(hl)
+   0040 D6 05               298 	sub	a, #0x05
+   0042 20 14               299 	jr	NZ,00104$
+                            300 ;main.c:27: set_sprite_tile(1, 3);
+   0044 21 01 03            301 	ld	hl,#0x0301
+   0047 E5                  302 	push	hl
+   0048 CDr00r00            303 	call	_set_sprite_tile
+   004B E8 02               304 	add	sp, #2
+                            305 ;main.c:28: set_sprite_tile(2, 4);
+   004D 21 02 04            306 	ld	hl,#0x0402
+   0050 E5                  307 	push	hl
+   0051 CDr00r00            308 	call	_set_sprite_tile
+   0054 E8 02               309 	add	sp, #2
+   0056 18 1F               310 	jr	00105$
+   0058                     311 00104$:
+                            312 ;main.c:30: else if(timer == 10){
+   0058 21r59r00            313 	ld	hl,#_timer
+   005B 7E                  314 	ld	a,(hl)
+   005C D6 0A               315 	sub	a, #0x0A
+   005E 20 17               316 	jr	NZ,00105$
+                            317 ;main.c:31: set_sprite_tile(1, 1);
+   0060 21 01 01            318 	ld	hl,#0x0101
+   0063 E5                  319 	push	hl
+   0064 CDr00r00            320 	call	_set_sprite_tile
+   0067 E8 02               321 	add	sp, #2
+                            322 ;main.c:32: set_sprite_tile(2, 2);
+   0069 21 02 02            323 	ld	hl,#0x0202
+   006C E5                  324 	push	hl
+   006D CDr00r00            325 	call	_set_sprite_tile
+   0070 E8 02               326 	add	sp, #2
+                            327 ;main.c:33: timer = 0;
+   0072 21r59r00            328 	ld	hl,#_timer
+   0075 36 00               329 	ld	(hl),#0x00
+   0077                     330 00105$:
+                            331 ;main.c:35: timer++;
+   0077 21r59r00            332 	ld	hl,#_timer
+   007A 34                  333 	inc	(hl)
+   007B C9                  334 	ret
+                            335 ;main.c:38: void moveGameCharacter(struct gameCharacter* character, UINT8 x, UINT8 y){
+                            336 ;	---------------------------------
+                            337 ; Function moveGameCharacter
+                            338 ; ---------------------------------
+   007C                     339 _moveGameCharacter::
+   007C E8 FD               340 	add	sp, #-3
+                            341 ;main.c:39: move_sprite(character->spriteId[1],x,y);
+   007E F8 05               342 	ldhl	sp,#5
+   0080 2A                  343 	ld	a,(hl+)
+   0081 5E                  344 	ld	e, (hl)
+   0082 F8 00               345 	ldhl	sp,#0
+   0084 22                  346 	ld	(hl+),a
+   0085 73                  347 	ld	(hl),e
+   0086 C1                  348 	pop	bc
+   0087 C5                  349 	push	bc
+   0088 03                  350 	inc	bc
+   0089 0A                  351 	ld	a,(bc)
+   008A 57                  352 	ld	d,a
+   008B F8 08               353 	ldhl	sp,#8
+   008D 7E                  354 	ld	a,(hl)
+   008E F5                  355 	push	af
+   008F 33                  356 	inc	sp
+   0090 2B                  357 	dec	hl
+   0091 7E                  358 	ld	a,(hl)
+   0092 F5                  359 	push	af
+   0093 33                  360 	inc	sp
+   0094 D5                  361 	push	de
+   0095 33                  362 	inc	sp
+   0096 CDr00r00            363 	call	_move_sprite
+   0099 E8 03               364 	add	sp, #3
+                            365 ;main.c:40: move_sprite(character->spriteId[2],x,y + 8);
+   009B F8 08               366 	ldhl	sp,#8
+   009D 7E                  367 	ld	a,(hl)
+   009E C6 08               368 	add	a, #0x08
+   00A0 F8 02               369 	ldhl	sp,#2
+   00A2 77                  370 	ld	(hl),a
+   00A3 C1                  371 	pop	bc
+   00A4 C5                  372 	push	bc
+   00A5 03                  373 	inc	bc
+   00A6 03                  374 	inc	bc
+   00A7 0A                  375 	ld	a,(bc)
+   00A8 57                  376 	ld	d,a
+   00A9 7E                  377 	ld	a,(hl)
+   00AA F5                  378 	push	af
+   00AB 33                  379 	inc	sp
+   00AC F8 08               380 	ldhl	sp,#8
+   00AE 7E                  381 	ld	a,(hl)
+   00AF F5                  382 	push	af
+   00B0 33                  383 	inc	sp
+   00B1 D5                  384 	push	de
+   00B2 33                  385 	inc	sp
+   00B3 CDr00r00            386 	call	_move_sprite
+   00B6 E8 03               387 	add	sp, #3
+   00B8 E8 03               388 	add	sp, #3
+   00BA C9                  389 	ret
+                            390 ;main.c:44: void setupSpider(){
+                            391 ;	---------------------------------
+                            392 ; Function setupSpider
+                            393 ; ---------------------------------
+   00BB                     394 _setupSpider::
+                            395 ;main.c:45: spider.x=80;
+   00BB 21r55r00            396 	ld	hl,#(_spider + 0x0005)
+   00BE 36 50               397 	ld	(hl),#0x50
+                            398 ;main.c:46: spider.y=130;
+   00C0 21r56r00            399 	ld	hl,#(_spider + 0x0006)
+   00C3 36 82               400 	ld	(hl),#0x82
+                            401 ;main.c:47: spider.width=8;
+   00C5 21r57r00            402 	ld	hl,#(_spider + 0x0007)
+   00C8 36 08               403 	ld	(hl),#0x08
+                            404 ;main.c:48: spider.height=16;
+   00CA 21r58r00            405 	ld	hl,#(_spider + 0x0008)
+   00CD 36 10               406 	ld	(hl),#0x10
+                            407 ;main.c:50: set_sprite_tile(0,0);
+   00CF 21 00 00            408 	ld	hl,#0x0000
+   00D2 E5                  409 	push	hl
+   00D3 CDr00r00            410 	call	_set_sprite_tile
+   00D6 E8 02               411 	add	sp, #2
+                            412 ;main.c:51: spider.spriteId[0]=0;
+   00D8 21r50r00            413 	ld	hl,#_spider
+   00DB 36 00               414 	ld	(hl),#0x00
+                            415 ;main.c:53: set_sprite_tile(1,1);
+   00DD 21 01 01            416 	ld	hl,#0x0101
+   00E0 E5                  417 	push	hl
+   00E1 CDr00r00            418 	call	_set_sprite_tile
+   00E4 E8 02               419 	add	sp, #2
+                            420 ;main.c:54: spider.spriteId[1]=1;
+   00E6 21r51r00            421 	ld	hl,#(_spider + 0x0001)
+   00E9 36 01               422 	ld	(hl),#0x01
+                            423 ;main.c:55: set_sprite_tile(2,2);
+   00EB 21 02 02            424 	ld	hl,#0x0202
+   00EE E5                  425 	push	hl
+   00EF CDr00r00            426 	call	_set_sprite_tile
+   00F2 E8 02               427 	add	sp, #2
+                            428 ;main.c:56: spider.spriteId[2]=2;
+   00F4 21r52r00            429 	ld	hl,#(_spider + 0x0002)
+   00F7 36 02               430 	ld	(hl),#0x02
+                            431 ;main.c:63: moveGameCharacter(&spider,spider.x,spider.y);
+   00F9 11r56r00            432 	ld	de, #(_spider + 0x0006) + 0
+   00FC 1A                  433 	ld	a,(de)
+   00FD 4F                  434 	ld	c,a
+   00FE 11r55r00            435 	ld	de, #(_spider + 0x0005) + 0
+   0101 1A                  436 	ld	a,(de)
+   0102 47                  437 	ld	b,a
+   0103 11r50r00            438 	ld	de,#_spider
+   0106 79                  439 	ld	a,c
+   0107 F5                  440 	push	af
+   0108 33                  441 	inc	sp
+   0109 C5                  442 	push	bc
+   010A 33                  443 	inc	sp
+   010B D5                  444 	push	de
+   010C CDr7Cr00            445 	call	_moveGameCharacter
+   010F E8 04               446 	add	sp, #4
+   0111 C9                  447 	ret
+                            448 ;main.c:66: void main(){
+                            449 ;	---------------------------------
+                            450 ; Function main
+                            451 ; ---------------------------------
+   0112                     452 _main::
+                            453 ;main.c:67: set_sprite_data(0,5,sprite);
+   0112 11r00r00            454 	ld	de,#_sprite
+   0115 D5                  455 	push	de
+   0116 21 00 05            456 	ld	hl,#0x0500
+   0119 E5                  457 	push	hl
+   011A CDr00r00            458 	call	_set_sprite_data
+   011D E8 04               459 	add	sp, #4
+                            460 ;main.c:68: setupSpider();
+   011F CDrBBr00            461 	call	_setupSpider
+                            462 ;main.c:71: SHOW_SPRITES;
+   0122 11 40 FF            463 	ld	de,#0xFF40
+   0125 1A                  464 	ld	a,(de)
+   0126 5F                  465 	ld	e,a
+   0127 16 00               466 	ld	d,#0x00
+   0129 7B                  467 	ld	a,e
+   012A CB CF               468 	set	1, a
+   012C 47                  469 	ld	b,a
+   012D 21 40 FF            470 	ld	hl,#0xFF40
+   0130 70                  471 	ld	(hl),b
+                            472 ;main.c:72: DISPLAY_ON;
+   0131 11 40 FF            473 	ld	de,#0xFF40
+   0134 1A                  474 	ld	a,(de)
+   0135 5F                  475 	ld	e,a
+   0136 16 00               476 	ld	d,#0x00
+   0138 7B                  477 	ld	a,e
+   0139 CB FF               478 	set	7, a
+   013B 47                  479 	ld	b,a
+   013C 2E 40               480 	ld	l, #0x40
+   013E 70                  481 	ld	(hl),b
+                            482 ;main.c:75: while(1){
+   013F                     483 00106$:
+                            484 ;main.c:76: moveGameCharAnim();
+   013F CDr3Cr00            485 	call	_moveGameCharAnim
+                            486 ;main.c:79: if(joypad() & J_LEFT){
+   0142 CDr00r00            487 	call	_joypad
+   0145 16 00               488 	ld	d,#0x00
+   0147 CB 4B               489 	bit	1, e
+   0149 28 20               490 	jr	Z,00102$
+                            491 ;main.c:80: spider.x -= 2;
+   014B FAr55r00            492 	ld	a, (#(_spider + 0x0005) + 0)
+   014E 47                  493 	ld	b,a
+   014F 05                  494 	dec	b
+   0150 05                  495 	dec	b
+   0151 21r55r00            496 	ld	hl,#(_spider + 0x0005)
+   0154 70                  497 	ld	(hl),b
+                            498 ;main.c:81: moveGameCharacter(&spider,spider.x,spider.y);
+   0155 11r56r00            499 	ld	de, #(_spider + 0x0006) + 0
+   0158 1A                  500 	ld	a,(de)
+   0159 4F                  501 	ld	c,a
+   015A 11r50r00            502 	ld	de,#_spider
+   015D 79                  503 	ld	a,c
+   015E F5                  504 	push	af
+   015F 33                  505 	inc	sp
+   0160 C5                  506 	push	bc
+   0161 33                  507 	inc	sp
+   0162 D5                  508 	push	de
+   0163 CDr7Cr00            509 	call	_moveGameCharacter
+   0166 E8 04               510 	add	sp, #4
+                            511 ;main.c:82: moveGameCharAnim();
+   0168 CDr3Cr00            512 	call	_moveGameCharAnim
+   016B                     513 00102$:
+                            514 ;main.c:86: if(joypad() & J_RIGHT){
+   016B CDr00r00            515 	call	_joypad
+   016E 16 00               516 	ld	d,#0x00
+   0170 CB 43               517 	bit	0, e
+   0172 28 20               518 	jr	Z,00104$
+                            519 ;main.c:87: spider.x += 2;
+   0174 FAr55r00            520 	ld	a, (#(_spider + 0x0005) + 0)
+   0177 47                  521 	ld	b,a
+   0178 04                  522 	inc	b
+   0179 04                  523 	inc	b
+   017A 21r55r00            524 	ld	hl,#(_spider + 0x0005)
+   017D 70                  525 	ld	(hl),b
+                            526 ;main.c:88: moveGameCharacter(&spider,spider.x,spider.y);
+   017E 11r56r00            527 	ld	de, #(_spider + 0x0006) + 0
+   0181 1A                  528 	ld	a,(de)
+   0182 4F                  529 	ld	c,a
+   0183 11r50r00            530 	ld	de,#_spider
+   0186 79                  531 	ld	a,c
+   0187 F5                  532 	push	af
+   0188 33                  533 	inc	sp
+   0189 C5                  534 	push	bc
+   018A 33                  535 	inc	sp
+   018B D5                  536 	push	de
+   018C CDr7Cr00            537 	call	_moveGameCharacter
+   018F E8 04               538 	add	sp, #4
+                            539 ;main.c:89: moveGameCharAnim();
+   0191 CDr3Cr00            540 	call	_moveGameCharAnim
+   0194                     541 00104$:
+                            542 ;main.c:93: performantDelay(1);
+   0194 3E 01               543 	ld	a,#0x01
+   0196 F5                  544 	push	af
+   0197 33                  545 	inc	sp
+   0198 CDr00r00            546 	call	_performantDelay
+   019B 33                  547 	inc	sp
+   019C C3r3Fr01            548 	jp	00106$
+   019F C9                  549 	ret
+                            550 	.area _CODE
+                            551 	.area _CABS (ABS)

@@ -1,0 +1,3665 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : FreeWare ANSI-C Compiler
+                              3 ; Version 2.2.1 Thu Nov 07 07:42:29 2019
+                              4 
+                              5 ;--------------------------------------------------------
+                              6 	.module lcc9600
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _animateSprite
+                             13 	.globl _canPlayerMove
+                             14 	.globl _performantdelay
+                             15 	.globl _scroll_sprite
+                             16 	.globl _move_sprite
+                             17 	.globl _set_sprite_tile
+                             18 	.globl _set_sprite_data
+                             19 	.globl _set_bkg_tiles
+                             20 	.globl _set_bkg_data
+                             21 	.globl _wait_vbl_done
+                             22 	.globl _joypad
+                             23 	.globl _playerlocation
+                             24 	.globl _Snail
+                             25 	.globl _MazeMap
+                             26 	.globl _MazeSprites
+                             27 	.globl _main
+                             28 	.globl _animateSprite
+                             29 	.globl _canPlayerMove
+                             30 	.globl _blankmap
+                             31 	.globl _performantdelay
+                             32 ;--------------------------------------------------------
+                             33 ; Externals used
+                             34 ;--------------------------------------------------------
+                             35 	.globl _IE_REG
+                             36 	.globl _SVBK_REG
+                             37 	.globl _OCPD_REG
+                             38 	.globl _OCPS_REG
+                             39 	.globl _BCPD_REG
+                             40 	.globl _BCPS_REG
+                             41 	.globl _RP_REG
+                             42 	.globl _HDMA5_REG
+                             43 	.globl _HDMA4_REG
+                             44 	.globl _HDMA3_REG
+                             45 	.globl _HDMA2_REG
+                             46 	.globl _HDMA1_REG
+                             47 	.globl _VBK_REG
+                             48 	.globl _KEY1_REG
+                             49 	.globl _WX_REG
+                             50 	.globl _WY_REG
+                             51 	.globl _OBP1_REG
+                             52 	.globl _OBP0_REG
+                             53 	.globl _BGP_REG
+                             54 	.globl _DMA_REG
+                             55 	.globl _LYC_REG
+                             56 	.globl _LY_REG
+                             57 	.globl _SCX_REG
+                             58 	.globl _SCY_REG
+                             59 	.globl _STAT_REG
+                             60 	.globl _LCDC_REG
+                             61 	.globl _NR52_REG
+                             62 	.globl _NR51_REG
+                             63 	.globl _NR50_REG
+                             64 	.globl _NR44_REG
+                             65 	.globl _NR43_REG
+                             66 	.globl _NR42_REG
+                             67 	.globl _NR41_REG
+                             68 	.globl _NR34_REG
+                             69 	.globl _NR33_REG
+                             70 	.globl _NR32_REG
+                             71 	.globl _NR31_REG
+                             72 	.globl _NR30_REG
+                             73 	.globl _NR24_REG
+                             74 	.globl _NR23_REG
+                             75 	.globl _NR22_REG
+                             76 	.globl _NR21_REG
+                             77 	.globl _NR14_REG
+                             78 	.globl _NR13_REG
+                             79 	.globl _NR12_REG
+                             80 	.globl _NR11_REG
+                             81 	.globl _NR10_REG
+                             82 	.globl _IF_REG
+                             83 	.globl _TAC_REG
+                             84 	.globl _TMA_REG
+                             85 	.globl _TIMA_REG
+                             86 	.globl _DIV_REG
+                             87 	.globl _SC_REG
+                             88 	.globl _SB_REG
+                             89 	.globl _P1_REG
+                             90 	.globl __io_out
+                             91 	.globl __io_in
+                             92 	.globl __io_status
+                             93 	.globl _sys_time
+                             94 	.globl __cpu
+                             95 ;--------------------------------------------------------
+                             96 ; special function registers
+                             97 ;--------------------------------------------------------
+                             98 ;--------------------------------------------------------
+                             99 ; special function bits 
+                            100 ;--------------------------------------------------------
+                            101 ;--------------------------------------------------------
+                            102 ; internal ram data
+                            103 ;--------------------------------------------------------
+                            104 	.area _DATA
+   0000                     105 _MazeSprites::
+   0000                     106 	.ds 64
+   0040                     107 _MazeMap::
+   0040                     108 	.ds 360
+   01A8                     109 _Snail::
+   01A8                     110 	.ds 16
+   01B8                     111 _playerlocation::
+   01B8                     112 	.ds 2
+                            113 ;--------------------------------------------------------
+                            114 ; overlayable items in internal ram 
+                            115 ;--------------------------------------------------------
+                            116 	.area _OVERLAY
+                            117 ;--------------------------------------------------------
+                            118 ; indirectly addressable internal ram data
+                            119 ;--------------------------------------------------------
+                            120 	.area _ISEG
+                            121 ;--------------------------------------------------------
+                            122 ; bit data
+                            123 ;--------------------------------------------------------
+                            124 	.area _BSEG
+                            125 ;--------------------------------------------------------
+                            126 ; external ram data
+                            127 ;--------------------------------------------------------
+                            128 	.area _XSEG
+                            129 ;--------------------------------------------------------
+                            130 ; global & static initialisations
+                            131 ;--------------------------------------------------------
+                            132 	.area _GSINIT
+                            133 	.area _GSFINAL
+                            134 	.area _GSINIT
+                            135 ;	main.c 94
+                            136 ; genAssign (pointer)
+   0000 11 00 00            137 	ld	de,#_MazeSprites + 0
+   0003 3E 00               138 	ld	a,#0x00
+   0005 12                  139 	ld	(de),a
+                            140 ; genPlus
+                            141 ; genPlusIncr
+   0006 11 01 00            142 	ld	de,#_MazeSprites + 0 + 1
+                            143 ; genAssign (pointer)
+   0009 3E 00               144 	ld	a,#0x00
+   000B 12                  145 	ld	(de),a
+                            146 ; genPlus
+                            147 ; genPlusIncr
+   000C 11 02 00            148 	ld	de,#_MazeSprites + 0 + 2
+                            149 ; genAssign (pointer)
+   000F 3E 00               150 	ld	a,#0x00
+   0011 12                  151 	ld	(de),a
+                            152 ; genPlus
+                            153 ; genPlusIncr
+   0012 11 03 00            154 	ld	de,#_MazeSprites + 0 + 3
+                            155 ; genAssign (pointer)
+   0015 3E 00               156 	ld	a,#0x00
+   0017 12                  157 	ld	(de),a
+                            158 ; genPlus
+                            159 ; genPlusIncr
+   0018 11 04 00            160 	ld	de,#_MazeSprites + 0 + 4
+                            161 ; genAssign (pointer)
+   001B 3E 00               162 	ld	a,#0x00
+   001D 12                  163 	ld	(de),a
+                            164 ; genPlus
+                            165 ; genPlusIncr
+   001E 11 05 00            166 	ld	de,#_MazeSprites + 0 + 5
+                            167 ; genAssign (pointer)
+   0021 3E 00               168 	ld	a,#0x00
+   0023 12                  169 	ld	(de),a
+                            170 ; genPlus
+                            171 ; genPlusIncr
+   0024 11 06 00            172 	ld	de,#_MazeSprites + 0 + 6
+                            173 ; genAssign (pointer)
+   0027 3E 00               174 	ld	a,#0x00
+   0029 12                  175 	ld	(de),a
+                            176 ; genPlus
+                            177 ; genPlusIncr
+   002A 11 07 00            178 	ld	de,#_MazeSprites + 0 + 7
+                            179 ; genAssign (pointer)
+   002D 3E 00               180 	ld	a,#0x00
+   002F 12                  181 	ld	(de),a
+                            182 ; genPlus
+                            183 ; genPlusIncr
+   0030 11 08 00            184 	ld	de,#_MazeSprites + 0 + 8
+                            185 ; genAssign (pointer)
+   0033 3E 00               186 	ld	a,#0x00
+   0035 12                  187 	ld	(de),a
+                            188 ; genPlus
+                            189 ; genPlusIncr
+   0036 11 09 00            190 	ld	de,#_MazeSprites + 0 + 9
+                            191 ; genAssign (pointer)
+   0039 3E 00               192 	ld	a,#0x00
+   003B 12                  193 	ld	(de),a
+                            194 ; genPlus
+                            195 ; genPlusIncr
+   003C 11 0A 00            196 	ld	de,#_MazeSprites + 0 + 10
+                            197 ; genAssign (pointer)
+   003F 3E 00               198 	ld	a,#0x00
+   0041 12                  199 	ld	(de),a
+                            200 ; genPlus
+                            201 ; genPlusIncr
+   0042 11 0B 00            202 	ld	de,#_MazeSprites + 0 + 11
+                            203 ; genAssign (pointer)
+   0045 3E 00               204 	ld	a,#0x00
+   0047 12                  205 	ld	(de),a
+                            206 ; genPlus
+                            207 ; genPlusIncr
+   0048 11 0C 00            208 	ld	de,#_MazeSprites + 0 + 12
+                            209 ; genAssign (pointer)
+   004B 3E 00               210 	ld	a,#0x00
+   004D 12                  211 	ld	(de),a
+                            212 ; genPlus
+                            213 ; genPlusIncr
+   004E 11 0D 00            214 	ld	de,#_MazeSprites + 0 + 13
+                            215 ; genAssign (pointer)
+   0051 3E 00               216 	ld	a,#0x00
+   0053 12                  217 	ld	(de),a
+                            218 ; genPlus
+                            219 ; genPlusIncr
+   0054 11 0E 00            220 	ld	de,#_MazeSprites + 0 + 14
+                            221 ; genAssign (pointer)
+   0057 3E 00               222 	ld	a,#0x00
+   0059 12                  223 	ld	(de),a
+                            224 ; genPlus
+                            225 ; genPlusIncr
+   005A 11 0F 00            226 	ld	de,#_MazeSprites + 0 + 15
+                            227 ; genAssign (pointer)
+   005D 3E 00               228 	ld	a,#0x00
+   005F 12                  229 	ld	(de),a
+                            230 ; genPlus
+                            231 ; genPlusIncr
+   0060 11 10 00            232 	ld	de,#_MazeSprites + 0 + 16
+                            233 ; genAssign (pointer)
+   0063 3E 7E               234 	ld	a,#0x7E
+   0065 12                  235 	ld	(de),a
+                            236 ; genPlus
+                            237 ; genPlusIncr
+   0066 11 11 00            238 	ld	de,#_MazeSprites + 0 + 17
+                            239 ; genAssign (pointer)
+   0069 3E 7E               240 	ld	a,#0x7E
+   006B 12                  241 	ld	(de),a
+                            242 ; genPlus
+                            243 ; genPlusIncr
+   006C 11 12 00            244 	ld	de,#_MazeSprites + 0 + 18
+                            245 ; genAssign (pointer)
+   006F 3E DF               246 	ld	a,#0xDF
+   0071 12                  247 	ld	(de),a
+                            248 ; genPlus
+                            249 ; genPlusIncr
+   0072 11 13 00            250 	ld	de,#_MazeSprites + 0 + 19
+                            251 ; genAssign (pointer)
+   0075 3E E3               252 	ld	a,#0xE3
+   0077 12                  253 	ld	(de),a
+                            254 ; genPlus
+                            255 ; genPlusIncr
+   0078 11 14 00            256 	ld	de,#_MazeSprites + 0 + 20
+                            257 ; genAssign (pointer)
+   007B 3E B7               258 	ld	a,#0xB7
+   007D 12                  259 	ld	(de),a
+                            260 ; genPlus
+                            261 ; genPlusIncr
+   007E 11 15 00            262 	ld	de,#_MazeSprites + 0 + 21
+                            263 ; genAssign (pointer)
+   0081 3E C9               264 	ld	a,#0xC9
+   0083 12                  265 	ld	(de),a
+                            266 ; genPlus
+                            267 ; genPlusIncr
+   0084 11 16 00            268 	ld	de,#_MazeSprites + 0 + 22
+                            269 ; genAssign (pointer)
+   0087 3E AB               270 	ld	a,#0xAB
+   0089 12                  271 	ld	(de),a
+                            272 ; genPlus
+                            273 ; genPlusIncr
+   008A 11 17 00            274 	ld	de,#_MazeSprites + 0 + 23
+                            275 ; genAssign (pointer)
+   008D 3E D5               276 	ld	a,#0xD5
+   008F 12                  277 	ld	(de),a
+                            278 ; genPlus
+                            279 ; genPlusIncr
+   0090 11 18 00            280 	ld	de,#_MazeSprites + 0 + 24
+                            281 ; genAssign (pointer)
+   0093 3E 97               282 	ld	a,#0x97
+   0095 12                  283 	ld	(de),a
+                            284 ; genPlus
+                            285 ; genPlusIncr
+   0096 11 19 00            286 	ld	de,#_MazeSprites + 0 + 25
+                            287 ; genAssign (pointer)
+   0099 3E E9               288 	ld	a,#0xE9
+   009B 12                  289 	ld	(de),a
+                            290 ; genPlus
+                            291 ; genPlusIncr
+   009C 11 1A 00            292 	ld	de,#_MazeSprites + 0 + 26
+                            293 ; genAssign (pointer)
+   009F 3E AB               294 	ld	a,#0xAB
+   00A1 12                  295 	ld	(de),a
+                            296 ; genPlus
+                            297 ; genPlusIncr
+   00A2 11 1B 00            298 	ld	de,#_MazeSprites + 0 + 27
+                            299 ; genAssign (pointer)
+   00A5 3E D5               300 	ld	a,#0xD5
+   00A7 12                  301 	ld	(de),a
+                            302 ; genPlus
+                            303 ; genPlusIncr
+   00A8 11 1C 00            304 	ld	de,#_MazeSprites + 0 + 28
+                            305 ; genAssign (pointer)
+   00AB 3E C7               306 	ld	a,#0xC7
+   00AD 12                  307 	ld	(de),a
+                            308 ; genPlus
+                            309 ; genPlusIncr
+   00AE 11 1D 00            310 	ld	de,#_MazeSprites + 0 + 29
+                            311 ; genAssign (pointer)
+   00B1 3E FB               312 	ld	a,#0xFB
+   00B3 12                  313 	ld	(de),a
+                            314 ; genPlus
+                            315 ; genPlusIncr
+   00B4 11 1E 00            316 	ld	de,#_MazeSprites + 0 + 30
+                            317 ; genAssign (pointer)
+   00B7 3E 7E               318 	ld	a,#0x7E
+   00B9 12                  319 	ld	(de),a
+                            320 ; genPlus
+                            321 ; genPlusIncr
+   00BA 11 1F 00            322 	ld	de,#_MazeSprites + 0 + 31
+                            323 ; genAssign (pointer)
+   00BD 3E 7E               324 	ld	a,#0x7E
+   00BF 12                  325 	ld	(de),a
+                            326 ; genPlus
+                            327 ; genPlusIncr
+   00C0 11 20 00            328 	ld	de,#_MazeSprites + 0 + 32
+                            329 ; genAssign (pointer)
+   00C3 3E 18               330 	ld	a,#0x18
+   00C5 12                  331 	ld	(de),a
+                            332 ; genPlus
+                            333 ; genPlusIncr
+   00C6 11 21 00            334 	ld	de,#_MazeSprites + 0 + 33
+                            335 ; genAssign (pointer)
+   00C9 3E 18               336 	ld	a,#0x18
+   00CB 12                  337 	ld	(de),a
+                            338 ; genPlus
+                            339 ; genPlusIncr
+   00CC 11 22 00            340 	ld	de,#_MazeSprites + 0 + 34
+                            341 ; genAssign (pointer)
+   00CF 3E 76               342 	ld	a,#0x76
+   00D1 12                  343 	ld	(de),a
+                            344 ; genPlus
+                            345 ; genPlusIncr
+   00D2 11 23 00            346 	ld	de,#_MazeSprites + 0 + 35
+                            347 ; genAssign (pointer)
+   00D5 3E 6E               348 	ld	a,#0x6E
+   00D7 12                  349 	ld	(de),a
+                            350 ; genPlus
+                            351 ; genPlusIncr
+   00D8 11 24 00            352 	ld	de,#_MazeSprites + 0 + 36
+                            353 ; genAssign (pointer)
+   00DB 3E D7               354 	ld	a,#0xD7
+   00DD 12                  355 	ld	(de),a
+                            356 ; genPlus
+                            357 ; genPlusIncr
+   00DE 11 25 00            358 	ld	de,#_MazeSprites + 0 + 37
+                            359 ; genAssign (pointer)
+   00E1 3E EB               360 	ld	a,#0xEB
+   00E3 12                  361 	ld	(de),a
+                            362 ; genPlus
+                            363 ; genPlusIncr
+   00E4 11 26 00            364 	ld	de,#_MazeSprites + 0 + 38
+                            365 ; genAssign (pointer)
+   00E7 3E D5               366 	ld	a,#0xD5
+   00E9 12                  367 	ld	(de),a
+                            368 ; genPlus
+                            369 ; genPlusIncr
+   00EA 11 27 00            370 	ld	de,#_MazeSprites + 0 + 39
+                            371 ; genAssign (pointer)
+   00ED 3E AB               372 	ld	a,#0xAB
+   00EF 12                  373 	ld	(de),a
+                            374 ; genPlus
+                            375 ; genPlusIncr
+   00F0 11 28 00            376 	ld	de,#_MazeSprites + 0 + 40
+                            377 ; genAssign (pointer)
+   00F3 3E D5               378 	ld	a,#0xD5
+   00F5 12                  379 	ld	(de),a
+                            380 ; genPlus
+                            381 ; genPlusIncr
+   00F6 11 29 00            382 	ld	de,#_MazeSprites + 0 + 41
+                            383 ; genAssign (pointer)
+   00F9 3E AB               384 	ld	a,#0xAB
+   00FB 12                  385 	ld	(de),a
+                            386 ; genPlus
+                            387 ; genPlusIncr
+   00FC 11 2A 00            388 	ld	de,#_MazeSprites + 0 + 42
+                            389 ; genAssign (pointer)
+   00FF 3E D5               390 	ld	a,#0xD5
+   0101 12                  391 	ld	(de),a
+                            392 ; genPlus
+                            393 ; genPlusIncr
+   0102 11 2B 00            394 	ld	de,#_MazeSprites + 0 + 43
+                            395 ; genAssign (pointer)
+   0105 3E AB               396 	ld	a,#0xAB
+   0107 12                  397 	ld	(de),a
+                            398 ; genPlus
+                            399 ; genPlusIncr
+   0108 11 2C 00            400 	ld	de,#_MazeSprites + 0 + 44
+                            401 ; genAssign (pointer)
+   010B 3E D5               402 	ld	a,#0xD5
+   010D 12                  403 	ld	(de),a
+                            404 ; genPlus
+                            405 ; genPlusIncr
+   010E 11 2D 00            406 	ld	de,#_MazeSprites + 0 + 45
+                            407 ; genAssign (pointer)
+   0111 3E AB               408 	ld	a,#0xAB
+   0113 12                  409 	ld	(de),a
+                            410 ; genPlus
+                            411 ; genPlusIncr
+   0114 11 2E 00            412 	ld	de,#_MazeSprites + 0 + 46
+                            413 ; genAssign (pointer)
+   0117 3E D5               414 	ld	a,#0xD5
+   0119 12                  415 	ld	(de),a
+                            416 ; genPlus
+                            417 ; genPlusIncr
+   011A 11 2F 00            418 	ld	de,#_MazeSprites + 0 + 47
+                            419 ; genAssign (pointer)
+   011D 3E AB               420 	ld	a,#0xAB
+   011F 12                  421 	ld	(de),a
+                            422 ; genPlus
+                            423 ; genPlusIncr
+   0120 11 30 00            424 	ld	de,#_MazeSprites + 0 + 48
+                            425 ; genAssign (pointer)
+   0123 3E 00               426 	ld	a,#0x00
+   0125 12                  427 	ld	(de),a
+                            428 ; genPlus
+                            429 ; genPlusIncr
+   0126 11 31 00            430 	ld	de,#_MazeSprites + 0 + 49
+                            431 ; genAssign (pointer)
+   0129 3E 38               432 	ld	a,#0x38
+   012B 12                  433 	ld	(de),a
+                            434 ; genPlus
+                            435 ; genPlusIncr
+   012C 11 32 00            436 	ld	de,#_MazeSprites + 0 + 50
+                            437 ; genAssign (pointer)
+   012F 3E 28               438 	ld	a,#0x28
+   0131 12                  439 	ld	(de),a
+                            440 ; genPlus
+                            441 ; genPlusIncr
+   0132 11 33 00            442 	ld	de,#_MazeSprites + 0 + 51
+                            443 ; genAssign (pointer)
+   0135 3E 44               444 	ld	a,#0x44
+   0137 12                  445 	ld	(de),a
+                            446 ; genPlus
+                            447 ; genPlusIncr
+   0138 11 34 00            448 	ld	de,#_MazeSprites + 0 + 52
+                            449 ; genAssign (pointer)
+   013B 3E 28               450 	ld	a,#0x28
+   013D 12                  451 	ld	(de),a
+                            452 ; genPlus
+                            453 ; genPlusIncr
+   013E 11 35 00            454 	ld	de,#_MazeSprites + 0 + 53
+                            455 ; genAssign (pointer)
+   0141 3E 44               456 	ld	a,#0x44
+   0143 12                  457 	ld	(de),a
+                            458 ; genPlus
+                            459 ; genPlusIncr
+   0144 11 36 00            460 	ld	de,#_MazeSprites + 0 + 54
+                            461 ; genAssign (pointer)
+   0147 3E 00               462 	ld	a,#0x00
+   0149 12                  463 	ld	(de),a
+                            464 ; genPlus
+                            465 ; genPlusIncr
+   014A 11 37 00            466 	ld	de,#_MazeSprites + 0 + 55
+                            467 ; genAssign (pointer)
+   014D 3E 38               468 	ld	a,#0x38
+   014F 12                  469 	ld	(de),a
+                            470 ; genPlus
+                            471 ; genPlusIncr
+   0150 11 38 00            472 	ld	de,#_MazeSprites + 0 + 56
+                            473 ; genAssign (pointer)
+   0153 3E 00               474 	ld	a,#0x00
+   0155 12                  475 	ld	(de),a
+                            476 ; genPlus
+                            477 ; genPlusIncr
+   0156 11 39 00            478 	ld	de,#_MazeSprites + 0 + 57
+                            479 ; genAssign (pointer)
+   0159 3E 10               480 	ld	a,#0x10
+   015B 12                  481 	ld	(de),a
+                            482 ; genPlus
+                            483 ; genPlusIncr
+   015C 11 3A 00            484 	ld	de,#_MazeSprites + 0 + 58
+                            485 ; genAssign (pointer)
+   015F 3E 00               486 	ld	a,#0x00
+   0161 12                  487 	ld	(de),a
+                            488 ; genPlus
+                            489 ; genPlusIncr
+   0162 11 3B 00            490 	ld	de,#_MazeSprites + 0 + 59
+                            491 ; genAssign (pointer)
+   0165 3E 18               492 	ld	a,#0x18
+   0167 12                  493 	ld	(de),a
+                            494 ; genPlus
+                            495 ; genPlusIncr
+   0168 11 3C 00            496 	ld	de,#_MazeSprites + 0 + 60
+                            497 ; genAssign (pointer)
+   016B 3E 00               498 	ld	a,#0x00
+   016D 12                  499 	ld	(de),a
+                            500 ; genPlus
+                            501 ; genPlusIncr
+   016E 11 3D 00            502 	ld	de,#_MazeSprites + 0 + 61
+                            503 ; genAssign (pointer)
+   0171 3E 10               504 	ld	a,#0x10
+   0173 12                  505 	ld	(de),a
+                            506 ; genPlus
+                            507 ; genPlusIncr
+   0174 11 3E 00            508 	ld	de,#_MazeSprites + 0 + 62
+                            509 ; genAssign (pointer)
+   0177 3E 00               510 	ld	a,#0x00
+   0179 12                  511 	ld	(de),a
+                            512 ; genPlus
+                            513 ; genPlusIncr
+   017A 11 3F 00            514 	ld	de,#_MazeSprites + 0 + 63
+                            515 ; genAssign (pointer)
+   017D 3E 1C               516 	ld	a,#0x1C
+   017F 12                  517 	ld	(de),a
+                            518 ;	main.c 94
+                            519 ; genAssign (pointer)
+   0180 11 40 00            520 	ld	de,#_MazeMap + 0
+   0183 3E 01               521 	ld	a,#0x01
+   0185 12                  522 	ld	(de),a
+                            523 ; genPlus
+                            524 ; genPlusIncr
+   0186 11 41 00            525 	ld	de,#_MazeMap + 0 + 1
+                            526 ; genAssign (pointer)
+   0189 3E 01               527 	ld	a,#0x01
+   018B 12                  528 	ld	(de),a
+                            529 ; genPlus
+                            530 ; genPlusIncr
+   018C 11 42 00            531 	ld	de,#_MazeMap + 0 + 2
+                            532 ; genAssign (pointer)
+   018F 3E 01               533 	ld	a,#0x01
+   0191 12                  534 	ld	(de),a
+                            535 ; genPlus
+                            536 ; genPlusIncr
+   0192 11 43 00            537 	ld	de,#_MazeMap + 0 + 3
+                            538 ; genAssign (pointer)
+   0195 3E 01               539 	ld	a,#0x01
+   0197 12                  540 	ld	(de),a
+                            541 ; genPlus
+                            542 ; genPlusIncr
+   0198 11 44 00            543 	ld	de,#_MazeMap + 0 + 4
+                            544 ; genAssign (pointer)
+   019B 3E 01               545 	ld	a,#0x01
+   019D 12                  546 	ld	(de),a
+                            547 ; genPlus
+                            548 ; genPlusIncr
+   019E 11 45 00            549 	ld	de,#_MazeMap + 0 + 5
+                            550 ; genAssign (pointer)
+   01A1 3E 01               551 	ld	a,#0x01
+   01A3 12                  552 	ld	(de),a
+                            553 ; genPlus
+                            554 ; genPlusIncr
+   01A4 11 46 00            555 	ld	de,#_MazeMap + 0 + 6
+                            556 ; genAssign (pointer)
+   01A7 3E 01               557 	ld	a,#0x01
+   01A9 12                  558 	ld	(de),a
+                            559 ; genPlus
+                            560 ; genPlusIncr
+   01AA 11 47 00            561 	ld	de,#_MazeMap + 0 + 7
+                            562 ; genAssign (pointer)
+   01AD 3E 01               563 	ld	a,#0x01
+   01AF 12                  564 	ld	(de),a
+                            565 ; genPlus
+                            566 ; genPlusIncr
+   01B0 11 48 00            567 	ld	de,#_MazeMap + 0 + 8
+                            568 ; genAssign (pointer)
+   01B3 3E 01               569 	ld	a,#0x01
+   01B5 12                  570 	ld	(de),a
+                            571 ; genPlus
+                            572 ; genPlusIncr
+   01B6 11 49 00            573 	ld	de,#_MazeMap + 0 + 9
+                            574 ; genAssign (pointer)
+   01B9 3E 01               575 	ld	a,#0x01
+   01BB 12                  576 	ld	(de),a
+                            577 ; genPlus
+                            578 ; genPlusIncr
+   01BC 11 4A 00            579 	ld	de,#_MazeMap + 0 + 10
+                            580 ; genAssign (pointer)
+   01BF 3E 01               581 	ld	a,#0x01
+   01C1 12                  582 	ld	(de),a
+                            583 ; genPlus
+                            584 ; genPlusIncr
+   01C2 11 4B 00            585 	ld	de,#_MazeMap + 0 + 11
+                            586 ; genAssign (pointer)
+   01C5 3E 01               587 	ld	a,#0x01
+   01C7 12                  588 	ld	(de),a
+                            589 ; genPlus
+                            590 ; genPlusIncr
+   01C8 11 4C 00            591 	ld	de,#_MazeMap + 0 + 12
+                            592 ; genAssign (pointer)
+   01CB 3E 01               593 	ld	a,#0x01
+   01CD 12                  594 	ld	(de),a
+                            595 ; genPlus
+                            596 ; genPlusIncr
+   01CE 11 4D 00            597 	ld	de,#_MazeMap + 0 + 13
+                            598 ; genAssign (pointer)
+   01D1 3E 01               599 	ld	a,#0x01
+   01D3 12                  600 	ld	(de),a
+                            601 ; genPlus
+                            602 ; genPlusIncr
+   01D4 11 4E 00            603 	ld	de,#_MazeMap + 0 + 14
+                            604 ; genAssign (pointer)
+   01D7 3E 01               605 	ld	a,#0x01
+   01D9 12                  606 	ld	(de),a
+                            607 ; genPlus
+                            608 ; genPlusIncr
+   01DA 11 4F 00            609 	ld	de,#_MazeMap + 0 + 15
+                            610 ; genAssign (pointer)
+   01DD 3E 01               611 	ld	a,#0x01
+   01DF 12                  612 	ld	(de),a
+                            613 ; genPlus
+                            614 ; genPlusIncr
+   01E0 11 50 00            615 	ld	de,#_MazeMap + 0 + 16
+                            616 ; genAssign (pointer)
+   01E3 3E 01               617 	ld	a,#0x01
+   01E5 12                  618 	ld	(de),a
+                            619 ; genPlus
+                            620 ; genPlusIncr
+   01E6 11 51 00            621 	ld	de,#_MazeMap + 0 + 17
+                            622 ; genAssign (pointer)
+   01E9 3E 01               623 	ld	a,#0x01
+   01EB 12                  624 	ld	(de),a
+                            625 ; genPlus
+                            626 ; genPlusIncr
+   01EC 11 52 00            627 	ld	de,#_MazeMap + 0 + 18
+                            628 ; genAssign (pointer)
+   01EF 3E 01               629 	ld	a,#0x01
+   01F1 12                  630 	ld	(de),a
+                            631 ; genPlus
+                            632 ; genPlusIncr
+   01F2 11 53 00            633 	ld	de,#_MazeMap + 0 + 19
+                            634 ; genAssign (pointer)
+   01F5 3E 01               635 	ld	a,#0x01
+   01F7 12                  636 	ld	(de),a
+                            637 ; genPlus
+                            638 ; genPlusIncr
+   01F8 11 54 00            639 	ld	de,#_MazeMap + 0 + 20
+                            640 ; genAssign (pointer)
+   01FB 3E 01               641 	ld	a,#0x01
+   01FD 12                  642 	ld	(de),a
+                            643 ; genPlus
+                            644 ; genPlusIncr
+   01FE 11 55 00            645 	ld	de,#_MazeMap + 0 + 21
+                            646 ; genAssign (pointer)
+   0201 3E 00               647 	ld	a,#0x00
+   0203 12                  648 	ld	(de),a
+                            649 ; genPlus
+                            650 ; genPlusIncr
+   0204 11 56 00            651 	ld	de,#_MazeMap + 0 + 22
+                            652 ; genAssign (pointer)
+   0207 3E 01               653 	ld	a,#0x01
+   0209 12                  654 	ld	(de),a
+                            655 ; genPlus
+                            656 ; genPlusIncr
+   020A 11 57 00            657 	ld	de,#_MazeMap + 0 + 23
+                            658 ; genAssign (pointer)
+   020D 3E 00               659 	ld	a,#0x00
+   020F 12                  660 	ld	(de),a
+                            661 ; genPlus
+                            662 ; genPlusIncr
+   0210 11 58 00            663 	ld	de,#_MazeMap + 0 + 24
+                            664 ; genAssign (pointer)
+   0213 3E 00               665 	ld	a,#0x00
+   0215 12                  666 	ld	(de),a
+                            667 ; genPlus
+                            668 ; genPlusIncr
+   0216 11 59 00            669 	ld	de,#_MazeMap + 0 + 25
+                            670 ; genAssign (pointer)
+   0219 3E 00               671 	ld	a,#0x00
+   021B 12                  672 	ld	(de),a
+                            673 ; genPlus
+                            674 ; genPlusIncr
+   021C 11 5A 00            675 	ld	de,#_MazeMap + 0 + 26
+                            676 ; genAssign (pointer)
+   021F 3E 00               677 	ld	a,#0x00
+   0221 12                  678 	ld	(de),a
+                            679 ; genPlus
+                            680 ; genPlusIncr
+   0222 11 5B 00            681 	ld	de,#_MazeMap + 0 + 27
+                            682 ; genAssign (pointer)
+   0225 3E 00               683 	ld	a,#0x00
+   0227 12                  684 	ld	(de),a
+                            685 ; genPlus
+                            686 ; genPlusIncr
+   0228 11 5C 00            687 	ld	de,#_MazeMap + 0 + 28
+                            688 ; genAssign (pointer)
+   022B 3E 00               689 	ld	a,#0x00
+   022D 12                  690 	ld	(de),a
+                            691 ; genPlus
+                            692 ; genPlusIncr
+   022E 11 5D 00            693 	ld	de,#_MazeMap + 0 + 29
+                            694 ; genAssign (pointer)
+   0231 3E 00               695 	ld	a,#0x00
+   0233 12                  696 	ld	(de),a
+                            697 ; genPlus
+                            698 ; genPlusIncr
+   0234 11 5E 00            699 	ld	de,#_MazeMap + 0 + 30
+                            700 ; genAssign (pointer)
+   0237 3E 00               701 	ld	a,#0x00
+   0239 12                  702 	ld	(de),a
+                            703 ; genPlus
+                            704 ; genPlusIncr
+   023A 11 5F 00            705 	ld	de,#_MazeMap + 0 + 31
+                            706 ; genAssign (pointer)
+   023D 3E 00               707 	ld	a,#0x00
+   023F 12                  708 	ld	(de),a
+                            709 ; genPlus
+                            710 ; genPlusIncr
+   0240 11 60 00            711 	ld	de,#_MazeMap + 0 + 32
+                            712 ; genAssign (pointer)
+   0243 3E 00               713 	ld	a,#0x00
+   0245 12                  714 	ld	(de),a
+                            715 ; genPlus
+                            716 ; genPlusIncr
+   0246 11 61 00            717 	ld	de,#_MazeMap + 0 + 33
+                            718 ; genAssign (pointer)
+   0249 3E 00               719 	ld	a,#0x00
+   024B 12                  720 	ld	(de),a
+                            721 ; genPlus
+                            722 ; genPlusIncr
+   024C 11 62 00            723 	ld	de,#_MazeMap + 0 + 34
+                            724 ; genAssign (pointer)
+   024F 3E 00               725 	ld	a,#0x00
+   0251 12                  726 	ld	(de),a
+                            727 ; genPlus
+                            728 ; genPlusIncr
+   0252 11 63 00            729 	ld	de,#_MazeMap + 0 + 35
+                            730 ; genAssign (pointer)
+   0255 3E 00               731 	ld	a,#0x00
+   0257 12                  732 	ld	(de),a
+                            733 ; genPlus
+                            734 ; genPlusIncr
+   0258 11 64 00            735 	ld	de,#_MazeMap + 0 + 36
+                            736 ; genAssign (pointer)
+   025B 3E 00               737 	ld	a,#0x00
+   025D 12                  738 	ld	(de),a
+                            739 ; genPlus
+                            740 ; genPlusIncr
+   025E 11 65 00            741 	ld	de,#_MazeMap + 0 + 37
+                            742 ; genAssign (pointer)
+   0261 3E 00               743 	ld	a,#0x00
+   0263 12                  744 	ld	(de),a
+                            745 ; genPlus
+                            746 ; genPlusIncr
+   0264 11 66 00            747 	ld	de,#_MazeMap + 0 + 38
+                            748 ; genAssign (pointer)
+   0267 3E 00               749 	ld	a,#0x00
+   0269 12                  750 	ld	(de),a
+                            751 ; genPlus
+                            752 ; genPlusIncr
+   026A 11 67 00            753 	ld	de,#_MazeMap + 0 + 39
+                            754 ; genAssign (pointer)
+   026D 3E 01               755 	ld	a,#0x01
+   026F 12                  756 	ld	(de),a
+                            757 ; genPlus
+                            758 ; genPlusIncr
+   0270 11 68 00            759 	ld	de,#_MazeMap + 0 + 40
+                            760 ; genAssign (pointer)
+   0273 3E 01               761 	ld	a,#0x01
+   0275 12                  762 	ld	(de),a
+                            763 ; genPlus
+                            764 ; genPlusIncr
+   0276 11 69 00            765 	ld	de,#_MazeMap + 0 + 41
+                            766 ; genAssign (pointer)
+   0279 3E 00               767 	ld	a,#0x00
+   027B 12                  768 	ld	(de),a
+                            769 ; genPlus
+                            770 ; genPlusIncr
+   027C 11 6A 00            771 	ld	de,#_MazeMap + 0 + 42
+                            772 ; genAssign (pointer)
+   027F 3E 01               773 	ld	a,#0x01
+   0281 12                  774 	ld	(de),a
+                            775 ; genPlus
+                            776 ; genPlusIncr
+   0282 11 6B 00            777 	ld	de,#_MazeMap + 0 + 43
+                            778 ; genAssign (pointer)
+   0285 3E 00               779 	ld	a,#0x00
+   0287 12                  780 	ld	(de),a
+                            781 ; genPlus
+                            782 ; genPlusIncr
+   0288 11 6C 00            783 	ld	de,#_MazeMap + 0 + 44
+                            784 ; genAssign (pointer)
+   028B 3E 01               785 	ld	a,#0x01
+   028D 12                  786 	ld	(de),a
+                            787 ; genPlus
+                            788 ; genPlusIncr
+   028E 11 6D 00            789 	ld	de,#_MazeMap + 0 + 45
+                            790 ; genAssign (pointer)
+   0291 3E 01               791 	ld	a,#0x01
+   0293 12                  792 	ld	(de),a
+                            793 ; genPlus
+                            794 ; genPlusIncr
+   0294 11 6E 00            795 	ld	de,#_MazeMap + 0 + 46
+                            796 ; genAssign (pointer)
+   0297 3E 01               797 	ld	a,#0x01
+   0299 12                  798 	ld	(de),a
+                            799 ; genPlus
+                            800 ; genPlusIncr
+   029A 11 6F 00            801 	ld	de,#_MazeMap + 0 + 47
+                            802 ; genAssign (pointer)
+   029D 3E 01               803 	ld	a,#0x01
+   029F 12                  804 	ld	(de),a
+                            805 ; genPlus
+                            806 ; genPlusIncr
+   02A0 11 70 00            807 	ld	de,#_MazeMap + 0 + 48
+                            808 ; genAssign (pointer)
+   02A3 3E 01               809 	ld	a,#0x01
+   02A5 12                  810 	ld	(de),a
+                            811 ; genPlus
+                            812 ; genPlusIncr
+   02A6 11 71 00            813 	ld	de,#_MazeMap + 0 + 49
+                            814 ; genAssign (pointer)
+   02A9 3E 01               815 	ld	a,#0x01
+   02AB 12                  816 	ld	(de),a
+                            817 ; genPlus
+                            818 ; genPlusIncr
+   02AC 11 72 00            819 	ld	de,#_MazeMap + 0 + 50
+                            820 ; genAssign (pointer)
+   02AF 3E 00               821 	ld	a,#0x00
+   02B1 12                  822 	ld	(de),a
+                            823 ; genPlus
+                            824 ; genPlusIncr
+   02B2 11 73 00            825 	ld	de,#_MazeMap + 0 + 51
+                            826 ; genAssign (pointer)
+   02B5 3E 01               827 	ld	a,#0x01
+   02B7 12                  828 	ld	(de),a
+                            829 ; genPlus
+                            830 ; genPlusIncr
+   02B8 11 74 00            831 	ld	de,#_MazeMap + 0 + 52
+                            832 ; genAssign (pointer)
+   02BB 3E 01               833 	ld	a,#0x01
+   02BD 12                  834 	ld	(de),a
+                            835 ; genPlus
+                            836 ; genPlusIncr
+   02BE 11 75 00            837 	ld	de,#_MazeMap + 0 + 53
+                            838 ; genAssign (pointer)
+   02C1 3E 01               839 	ld	a,#0x01
+   02C3 12                  840 	ld	(de),a
+                            841 ; genPlus
+                            842 ; genPlusIncr
+   02C4 11 76 00            843 	ld	de,#_MazeMap + 0 + 54
+                            844 ; genAssign (pointer)
+   02C7 3E 01               845 	ld	a,#0x01
+   02C9 12                  846 	ld	(de),a
+                            847 ; genPlus
+                            848 ; genPlusIncr
+   02CA 11 77 00            849 	ld	de,#_MazeMap + 0 + 55
+                            850 ; genAssign (pointer)
+   02CD 3E 01               851 	ld	a,#0x01
+   02CF 12                  852 	ld	(de),a
+                            853 ; genPlus
+                            854 ; genPlusIncr
+   02D0 11 78 00            855 	ld	de,#_MazeMap + 0 + 56
+                            856 ; genAssign (pointer)
+   02D3 3E 01               857 	ld	a,#0x01
+   02D5 12                  858 	ld	(de),a
+                            859 ; genPlus
+                            860 ; genPlusIncr
+   02D6 11 79 00            861 	ld	de,#_MazeMap + 0 + 57
+                            862 ; genAssign (pointer)
+   02D9 3E 01               863 	ld	a,#0x01
+   02DB 12                  864 	ld	(de),a
+                            865 ; genPlus
+                            866 ; genPlusIncr
+   02DC 11 7A 00            867 	ld	de,#_MazeMap + 0 + 58
+                            868 ; genAssign (pointer)
+   02DF 3E 00               869 	ld	a,#0x00
+   02E1 12                  870 	ld	(de),a
+                            871 ; genPlus
+                            872 ; genPlusIncr
+   02E2 11 7B 00            873 	ld	de,#_MazeMap + 0 + 59
+                            874 ; genAssign (pointer)
+   02E5 3E 01               875 	ld	a,#0x01
+   02E7 12                  876 	ld	(de),a
+                            877 ; genPlus
+                            878 ; genPlusIncr
+   02E8 11 7C 00            879 	ld	de,#_MazeMap + 0 + 60
+                            880 ; genAssign (pointer)
+   02EB 3E 01               881 	ld	a,#0x01
+   02ED 12                  882 	ld	(de),a
+                            883 ; genPlus
+                            884 ; genPlusIncr
+   02EE 11 7D 00            885 	ld	de,#_MazeMap + 0 + 61
+                            886 ; genAssign (pointer)
+   02F1 3E 00               887 	ld	a,#0x00
+   02F3 12                  888 	ld	(de),a
+                            889 ; genPlus
+                            890 ; genPlusIncr
+   02F4 11 7E 00            891 	ld	de,#_MazeMap + 0 + 62
+                            892 ; genAssign (pointer)
+   02F7 3E 01               893 	ld	a,#0x01
+   02F9 12                  894 	ld	(de),a
+                            895 ; genPlus
+                            896 ; genPlusIncr
+   02FA 11 7F 00            897 	ld	de,#_MazeMap + 0 + 63
+                            898 ; genAssign (pointer)
+   02FD 3E 00               899 	ld	a,#0x00
+   02FF 12                  900 	ld	(de),a
+                            901 ; genPlus
+                            902 ; genPlusIncr
+   0300 11 80 00            903 	ld	de,#_MazeMap + 0 + 64
+                            904 ; genAssign (pointer)
+   0303 3E 01               905 	ld	a,#0x01
+   0305 12                  906 	ld	(de),a
+                            907 ; genPlus
+                            908 ; genPlusIncr
+   0306 11 81 00            909 	ld	de,#_MazeMap + 0 + 65
+                            910 ; genAssign (pointer)
+   0309 3E 00               911 	ld	a,#0x00
+   030B 12                  912 	ld	(de),a
+                            913 ; genPlus
+                            914 ; genPlusIncr
+   030C 11 82 00            915 	ld	de,#_MazeMap + 0 + 66
+                            916 ; genAssign (pointer)
+   030F 3E 00               917 	ld	a,#0x00
+   0311 12                  918 	ld	(de),a
+                            919 ; genPlus
+                            920 ; genPlusIncr
+   0312 11 83 00            921 	ld	de,#_MazeMap + 0 + 67
+                            922 ; genAssign (pointer)
+   0315 3E 00               923 	ld	a,#0x00
+   0317 12                  924 	ld	(de),a
+                            925 ; genPlus
+                            926 ; genPlusIncr
+   0318 11 84 00            927 	ld	de,#_MazeMap + 0 + 68
+                            928 ; genAssign (pointer)
+   031B 3E 00               929 	ld	a,#0x00
+   031D 12                  930 	ld	(de),a
+                            931 ; genPlus
+                            932 ; genPlusIncr
+   031E 11 85 00            933 	ld	de,#_MazeMap + 0 + 69
+                            934 ; genAssign (pointer)
+   0321 3E 01               935 	ld	a,#0x01
+   0323 12                  936 	ld	(de),a
+                            937 ; genPlus
+                            938 ; genPlusIncr
+   0324 11 86 00            939 	ld	de,#_MazeMap + 0 + 70
+                            940 ; genAssign (pointer)
+   0327 3E 00               941 	ld	a,#0x00
+   0329 12                  942 	ld	(de),a
+                            943 ; genPlus
+                            944 ; genPlusIncr
+   032A 11 87 00            945 	ld	de,#_MazeMap + 0 + 71
+                            946 ; genAssign (pointer)
+   032D 3E 01               947 	ld	a,#0x01
+   032F 12                  948 	ld	(de),a
+                            949 ; genPlus
+                            950 ; genPlusIncr
+   0330 11 88 00            951 	ld	de,#_MazeMap + 0 + 72
+                            952 ; genAssign (pointer)
+   0333 3E 00               953 	ld	a,#0x00
+   0335 12                  954 	ld	(de),a
+                            955 ; genPlus
+                            956 ; genPlusIncr
+   0336 11 89 00            957 	ld	de,#_MazeMap + 0 + 73
+                            958 ; genAssign (pointer)
+   0339 3E 00               959 	ld	a,#0x00
+   033B 12                  960 	ld	(de),a
+                            961 ; genPlus
+                            962 ; genPlusIncr
+   033C 11 8A 00            963 	ld	de,#_MazeMap + 0 + 74
+                            964 ; genAssign (pointer)
+   033F 3E 00               965 	ld	a,#0x00
+   0341 12                  966 	ld	(de),a
+                            967 ; genPlus
+                            968 ; genPlusIncr
+   0342 11 8B 00            969 	ld	de,#_MazeMap + 0 + 75
+                            970 ; genAssign (pointer)
+   0345 3E 00               971 	ld	a,#0x00
+   0347 12                  972 	ld	(de),a
+                            973 ; genPlus
+                            974 ; genPlusIncr
+   0348 11 8C 00            975 	ld	de,#_MazeMap + 0 + 76
+                            976 ; genAssign (pointer)
+   034B 3E 00               977 	ld	a,#0x00
+   034D 12                  978 	ld	(de),a
+                            979 ; genPlus
+                            980 ; genPlusIncr
+   034E 11 8D 00            981 	ld	de,#_MazeMap + 0 + 77
+                            982 ; genAssign (pointer)
+   0351 3E 01               983 	ld	a,#0x01
+   0353 12                  984 	ld	(de),a
+                            985 ; genPlus
+                            986 ; genPlusIncr
+   0354 11 8E 00            987 	ld	de,#_MazeMap + 0 + 78
+                            988 ; genAssign (pointer)
+   0357 3E 00               989 	ld	a,#0x00
+   0359 12                  990 	ld	(de),a
+                            991 ; genPlus
+                            992 ; genPlusIncr
+   035A 11 8F 00            993 	ld	de,#_MazeMap + 0 + 79
+                            994 ; genAssign (pointer)
+   035D 3E 01               995 	ld	a,#0x01
+   035F 12                  996 	ld	(de),a
+                            997 ; genPlus
+                            998 ; genPlusIncr
+   0360 11 90 00            999 	ld	de,#_MazeMap + 0 + 80
+                           1000 ; genAssign (pointer)
+   0363 3E 01              1001 	ld	a,#0x01
+   0365 12                 1002 	ld	(de),a
+                           1003 ; genPlus
+                           1004 ; genPlusIncr
+   0366 11 91 00           1005 	ld	de,#_MazeMap + 0 + 81
+                           1006 ; genAssign (pointer)
+   0369 3E 00              1007 	ld	a,#0x00
+   036B 12                 1008 	ld	(de),a
+                           1009 ; genPlus
+                           1010 ; genPlusIncr
+   036C 11 92 00           1011 	ld	de,#_MazeMap + 0 + 82
+                           1012 ; genAssign (pointer)
+   036F 3E 01              1013 	ld	a,#0x01
+   0371 12                 1014 	ld	(de),a
+                           1015 ; genPlus
+                           1016 ; genPlusIncr
+   0372 11 93 00           1017 	ld	de,#_MazeMap + 0 + 83
+                           1018 ; genAssign (pointer)
+   0375 3E 00              1019 	ld	a,#0x00
+   0377 12                 1020 	ld	(de),a
+                           1021 ; genPlus
+                           1022 ; genPlusIncr
+   0378 11 94 00           1023 	ld	de,#_MazeMap + 0 + 84
+                           1024 ; genAssign (pointer)
+   037B 3E 01              1025 	ld	a,#0x01
+   037D 12                 1026 	ld	(de),a
+                           1027 ; genPlus
+                           1028 ; genPlusIncr
+   037E 11 95 00           1029 	ld	de,#_MazeMap + 0 + 85
+                           1030 ; genAssign (pointer)
+   0381 3E 00              1031 	ld	a,#0x00
+   0383 12                 1032 	ld	(de),a
+                           1033 ; genPlus
+                           1034 ; genPlusIncr
+   0384 11 96 00           1035 	ld	de,#_MazeMap + 0 + 86
+                           1036 ; genAssign (pointer)
+   0387 3E 01              1037 	ld	a,#0x01
+   0389 12                 1038 	ld	(de),a
+                           1039 ; genPlus
+                           1040 ; genPlusIncr
+   038A 11 97 00           1041 	ld	de,#_MazeMap + 0 + 87
+                           1042 ; genAssign (pointer)
+   038D 3E 01              1043 	ld	a,#0x01
+   038F 12                 1044 	ld	(de),a
+                           1045 ; genPlus
+                           1046 ; genPlusIncr
+   0390 11 98 00           1047 	ld	de,#_MazeMap + 0 + 88
+                           1048 ; genAssign (pointer)
+   0393 3E 01              1049 	ld	a,#0x01
+   0395 12                 1050 	ld	(de),a
+                           1051 ; genPlus
+                           1052 ; genPlusIncr
+   0396 11 99 00           1053 	ld	de,#_MazeMap + 0 + 89
+                           1054 ; genAssign (pointer)
+   0399 3E 01              1055 	ld	a,#0x01
+   039B 12                 1056 	ld	(de),a
+                           1057 ; genPlus
+                           1058 ; genPlusIncr
+   039C 11 9A 00           1059 	ld	de,#_MazeMap + 0 + 90
+                           1060 ; genAssign (pointer)
+   039F 3E 00              1061 	ld	a,#0x00
+   03A1 12                 1062 	ld	(de),a
+                           1063 ; genPlus
+                           1064 ; genPlusIncr
+   03A2 11 9B 00           1065 	ld	de,#_MazeMap + 0 + 91
+                           1066 ; genAssign (pointer)
+   03A5 3E 01              1067 	ld	a,#0x01
+   03A7 12                 1068 	ld	(de),a
+                           1069 ; genPlus
+                           1070 ; genPlusIncr
+   03A8 11 9C 00           1071 	ld	de,#_MazeMap + 0 + 92
+                           1072 ; genAssign (pointer)
+   03AB 3E 00              1073 	ld	a,#0x00
+   03AD 12                 1074 	ld	(de),a
+                           1075 ; genPlus
+                           1076 ; genPlusIncr
+   03AE 11 9D 00           1077 	ld	de,#_MazeMap + 0 + 93
+                           1078 ; genAssign (pointer)
+   03B1 3E 01              1079 	ld	a,#0x01
+   03B3 12                 1080 	ld	(de),a
+                           1081 ; genPlus
+                           1082 ; genPlusIncr
+   03B4 11 9E 00           1083 	ld	de,#_MazeMap + 0 + 94
+                           1084 ; genAssign (pointer)
+   03B7 3E 01              1085 	ld	a,#0x01
+   03B9 12                 1086 	ld	(de),a
+                           1087 ; genPlus
+                           1088 ; genPlusIncr
+   03BA 11 9F 00           1089 	ld	de,#_MazeMap + 0 + 95
+                           1090 ; genAssign (pointer)
+   03BD 3E 01              1091 	ld	a,#0x01
+   03BF 12                 1092 	ld	(de),a
+                           1093 ; genPlus
+                           1094 ; genPlusIncr
+   03C0 11 A0 00           1095 	ld	de,#_MazeMap + 0 + 96
+                           1096 ; genAssign (pointer)
+   03C3 3E 01              1097 	ld	a,#0x01
+   03C5 12                 1098 	ld	(de),a
+                           1099 ; genPlus
+                           1100 ; genPlusIncr
+   03C6 11 A1 00           1101 	ld	de,#_MazeMap + 0 + 97
+                           1102 ; genAssign (pointer)
+   03C9 3E 01              1103 	ld	a,#0x01
+   03CB 12                 1104 	ld	(de),a
+                           1105 ; genPlus
+                           1106 ; genPlusIncr
+   03CC 11 A2 00           1107 	ld	de,#_MazeMap + 0 + 98
+                           1108 ; genAssign (pointer)
+   03CF 3E 00              1109 	ld	a,#0x00
+   03D1 12                 1110 	ld	(de),a
+                           1111 ; genPlus
+                           1112 ; genPlusIncr
+   03D2 11 A3 00           1113 	ld	de,#_MazeMap + 0 + 99
+                           1114 ; genAssign (pointer)
+   03D5 3E 01              1115 	ld	a,#0x01
+   03D7 12                 1116 	ld	(de),a
+                           1117 ; genPlus
+                           1118 ; genPlusIncr
+   03D8 11 A4 00           1119 	ld	de,#_MazeMap + 0 + 100
+                           1120 ; genAssign (pointer)
+   03DB 3E 01              1121 	ld	a,#0x01
+   03DD 12                 1122 	ld	(de),a
+                           1123 ; genPlus
+                           1124 ; genPlusIncr
+   03DE 11 A5 00           1125 	ld	de,#_MazeMap + 0 + 101
+                           1126 ; genAssign (pointer)
+   03E1 3E 00              1127 	ld	a,#0x00
+   03E3 12                 1128 	ld	(de),a
+                           1129 ; genPlus
+                           1130 ; genPlusIncr
+   03E4 11 A6 00           1131 	ld	de,#_MazeMap + 0 + 102
+                           1132 ; genAssign (pointer)
+   03E7 3E 01              1133 	ld	a,#0x01
+   03E9 12                 1134 	ld	(de),a
+                           1135 ; genPlus
+                           1136 ; genPlusIncr
+   03EA 11 A7 00           1137 	ld	de,#_MazeMap + 0 + 103
+                           1138 ; genAssign (pointer)
+   03ED 3E 00              1139 	ld	a,#0x00
+   03EF 12                 1140 	ld	(de),a
+                           1141 ; genPlus
+                           1142 ; genPlusIncr
+   03F0 11 A8 00           1143 	ld	de,#_MazeMap + 0 + 104
+                           1144 ; genAssign (pointer)
+   03F3 3E 01              1145 	ld	a,#0x01
+   03F5 12                 1146 	ld	(de),a
+                           1147 ; genPlus
+                           1148 ; genPlusIncr
+   03F6 11 A9 00           1149 	ld	de,#_MazeMap + 0 + 105
+                           1150 ; genAssign (pointer)
+   03F9 3E 00              1151 	ld	a,#0x00
+   03FB 12                 1152 	ld	(de),a
+                           1153 ; genPlus
+                           1154 ; genPlusIncr
+   03FC 11 AA 00           1155 	ld	de,#_MazeMap + 0 + 106
+                           1156 ; genAssign (pointer)
+   03FF 3E 00              1157 	ld	a,#0x00
+   0401 12                 1158 	ld	(de),a
+                           1159 ; genPlus
+                           1160 ; genPlusIncr
+   0402 11 AB 00           1161 	ld	de,#_MazeMap + 0 + 107
+                           1162 ; genAssign (pointer)
+   0405 3E 00              1163 	ld	a,#0x00
+   0407 12                 1164 	ld	(de),a
+                           1165 ; genPlus
+                           1166 ; genPlusIncr
+   0408 11 AC 00           1167 	ld	de,#_MazeMap + 0 + 108
+                           1168 ; genAssign (pointer)
+   040B 3E 00              1169 	ld	a,#0x00
+   040D 12                 1170 	ld	(de),a
+                           1171 ; genPlus
+                           1172 ; genPlusIncr
+   040E 11 AD 00           1173 	ld	de,#_MazeMap + 0 + 109
+                           1174 ; genAssign (pointer)
+   0411 3E 00              1175 	ld	a,#0x00
+   0413 12                 1176 	ld	(de),a
+                           1177 ; genPlus
+                           1178 ; genPlusIncr
+   0414 11 AE 00           1179 	ld	de,#_MazeMap + 0 + 110
+                           1180 ; genAssign (pointer)
+   0417 3E 00              1181 	ld	a,#0x00
+   0419 12                 1182 	ld	(de),a
+                           1183 ; genPlus
+                           1184 ; genPlusIncr
+   041A 11 AF 00           1185 	ld	de,#_MazeMap + 0 + 111
+                           1186 ; genAssign (pointer)
+   041D 3E 01              1187 	ld	a,#0x01
+   041F 12                 1188 	ld	(de),a
+                           1189 ; genPlus
+                           1190 ; genPlusIncr
+   0420 11 B0 00           1191 	ld	de,#_MazeMap + 0 + 112
+                           1192 ; genAssign (pointer)
+   0423 3E 00              1193 	ld	a,#0x00
+   0425 12                 1194 	ld	(de),a
+                           1195 ; genPlus
+                           1196 ; genPlusIncr
+   0426 11 B1 00           1197 	ld	de,#_MazeMap + 0 + 113
+                           1198 ; genAssign (pointer)
+   0429 3E 00              1199 	ld	a,#0x00
+   042B 12                 1200 	ld	(de),a
+                           1201 ; genPlus
+                           1202 ; genPlusIncr
+   042C 11 B2 00           1203 	ld	de,#_MazeMap + 0 + 114
+                           1204 ; genAssign (pointer)
+   042F 3E 00              1205 	ld	a,#0x00
+   0431 12                 1206 	ld	(de),a
+                           1207 ; genPlus
+                           1208 ; genPlusIncr
+   0432 11 B3 00           1209 	ld	de,#_MazeMap + 0 + 115
+                           1210 ; genAssign (pointer)
+   0435 3E 00              1211 	ld	a,#0x00
+   0437 12                 1212 	ld	(de),a
+                           1213 ; genPlus
+                           1214 ; genPlusIncr
+   0438 11 B4 00           1215 	ld	de,#_MazeMap + 0 + 116
+                           1216 ; genAssign (pointer)
+   043B 3E 00              1217 	ld	a,#0x00
+   043D 12                 1218 	ld	(de),a
+                           1219 ; genPlus
+                           1220 ; genPlusIncr
+   043E 11 B5 00           1221 	ld	de,#_MazeMap + 0 + 117
+                           1222 ; genAssign (pointer)
+   0441 3E 00              1223 	ld	a,#0x00
+   0443 12                 1224 	ld	(de),a
+                           1225 ; genPlus
+                           1226 ; genPlusIncr
+   0444 11 B6 00           1227 	ld	de,#_MazeMap + 0 + 118
+                           1228 ; genAssign (pointer)
+   0447 3E 00              1229 	ld	a,#0x00
+   0449 12                 1230 	ld	(de),a
+                           1231 ; genPlus
+                           1232 ; genPlusIncr
+   044A 11 B7 00           1233 	ld	de,#_MazeMap + 0 + 119
+                           1234 ; genAssign (pointer)
+   044D 3E 01              1235 	ld	a,#0x01
+   044F 12                 1236 	ld	(de),a
+                           1237 ; genPlus
+                           1238 ; genPlusIncr
+   0450 11 B8 00           1239 	ld	de,#_MazeMap + 0 + 120
+                           1240 ; genAssign (pointer)
+   0453 3E 01              1241 	ld	a,#0x01
+   0455 12                 1242 	ld	(de),a
+                           1243 ; genPlus
+                           1244 ; genPlusIncr
+   0456 11 B9 00           1245 	ld	de,#_MazeMap + 0 + 121
+                           1246 ; genAssign (pointer)
+   0459 3E 00              1247 	ld	a,#0x00
+   045B 12                 1248 	ld	(de),a
+                           1249 ; genPlus
+                           1250 ; genPlusIncr
+   045C 11 BA 00           1251 	ld	de,#_MazeMap + 0 + 122
+                           1252 ; genAssign (pointer)
+   045F 3E 01              1253 	ld	a,#0x01
+   0461 12                 1254 	ld	(de),a
+                           1255 ; genPlus
+                           1256 ; genPlusIncr
+   0462 11 BB 00           1257 	ld	de,#_MazeMap + 0 + 123
+                           1258 ; genAssign (pointer)
+   0465 3E 00              1259 	ld	a,#0x00
+   0467 12                 1260 	ld	(de),a
+                           1261 ; genPlus
+                           1262 ; genPlusIncr
+   0468 11 BC 00           1263 	ld	de,#_MazeMap + 0 + 124
+                           1264 ; genAssign (pointer)
+   046B 3E 01              1265 	ld	a,#0x01
+   046D 12                 1266 	ld	(de),a
+                           1267 ; genPlus
+                           1268 ; genPlusIncr
+   046E 11 BD 00           1269 	ld	de,#_MazeMap + 0 + 125
+                           1270 ; genAssign (pointer)
+   0471 3E 00              1271 	ld	a,#0x00
+   0473 12                 1272 	ld	(de),a
+                           1273 ; genPlus
+                           1274 ; genPlusIncr
+   0474 11 BE 00           1275 	ld	de,#_MazeMap + 0 + 126
+                           1276 ; genAssign (pointer)
+   0477 3E 01              1277 	ld	a,#0x01
+   0479 12                 1278 	ld	(de),a
+                           1279 ; genPlus
+                           1280 ; genPlusIncr
+   047A 11 BF 00           1281 	ld	de,#_MazeMap + 0 + 127
+                           1282 ; genAssign (pointer)
+   047D 3E 01              1283 	ld	a,#0x01
+   047F 12                 1284 	ld	(de),a
+                           1285 ; genPlus
+                           1286 ; genPlusIncr
+   0480 11 C0 00           1287 	ld	de,#_MazeMap + 0 + 128
+                           1288 ; genAssign (pointer)
+   0483 3E 01              1289 	ld	a,#0x01
+   0485 12                 1290 	ld	(de),a
+                           1291 ; genPlus
+                           1292 ; genPlusIncr
+   0486 11 C1 00           1293 	ld	de,#_MazeMap + 0 + 129
+                           1294 ; genAssign (pointer)
+   0489 3E 01              1295 	ld	a,#0x01
+   048B 12                 1296 	ld	(de),a
+                           1297 ; genPlus
+                           1298 ; genPlusIncr
+   048C 11 C2 00           1299 	ld	de,#_MazeMap + 0 + 130
+                           1300 ; genAssign (pointer)
+   048F 3E 01              1301 	ld	a,#0x01
+   0491 12                 1302 	ld	(de),a
+                           1303 ; genPlus
+                           1304 ; genPlusIncr
+   0492 11 C3 00           1305 	ld	de,#_MazeMap + 0 + 131
+                           1306 ; genAssign (pointer)
+   0495 3E 01              1307 	ld	a,#0x01
+   0497 12                 1308 	ld	(de),a
+                           1309 ; genPlus
+                           1310 ; genPlusIncr
+   0498 11 C4 00           1311 	ld	de,#_MazeMap + 0 + 132
+                           1312 ; genAssign (pointer)
+   049B 3E 00              1313 	ld	a,#0x00
+   049D 12                 1314 	ld	(de),a
+                           1315 ; genPlus
+                           1316 ; genPlusIncr
+   049E 11 C5 00           1317 	ld	de,#_MazeMap + 0 + 133
+                           1318 ; genAssign (pointer)
+   04A1 3E 01              1319 	ld	a,#0x01
+   04A3 12                 1320 	ld	(de),a
+                           1321 ; genPlus
+                           1322 ; genPlusIncr
+   04A4 11 C6 00           1323 	ld	de,#_MazeMap + 0 + 134
+                           1324 ; genAssign (pointer)
+   04A7 3E 01              1325 	ld	a,#0x01
+   04A9 12                 1326 	ld	(de),a
+                           1327 ; genPlus
+                           1328 ; genPlusIncr
+   04AA 11 C7 00           1329 	ld	de,#_MazeMap + 0 + 135
+                           1330 ; genAssign (pointer)
+   04AD 3E 01              1331 	ld	a,#0x01
+   04AF 12                 1332 	ld	(de),a
+                           1333 ; genPlus
+                           1334 ; genPlusIncr
+   04B0 11 C8 00           1335 	ld	de,#_MazeMap + 0 + 136
+                           1336 ; genAssign (pointer)
+   04B3 3E 01              1337 	ld	a,#0x01
+   04B5 12                 1338 	ld	(de),a
+                           1339 ; genPlus
+                           1340 ; genPlusIncr
+   04B6 11 C9 00           1341 	ld	de,#_MazeMap + 0 + 137
+                           1342 ; genAssign (pointer)
+   04B9 3E 01              1343 	ld	a,#0x01
+   04BB 12                 1344 	ld	(de),a
+                           1345 ; genPlus
+                           1346 ; genPlusIncr
+   04BC 11 CA 00           1347 	ld	de,#_MazeMap + 0 + 138
+                           1348 ; genAssign (pointer)
+   04BF 3E 01              1349 	ld	a,#0x01
+   04C1 12                 1350 	ld	(de),a
+                           1351 ; genPlus
+                           1352 ; genPlusIncr
+   04C2 11 CB 00           1353 	ld	de,#_MazeMap + 0 + 139
+                           1354 ; genAssign (pointer)
+   04C5 3E 01              1355 	ld	a,#0x01
+   04C7 12                 1356 	ld	(de),a
+                           1357 ; genPlus
+                           1358 ; genPlusIncr
+   04C8 11 CC 00           1359 	ld	de,#_MazeMap + 0 + 140
+                           1360 ; genAssign (pointer)
+   04CB 3E 01              1361 	ld	a,#0x01
+   04CD 12                 1362 	ld	(de),a
+                           1363 ; genPlus
+                           1364 ; genPlusIncr
+   04CE 11 CD 00           1365 	ld	de,#_MazeMap + 0 + 141
+                           1366 ; genAssign (pointer)
+   04D1 3E 00              1367 	ld	a,#0x00
+   04D3 12                 1368 	ld	(de),a
+                           1369 ; genPlus
+                           1370 ; genPlusIncr
+   04D4 11 CE 00           1371 	ld	de,#_MazeMap + 0 + 142
+                           1372 ; genAssign (pointer)
+   04D7 3E 01              1373 	ld	a,#0x01
+   04D9 12                 1374 	ld	(de),a
+                           1375 ; genPlus
+                           1376 ; genPlusIncr
+   04DA 11 CF 00           1377 	ld	de,#_MazeMap + 0 + 143
+                           1378 ; genAssign (pointer)
+   04DD 3E 00              1379 	ld	a,#0x00
+   04DF 12                 1380 	ld	(de),a
+                           1381 ; genPlus
+                           1382 ; genPlusIncr
+   04E0 11 D0 00           1383 	ld	de,#_MazeMap + 0 + 144
+                           1384 ; genAssign (pointer)
+   04E3 3E 01              1385 	ld	a,#0x01
+   04E5 12                 1386 	ld	(de),a
+                           1387 ; genPlus
+                           1388 ; genPlusIncr
+   04E6 11 D1 00           1389 	ld	de,#_MazeMap + 0 + 145
+                           1390 ; genAssign (pointer)
+   04E9 3E 00              1391 	ld	a,#0x00
+   04EB 12                 1392 	ld	(de),a
+                           1393 ; genPlus
+                           1394 ; genPlusIncr
+   04EC 11 D2 00           1395 	ld	de,#_MazeMap + 0 + 146
+                           1396 ; genAssign (pointer)
+   04EF 3E 01              1397 	ld	a,#0x01
+   04F1 12                 1398 	ld	(de),a
+                           1399 ; genPlus
+                           1400 ; genPlusIncr
+   04F2 11 D3 00           1401 	ld	de,#_MazeMap + 0 + 147
+                           1402 ; genAssign (pointer)
+   04F5 3E 00              1403 	ld	a,#0x00
+   04F7 12                 1404 	ld	(de),a
+                           1405 ; genPlus
+                           1406 ; genPlusIncr
+   04F8 11 D4 00           1407 	ld	de,#_MazeMap + 0 + 148
+                           1408 ; genAssign (pointer)
+   04FB 3E 00              1409 	ld	a,#0x00
+   04FD 12                 1410 	ld	(de),a
+                           1411 ; genPlus
+                           1412 ; genPlusIncr
+   04FE 11 D5 00           1413 	ld	de,#_MazeMap + 0 + 149
+                           1414 ; genAssign (pointer)
+   0501 3E 00              1415 	ld	a,#0x00
+   0503 12                 1416 	ld	(de),a
+                           1417 ; genPlus
+                           1418 ; genPlusIncr
+   0504 11 D6 00           1419 	ld	de,#_MazeMap + 0 + 150
+                           1420 ; genAssign (pointer)
+   0507 3E 00              1421 	ld	a,#0x00
+   0509 12                 1422 	ld	(de),a
+                           1423 ; genPlus
+                           1424 ; genPlusIncr
+   050A 11 D7 00           1425 	ld	de,#_MazeMap + 0 + 151
+                           1426 ; genAssign (pointer)
+   050D 3E 00              1427 	ld	a,#0x00
+   050F 12                 1428 	ld	(de),a
+                           1429 ; genPlus
+                           1430 ; genPlusIncr
+   0510 11 D8 00           1431 	ld	de,#_MazeMap + 0 + 152
+                           1432 ; genAssign (pointer)
+   0513 3E 00              1433 	ld	a,#0x00
+   0515 12                 1434 	ld	(de),a
+                           1435 ; genPlus
+                           1436 ; genPlusIncr
+   0516 11 D9 00           1437 	ld	de,#_MazeMap + 0 + 153
+                           1438 ; genAssign (pointer)
+   0519 3E 01              1439 	ld	a,#0x01
+   051B 12                 1440 	ld	(de),a
+                           1441 ; genPlus
+                           1442 ; genPlusIncr
+   051C 11 DA 00           1443 	ld	de,#_MazeMap + 0 + 154
+                           1444 ; genAssign (pointer)
+   051F 3E 00              1445 	ld	a,#0x00
+   0521 12                 1446 	ld	(de),a
+                           1447 ; genPlus
+                           1448 ; genPlusIncr
+   0522 11 DB 00           1449 	ld	de,#_MazeMap + 0 + 155
+                           1450 ; genAssign (pointer)
+   0525 3E 00              1451 	ld	a,#0x00
+   0527 12                 1452 	ld	(de),a
+                           1453 ; genPlus
+                           1454 ; genPlusIncr
+   0528 11 DC 00           1455 	ld	de,#_MazeMap + 0 + 156
+                           1456 ; genAssign (pointer)
+   052B 3E 00              1457 	ld	a,#0x00
+   052D 12                 1458 	ld	(de),a
+                           1459 ; genPlus
+                           1460 ; genPlusIncr
+   052E 11 DD 00           1461 	ld	de,#_MazeMap + 0 + 157
+                           1462 ; genAssign (pointer)
+   0531 3E 00              1463 	ld	a,#0x00
+   0533 12                 1464 	ld	(de),a
+                           1465 ; genPlus
+                           1466 ; genPlusIncr
+   0534 11 DE 00           1467 	ld	de,#_MazeMap + 0 + 158
+                           1468 ; genAssign (pointer)
+   0537 3E 00              1469 	ld	a,#0x00
+   0539 12                 1470 	ld	(de),a
+                           1471 ; genPlus
+                           1472 ; genPlusIncr
+   053A 11 DF 00           1473 	ld	de,#_MazeMap + 0 + 159
+                           1474 ; genAssign (pointer)
+   053D 3E 01              1475 	ld	a,#0x01
+   053F 12                 1476 	ld	(de),a
+                           1477 ; genPlus
+                           1478 ; genPlusIncr
+   0540 11 E0 00           1479 	ld	de,#_MazeMap + 0 + 160
+                           1480 ; genAssign (pointer)
+   0543 3E 01              1481 	ld	a,#0x01
+   0545 12                 1482 	ld	(de),a
+                           1483 ; genPlus
+                           1484 ; genPlusIncr
+   0546 11 E1 00           1485 	ld	de,#_MazeMap + 0 + 161
+                           1486 ; genAssign (pointer)
+   0549 3E 00              1487 	ld	a,#0x00
+   054B 12                 1488 	ld	(de),a
+                           1489 ; genPlus
+                           1490 ; genPlusIncr
+   054C 11 E2 00           1491 	ld	de,#_MazeMap + 0 + 162
+                           1492 ; genAssign (pointer)
+   054F 3E 00              1493 	ld	a,#0x00
+   0551 12                 1494 	ld	(de),a
+                           1495 ; genPlus
+                           1496 ; genPlusIncr
+   0552 11 E3 00           1497 	ld	de,#_MazeMap + 0 + 163
+                           1498 ; genAssign (pointer)
+   0555 3E 00              1499 	ld	a,#0x00
+   0557 12                 1500 	ld	(de),a
+                           1501 ; genPlus
+                           1502 ; genPlusIncr
+   0558 11 E4 00           1503 	ld	de,#_MazeMap + 0 + 164
+                           1504 ; genAssign (pointer)
+   055B 3E 01              1505 	ld	a,#0x01
+   055D 12                 1506 	ld	(de),a
+                           1507 ; genPlus
+                           1508 ; genPlusIncr
+   055E 11 E5 00           1509 	ld	de,#_MazeMap + 0 + 165
+                           1510 ; genAssign (pointer)
+   0561 3E 00              1511 	ld	a,#0x00
+   0563 12                 1512 	ld	(de),a
+                           1513 ; genPlus
+                           1514 ; genPlusIncr
+   0564 11 E6 00           1515 	ld	de,#_MazeMap + 0 + 166
+                           1516 ; genAssign (pointer)
+   0567 3E 01              1517 	ld	a,#0x01
+   0569 12                 1518 	ld	(de),a
+                           1519 ; genPlus
+                           1520 ; genPlusIncr
+   056A 11 E7 00           1521 	ld	de,#_MazeMap + 0 + 167
+                           1522 ; genAssign (pointer)
+   056D 3E 00              1523 	ld	a,#0x00
+   056F 12                 1524 	ld	(de),a
+                           1525 ; genPlus
+                           1526 ; genPlusIncr
+   0570 11 E8 00           1527 	ld	de,#_MazeMap + 0 + 168
+                           1528 ; genAssign (pointer)
+   0573 3E 01              1529 	ld	a,#0x01
+   0575 12                 1530 	ld	(de),a
+                           1531 ; genPlus
+                           1532 ; genPlusIncr
+   0576 11 E9 00           1533 	ld	de,#_MazeMap + 0 + 169
+                           1534 ; genAssign (pointer)
+   0579 3E 01              1535 	ld	a,#0x01
+   057B 12                 1536 	ld	(de),a
+                           1537 ; genPlus
+                           1538 ; genPlusIncr
+   057C 11 EA 00           1539 	ld	de,#_MazeMap + 0 + 170
+                           1540 ; genAssign (pointer)
+   057F 3E 01              1541 	ld	a,#0x01
+   0581 12                 1542 	ld	(de),a
+                           1543 ; genPlus
+                           1544 ; genPlusIncr
+   0582 11 EB 00           1545 	ld	de,#_MazeMap + 0 + 171
+                           1546 ; genAssign (pointer)
+   0585 3E 01              1547 	ld	a,#0x01
+   0587 12                 1548 	ld	(de),a
+                           1549 ; genPlus
+                           1550 ; genPlusIncr
+   0588 11 EC 00           1551 	ld	de,#_MazeMap + 0 + 172
+                           1552 ; genAssign (pointer)
+   058B 3E 01              1553 	ld	a,#0x01
+   058D 12                 1554 	ld	(de),a
+                           1555 ; genPlus
+                           1556 ; genPlusIncr
+   058E 11 ED 00           1557 	ld	de,#_MazeMap + 0 + 173
+                           1558 ; genAssign (pointer)
+   0591 3E 01              1559 	ld	a,#0x01
+   0593 12                 1560 	ld	(de),a
+                           1561 ; genPlus
+                           1562 ; genPlusIncr
+   0594 11 EE 00           1563 	ld	de,#_MazeMap + 0 + 174
+                           1564 ; genAssign (pointer)
+   0597 3E 00              1565 	ld	a,#0x00
+   0599 12                 1566 	ld	(de),a
+                           1567 ; genPlus
+                           1568 ; genPlusIncr
+   059A 11 EF 00           1569 	ld	de,#_MazeMap + 0 + 175
+                           1570 ; genAssign (pointer)
+   059D 3E 01              1571 	ld	a,#0x01
+   059F 12                 1572 	ld	(de),a
+                           1573 ; genPlus
+                           1574 ; genPlusIncr
+   05A0 11 F0 00           1575 	ld	de,#_MazeMap + 0 + 176
+                           1576 ; genAssign (pointer)
+   05A3 3E 01              1577 	ld	a,#0x01
+   05A5 12                 1578 	ld	(de),a
+                           1579 ; genPlus
+                           1580 ; genPlusIncr
+   05A6 11 F1 00           1581 	ld	de,#_MazeMap + 0 + 177
+                           1582 ; genAssign (pointer)
+   05A9 3E 01              1583 	ld	a,#0x01
+   05AB 12                 1584 	ld	(de),a
+                           1585 ; genPlus
+                           1586 ; genPlusIncr
+   05AC 11 F2 00           1587 	ld	de,#_MazeMap + 0 + 178
+                           1588 ; genAssign (pointer)
+   05AF 3E 00              1589 	ld	a,#0x00
+   05B1 12                 1590 	ld	(de),a
+                           1591 ; genPlus
+                           1592 ; genPlusIncr
+   05B2 11 F3 00           1593 	ld	de,#_MazeMap + 0 + 179
+                           1594 ; genAssign (pointer)
+   05B5 3E 01              1595 	ld	a,#0x01
+   05B7 12                 1596 	ld	(de),a
+                           1597 ; genPlus
+                           1598 ; genPlusIncr
+   05B8 11 F4 00           1599 	ld	de,#_MazeMap + 0 + 180
+                           1600 ; genAssign (pointer)
+   05BB 3E 01              1601 	ld	a,#0x01
+   05BD 12                 1602 	ld	(de),a
+                           1603 ; genPlus
+                           1604 ; genPlusIncr
+   05BE 11 F5 00           1605 	ld	de,#_MazeMap + 0 + 181
+                           1606 ; genAssign (pointer)
+   05C1 3E 01              1607 	ld	a,#0x01
+   05C3 12                 1608 	ld	(de),a
+                           1609 ; genPlus
+                           1610 ; genPlusIncr
+   05C4 11 F6 00           1611 	ld	de,#_MazeMap + 0 + 182
+                           1612 ; genAssign (pointer)
+   05C7 3E 01              1613 	ld	a,#0x01
+   05C9 12                 1614 	ld	(de),a
+                           1615 ; genPlus
+                           1616 ; genPlusIncr
+   05CA 11 F7 00           1617 	ld	de,#_MazeMap + 0 + 183
+                           1618 ; genAssign (pointer)
+   05CD 3E 01              1619 	ld	a,#0x01
+   05CF 12                 1620 	ld	(de),a
+                           1621 ; genPlus
+                           1622 ; genPlusIncr
+   05D0 11 F8 00           1623 	ld	de,#_MazeMap + 0 + 184
+                           1624 ; genAssign (pointer)
+   05D3 3E 01              1625 	ld	a,#0x01
+   05D5 12                 1626 	ld	(de),a
+                           1627 ; genPlus
+                           1628 ; genPlusIncr
+   05D6 11 F9 00           1629 	ld	de,#_MazeMap + 0 + 185
+                           1630 ; genAssign (pointer)
+   05D9 3E 00              1631 	ld	a,#0x00
+   05DB 12                 1632 	ld	(de),a
+                           1633 ; genPlus
+                           1634 ; genPlusIncr
+   05DC 11 FA 00           1635 	ld	de,#_MazeMap + 0 + 186
+                           1636 ; genAssign (pointer)
+   05DF 3E 01              1637 	ld	a,#0x01
+   05E1 12                 1638 	ld	(de),a
+                           1639 ; genPlus
+                           1640 ; genPlusIncr
+   05E2 11 FB 00           1641 	ld	de,#_MazeMap + 0 + 187
+                           1642 ; genAssign (pointer)
+   05E5 3E 00              1643 	ld	a,#0x00
+   05E7 12                 1644 	ld	(de),a
+                           1645 ; genPlus
+                           1646 ; genPlusIncr
+   05E8 11 FC 00           1647 	ld	de,#_MazeMap + 0 + 188
+                           1648 ; genAssign (pointer)
+   05EB 3E 01              1649 	ld	a,#0x01
+   05ED 12                 1650 	ld	(de),a
+                           1651 ; genPlus
+                           1652 ; genPlusIncr
+   05EE 11 FD 00           1653 	ld	de,#_MazeMap + 0 + 189
+                           1654 ; genAssign (pointer)
+   05F1 3E 00              1655 	ld	a,#0x00
+   05F3 12                 1656 	ld	(de),a
+                           1657 ; genPlus
+                           1658 ; genPlusIncr
+   05F4 11 FE 00           1659 	ld	de,#_MazeMap + 0 + 190
+                           1660 ; genAssign (pointer)
+   05F7 3E 00              1661 	ld	a,#0x00
+   05F9 12                 1662 	ld	(de),a
+                           1663 ; genPlus
+                           1664 ; genPlusIncr
+   05FA 11 FF 00           1665 	ld	de,#_MazeMap + 0 + 191
+                           1666 ; genAssign (pointer)
+   05FD 3E 00              1667 	ld	a,#0x00
+   05FF 12                 1668 	ld	(de),a
+                           1669 ; genPlus
+                           1670 ; genPlusIncr
+   0600 11 00 01           1671 	ld	de,#_MazeMap + 0 + 192
+                           1672 ; genAssign (pointer)
+   0603 3E 00              1673 	ld	a,#0x00
+   0605 12                 1674 	ld	(de),a
+                           1675 ; genPlus
+                           1676 ; genPlusIncr
+   0606 11 01 01           1677 	ld	de,#_MazeMap + 0 + 193
+                           1678 ; genAssign (pointer)
+   0609 3E 00              1679 	ld	a,#0x00
+   060B 12                 1680 	ld	(de),a
+                           1681 ; genPlus
+                           1682 ; genPlusIncr
+   060C 11 02 01           1683 	ld	de,#_MazeMap + 0 + 194
+                           1684 ; genAssign (pointer)
+   060F 3E 00              1685 	ld	a,#0x00
+   0611 12                 1686 	ld	(de),a
+                           1687 ; genPlus
+                           1688 ; genPlusIncr
+   0612 11 03 01           1689 	ld	de,#_MazeMap + 0 + 195
+                           1690 ; genAssign (pointer)
+   0615 3E 01              1691 	ld	a,#0x01
+   0617 12                 1692 	ld	(de),a
+                           1693 ; genPlus
+                           1694 ; genPlusIncr
+   0618 11 04 01           1695 	ld	de,#_MazeMap + 0 + 196
+                           1696 ; genAssign (pointer)
+   061B 3E 00              1697 	ld	a,#0x00
+   061D 12                 1698 	ld	(de),a
+                           1699 ; genPlus
+                           1700 ; genPlusIncr
+   061E 11 05 01           1701 	ld	de,#_MazeMap + 0 + 197
+                           1702 ; genAssign (pointer)
+   0621 3E 01              1703 	ld	a,#0x01
+   0623 12                 1704 	ld	(de),a
+                           1705 ; genPlus
+                           1706 ; genPlusIncr
+   0624 11 06 01           1707 	ld	de,#_MazeMap + 0 + 198
+                           1708 ; genAssign (pointer)
+   0627 3E 00              1709 	ld	a,#0x00
+   0629 12                 1710 	ld	(de),a
+                           1711 ; genPlus
+                           1712 ; genPlusIncr
+   062A 11 07 01           1713 	ld	de,#_MazeMap + 0 + 199
+                           1714 ; genAssign (pointer)
+   062D 3E 01              1715 	ld	a,#0x01
+   062F 12                 1716 	ld	(de),a
+                           1717 ; genPlus
+                           1718 ; genPlusIncr
+   0630 11 08 01           1719 	ld	de,#_MazeMap + 0 + 200
+                           1720 ; genAssign (pointer)
+   0633 3E 01              1721 	ld	a,#0x01
+   0635 12                 1722 	ld	(de),a
+                           1723 ; genPlus
+                           1724 ; genPlusIncr
+   0636 11 09 01           1725 	ld	de,#_MazeMap + 0 + 201
+                           1726 ; genAssign (pointer)
+   0639 3E 00              1727 	ld	a,#0x00
+   063B 12                 1728 	ld	(de),a
+                           1729 ; genPlus
+                           1730 ; genPlusIncr
+   063C 11 0A 01           1731 	ld	de,#_MazeMap + 0 + 202
+                           1732 ; genAssign (pointer)
+   063F 3E 00              1733 	ld	a,#0x00
+   0641 12                 1734 	ld	(de),a
+                           1735 ; genPlus
+                           1736 ; genPlusIncr
+   0642 11 0B 01           1737 	ld	de,#_MazeMap + 0 + 203
+                           1738 ; genAssign (pointer)
+   0645 3E 00              1739 	ld	a,#0x00
+   0647 12                 1740 	ld	(de),a
+                           1741 ; genPlus
+                           1742 ; genPlusIncr
+   0648 11 0C 01           1743 	ld	de,#_MazeMap + 0 + 204
+                           1744 ; genAssign (pointer)
+   064B 3E 00              1745 	ld	a,#0x00
+   064D 12                 1746 	ld	(de),a
+                           1747 ; genPlus
+                           1748 ; genPlusIncr
+   064E 11 0D 01           1749 	ld	de,#_MazeMap + 0 + 205
+                           1750 ; genAssign (pointer)
+   0651 3E 00              1751 	ld	a,#0x00
+   0653 12                 1752 	ld	(de),a
+                           1753 ; genPlus
+                           1754 ; genPlusIncr
+   0654 11 0E 01           1755 	ld	de,#_MazeMap + 0 + 206
+                           1756 ; genAssign (pointer)
+   0657 3E 01              1757 	ld	a,#0x01
+   0659 12                 1758 	ld	(de),a
+                           1759 ; genPlus
+                           1760 ; genPlusIncr
+   065A 11 0F 01           1761 	ld	de,#_MazeMap + 0 + 207
+                           1762 ; genAssign (pointer)
+   065D 3E 00              1763 	ld	a,#0x00
+   065F 12                 1764 	ld	(de),a
+                           1765 ; genPlus
+                           1766 ; genPlusIncr
+   0660 11 10 01           1767 	ld	de,#_MazeMap + 0 + 208
+                           1768 ; genAssign (pointer)
+   0663 3E 01              1769 	ld	a,#0x01
+   0665 12                 1770 	ld	(de),a
+                           1771 ; genPlus
+                           1772 ; genPlusIncr
+   0666 11 11 01           1773 	ld	de,#_MazeMap + 0 + 209
+                           1774 ; genAssign (pointer)
+   0669 3E 00              1775 	ld	a,#0x00
+   066B 12                 1776 	ld	(de),a
+                           1777 ; genPlus
+                           1778 ; genPlusIncr
+   066C 11 12 01           1779 	ld	de,#_MazeMap + 0 + 210
+                           1780 ; genAssign (pointer)
+   066F 3E 01              1781 	ld	a,#0x01
+   0671 12                 1782 	ld	(de),a
+                           1783 ; genPlus
+                           1784 ; genPlusIncr
+   0672 11 13 01           1785 	ld	de,#_MazeMap + 0 + 211
+                           1786 ; genAssign (pointer)
+   0675 3E 01              1787 	ld	a,#0x01
+   0677 12                 1788 	ld	(de),a
+                           1789 ; genPlus
+                           1790 ; genPlusIncr
+   0678 11 14 01           1791 	ld	de,#_MazeMap + 0 + 212
+                           1792 ; genAssign (pointer)
+   067B 3E 01              1793 	ld	a,#0x01
+   067D 12                 1794 	ld	(de),a
+                           1795 ; genPlus
+                           1796 ; genPlusIncr
+   067E 11 15 01           1797 	ld	de,#_MazeMap + 0 + 213
+                           1798 ; genAssign (pointer)
+   0681 3E 01              1799 	ld	a,#0x01
+   0683 12                 1800 	ld	(de),a
+                           1801 ; genPlus
+                           1802 ; genPlusIncr
+   0684 11 16 01           1803 	ld	de,#_MazeMap + 0 + 214
+                           1804 ; genAssign (pointer)
+   0687 3E 01              1805 	ld	a,#0x01
+   0689 12                 1806 	ld	(de),a
+                           1807 ; genPlus
+                           1808 ; genPlusIncr
+   068A 11 17 01           1809 	ld	de,#_MazeMap + 0 + 215
+                           1810 ; genAssign (pointer)
+   068D 3E 01              1811 	ld	a,#0x01
+   068F 12                 1812 	ld	(de),a
+                           1813 ; genPlus
+                           1814 ; genPlusIncr
+   0690 11 18 01           1815 	ld	de,#_MazeMap + 0 + 216
+                           1816 ; genAssign (pointer)
+   0693 3E 00              1817 	ld	a,#0x00
+   0695 12                 1818 	ld	(de),a
+                           1819 ; genPlus
+                           1820 ; genPlusIncr
+   0696 11 19 01           1821 	ld	de,#_MazeMap + 0 + 217
+                           1822 ; genAssign (pointer)
+   0699 3E 01              1823 	ld	a,#0x01
+   069B 12                 1824 	ld	(de),a
+                           1825 ; genPlus
+                           1826 ; genPlusIncr
+   069C 11 1A 01           1827 	ld	de,#_MazeMap + 0 + 218
+                           1828 ; genAssign (pointer)
+   069F 3E 00              1829 	ld	a,#0x00
+   06A1 12                 1830 	ld	(de),a
+                           1831 ; genPlus
+                           1832 ; genPlusIncr
+   06A2 11 1B 01           1833 	ld	de,#_MazeMap + 0 + 219
+                           1834 ; genAssign (pointer)
+   06A5 3E 01              1835 	ld	a,#0x01
+   06A7 12                 1836 	ld	(de),a
+                           1837 ; genPlus
+                           1838 ; genPlusIncr
+   06A8 11 1C 01           1839 	ld	de,#_MazeMap + 0 + 220
+                           1840 ; genAssign (pointer)
+   06AB 3E 01              1841 	ld	a,#0x01
+   06AD 12                 1842 	ld	(de),a
+                           1843 ; genPlus
+                           1844 ; genPlusIncr
+   06AE 11 1D 01           1845 	ld	de,#_MazeMap + 0 + 221
+                           1846 ; genAssign (pointer)
+   06B1 3E 00              1847 	ld	a,#0x00
+   06B3 12                 1848 	ld	(de),a
+                           1849 ; genPlus
+                           1850 ; genPlusIncr
+   06B4 11 1E 01           1851 	ld	de,#_MazeMap + 0 + 222
+                           1852 ; genAssign (pointer)
+   06B7 3E 01              1853 	ld	a,#0x01
+   06B9 12                 1854 	ld	(de),a
+                           1855 ; genPlus
+                           1856 ; genPlusIncr
+   06BA 11 1F 01           1857 	ld	de,#_MazeMap + 0 + 223
+                           1858 ; genAssign (pointer)
+   06BD 3E 01              1859 	ld	a,#0x01
+   06BF 12                 1860 	ld	(de),a
+                           1861 ; genPlus
+                           1862 ; genPlusIncr
+   06C0 11 20 01           1863 	ld	de,#_MazeMap + 0 + 224
+                           1864 ; genAssign (pointer)
+   06C3 3E 01              1865 	ld	a,#0x01
+   06C5 12                 1866 	ld	(de),a
+                           1867 ; genPlus
+                           1868 ; genPlusIncr
+   06C6 11 21 01           1869 	ld	de,#_MazeMap + 0 + 225
+                           1870 ; genAssign (pointer)
+   06C9 3E 01              1871 	ld	a,#0x01
+   06CB 12                 1872 	ld	(de),a
+                           1873 ; genPlus
+                           1874 ; genPlusIncr
+   06CC 11 22 01           1875 	ld	de,#_MazeMap + 0 + 226
+                           1876 ; genAssign (pointer)
+   06CF 3E 01              1877 	ld	a,#0x01
+   06D1 12                 1878 	ld	(de),a
+                           1879 ; genPlus
+                           1880 ; genPlusIncr
+   06D2 11 23 01           1881 	ld	de,#_MazeMap + 0 + 227
+                           1882 ; genAssign (pointer)
+   06D5 3E 00              1883 	ld	a,#0x00
+   06D7 12                 1884 	ld	(de),a
+                           1885 ; genPlus
+                           1886 ; genPlusIncr
+   06D8 11 24 01           1887 	ld	de,#_MazeMap + 0 + 228
+                           1888 ; genAssign (pointer)
+   06DB 3E 01              1889 	ld	a,#0x01
+   06DD 12                 1890 	ld	(de),a
+                           1891 ; genPlus
+                           1892 ; genPlusIncr
+   06DE 11 25 01           1893 	ld	de,#_MazeMap + 0 + 229
+                           1894 ; genAssign (pointer)
+   06E1 3E 00              1895 	ld	a,#0x00
+   06E3 12                 1896 	ld	(de),a
+                           1897 ; genPlus
+                           1898 ; genPlusIncr
+   06E4 11 26 01           1899 	ld	de,#_MazeMap + 0 + 230
+                           1900 ; genAssign (pointer)
+   06E7 3E 01              1901 	ld	a,#0x01
+   06E9 12                 1902 	ld	(de),a
+                           1903 ; genPlus
+                           1904 ; genPlusIncr
+   06EA 11 27 01           1905 	ld	de,#_MazeMap + 0 + 231
+                           1906 ; genAssign (pointer)
+   06ED 3E 00              1907 	ld	a,#0x00
+   06EF 12                 1908 	ld	(de),a
+                           1909 ; genPlus
+                           1910 ; genPlusIncr
+   06F0 11 28 01           1911 	ld	de,#_MazeMap + 0 + 232
+                           1912 ; genAssign (pointer)
+   06F3 3E 00              1913 	ld	a,#0x00
+   06F5 12                 1914 	ld	(de),a
+                           1915 ; genPlus
+                           1916 ; genPlusIncr
+   06F6 11 29 01           1917 	ld	de,#_MazeMap + 0 + 233
+                           1918 ; genAssign (pointer)
+   06F9 3E 00              1919 	ld	a,#0x00
+   06FB 12                 1920 	ld	(de),a
+                           1921 ; genPlus
+                           1922 ; genPlusIncr
+   06FC 11 2A 01           1923 	ld	de,#_MazeMap + 0 + 234
+                           1924 ; genAssign (pointer)
+   06FF 3E 00              1925 	ld	a,#0x00
+   0701 12                 1926 	ld	(de),a
+                           1927 ; genPlus
+                           1928 ; genPlusIncr
+   0702 11 2B 01           1929 	ld	de,#_MazeMap + 0 + 235
+                           1930 ; genAssign (pointer)
+   0705 3E 00              1931 	ld	a,#0x00
+   0707 12                 1932 	ld	(de),a
+                           1933 ; genPlus
+                           1934 ; genPlusIncr
+   0708 11 2C 01           1935 	ld	de,#_MazeMap + 0 + 236
+                           1936 ; genAssign (pointer)
+   070B 3E 00              1937 	ld	a,#0x00
+   070D 12                 1938 	ld	(de),a
+                           1939 ; genPlus
+                           1940 ; genPlusIncr
+   070E 11 2D 01           1941 	ld	de,#_MazeMap + 0 + 237
+                           1942 ; genAssign (pointer)
+   0711 3E 01              1943 	ld	a,#0x01
+   0713 12                 1944 	ld	(de),a
+                           1945 ; genPlus
+                           1946 ; genPlusIncr
+   0714 11 2E 01           1947 	ld	de,#_MazeMap + 0 + 238
+                           1948 ; genAssign (pointer)
+   0717 3E 00              1949 	ld	a,#0x00
+   0719 12                 1950 	ld	(de),a
+                           1951 ; genPlus
+                           1952 ; genPlusIncr
+   071A 11 2F 01           1953 	ld	de,#_MazeMap + 0 + 239
+                           1954 ; genAssign (pointer)
+   071D 3E 01              1955 	ld	a,#0x01
+   071F 12                 1956 	ld	(de),a
+                           1957 ; genPlus
+                           1958 ; genPlusIncr
+   0720 11 30 01           1959 	ld	de,#_MazeMap + 0 + 240
+                           1960 ; genAssign (pointer)
+   0723 3E 01              1961 	ld	a,#0x01
+   0725 12                 1962 	ld	(de),a
+                           1963 ; genPlus
+                           1964 ; genPlusIncr
+   0726 11 31 01           1965 	ld	de,#_MazeMap + 0 + 241
+                           1966 ; genAssign (pointer)
+   0729 3E 00              1967 	ld	a,#0x00
+   072B 12                 1968 	ld	(de),a
+                           1969 ; genPlus
+                           1970 ; genPlusIncr
+   072C 11 32 01           1971 	ld	de,#_MazeMap + 0 + 242
+                           1972 ; genAssign (pointer)
+   072F 3E 01              1973 	ld	a,#0x01
+   0731 12                 1974 	ld	(de),a
+                           1975 ; genPlus
+                           1976 ; genPlusIncr
+   0732 11 33 01           1977 	ld	de,#_MazeMap + 0 + 243
+                           1978 ; genAssign (pointer)
+   0735 3E 00              1979 	ld	a,#0x00
+   0737 12                 1980 	ld	(de),a
+                           1981 ; genPlus
+                           1982 ; genPlusIncr
+   0738 11 34 01           1983 	ld	de,#_MazeMap + 0 + 244
+                           1984 ; genAssign (pointer)
+   073B 3E 00              1985 	ld	a,#0x00
+   073D 12                 1986 	ld	(de),a
+                           1987 ; genPlus
+                           1988 ; genPlusIncr
+   073E 11 35 01           1989 	ld	de,#_MazeMap + 0 + 245
+                           1990 ; genAssign (pointer)
+   0741 3E 00              1991 	ld	a,#0x00
+   0743 12                 1992 	ld	(de),a
+                           1993 ; genPlus
+                           1994 ; genPlusIncr
+   0744 11 36 01           1995 	ld	de,#_MazeMap + 0 + 246
+                           1996 ; genAssign (pointer)
+   0747 3E 00              1997 	ld	a,#0x00
+   0749 12                 1998 	ld	(de),a
+                           1999 ; genPlus
+                           2000 ; genPlusIncr
+   074A 11 37 01           2001 	ld	de,#_MazeMap + 0 + 247
+                           2002 ; genAssign (pointer)
+   074D 3E 00              2003 	ld	a,#0x00
+   074F 12                 2004 	ld	(de),a
+                           2005 ; genPlus
+                           2006 ; genPlusIncr
+   0750 11 38 01           2007 	ld	de,#_MazeMap + 0 + 248
+                           2008 ; genAssign (pointer)
+   0753 3E 01              2009 	ld	a,#0x01
+   0755 12                 2010 	ld	(de),a
+                           2011 ; genPlus
+                           2012 ; genPlusIncr
+   0756 11 39 01           2013 	ld	de,#_MazeMap + 0 + 249
+                           2014 ; genAssign (pointer)
+   0759 3E 00              2015 	ld	a,#0x00
+   075B 12                 2016 	ld	(de),a
+                           2017 ; genPlus
+                           2018 ; genPlusIncr
+   075C 11 3A 01           2019 	ld	de,#_MazeMap + 0 + 250
+                           2020 ; genAssign (pointer)
+   075F 3E 01              2021 	ld	a,#0x01
+   0761 12                 2022 	ld	(de),a
+                           2023 ; genPlus
+                           2024 ; genPlusIncr
+   0762 11 3B 01           2025 	ld	de,#_MazeMap + 0 + 251
+                           2026 ; genAssign (pointer)
+   0765 3E 00              2027 	ld	a,#0x00
+   0767 12                 2028 	ld	(de),a
+                           2029 ; genPlus
+                           2030 ; genPlusIncr
+   0768 11 3C 01           2031 	ld	de,#_MazeMap + 0 + 252
+                           2032 ; genAssign (pointer)
+   076B 3E 01              2033 	ld	a,#0x01
+   076D 12                 2034 	ld	(de),a
+                           2035 ; genPlus
+                           2036 ; genPlusIncr
+   076E 11 3D 01           2037 	ld	de,#_MazeMap + 0 + 253
+                           2038 ; genAssign (pointer)
+   0771 3E 01              2039 	ld	a,#0x01
+   0773 12                 2040 	ld	(de),a
+                           2041 ; genPlus
+                           2042 ; genPlusIncr
+   0774 11 3E 01           2043 	ld	de,#_MazeMap + 0 + 254
+                           2044 ; genAssign (pointer)
+   0777 3E 01              2045 	ld	a,#0x01
+   0779 12                 2046 	ld	(de),a
+                           2047 ; genPlus
+                           2048 ; genPlusIncr
+   077A 11 3F 01           2049 	ld	de,#_MazeMap + 0 + 255
+                           2050 ; genAssign (pointer)
+   077D 3E 01              2051 	ld	a,#0x01
+   077F 12                 2052 	ld	(de),a
+                           2053 ; genPlus
+                           2054 ; genPlusIncr
+   0780 11 40 01           2055 	ld	de,#_MazeMap + 0 + 256
+                           2056 ; genAssign (pointer)
+   0783 3E 01              2057 	ld	a,#0x01
+   0785 12                 2058 	ld	(de),a
+                           2059 ; genPlus
+                           2060 ; genPlusIncr
+   0786 11 41 01           2061 	ld	de,#_MazeMap + 0 + 257
+                           2062 ; genAssign (pointer)
+   0789 3E 01              2063 	ld	a,#0x01
+   078B 12                 2064 	ld	(de),a
+                           2065 ; genPlus
+                           2066 ; genPlusIncr
+   078C 11 42 01           2067 	ld	de,#_MazeMap + 0 + 258
+                           2068 ; genAssign (pointer)
+   078F 3E 00              2069 	ld	a,#0x00
+   0791 12                 2070 	ld	(de),a
+                           2071 ; genPlus
+                           2072 ; genPlusIncr
+   0792 11 43 01           2073 	ld	de,#_MazeMap + 0 + 259
+                           2074 ; genAssign (pointer)
+   0795 3E 01              2075 	ld	a,#0x01
+   0797 12                 2076 	ld	(de),a
+                           2077 ; genPlus
+                           2078 ; genPlusIncr
+   0798 11 44 01           2079 	ld	de,#_MazeMap + 0 + 260
+                           2080 ; genAssign (pointer)
+   079B 3E 01              2081 	ld	a,#0x01
+   079D 12                 2082 	ld	(de),a
+                           2083 ; genPlus
+                           2084 ; genPlusIncr
+   079E 11 45 01           2085 	ld	de,#_MazeMap + 0 + 261
+                           2086 ; genAssign (pointer)
+   07A1 3E 00              2087 	ld	a,#0x00
+   07A3 12                 2088 	ld	(de),a
+                           2089 ; genPlus
+                           2090 ; genPlusIncr
+   07A4 11 46 01           2091 	ld	de,#_MazeMap + 0 + 262
+                           2092 ; genAssign (pointer)
+   07A7 3E 01              2093 	ld	a,#0x01
+   07A9 12                 2094 	ld	(de),a
+                           2095 ; genPlus
+                           2096 ; genPlusIncr
+   07AA 11 47 01           2097 	ld	de,#_MazeMap + 0 + 263
+                           2098 ; genAssign (pointer)
+   07AD 3E 02              2099 	ld	a,#0x02
+   07AF 12                 2100 	ld	(de),a
+                           2101 ; genPlus
+                           2102 ; genPlusIncr
+   07B0 11 48 01           2103 	ld	de,#_MazeMap + 0 + 264
+                           2104 ; genAssign (pointer)
+   07B3 3E 01              2105 	ld	a,#0x01
+   07B5 12                 2106 	ld	(de),a
+                           2107 ; genPlus
+                           2108 ; genPlusIncr
+   07B6 11 49 01           2109 	ld	de,#_MazeMap + 0 + 265
+                           2110 ; genAssign (pointer)
+   07B9 3E 01              2111 	ld	a,#0x01
+   07BB 12                 2112 	ld	(de),a
+                           2113 ; genPlus
+                           2114 ; genPlusIncr
+   07BC 11 4A 01           2115 	ld	de,#_MazeMap + 0 + 266
+                           2116 ; genAssign (pointer)
+   07BF 3E 01              2117 	ld	a,#0x01
+   07C1 12                 2118 	ld	(de),a
+                           2119 ; genPlus
+                           2120 ; genPlusIncr
+   07C2 11 4B 01           2121 	ld	de,#_MazeMap + 0 + 267
+                           2122 ; genAssign (pointer)
+   07C5 3E 01              2123 	ld	a,#0x01
+   07C7 12                 2124 	ld	(de),a
+                           2125 ; genPlus
+                           2126 ; genPlusIncr
+   07C8 11 4C 01           2127 	ld	de,#_MazeMap + 0 + 268
+                           2128 ; genAssign (pointer)
+   07CB 3E 01              2129 	ld	a,#0x01
+   07CD 12                 2130 	ld	(de),a
+                           2131 ; genPlus
+                           2132 ; genPlusIncr
+   07CE 11 4D 01           2133 	ld	de,#_MazeMap + 0 + 269
+                           2134 ; genAssign (pointer)
+   07D1 3E 00              2135 	ld	a,#0x00
+   07D3 12                 2136 	ld	(de),a
+                           2137 ; genPlus
+                           2138 ; genPlusIncr
+   07D4 11 4E 01           2139 	ld	de,#_MazeMap + 0 + 270
+                           2140 ; genAssign (pointer)
+   07D7 3E 01              2141 	ld	a,#0x01
+   07D9 12                 2142 	ld	(de),a
+                           2143 ; genPlus
+                           2144 ; genPlusIncr
+   07DA 11 4F 01           2145 	ld	de,#_MazeMap + 0 + 271
+                           2146 ; genAssign (pointer)
+   07DD 3E 00              2147 	ld	a,#0x00
+   07DF 12                 2148 	ld	(de),a
+                           2149 ; genPlus
+                           2150 ; genPlusIncr
+   07E0 11 50 01           2151 	ld	de,#_MazeMap + 0 + 272
+                           2152 ; genAssign (pointer)
+   07E3 3E 01              2153 	ld	a,#0x01
+   07E5 12                 2154 	ld	(de),a
+                           2155 ; genPlus
+                           2156 ; genPlusIncr
+   07E6 11 51 01           2157 	ld	de,#_MazeMap + 0 + 273
+                           2158 ; genAssign (pointer)
+   07E9 3E 00              2159 	ld	a,#0x00
+   07EB 12                 2160 	ld	(de),a
+                           2161 ; genPlus
+                           2162 ; genPlusIncr
+   07EC 11 52 01           2163 	ld	de,#_MazeMap + 0 + 274
+                           2164 ; genAssign (pointer)
+   07EF 3E 00              2165 	ld	a,#0x00
+   07F1 12                 2166 	ld	(de),a
+                           2167 ; genPlus
+                           2168 ; genPlusIncr
+   07F2 11 53 01           2169 	ld	de,#_MazeMap + 0 + 275
+                           2170 ; genAssign (pointer)
+   07F5 3E 00              2171 	ld	a,#0x00
+   07F7 12                 2172 	ld	(de),a
+                           2173 ; genPlus
+                           2174 ; genPlusIncr
+   07F8 11 54 01           2175 	ld	de,#_MazeMap + 0 + 276
+                           2176 ; genAssign (pointer)
+   07FB 3E 00              2177 	ld	a,#0x00
+   07FD 12                 2178 	ld	(de),a
+                           2179 ; genPlus
+                           2180 ; genPlusIncr
+   07FE 11 55 01           2181 	ld	de,#_MazeMap + 0 + 277
+                           2182 ; genAssign (pointer)
+   0801 3E 00              2183 	ld	a,#0x00
+   0803 12                 2184 	ld	(de),a
+                           2185 ; genPlus
+                           2186 ; genPlusIncr
+   0804 11 56 01           2187 	ld	de,#_MazeMap + 0 + 278
+                           2188 ; genAssign (pointer)
+   0807 3E 00              2189 	ld	a,#0x00
+   0809 12                 2190 	ld	(de),a
+                           2191 ; genPlus
+                           2192 ; genPlusIncr
+   080A 11 57 01           2193 	ld	de,#_MazeMap + 0 + 279
+                           2194 ; genAssign (pointer)
+   080D 3E 01              2195 	ld	a,#0x01
+   080F 12                 2196 	ld	(de),a
+                           2197 ; genPlus
+                           2198 ; genPlusIncr
+   0810 11 58 01           2199 	ld	de,#_MazeMap + 0 + 280
+                           2200 ; genAssign (pointer)
+   0813 3E 01              2201 	ld	a,#0x01
+   0815 12                 2202 	ld	(de),a
+                           2203 ; genPlus
+                           2204 ; genPlusIncr
+   0816 11 59 01           2205 	ld	de,#_MazeMap + 0 + 281
+                           2206 ; genAssign (pointer)
+   0819 3E 00              2207 	ld	a,#0x00
+   081B 12                 2208 	ld	(de),a
+                           2209 ; genPlus
+                           2210 ; genPlusIncr
+   081C 11 5A 01           2211 	ld	de,#_MazeMap + 0 + 282
+                           2212 ; genAssign (pointer)
+   081F 3E 01              2213 	ld	a,#0x01
+   0821 12                 2214 	ld	(de),a
+                           2215 ; genPlus
+                           2216 ; genPlusIncr
+   0822 11 5B 01           2217 	ld	de,#_MazeMap + 0 + 283
+                           2218 ; genAssign (pointer)
+   0825 3E 00              2219 	ld	a,#0x00
+   0827 12                 2220 	ld	(de),a
+                           2221 ; genPlus
+                           2222 ; genPlusIncr
+   0828 11 5C 01           2223 	ld	de,#_MazeMap + 0 + 284
+                           2224 ; genAssign (pointer)
+   082B 3E 01              2225 	ld	a,#0x01
+   082D 12                 2226 	ld	(de),a
+                           2227 ; genPlus
+                           2228 ; genPlusIncr
+   082E 11 5D 01           2229 	ld	de,#_MazeMap + 0 + 285
+                           2230 ; genAssign (pointer)
+   0831 3E 00              2231 	ld	a,#0x00
+   0833 12                 2232 	ld	(de),a
+                           2233 ; genPlus
+                           2234 ; genPlusIncr
+   0834 11 5E 01           2235 	ld	de,#_MazeMap + 0 + 286
+                           2236 ; genAssign (pointer)
+   0837 3E 00              2237 	ld	a,#0x00
+   0839 12                 2238 	ld	(de),a
+                           2239 ; genPlus
+                           2240 ; genPlusIncr
+   083A 11 5F 01           2241 	ld	de,#_MazeMap + 0 + 287
+                           2242 ; genAssign (pointer)
+   083D 3E 00              2243 	ld	a,#0x00
+   083F 12                 2244 	ld	(de),a
+                           2245 ; genPlus
+                           2246 ; genPlusIncr
+   0840 11 60 01           2247 	ld	de,#_MazeMap + 0 + 288
+                           2248 ; genAssign (pointer)
+   0843 3E 00              2249 	ld	a,#0x00
+   0845 12                 2250 	ld	(de),a
+                           2251 ; genPlus
+                           2252 ; genPlusIncr
+   0846 11 61 01           2253 	ld	de,#_MazeMap + 0 + 289
+                           2254 ; genAssign (pointer)
+   0849 3E 00              2255 	ld	a,#0x00
+   084B 12                 2256 	ld	(de),a
+                           2257 ; genPlus
+                           2258 ; genPlusIncr
+   084C 11 62 01           2259 	ld	de,#_MazeMap + 0 + 290
+                           2260 ; genAssign (pointer)
+   084F 3E 01              2261 	ld	a,#0x01
+   0851 12                 2262 	ld	(de),a
+                           2263 ; genPlus
+                           2264 ; genPlusIncr
+   0852 11 63 01           2265 	ld	de,#_MazeMap + 0 + 291
+                           2266 ; genAssign (pointer)
+   0855 3E 00              2267 	ld	a,#0x00
+   0857 12                 2268 	ld	(de),a
+                           2269 ; genPlus
+                           2270 ; genPlusIncr
+   0858 11 64 01           2271 	ld	de,#_MazeMap + 0 + 292
+                           2272 ; genAssign (pointer)
+   085B 3E 01              2273 	ld	a,#0x01
+   085D 12                 2274 	ld	(de),a
+                           2275 ; genPlus
+                           2276 ; genPlusIncr
+   085E 11 65 01           2277 	ld	de,#_MazeMap + 0 + 293
+                           2278 ; genAssign (pointer)
+   0861 3E 00              2279 	ld	a,#0x00
+   0863 12                 2280 	ld	(de),a
+                           2281 ; genPlus
+                           2282 ; genPlusIncr
+   0864 11 66 01           2283 	ld	de,#_MazeMap + 0 + 294
+                           2284 ; genAssign (pointer)
+   0867 3E 00              2285 	ld	a,#0x00
+   0869 12                 2286 	ld	(de),a
+                           2287 ; genPlus
+                           2288 ; genPlusIncr
+   086A 11 67 01           2289 	ld	de,#_MazeMap + 0 + 295
+                           2290 ; genAssign (pointer)
+   086D 3E 00              2291 	ld	a,#0x00
+   086F 12                 2292 	ld	(de),a
+                           2293 ; genPlus
+                           2294 ; genPlusIncr
+   0870 11 68 01           2295 	ld	de,#_MazeMap + 0 + 296
+                           2296 ; genAssign (pointer)
+   0873 3E 00              2297 	ld	a,#0x00
+   0875 12                 2298 	ld	(de),a
+                           2299 ; genPlus
+                           2300 ; genPlusIncr
+   0876 11 69 01           2301 	ld	de,#_MazeMap + 0 + 297
+                           2302 ; genAssign (pointer)
+   0879 3E 01              2303 	ld	a,#0x01
+   087B 12                 2304 	ld	(de),a
+                           2305 ; genPlus
+                           2306 ; genPlusIncr
+   087C 11 6A 01           2307 	ld	de,#_MazeMap + 0 + 298
+                           2308 ; genAssign (pointer)
+   087F 3E 00              2309 	ld	a,#0x00
+   0881 12                 2310 	ld	(de),a
+                           2311 ; genPlus
+                           2312 ; genPlusIncr
+   0882 11 6B 01           2313 	ld	de,#_MazeMap + 0 + 299
+                           2314 ; genAssign (pointer)
+   0885 3E 01              2315 	ld	a,#0x01
+   0887 12                 2316 	ld	(de),a
+                           2317 ; genPlus
+                           2318 ; genPlusIncr
+   0888 11 6C 01           2319 	ld	de,#_MazeMap + 0 + 300
+                           2320 ; genAssign (pointer)
+   088B 3E 01              2321 	ld	a,#0x01
+   088D 12                 2322 	ld	(de),a
+                           2323 ; genPlus
+                           2324 ; genPlusIncr
+   088E 11 6D 01           2325 	ld	de,#_MazeMap + 0 + 301
+                           2326 ; genAssign (pointer)
+   0891 3E 00              2327 	ld	a,#0x00
+   0893 12                 2328 	ld	(de),a
+                           2329 ; genPlus
+                           2330 ; genPlusIncr
+   0894 11 6E 01           2331 	ld	de,#_MazeMap + 0 + 302
+                           2332 ; genAssign (pointer)
+   0897 3E 01              2333 	ld	a,#0x01
+   0899 12                 2334 	ld	(de),a
+                           2335 ; genPlus
+                           2336 ; genPlusIncr
+   089A 11 6F 01           2337 	ld	de,#_MazeMap + 0 + 303
+                           2338 ; genAssign (pointer)
+   089D 3E 00              2339 	ld	a,#0x00
+   089F 12                 2340 	ld	(de),a
+                           2341 ; genPlus
+                           2342 ; genPlusIncr
+   08A0 11 70 01           2343 	ld	de,#_MazeMap + 0 + 304
+                           2344 ; genAssign (pointer)
+   08A3 3E 01              2345 	ld	a,#0x01
+   08A5 12                 2346 	ld	(de),a
+                           2347 ; genPlus
+                           2348 ; genPlusIncr
+   08A6 11 71 01           2349 	ld	de,#_MazeMap + 0 + 305
+                           2350 ; genAssign (pointer)
+   08A9 3E 01              2351 	ld	a,#0x01
+   08AB 12                 2352 	ld	(de),a
+                           2353 ; genPlus
+                           2354 ; genPlusIncr
+   08AC 11 72 01           2355 	ld	de,#_MazeMap + 0 + 306
+                           2356 ; genAssign (pointer)
+   08AF 3E 01              2357 	ld	a,#0x01
+   08B1 12                 2358 	ld	(de),a
+                           2359 ; genPlus
+                           2360 ; genPlusIncr
+   08B2 11 73 01           2361 	ld	de,#_MazeMap + 0 + 307
+                           2362 ; genAssign (pointer)
+   08B5 3E 01              2363 	ld	a,#0x01
+   08B7 12                 2364 	ld	(de),a
+                           2365 ; genPlus
+                           2366 ; genPlusIncr
+   08B8 11 74 01           2367 	ld	de,#_MazeMap + 0 + 308
+                           2368 ; genAssign (pointer)
+   08BB 3E 01              2369 	ld	a,#0x01
+   08BD 12                 2370 	ld	(de),a
+                           2371 ; genPlus
+                           2372 ; genPlusIncr
+   08BE 11 75 01           2373 	ld	de,#_MazeMap + 0 + 309
+                           2374 ; genAssign (pointer)
+   08C1 3E 01              2375 	ld	a,#0x01
+   08C3 12                 2376 	ld	(de),a
+                           2377 ; genPlus
+                           2378 ; genPlusIncr
+   08C4 11 76 01           2379 	ld	de,#_MazeMap + 0 + 310
+                           2380 ; genAssign (pointer)
+   08C7 3E 01              2381 	ld	a,#0x01
+   08C9 12                 2382 	ld	(de),a
+                           2383 ; genPlus
+                           2384 ; genPlusIncr
+   08CA 11 77 01           2385 	ld	de,#_MazeMap + 0 + 311
+                           2386 ; genAssign (pointer)
+   08CD 3E 00              2387 	ld	a,#0x00
+   08CF 12                 2388 	ld	(de),a
+                           2389 ; genPlus
+                           2390 ; genPlusIncr
+   08D0 11 78 01           2391 	ld	de,#_MazeMap + 0 + 312
+                           2392 ; genAssign (pointer)
+   08D3 3E 01              2393 	ld	a,#0x01
+   08D5 12                 2394 	ld	(de),a
+                           2395 ; genPlus
+                           2396 ; genPlusIncr
+   08D6 11 79 01           2397 	ld	de,#_MazeMap + 0 + 313
+                           2398 ; genAssign (pointer)
+   08D9 3E 01              2399 	ld	a,#0x01
+   08DB 12                 2400 	ld	(de),a
+                           2401 ; genPlus
+                           2402 ; genPlusIncr
+   08DC 11 7A 01           2403 	ld	de,#_MazeMap + 0 + 314
+                           2404 ; genAssign (pointer)
+   08DF 3E 01              2405 	ld	a,#0x01
+   08E1 12                 2406 	ld	(de),a
+                           2407 ; genPlus
+                           2408 ; genPlusIncr
+   08E2 11 7B 01           2409 	ld	de,#_MazeMap + 0 + 315
+                           2410 ; genAssign (pointer)
+   08E5 3E 01              2411 	ld	a,#0x01
+   08E7 12                 2412 	ld	(de),a
+                           2413 ; genPlus
+                           2414 ; genPlusIncr
+   08E8 11 7C 01           2415 	ld	de,#_MazeMap + 0 + 316
+                           2416 ; genAssign (pointer)
+   08EB 3E 01              2417 	ld	a,#0x01
+   08ED 12                 2418 	ld	(de),a
+                           2419 ; genPlus
+                           2420 ; genPlusIncr
+   08EE 11 7D 01           2421 	ld	de,#_MazeMap + 0 + 317
+                           2422 ; genAssign (pointer)
+   08F1 3E 01              2423 	ld	a,#0x01
+   08F3 12                 2424 	ld	(de),a
+                           2425 ; genPlus
+                           2426 ; genPlusIncr
+   08F4 11 7E 01           2427 	ld	de,#_MazeMap + 0 + 318
+                           2428 ; genAssign (pointer)
+   08F7 3E 00              2429 	ld	a,#0x00
+   08F9 12                 2430 	ld	(de),a
+                           2431 ; genPlus
+                           2432 ; genPlusIncr
+   08FA 11 7F 01           2433 	ld	de,#_MazeMap + 0 + 319
+                           2434 ; genAssign (pointer)
+   08FD 3E 01              2435 	ld	a,#0x01
+   08FF 12                 2436 	ld	(de),a
+                           2437 ; genPlus
+                           2438 ; genPlusIncr
+   0900 11 80 01           2439 	ld	de,#_MazeMap + 0 + 320
+                           2440 ; genAssign (pointer)
+   0903 3E 01              2441 	ld	a,#0x01
+   0905 12                 2442 	ld	(de),a
+                           2443 ; genPlus
+                           2444 ; genPlusIncr
+   0906 11 81 01           2445 	ld	de,#_MazeMap + 0 + 321
+                           2446 ; genAssign (pointer)
+   0909 3E 03              2447 	ld	a,#0x03
+   090B 12                 2448 	ld	(de),a
+                           2449 ; genPlus
+                           2450 ; genPlusIncr
+   090C 11 82 01           2451 	ld	de,#_MazeMap + 0 + 322
+                           2452 ; genAssign (pointer)
+   090F 3E 01              2453 	ld	a,#0x01
+   0911 12                 2454 	ld	(de),a
+                           2455 ; genPlus
+                           2456 ; genPlusIncr
+   0912 11 83 01           2457 	ld	de,#_MazeMap + 0 + 323
+                           2458 ; genAssign (pointer)
+   0915 3E 00              2459 	ld	a,#0x00
+   0917 12                 2460 	ld	(de),a
+                           2461 ; genPlus
+                           2462 ; genPlusIncr
+   0918 11 84 01           2463 	ld	de,#_MazeMap + 0 + 324
+                           2464 ; genAssign (pointer)
+   091B 3E 00              2465 	ld	a,#0x00
+   091D 12                 2466 	ld	(de),a
+                           2467 ; genPlus
+                           2468 ; genPlusIncr
+   091E 11 85 01           2469 	ld	de,#_MazeMap + 0 + 325
+                           2470 ; genAssign (pointer)
+   0921 3E 00              2471 	ld	a,#0x00
+   0923 12                 2472 	ld	(de),a
+                           2473 ; genPlus
+                           2474 ; genPlusIncr
+   0924 11 86 01           2475 	ld	de,#_MazeMap + 0 + 326
+                           2476 ; genAssign (pointer)
+   0927 3E 00              2477 	ld	a,#0x00
+   0929 12                 2478 	ld	(de),a
+                           2479 ; genPlus
+                           2480 ; genPlusIncr
+   092A 11 87 01           2481 	ld	de,#_MazeMap + 0 + 327
+                           2482 ; genAssign (pointer)
+   092D 3E 00              2483 	ld	a,#0x00
+   092F 12                 2484 	ld	(de),a
+                           2485 ; genPlus
+                           2486 ; genPlusIncr
+   0930 11 88 01           2487 	ld	de,#_MazeMap + 0 + 328
+                           2488 ; genAssign (pointer)
+   0933 3E 00              2489 	ld	a,#0x00
+   0935 12                 2490 	ld	(de),a
+                           2491 ; genPlus
+                           2492 ; genPlusIncr
+   0936 11 89 01           2493 	ld	de,#_MazeMap + 0 + 329
+                           2494 ; genAssign (pointer)
+   0939 3E 00              2495 	ld	a,#0x00
+   093B 12                 2496 	ld	(de),a
+                           2497 ; genPlus
+                           2498 ; genPlusIncr
+   093C 11 8A 01           2499 	ld	de,#_MazeMap + 0 + 330
+                           2500 ; genAssign (pointer)
+   093F 3E 00              2501 	ld	a,#0x00
+   0941 12                 2502 	ld	(de),a
+                           2503 ; genPlus
+                           2504 ; genPlusIncr
+   0942 11 8B 01           2505 	ld	de,#_MazeMap + 0 + 331
+                           2506 ; genAssign (pointer)
+   0945 3E 00              2507 	ld	a,#0x00
+   0947 12                 2508 	ld	(de),a
+                           2509 ; genPlus
+                           2510 ; genPlusIncr
+   0948 11 8C 01           2511 	ld	de,#_MazeMap + 0 + 332
+                           2512 ; genAssign (pointer)
+   094B 3E 00              2513 	ld	a,#0x00
+   094D 12                 2514 	ld	(de),a
+                           2515 ; genPlus
+                           2516 ; genPlusIncr
+   094E 11 8D 01           2517 	ld	de,#_MazeMap + 0 + 333
+                           2518 ; genAssign (pointer)
+   0951 3E 00              2519 	ld	a,#0x00
+   0953 12                 2520 	ld	(de),a
+                           2521 ; genPlus
+                           2522 ; genPlusIncr
+   0954 11 8E 01           2523 	ld	de,#_MazeMap + 0 + 334
+                           2524 ; genAssign (pointer)
+   0957 3E 00              2525 	ld	a,#0x00
+   0959 12                 2526 	ld	(de),a
+                           2527 ; genPlus
+                           2528 ; genPlusIncr
+   095A 11 8F 01           2529 	ld	de,#_MazeMap + 0 + 335
+                           2530 ; genAssign (pointer)
+   095D 3E 00              2531 	ld	a,#0x00
+   095F 12                 2532 	ld	(de),a
+                           2533 ; genPlus
+                           2534 ; genPlusIncr
+   0960 11 90 01           2535 	ld	de,#_MazeMap + 0 + 336
+                           2536 ; genAssign (pointer)
+   0963 3E 00              2537 	ld	a,#0x00
+   0965 12                 2538 	ld	(de),a
+                           2539 ; genPlus
+                           2540 ; genPlusIncr
+   0966 11 91 01           2541 	ld	de,#_MazeMap + 0 + 337
+                           2542 ; genAssign (pointer)
+   0969 3E 00              2543 	ld	a,#0x00
+   096B 12                 2544 	ld	(de),a
+                           2545 ; genPlus
+                           2546 ; genPlusIncr
+   096C 11 92 01           2547 	ld	de,#_MazeMap + 0 + 338
+                           2548 ; genAssign (pointer)
+   096F 3E 00              2549 	ld	a,#0x00
+   0971 12                 2550 	ld	(de),a
+                           2551 ; genPlus
+                           2552 ; genPlusIncr
+   0972 11 93 01           2553 	ld	de,#_MazeMap + 0 + 339
+                           2554 ; genAssign (pointer)
+   0975 3E 00              2555 	ld	a,#0x00
+   0977 12                 2556 	ld	(de),a
+                           2557 ; genPlus
+                           2558 ; genPlusIncr
+   0978 11 94 01           2559 	ld	de,#_MazeMap + 0 + 340
+                           2560 ; genAssign (pointer)
+   097B 3E 01              2561 	ld	a,#0x01
+   097D 12                 2562 	ld	(de),a
+                           2563 ; genPlus
+                           2564 ; genPlusIncr
+   097E 11 95 01           2565 	ld	de,#_MazeMap + 0 + 341
+                           2566 ; genAssign (pointer)
+   0981 3E 01              2567 	ld	a,#0x01
+   0983 12                 2568 	ld	(de),a
+                           2569 ; genPlus
+                           2570 ; genPlusIncr
+   0984 11 96 01           2571 	ld	de,#_MazeMap + 0 + 342
+                           2572 ; genAssign (pointer)
+   0987 3E 01              2573 	ld	a,#0x01
+   0989 12                 2574 	ld	(de),a
+                           2575 ; genPlus
+                           2576 ; genPlusIncr
+   098A 11 97 01           2577 	ld	de,#_MazeMap + 0 + 343
+                           2578 ; genAssign (pointer)
+   098D 3E 01              2579 	ld	a,#0x01
+   098F 12                 2580 	ld	(de),a
+                           2581 ; genPlus
+                           2582 ; genPlusIncr
+   0990 11 98 01           2583 	ld	de,#_MazeMap + 0 + 344
+                           2584 ; genAssign (pointer)
+   0993 3E 01              2585 	ld	a,#0x01
+   0995 12                 2586 	ld	(de),a
+                           2587 ; genPlus
+                           2588 ; genPlusIncr
+   0996 11 99 01           2589 	ld	de,#_MazeMap + 0 + 345
+                           2590 ; genAssign (pointer)
+   0999 3E 01              2591 	ld	a,#0x01
+   099B 12                 2592 	ld	(de),a
+                           2593 ; genPlus
+                           2594 ; genPlusIncr
+   099C 11 9A 01           2595 	ld	de,#_MazeMap + 0 + 346
+                           2596 ; genAssign (pointer)
+   099F 3E 01              2597 	ld	a,#0x01
+   09A1 12                 2598 	ld	(de),a
+                           2599 ; genPlus
+                           2600 ; genPlusIncr
+   09A2 11 9B 01           2601 	ld	de,#_MazeMap + 0 + 347
+                           2602 ; genAssign (pointer)
+   09A5 3E 01              2603 	ld	a,#0x01
+   09A7 12                 2604 	ld	(de),a
+                           2605 ; genPlus
+                           2606 ; genPlusIncr
+   09A8 11 9C 01           2607 	ld	de,#_MazeMap + 0 + 348
+                           2608 ; genAssign (pointer)
+   09AB 3E 01              2609 	ld	a,#0x01
+   09AD 12                 2610 	ld	(de),a
+                           2611 ; genPlus
+                           2612 ; genPlusIncr
+   09AE 11 9D 01           2613 	ld	de,#_MazeMap + 0 + 349
+                           2614 ; genAssign (pointer)
+   09B1 3E 01              2615 	ld	a,#0x01
+   09B3 12                 2616 	ld	(de),a
+                           2617 ; genPlus
+                           2618 ; genPlusIncr
+   09B4 11 9E 01           2619 	ld	de,#_MazeMap + 0 + 350
+                           2620 ; genAssign (pointer)
+   09B7 3E 01              2621 	ld	a,#0x01
+   09B9 12                 2622 	ld	(de),a
+                           2623 ; genPlus
+                           2624 ; genPlusIncr
+   09BA 11 9F 01           2625 	ld	de,#_MazeMap + 0 + 351
+                           2626 ; genAssign (pointer)
+   09BD 3E 01              2627 	ld	a,#0x01
+   09BF 12                 2628 	ld	(de),a
+                           2629 ; genPlus
+                           2630 ; genPlusIncr
+   09C0 11 A0 01           2631 	ld	de,#_MazeMap + 0 + 352
+                           2632 ; genAssign (pointer)
+   09C3 3E 01              2633 	ld	a,#0x01
+   09C5 12                 2634 	ld	(de),a
+                           2635 ; genPlus
+                           2636 ; genPlusIncr
+   09C6 11 A1 01           2637 	ld	de,#_MazeMap + 0 + 353
+                           2638 ; genAssign (pointer)
+   09C9 3E 01              2639 	ld	a,#0x01
+   09CB 12                 2640 	ld	(de),a
+                           2641 ; genPlus
+                           2642 ; genPlusIncr
+   09CC 11 A2 01           2643 	ld	de,#_MazeMap + 0 + 354
+                           2644 ; genAssign (pointer)
+   09CF 3E 01              2645 	ld	a,#0x01
+   09D1 12                 2646 	ld	(de),a
+                           2647 ; genPlus
+                           2648 ; genPlusIncr
+   09D2 11 A3 01           2649 	ld	de,#_MazeMap + 0 + 355
+                           2650 ; genAssign (pointer)
+   09D5 3E 01              2651 	ld	a,#0x01
+   09D7 12                 2652 	ld	(de),a
+                           2653 ; genPlus
+                           2654 ; genPlusIncr
+   09D8 11 A4 01           2655 	ld	de,#_MazeMap + 0 + 356
+                           2656 ; genAssign (pointer)
+   09DB 3E 01              2657 	ld	a,#0x01
+   09DD 12                 2658 	ld	(de),a
+                           2659 ; genPlus
+                           2660 ; genPlusIncr
+   09DE 11 A5 01           2661 	ld	de,#_MazeMap + 0 + 357
+                           2662 ; genAssign (pointer)
+   09E1 3E 01              2663 	ld	a,#0x01
+   09E3 12                 2664 	ld	(de),a
+                           2665 ; genPlus
+                           2666 ; genPlusIncr
+   09E4 11 A6 01           2667 	ld	de,#_MazeMap + 0 + 358
+                           2668 ; genAssign (pointer)
+   09E7 3E 01              2669 	ld	a,#0x01
+   09E9 12                 2670 	ld	(de),a
+                           2671 ; genPlus
+                           2672 ; genPlusIncr
+   09EA 11 A7 01           2673 	ld	de,#_MazeMap + 0 + 359
+                           2674 ; genAssign (pointer)
+   09ED 3E 01              2675 	ld	a,#0x01
+   09EF 12                 2676 	ld	(de),a
+                           2677 ;	main.c 94
+                           2678 ; genAssign (pointer)
+   09F0 11 A8 01           2679 	ld	de,#_Snail + 0
+   09F3 3E 00              2680 	ld	a,#0x00
+   09F5 12                 2681 	ld	(de),a
+                           2682 ; genPlus
+                           2683 ; genPlusIncr
+   09F6 11 A9 01           2684 	ld	de,#_Snail + 0 + 1
+                           2685 ; genAssign (pointer)
+   09F9 3E 00              2686 	ld	a,#0x00
+   09FB 12                 2687 	ld	(de),a
+                           2688 ; genPlus
+                           2689 ; genPlusIncr
+   09FC 11 AA 01           2690 	ld	de,#_Snail + 0 + 2
+                           2691 ; genAssign (pointer)
+   09FF 3E 00              2692 	ld	a,#0x00
+   0A01 12                 2693 	ld	(de),a
+                           2694 ; genPlus
+                           2695 ; genPlusIncr
+   0A02 11 AB 01           2696 	ld	de,#_Snail + 0 + 3
+                           2697 ; genAssign (pointer)
+   0A05 3E 00              2698 	ld	a,#0x00
+   0A07 12                 2699 	ld	(de),a
+                           2700 ; genPlus
+                           2701 ; genPlusIncr
+   0A08 11 AC 01           2702 	ld	de,#_Snail + 0 + 4
+                           2703 ; genAssign (pointer)
+   0A0B 3E 30              2704 	ld	a,#0x30
+   0A0D 12                 2705 	ld	(de),a
+                           2706 ; genPlus
+                           2707 ; genPlusIncr
+   0A0E 11 AD 01           2708 	ld	de,#_Snail + 0 + 5
+                           2709 ; genAssign (pointer)
+   0A11 3E 30              2710 	ld	a,#0x30
+   0A13 12                 2711 	ld	(de),a
+                           2712 ; genPlus
+                           2713 ; genPlusIncr
+   0A14 11 AE 01           2714 	ld	de,#_Snail + 0 + 6
+                           2715 ; genAssign (pointer)
+   0A17 3E 78              2716 	ld	a,#0x78
+   0A19 12                 2717 	ld	(de),a
+                           2718 ; genPlus
+                           2719 ; genPlusIncr
+   0A1A 11 AF 01           2720 	ld	de,#_Snail + 0 + 7
+                           2721 ; genAssign (pointer)
+   0A1D 3E 78              2722 	ld	a,#0x78
+   0A1F 12                 2723 	ld	(de),a
+                           2724 ; genPlus
+                           2725 ; genPlusIncr
+   0A20 11 B0 01           2726 	ld	de,#_Snail + 0 + 8
+                           2727 ; genAssign (pointer)
+   0A23 3E 7A              2728 	ld	a,#0x7A
+   0A25 12                 2729 	ld	(de),a
+                           2730 ; genPlus
+                           2731 ; genPlusIncr
+   0A26 11 B1 01           2732 	ld	de,#_Snail + 0 + 9
+                           2733 ; genAssign (pointer)
+   0A29 3E 78              2734 	ld	a,#0x78
+   0A2B 12                 2735 	ld	(de),a
+                           2736 ; genPlus
+                           2737 ; genPlusIncr
+   0A2C 11 B2 01           2738 	ld	de,#_Snail + 0 + 10
+                           2739 ; genAssign (pointer)
+   0A2F 3E 7C              2740 	ld	a,#0x7C
+   0A31 12                 2741 	ld	(de),a
+                           2742 ; genPlus
+                           2743 ; genPlusIncr
+   0A32 11 B3 01           2744 	ld	de,#_Snail + 0 + 11
+                           2745 ; genAssign (pointer)
+   0A35 3E 7A              2746 	ld	a,#0x7A
+   0A37 12                 2747 	ld	(de),a
+                           2748 ; genPlus
+                           2749 ; genPlusIncr
+   0A38 11 B4 01           2750 	ld	de,#_Snail + 0 + 12
+                           2751 ; genAssign (pointer)
+   0A3B 3E 3E              2752 	ld	a,#0x3E
+   0A3D 12                 2753 	ld	(de),a
+                           2754 ; genPlus
+                           2755 ; genPlusIncr
+   0A3E 11 B5 01           2756 	ld	de,#_Snail + 0 + 13
+                           2757 ; genAssign (pointer)
+   0A41 3E 30              2758 	ld	a,#0x30
+   0A43 12                 2759 	ld	(de),a
+                           2760 ; genPlus
+                           2761 ; genPlusIncr
+   0A44 11 B6 01           2762 	ld	de,#_Snail + 0 + 14
+                           2763 ; genAssign (pointer)
+   0A47 3E 00              2764 	ld	a,#0x00
+   0A49 12                 2765 	ld	(de),a
+                           2766 ; genPlus
+                           2767 ; genPlusIncr
+   0A4A 11 B7 01           2768 	ld	de,#_Snail + 0 + 15
+                           2769 ; genAssign (pointer)
+   0A4D 3E 00              2770 	ld	a,#0x00
+   0A4F 12                 2771 	ld	(de),a
+                           2772 ;--------------------------------------------------------
+                           2773 ; Home
+                           2774 ;--------------------------------------------------------
+                           2775 	.area _HOME
+                           2776 	.area _CODE
+                           2777 ;--------------------------------------------------------
+                           2778 ; code
+                           2779 ;--------------------------------------------------------
+                           2780 	.area _CODE
+                           2781 ;	main.c 10
+                           2782 ; genLabel
+                           2783 ; genFunction
+                           2784 ;	---------------------------------
+                           2785 ; Function performantdelay
+                           2786 ; ---------------------------------
+   0000                    2787 ___performantdelay_start:
+   0000                    2788 _performantdelay:
+   0000 C5                 2789 	push	bc
+                           2790 	
+                           2791 ;	main.c 12
+                           2792 ; genAssign
+   0001 0E 00              2793 	ld	c,#0x00
+                           2794 ; genLabel
+   0003                    2795 00101$:
+                           2796 ; genCmpLt
+                           2797 ; AOP_STK for 
+   0003 AF                 2798 	xor	a,a
+   0004 79                 2799 	ld	a,c
+   0005 F8 04              2800 	lda	hl,4(sp)
+   0007 9E                 2801 	sbc	a,(hl) ; 2
+   0008 D2 12 00           2802 	jp	nc,00105$
+                           2803 ;	main.c 13
+                           2804 ; genCall
+   000B CD 00 00           2805 	call	_wait_vbl_done
+                           2806 ;	main.c 12
+                           2807 ; genPlus
+                           2808 ; genPlusIncr
+   000E 0C                 2809 	inc	c
+                           2810 ; genGoto
+   000F C3 03 00           2811 	jp	00101$
+                           2812 ; genLabel
+   0012                    2813 00105$:
+                           2814 ; genEndFunction
+                           2815 	
+   0012 C1                 2816 	pop	bc
+   0013 C9                 2817 	ret
+   0014                    2818 ___performantdelay_end:
+   0014                    2819 _blankmap:
+   0014 00                 2820 	.db #0x00
+                           2821 ;	main.c 17
+                           2822 ; genLabel
+                           2823 ; genFunction
+                           2824 ;	---------------------------------
+                           2825 ; Function canPlayerMove
+                           2826 ; ---------------------------------
+   0015                    2827 ___canPlayerMove_start:
+   0015                    2828 _canPlayerMove:
+   0015 C5                 2829 	push	bc
+   0016 E8 FE              2830 	lda	sp,-2(sp)
+                           2831 ;	main.c 22
+                           2832 ; genMinus
+                           2833 ; AOP_STK for 
+   0018 F8 06              2834 	lda	hl,6(sp)
+   001A 7E                 2835 	ld	a,(hl)
+   001B C6 F8              2836 	add	a,#0xF8
+   001D 4F                 2837 	ld	c,a
+                           2838 ; genRightShift
+                           2839 ; shift right 	result 1, left 1
+                           2840 ; Removed redundent load
+   001E CB 39              2841 	srl	c
+   0020 CB 39              2842 	srl	c
+   0022 CB 39              2843 	srl	c
+                           2844 ; genCast
+                           2845 ; AOP_STK for _canPlayerMove_indexTLx_1_1
+   0024 F8 00              2846 	lda	hl,0(sp)
+   0026 71                 2847 	ld	(hl),c
+   0027 23                 2848 	inc	hl
+   0028 36 00              2849 	ld	(hl),#0x00
+                           2850 ;	main.c 23
+                           2851 ; genMinus
+                           2852 ; AOP_STK for 
+   002A F8 07              2853 	lda	hl,7(sp)
+   002C 7E                 2854 	ld	a,(hl)
+   002D C6 F0              2855 	add	a,#0xF0
+   002F 4F                 2856 	ld	c,a
+                           2857 ; genRightShift
+                           2858 ; shift right 	result 1, left 1
+                           2859 ; Removed redundent load
+   0030 CB 39              2860 	srl	c
+   0032 CB 39              2861 	srl	c
+   0034 CB 39              2862 	srl	c
+                           2863 ; genCast
+                           2864 ; Removed redundent load
+   0036 06 00              2865 	ld	b,#0x00
+                           2866 ;	main.c 24
+                           2867 ; genIpush
+   0038 21 14 00           2868 	ld	hl,#0x0014
+   003B E5                 2869 	push	hl
+                           2870 ; genIpush
+   003C C5                 2871 	push	bc
+                           2872 ; genCall
+   003D CD 00 00           2873 	call	__muluint
+   0040 42                 2874 	ld	b,d
+   0041 4B                 2875 	ld	c,e
+   0042 E8 04              2876 	lda	sp,4(sp)
+                           2877 ; genPlus
+                           2878 ; AOP_STK for _canPlayerMove_indexTLx_1_1
+                           2879 ;	genPlusIncr failed
+   0044 F8 00              2880 	lda	hl,0(sp)
+   0046 2A                 2881 	ld	a,(hl+)
+   0047 66                 2882 	ld	h,(hl)
+   0048 6F                 2883 	ld	l,a
+   0049 09                 2884 	add	hl,bc
+   004A 4D                 2885 	ld	c,l
+   004B 44                 2886 	ld	b,h
+                           2887 ;	main.c 26
+                           2888 ; genPlus
+                           2889 ;	genPlusIncr failed
+   004C 3E 40              2890 	ld	a,#<_MazeMap
+   004E 81                 2891 	add	a,c
+   004F 5F                 2892 	ld	e,a
+   0050 3E 00              2893 	ld	a,#>_MazeMap
+   0052 88                 2894 	adc	a,b
+   0053 57                 2895 	ld	d,a
+                           2896 ; genPointerGet
+   0054 1A                 2897 	ld	a,(de)
+   0055 4F                 2898 	ld	c,a
+                           2899 ; genPointerGet
+   0056 11 14 00           2900 	ld	de,#_blankmap + 0
+   0059 1A                 2901 	ld	a,(de)
+                           2902 ; genCmpEq
+   005A B9                 2903 	cp	c ; 5
+   005B 20 04              2904 	jr	nz,00103$
+   005D 3E 01              2905 	ld	a,#0x01
+   005F 18 01              2906 	jr	00104$
+   0061                    2907 00103$:
+   0061 AF                 2908 	xor	a,a
+   0062                    2909 00104$:
+   0062 4F                 2910 	ld	c,a
+                           2911 ;	main.c 28
+                           2912 ; genRet
+   0063 59                 2913 	ld	e,c
+                           2914 ; genLabel
+   0064                    2915 00101$:
+                           2916 ; genEndFunction
+   0064 E8 02              2917 	lda	sp,2(sp)
+   0066 C1                 2918 	pop	bc
+   0067 C9                 2919 	ret
+   0068                    2920 ___canPlayerMove_end:
+                           2921 ;	main.c 31
+                           2922 ; genLabel
+                           2923 ; genFunction
+                           2924 ;	---------------------------------
+                           2925 ; Function animateSprite
+                           2926 ; ---------------------------------
+   0068                    2927 ___animateSprite_start:
+   0068                    2928 _animateSprite:
+   0068 C5                 2929 	push	bc
+                           2930 	
+                           2931 ;	main.c 32
+                           2932 ; genAssign
+                           2933 ; (operands are equal 3)
+                           2934 ; genLabel
+   0069                    2935 00101$:
+                           2936 ; genCmpEq
+                           2937 ; AOP_STK for 
+   0069 F8 05              2938 	lda	hl,5(sp)
+   006B 7E                 2939 	ld	a,(hl)
+   006C B7                 2940 	or	a,a
+                           2941 ; Rule 5
+   006D CA AF 00           2942 	jp	z,00124$
+   0070                    2943 00125$:
+                           2944 ;	main.c 33
+                           2945 ; genCmpLt
+                           2946 ; AOP_STK for 
+   0070 F8 05              2947 	lda	hl,5(sp)
+   0072 7E                 2948 	ld	a,(hl)
+   0073 EE 80              2949 	xor	a,#0x80
+   0075 FE 80              2950 	cp	#0x00^0x80
+   0077 3E 00              2951 	ld	a,#0x00
+   0079 17                 2952 	rla
+   007A 47                 2953 	ld	b,a
+                           2954 ; genIfx
+                           2955 ; Removed redundent or a,a
+   007B AF                 2956 	xor	a,a
+   007C B0                 2957 	or	a,b
+   007D CA 85 00           2958 	jp	z,00109$
+                           2959 ; genAssign
+   0080 0E FF              2960 	ld	c,#0xFF
+                           2961 ; genGoto
+   0082 C3 87 00           2962 	jp	00110$
+                           2963 ; genLabel
+   0085                    2964 00109$:
+                           2965 ; genAssign
+   0085 0E 01              2966 	ld	c,#0x01
+                           2967 ; genLabel
+   0087                    2968 00110$:
+                           2969 ; genIpush
+   0087 3E 00              2970 	ld	a,#0x00
+   0089 F5                 2971 	push	af
+   008A 33                 2972 	inc	sp
+                           2973 ; genIpush
+   008B 79                 2974 	ld	a,c
+   008C F5                 2975 	push	af
+   008D 33                 2976 	inc	sp
+                           2977 ; genIpush
+                           2978 ; AOP_STK for 
+   008E F8 06              2979 	lda	hl,6(sp)
+   0090 7E                 2980 	ld	a,(hl)
+   0091 F5                 2981 	push	af
+   0092 33                 2982 	inc	sp
+                           2983 ; genCall
+   0093 CD 00 00           2984 	call	_scroll_sprite
+   0096 E8 03              2985 	lda	sp,3(sp)
+                           2986 ;	main.c 34
+                           2987 ; genIfx
+                           2988 ; Removed redundent or a,a
+   0098 AF                 2989 	xor	a,a
+   0099 B0                 2990 	or	a,b
+   009A CA A2 00           2991 	jp	z,00111$
+                           2992 ; genAssign
+   009D 0E 02              2993 	ld	c,#0x02
+                           2994 ; genGoto
+   009F C3 A4 00           2995 	jp	00112$
+                           2996 ; genLabel
+   00A2                    2997 00111$:
+                           2998 ; genAssign
+   00A2 0E FE              2999 	ld	c,#0xFE
+                           3000 ; genLabel
+   00A4                    3001 00112$:
+                           3002 ; genPlus
+                           3003 ; AOP_STK for 
+                           3004 ;	genPlusIncr failed
+   00A4 F8 05              3005 	lda	hl,5(sp)
+   00A6 7E                 3006 	ld	a,(hl)
+   00A7 81                 3007 	add	a,c
+   00A8 77                 3008 	ld	(hl),a
+                           3009 ;	main.c 35
+                           3010 ; genCall
+   00A9 CD 00 00           3011 	call	_wait_vbl_done
+                           3012 ; genGoto
+   00AC C3 69 00           3013 	jp	00101$
+                           3014 ;	main.c 37
+                           3015 ; genLabel
+   00AF                    3016 00124$:
+                           3017 ; genAssign
+                           3018 ; AOP_STK for 
+                           3019 ; (registers are the same)
+                           3020 ; genLabel
+   00AF                    3021 00104$:
+                           3022 ; genCmpEq
+                           3023 ; AOP_STK for 
+   00AF F8 06              3024 	lda	hl,6(sp)
+   00B1 7E                 3025 	ld	a,(hl)
+   00B2 B7                 3026 	or	a,a
+                           3027 ; Rule 5
+   00B3 CA F5 00           3028 	jp	z,00107$
+   00B6                    3029 00126$:
+                           3030 ;	main.c 38
+                           3031 ; genCmpLt
+                           3032 ; AOP_STK for 
+   00B6 F8 06              3033 	lda	hl,6(sp)
+   00B8 7E                 3034 	ld	a,(hl)
+   00B9 EE 80              3035 	xor	a,#0x80
+   00BB FE 80              3036 	cp	#0x00^0x80
+   00BD 3E 00              3037 	ld	a,#0x00
+   00BF 17                 3038 	rla
+   00C0 47                 3039 	ld	b,a
+                           3040 ; genIfx
+                           3041 ; Removed redundent or a,a
+   00C1 AF                 3042 	xor	a,a
+   00C2 B0                 3043 	or	a,b
+   00C3 CA CB 00           3044 	jp	z,00113$
+                           3045 ; genAssign
+   00C6 0E FF              3046 	ld	c,#0xFF
+                           3047 ; genGoto
+   00C8 C3 CD 00           3048 	jp	00114$
+                           3049 ; genLabel
+   00CB                    3050 00113$:
+                           3051 ; genAssign
+   00CB 0E 01              3052 	ld	c,#0x01
+                           3053 ; genLabel
+   00CD                    3054 00114$:
+                           3055 ; genIpush
+   00CD 79                 3056 	ld	a,c
+   00CE F5                 3057 	push	af
+   00CF 33                 3058 	inc	sp
+                           3059 ; genIpush
+   00D0 3E 00              3060 	ld	a,#0x00
+   00D2 F5                 3061 	push	af
+   00D3 33                 3062 	inc	sp
+                           3063 ; genIpush
+                           3064 ; AOP_STK for 
+   00D4 F8 06              3065 	lda	hl,6(sp)
+   00D6 7E                 3066 	ld	a,(hl)
+   00D7 F5                 3067 	push	af
+   00D8 33                 3068 	inc	sp
+                           3069 ; genCall
+   00D9 CD 00 00           3070 	call	_scroll_sprite
+   00DC E8 03              3071 	lda	sp,3(sp)
+                           3072 ;	main.c 39
+                           3073 ; genIfx
+                           3074 ; Removed redundent or a,a
+   00DE AF                 3075 	xor	a,a
+   00DF B0                 3076 	or	a,b
+   00E0 CA E8 00           3077 	jp	z,00115$
+                           3078 ; genAssign
+   00E3 0E 01              3079 	ld	c,#0x01
+                           3080 ; genGoto
+   00E5 C3 EA 00           3081 	jp	00116$
+                           3082 ; genLabel
+   00E8                    3083 00115$:
+                           3084 ; genAssign
+   00E8 0E FF              3085 	ld	c,#0xFF
+                           3086 ; genLabel
+   00EA                    3087 00116$:
+                           3088 ; genPlus
+                           3089 ; AOP_STK for 
+                           3090 ;	genPlusIncr failed
+   00EA F8 06              3091 	lda	hl,6(sp)
+   00EC 7E                 3092 	ld	a,(hl)
+   00ED 81                 3093 	add	a,c
+   00EE 77                 3094 	ld	(hl),a
+                           3095 ;	main.c 40
+                           3096 ; genCall
+   00EF CD 00 00           3097 	call	_wait_vbl_done
+                           3098 ; genGoto
+   00F2 C3 AF 00           3099 	jp	00104$
+                           3100 ; genLabel
+   00F5                    3101 00107$:
+                           3102 ; genEndFunction
+                           3103 	
+   00F5 C1                 3104 	pop	bc
+   00F6 C9                 3105 	ret
+   00F7                    3106 ___animateSprite_end:
+                           3107 ;	main.c 46
+                           3108 ; genLabel
+                           3109 ; genFunction
+                           3110 ;	---------------------------------
+                           3111 ; Function main
+                           3112 ; ---------------------------------
+   00F7                    3113 ___main_start:
+   00F7                    3114 _main:
+   00F7 C5                 3115 	push	bc
+   00F8 E8 FD              3116 	lda	sp,-3(sp)
+                           3117 ;	main.c 48
+                           3118 ; genIpush
+   00FA 21 00 00           3119 	ld	hl,#_MazeSprites + 0
+   00FD E5                 3120 	push	hl
+                           3121 ; genIpush
+   00FE 3E 04              3122 	ld	a,#0x04
+   0100 F5                 3123 	push	af
+   0101 33                 3124 	inc	sp
+                           3125 ; genIpush
+   0102 3E 00              3126 	ld	a,#0x00
+   0104 F5                 3127 	push	af
+   0105 33                 3128 	inc	sp
+                           3129 ; genCall
+   0106 CD 00 00           3130 	call	_set_bkg_data
+   0109 E8 04              3131 	lda	sp,4(sp)
+                           3132 ;	main.c 49
+                           3133 ; genIpush
+   010B 21 40 00           3134 	ld	hl,#_MazeMap + 0
+   010E E5                 3135 	push	hl
+                           3136 ; genIpush
+   010F 3E 12              3137 	ld	a,#0x12
+   0111 F5                 3138 	push	af
+   0112 33                 3139 	inc	sp
+                           3140 ; genIpush
+   0113 3E 14              3141 	ld	a,#0x14
+   0115 F5                 3142 	push	af
+   0116 33                 3143 	inc	sp
+                           3144 ; genIpush
+   0117 3E 00              3145 	ld	a,#0x00
+   0119 F5                 3146 	push	af
+   011A 33                 3147 	inc	sp
+                           3148 ; genIpush
+   011B 3E 00              3149 	ld	a,#0x00
+   011D F5                 3150 	push	af
+   011E 33                 3151 	inc	sp
+                           3152 ; genCall
+   011F CD 00 00           3153 	call	_set_bkg_tiles
+   0122 E8 06              3154 	lda	sp,6(sp)
+                           3155 ;	main.c 51
+                           3156 ; genIpush
+   0124 21 A8 01           3157 	ld	hl,#_Snail + 0
+   0127 E5                 3158 	push	hl
+                           3159 ; genIpush
+   0128 3E 01              3160 	ld	a,#0x01
+   012A F5                 3161 	push	af
+   012B 33                 3162 	inc	sp
+                           3163 ; genIpush
+   012C 3E 00              3164 	ld	a,#0x00
+   012E F5                 3165 	push	af
+   012F 33                 3166 	inc	sp
+                           3167 ; genCall
+   0130 CD 00 00           3168 	call	_set_sprite_data
+   0133 E8 04              3169 	lda	sp,4(sp)
+                           3170 ;	main.c 52
+                           3171 ; genIpush
+   0135 3E 00              3172 	ld	a,#0x00
+   0137 F5                 3173 	push	af
+   0138 33                 3174 	inc	sp
+                           3175 ; genIpush
+   0139 3E 00              3176 	ld	a,#0x00
+   013B F5                 3177 	push	af
+   013C 33                 3178 	inc	sp
+                           3179 ; genCall
+   013D CD 00 00           3180 	call	_set_sprite_tile
+   0140 E8 02              3181 	lda	sp,2(sp)
+                           3182 ;	main.c 54
+                           3183 ; genAssign (pointer)
+   0142 11 B8 01           3184 	ld	de,#_playerlocation + 0
+   0145 3E 10              3185 	ld	a,#0x10
+   0147 12                 3186 	ld	(de),a
+                           3187 ;	main.c 55
+                           3188 ; genPlus
+                           3189 ; AOP_STK for _main_sloc1_1_0
+                           3190 ; genPlusIncr
+                           3191 ;	genPlusIncr failed
+   0148 11 B8 01           3192 	ld	de,#_playerlocation + 0
+   014B 21 01 00           3193 	ld	hl,#0x0001
+   014E 19                 3194 	add	hl,de
+   014F 7D                 3195 	ld	a,l
+   0150 54                 3196 	ld	d,h
+   0151 F8 00              3197 	lda	hl,0(sp)
+   0153 22                 3198 	ld	(hl+),a
+   0154 72                 3199 	ld	(hl),d
+                           3200 ; genAssign (pointer)
+                           3201 ; AOP_STK for _main_sloc1_1_0
+   0155 2B                 3202 	dec	hl
+   0156 5E                 3203 	ld	e,(hl)
+   0157 23                 3204 	inc	hl
+   0158 56                 3205 	ld	d,(hl)
+   0159 3E 18              3206 	ld	a,#0x18
+   015B 12                 3207 	ld	(de),a
+                           3208 ;	main.c 57
+                           3209 ; genPointerGet
+                           3210 ; AOP_STK for _main_sloc1_1_0
+                           3211 ; AOP_STK for _main_sloc0_1_0
+   015C 2B                 3212 	dec	hl
+   015D 5E                 3213 	ld	e,(hl)
+   015E 23                 3214 	inc	hl
+   015F 56                 3215 	ld	d,(hl)
+   0160 1A                 3216 	ld	a,(de)
+   0161 23                 3217 	inc	hl
+   0162 77                 3218 	ld	(hl),a
+                           3219 ; genPointerGet
+   0163 11 B8 01           3220 	ld	de,#_playerlocation + 0
+   0166 1A                 3221 	ld	a,(de)
+   0167 4F                 3222 	ld	c,a
+                           3223 ; genIpush
+                           3224 ; AOP_STK for _main_sloc0_1_0
+   0168 7E                 3225 	ld	a,(hl)
+   0169 F5                 3226 	push	af
+   016A 33                 3227 	inc	sp
+                           3228 ; genIpush
+   016B 79                 3229 	ld	a,c
+   016C F5                 3230 	push	af
+   016D 33                 3231 	inc	sp
+                           3232 ; genIpush
+   016E 3E 00              3233 	ld	a,#0x00
+   0170 F5                 3234 	push	af
+   0171 33                 3235 	inc	sp
+                           3236 ; genCall
+   0172 CD 00 00           3237 	call	_move_sprite
+   0175 E8 03              3238 	lda	sp,3(sp)
+                           3239 ;	main.c 60
+                           3240 ; genOr
+                           3241 ; AOP_SFR for _LCDC_REG
+                           3242 ; Type res[4] = l[4]&r[1]
+                           3243 ; Size res[1] = l[1]&r[1]
+   0177 F0 00              3244 	ldh	a,(_LCDC_REG+0) ; x
+   0179 F6 02              3245 	or	a,#0x02
+   017B E0 00              3246 	ldh	(_LCDC_REG+0),a
+                           3247 ;	main.c 61
+                           3248 ; genOr
+                           3249 ; AOP_SFR for _LCDC_REG
+                           3250 ; Type res[4] = l[4]&r[1]
+                           3251 ; Size res[1] = l[1]&r[1]
+   017D F0 00              3252 	ldh	a,(_LCDC_REG+0) ; x
+   017F F6 01              3253 	or	a,#0x01
+   0181 E0 00              3254 	ldh	(_LCDC_REG+0),a
+                           3255 ;	main.c 62
+                           3256 ; genOr
+                           3257 ; AOP_SFR for _LCDC_REG
+                           3258 ; Type res[4] = l[4]&r[1]
+                           3259 ; Size res[1] = l[1]&r[1]
+   0183 F0 00              3260 	ldh	a,(_LCDC_REG+0) ; x
+   0185 F6 80              3261 	or	a,#0x80
+   0187 E0 00              3262 	ldh	(_LCDC_REG+0),a
+                           3263 ;	main.c 64
+                           3264 ; genLabel
+   0189                    3265 00121$:
+                           3266 ;	main.c 65
+                           3267 ; genCall
+   0189 CD 00 00           3268 	call	_joypad
+   018C 4B                 3269 	ld	c,e
+                           3270 ; genAnd
+   018D 79                 3271 	ld	a,c
+   018E CB 4F              3272 	bit	1,a
+   0190 CA CD 01           3273 	jp	z,00118$
+                           3274 ;	main.c 66
+                           3275 ; genPointerGet
+                           3276 ; AOP_STK for _main_sloc1_1_0
+   0193 F8 00              3277 	lda	hl,0(sp)
+   0195 5E                 3278 	ld	e,(hl)
+   0196 23                 3279 	inc	hl
+   0197 56                 3280 	ld	d,(hl)
+   0198 1A                 3281 	ld	a,(de)
+   0199 4F                 3282 	ld	c,a
+                           3283 ; genPointerGet
+   019A 11 B8 01           3284 	ld	de,#_playerlocation + 0
+   019D 1A                 3285 	ld	a,(de)
+   019E 47                 3286 	ld	b,a
+                           3287 ; genMinus
+   019F 78                 3288 	ld	a,b
+   01A0 C6 F8              3289 	add	a,#0xF8
+   01A2 47                 3290 	ld	b,a
+                           3291 ; genIpush
+   01A3 79                 3292 	ld	a,c
+   01A4 F5                 3293 	push	af
+   01A5 33                 3294 	inc	sp
+                           3295 ; genIpush
+   01A6 78                 3296 	ld	a,b
+   01A7 F5                 3297 	push	af
+   01A8 33                 3298 	inc	sp
+                           3299 ; genCall
+   01A9 CD 15 00           3300 	call	_canPlayerMove
+   01AC 4B                 3301 	ld	c,e
+   01AD E8 02              3302 	lda	sp,2(sp)
+                           3303 ; genIfx
+                           3304 ; Removed redundent or a,a
+   01AF AF                 3305 	xor	a,a
+   01B0 B1                 3306 	or	a,c
+   01B1 CA 9A 02           3307 	jp	z,00119$
+                           3308 ;	main.c 67
+                           3309 ; genAssign (pointer)
+   01B4 11 B8 01           3310 	ld	de,#_playerlocation + 0
+   01B7 78                 3311 	ld	a,b
+   01B8 12                 3312 	ld	(de),a
+                           3313 ;	main.c 68
+                           3314 ; genIpush
+   01B9 3E 00              3315 	ld	a,#0x00
+   01BB F5                 3316 	push	af
+   01BC 33                 3317 	inc	sp
+                           3318 ; genIpush
+   01BD 3E F8              3319 	ld	a,#0xF8
+   01BF F5                 3320 	push	af
+   01C0 33                 3321 	inc	sp
+                           3322 ; genIpush
+   01C1 3E 00              3323 	ld	a,#0x00
+   01C3 F5                 3324 	push	af
+   01C4 33                 3325 	inc	sp
+                           3326 ; genCall
+   01C5 CD 68 00           3327 	call	_animateSprite
+   01C8 E8 03              3328 	lda	sp,3(sp)
+                           3329 ; genGoto
+   01CA C3 9A 02           3330 	jp	00119$
+                           3331 ; genLabel
+   01CD                    3332 00118$:
+                           3333 ;	main.c 72
+                           3334 ; genCall
+   01CD CD 00 00           3335 	call	_joypad
+   01D0 4B                 3336 	ld	c,e
+                           3337 ; genAnd
+   01D1 79                 3338 	ld	a,c
+   01D2 CB 47              3339 	bit	0,a
+   01D4 CA 11 02           3340 	jp	z,00115$
+                           3341 ;	main.c 73
+                           3342 ; genPointerGet
+                           3343 ; AOP_STK for _main_sloc1_1_0
+   01D7 F8 00              3344 	lda	hl,0(sp)
+   01D9 5E                 3345 	ld	e,(hl)
+   01DA 23                 3346 	inc	hl
+   01DB 56                 3347 	ld	d,(hl)
+   01DC 1A                 3348 	ld	a,(de)
+   01DD 4F                 3349 	ld	c,a
+                           3350 ; genPointerGet
+   01DE 11 B8 01           3351 	ld	de,#_playerlocation + 0
+   01E1 1A                 3352 	ld	a,(de)
+   01E2 47                 3353 	ld	b,a
+                           3354 ; genPlus
+                           3355 ; genPlusIncr
+                           3356 ;	genPlusIncr failed
+   01E3 78                 3357 	ld	a,b
+   01E4 C6 08              3358 	add	a,#0x08
+   01E6 47                 3359 	ld	b,a
+                           3360 ; genIpush
+   01E7 79                 3361 	ld	a,c
+   01E8 F5                 3362 	push	af
+   01E9 33                 3363 	inc	sp
+                           3364 ; genIpush
+   01EA 78                 3365 	ld	a,b
+   01EB F5                 3366 	push	af
+   01EC 33                 3367 	inc	sp
+                           3368 ; genCall
+   01ED CD 15 00           3369 	call	_canPlayerMove
+   01F0 4B                 3370 	ld	c,e
+   01F1 E8 02              3371 	lda	sp,2(sp)
+                           3372 ; genIfx
+                           3373 ; Removed redundent or a,a
+   01F3 AF                 3374 	xor	a,a
+   01F4 B1                 3375 	or	a,c
+   01F5 CA 9A 02           3376 	jp	z,00119$
+                           3377 ;	main.c 74
+                           3378 ; genAssign (pointer)
+   01F8 11 B8 01           3379 	ld	de,#_playerlocation + 0
+   01FB 78                 3380 	ld	a,b
+   01FC 12                 3381 	ld	(de),a
+                           3382 ;	main.c 75
+                           3383 ; genIpush
+   01FD 3E 00              3384 	ld	a,#0x00
+   01FF F5                 3385 	push	af
+   0200 33                 3386 	inc	sp
+                           3387 ; genIpush
+   0201 3E 08              3388 	ld	a,#0x08
+   0203 F5                 3389 	push	af
+   0204 33                 3390 	inc	sp
+                           3391 ; genIpush
+   0205 3E 00              3392 	ld	a,#0x00
+   0207 F5                 3393 	push	af
+   0208 33                 3394 	inc	sp
+                           3395 ; genCall
+   0209 CD 68 00           3396 	call	_animateSprite
+   020C E8 03              3397 	lda	sp,3(sp)
+                           3398 ; genGoto
+   020E C3 9A 02           3399 	jp	00119$
+                           3400 ; genLabel
+   0211                    3401 00115$:
+                           3402 ;	main.c 78
+                           3403 ; genCall
+   0211 CD 00 00           3404 	call	_joypad
+   0214 4B                 3405 	ld	c,e
+                           3406 ; genAnd
+   0215 79                 3407 	ld	a,c
+   0216 CB 57              3408 	bit	2,a
+   0218 CA 57 02           3409 	jp	z,00112$
+                           3410 ;	main.c 79
+                           3411 ; genPointerGet
+                           3412 ; AOP_STK for _main_sloc1_1_0
+   021B F8 00              3413 	lda	hl,0(sp)
+   021D 5E                 3414 	ld	e,(hl)
+   021E 23                 3415 	inc	hl
+   021F 56                 3416 	ld	d,(hl)
+   0220 1A                 3417 	ld	a,(de)
+   0221 4F                 3418 	ld	c,a
+                           3419 ; genMinus
+   0222 79                 3420 	ld	a,c
+   0223 C6 F8              3421 	add	a,#0xF8
+   0225 4F                 3422 	ld	c,a
+                           3423 ; genPointerGet
+   0226 11 B8 01           3424 	ld	de,#_playerlocation + 0
+   0229 1A                 3425 	ld	a,(de)
+   022A 47                 3426 	ld	b,a
+                           3427 ; genIpush
+   022B 79                 3428 	ld	a,c
+   022C F5                 3429 	push	af
+   022D 33                 3430 	inc	sp
+                           3431 ; genIpush
+   022E 78                 3432 	ld	a,b
+   022F F5                 3433 	push	af
+   0230 33                 3434 	inc	sp
+                           3435 ; genCall
+   0231 CD 15 00           3436 	call	_canPlayerMove
+   0234 43                 3437 	ld	b,e
+   0235 E8 02              3438 	lda	sp,2(sp)
+                           3439 ; genIfx
+                           3440 ; Removed redundent or a,a
+   0237 AF                 3441 	xor	a,a
+   0238 B0                 3442 	or	a,b
+   0239 CA 9A 02           3443 	jp	z,00119$
+                           3444 ;	main.c 80
+                           3445 ; genAssign (pointer)
+                           3446 ; AOP_STK for _main_sloc1_1_0
+   023C F8 00              3447 	lda	hl,0(sp)
+   023E 5E                 3448 	ld	e,(hl)
+   023F 23                 3449 	inc	hl
+   0240 56                 3450 	ld	d,(hl)
+   0241 79                 3451 	ld	a,c
+   0242 12                 3452 	ld	(de),a
+                           3453 ;	main.c 81
+                           3454 ; genIpush
+   0243 3E F8              3455 	ld	a,#0xF8
+   0245 F5                 3456 	push	af
+   0246 33                 3457 	inc	sp
+                           3458 ; genIpush
+   0247 3E 00              3459 	ld	a,#0x00
+   0249 F5                 3460 	push	af
+   024A 33                 3461 	inc	sp
+                           3462 ; genIpush
+   024B 3E 00              3463 	ld	a,#0x00
+   024D F5                 3464 	push	af
+   024E 33                 3465 	inc	sp
+                           3466 ; genCall
+   024F CD 68 00           3467 	call	_animateSprite
+   0252 E8 03              3468 	lda	sp,3(sp)
+                           3469 ; genGoto
+   0254 C3 9A 02           3470 	jp	00119$
+                           3471 ; genLabel
+   0257                    3472 00112$:
+                           3473 ;	main.c 84
+                           3474 ; genCall
+   0257 CD 00 00           3475 	call	_joypad
+   025A 4B                 3476 	ld	c,e
+                           3477 ; genAnd
+   025B 79                 3478 	ld	a,c
+   025C CB 5F              3479 	bit	3,a
+   025E CA 9A 02           3480 	jp	z,00119$
+                           3481 ;	main.c 85
+                           3482 ; genPointerGet
+                           3483 ; AOP_STK for _main_sloc1_1_0
+   0261 F8 00              3484 	lda	hl,0(sp)
+   0263 5E                 3485 	ld	e,(hl)
+   0264 23                 3486 	inc	hl
+   0265 56                 3487 	ld	d,(hl)
+   0266 1A                 3488 	ld	a,(de)
+   0267 4F                 3489 	ld	c,a
+                           3490 ; genPlus
+                           3491 ; genPlusIncr
+                           3492 ;	genPlusIncr failed
+   0268 79                 3493 	ld	a,c
+   0269 C6 08              3494 	add	a,#0x08
+   026B 4F                 3495 	ld	c,a
+                           3496 ; genPointerGet
+   026C 11 B8 01           3497 	ld	de,#_playerlocation + 0
+   026F 1A                 3498 	ld	a,(de)
+   0270 47                 3499 	ld	b,a
+                           3500 ; genIpush
+   0271 79                 3501 	ld	a,c
+   0272 F5                 3502 	push	af
+   0273 33                 3503 	inc	sp
+                           3504 ; genIpush
+   0274 78                 3505 	ld	a,b
+   0275 F5                 3506 	push	af
+   0276 33                 3507 	inc	sp
+                           3508 ; genCall
+   0277 CD 15 00           3509 	call	_canPlayerMove
+   027A 43                 3510 	ld	b,e
+   027B E8 02              3511 	lda	sp,2(sp)
+                           3512 ; genIfx
+                           3513 ; Removed redundent or a,a
+   027D AF                 3514 	xor	a,a
+   027E B0                 3515 	or	a,b
+   027F CA 9A 02           3516 	jp	z,00119$
+                           3517 ;	main.c 86
+                           3518 ; genAssign (pointer)
+                           3519 ; AOP_STK for _main_sloc1_1_0
+   0282 F8 00              3520 	lda	hl,0(sp)
+   0284 5E                 3521 	ld	e,(hl)
+   0285 23                 3522 	inc	hl
+   0286 56                 3523 	ld	d,(hl)
+   0287 79                 3524 	ld	a,c
+   0288 12                 3525 	ld	(de),a
+                           3526 ;	main.c 87
+                           3527 ; genIpush
+   0289 3E 08              3528 	ld	a,#0x08
+   028B F5                 3529 	push	af
+   028C 33                 3530 	inc	sp
+                           3531 ; genIpush
+   028D 3E 00              3532 	ld	a,#0x00
+   028F F5                 3533 	push	af
+   0290 33                 3534 	inc	sp
+                           3535 ; genIpush
+   0291 3E 00              3536 	ld	a,#0x00
+   0293 F5                 3537 	push	af
+   0294 33                 3538 	inc	sp
+                           3539 ; genCall
+   0295 CD 68 00           3540 	call	_animateSprite
+   0298 E8 03              3541 	lda	sp,3(sp)
+                           3542 ; genLabel
+   029A                    3543 00119$:
+                           3544 ;	main.c 91
+                           3545 ; genIpush
+   029A 3E 06              3546 	ld	a,#0x06
+   029C F5                 3547 	push	af
+   029D 33                 3548 	inc	sp
+                           3549 ; genCall
+   029E CD 00 00           3550 	call	_performantdelay
+   02A1 E8 01              3551 	lda	sp,1(sp)
+                           3552 ; genGoto
+   02A3 C3 89 01           3553 	jp	00121$
+                           3554 ; genLabel
+   02A6                    3555 00123$:
+                           3556 ; genEndFunction
+   02A6 E8 03              3557 	lda	sp,3(sp)
+   02A8 C1                 3558 	pop	bc
+   02A9 C9                 3559 	ret
+   02AA                    3560 ___main_end:
+                           3561 	.area _CODE
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 1.
+
+Symbol Table
+
+    _BCPD_REG                          **** GX
+    _BCPS_REG                          **** GX
+    _BGP_REG                           **** GX
+    _DIV_REG                           **** GX
+    _DMA_REG                           **** GX
+    _HDMA1_REG                         **** GX
+    _HDMA2_REG                         **** GX
+    _HDMA3_REG                         **** GX
+    _HDMA4_REG                         **** GX
+    _HDMA5_REG                         **** GX
+    _IE_REG                            **** GX
+    _IF_REG                            **** GX
+    _KEY1_REG                          **** GX
+    _LCDC_REG                          **** GX
+    _LYC_REG                           **** GX
+    _LY_REG                            **** GX
+  1 _MazeMap                           0040 GR
+  1 _MazeSprites                       0000 GR
+    _NR10_REG                          **** GX
+    _NR11_REG                          **** GX
+    _NR12_REG                          **** GX
+    _NR13_REG                          **** GX
+    _NR14_REG                          **** GX
+    _NR21_REG                          **** GX
+    _NR22_REG                          **** GX
+    _NR23_REG                          **** GX
+    _NR24_REG                          **** GX
+    _NR30_REG                          **** GX
+    _NR31_REG                          **** GX
+    _NR32_REG                          **** GX
+    _NR33_REG                          **** GX
+    _NR34_REG                          **** GX
+    _NR41_REG                          **** GX
+    _NR42_REG                          **** GX
+    _NR43_REG                          **** GX
+    _NR44_REG                          **** GX
+    _NR50_REG                          **** GX
+    _NR51_REG                          **** GX
+    _NR52_REG                          **** GX
+    _OBP0_REG                          **** GX
+    _OBP1_REG                          **** GX
+    _OCPD_REG                          **** GX
+    _OCPS_REG                          **** GX
+    _P1_REG                            **** GX
+    _RP_REG                            **** GX
+    _SB_REG                            **** GX
+    _SCX_REG                           **** GX
+    _SCY_REG                           **** GX
+    _SC_REG                            **** GX
+    _STAT_REG                          **** GX
+    _SVBK_REG                          **** GX
+  1 _Snail                             01A8 GR
+    _TAC_REG                           **** GX
+    _TIMA_REG                          **** GX
+    _TMA_REG                           **** GX
+    _VBK_REG                           **** GX
+    _WX_REG                            **** GX
+    _WY_REG                            **** GX
+  0 ___animateSprite_end               00F7 R
+  0 ___animateSprite_start             0068 R
+  0 ___canPlayerMove_end               0068 R
+  0 ___canPlayerMove_start             0015 R
+  0 ___main_end                        02AA R
+  0 ___main_start                      00F7 R
+  0 ___performantdelay_end             0014 R
+  0 ___performantdelay_start           0000 R
+    __cpu                              **** GX
+    __io_in                            **** GX
+    __io_out                           **** GX
+    __io_status                        **** GX
+    __muluint                          **** GX
+  0 _animateSprite                     0068 GR
+  0 _blankmap                          0014 GR
+  0 _canPlayerMove                     0015 GR
+    _joypad                            **** GX
+  0 _main                              00F7 GR
+    _move_sprite                       **** GX
+  0 _performantdelay                   0000 GR
+  1 _playerlocation                    01B8 GR
+    _scroll_sprite                     **** GX
+    _set_bkg_data                      **** GX
+    _set_bkg_tiles                     **** GX
+    _set_sprite_data                   **** GX
+    _set_sprite_tile                   **** GX
+    _sys_time                          **** GX
+    _wait_vbl_done                     **** GX
+
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 2.
+
+Area Table
+
+   0 _CODE                              size  2AA   flags 0
+   1 _DATA                              size  1BA   flags 0
+   2 _OVERLAY                           size    0   flags 0
+   3 _ISEG                              size    0   flags 0
+   4 _BSEG                              size    0   flags 0
+   5 _XSEG                              size    0   flags 0
+   6 _GSINIT                            size  A50   flags 0
+   7 _GSFINAL                           size    0   flags 0
+   8 _HOME                              size    0   flags 0
