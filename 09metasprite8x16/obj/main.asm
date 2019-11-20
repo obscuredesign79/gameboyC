@@ -1,7 +1,7 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
 ; Version 3.5.0 #9253 (Mar 19 2016) (Linux)
-; This file was generated Tue Nov 19 22:43:46 2019
+; This file was generated Wed Nov 20 16:47:56 2019
 ;--------------------------------------------------------
 	.module main
 	.optsdcc -mgbz80
@@ -13,15 +13,14 @@
 	.globl _setupSpider
 	.globl _moveGameCharacter
 	.globl _moveGameCharAnim
-	.globl _updateSwitches
 	.globl _performantDelay
 	.globl _move_sprite
 	.globl _set_sprite_tile
 	.globl _set_sprite_data
 	.globl _wait_vbl_done
 	.globl _joypad
-	.globl _timer
 	.globl _spider
+	.globl _timer
 	.globl _sprite
 ;--------------------------------------------------------
 ; ram data
@@ -29,10 +28,10 @@
 	.area _DATA
 _sprite::
 	.ds 80
-_spider::
-	.ds 9
 _timer::
 	.ds 1
+_spider::
+	.ds 9
 ;--------------------------------------------------------
 ; absolute external ram data
 ;--------------------------------------------------------
@@ -220,7 +219,7 @@ _timer::
 	ld	(hl),#0x5A
 	ld	hl,#(_sprite + 0x004f)
 	ld	(hl),#0x5A
-;main.c:8: UINT8 timer = 0;
+;main.c:5: UINT8 timer = 0;
 	ld	hl,#_timer
 	ld	(hl),#0x00
 ;--------------------------------------------------------
@@ -232,113 +231,78 @@ _timer::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;main.c:10: void performantDelay(UINT8 numloops){
+;main.c:9: void performantDelay(UINT8 numloops){
 ;	---------------------------------
 ; Function performantDelay
 ; ---------------------------------
 _performantDelay::
-;main.c:13: for(i=0;i<numloops;i++){
+;main.c:12: for(i=0;i<numloops;i++){
 	ld	b,#0x00
 00103$:
 	ld	a,b
 	ldhl	sp,#2
 	sub	a, (hl)
 	ret	NC
-;main.c:14: wait_vbl_done();
+;main.c:13: wait_vbl_done();
 	push	bc
 	call	_wait_vbl_done
 	pop	bc
-;main.c:13: for(i=0;i<numloops;i++){
+;main.c:12: for(i=0;i<numloops;i++){
 	inc	b
 	jr	00103$
 	ret
-;main.c:18: void updateSwitches(){
-;	---------------------------------
-; Function updateSwitches
-; ---------------------------------
-_updateSwitches::
-;main.c:19: HIDE_WIN;
-	ld	de,#0xFF40
-	ld	a,(de)
-	ld	b,a
-	ld	d,#0x00
-	res	5, b
-	ld	d,#0x00
-	ld	hl,#0xFF40
-	ld	(hl),b
-;main.c:20: SHOW_SPRITES;
-	ld	de,#0xFF40
-	ld	a,(de)
-	ld	e,a
-	ld	d,#0x00
-	ld	a,e
-	set	1, a
-	ld	b,a
-	ld	l, #0x40
-	ld	(hl),b
-;main.c:21: SHOW_BKG;
-	ld	de,#0xFF40
-	ld	a,(de)
-	ld	e,a
-	ld	d,#0x00
-	ld	a,e
-	set	0, a
-	ld	b,a
-	ld	l, #0x40
-	ld	(hl),b
-	ret
-;main.c:24: void moveGameCharAnim(){
+;main.c:17: void moveGameCharAnim(){
 ;	---------------------------------
 ; Function moveGameCharAnim
 ; ---------------------------------
 _moveGameCharAnim::
-;main.c:26: if(timer == 5){
+;main.c:19: if(timer == 5){
 	ld	hl,#_timer
 	ld	a,(hl)
 	sub	a, #0x05
 	jr	NZ,00104$
-;main.c:27: set_sprite_tile(1, 3);
+;main.c:20: set_sprite_tile(1, 3);
 	ld	hl,#0x0301
 	push	hl
 	call	_set_sprite_tile
 	add	sp, #2
-;main.c:28: set_sprite_tile(2, 4);
+;main.c:21: set_sprite_tile(2, 4);
 	ld	hl,#0x0402
 	push	hl
 	call	_set_sprite_tile
 	add	sp, #2
 	jr	00105$
 00104$:
-;main.c:30: else if(timer == 10){
+;main.c:23: else if(timer == 10){
 	ld	hl,#_timer
 	ld	a,(hl)
 	sub	a, #0x0A
 	jr	NZ,00105$
-;main.c:31: set_sprite_tile(1, 1);
+;main.c:24: set_sprite_tile(1, 1);
 	ld	hl,#0x0101
 	push	hl
 	call	_set_sprite_tile
 	add	sp, #2
-;main.c:32: set_sprite_tile(2, 2);
+;main.c:25: set_sprite_tile(2, 2);
 	ld	hl,#0x0202
 	push	hl
 	call	_set_sprite_tile
 	add	sp, #2
-;main.c:33: timer = 0;
+;main.c:26: timer = 0;
 	ld	hl,#_timer
 	ld	(hl),#0x00
 00105$:
-;main.c:35: timer++;
+;main.c:28: timer++;
 	ld	hl,#_timer
 	inc	(hl)
 	ret
-;main.c:38: void moveGameCharacter(struct gameCharacter* character, UINT8 x, UINT8 y){
+;main.c:31: void moveGameCharacter(struct gameCharacter* character, UINT8 x, UINT8 y){
 ;	---------------------------------
 ; Function moveGameCharacter
 ; ---------------------------------
 _moveGameCharacter::
 	add	sp, #-3
-;main.c:39: move_sprite(character->spriteId[1],x,y);
+;main.c:32: move_sprite(character->spriteId[1],x,y);
 	ldhl	sp,#5
 	ld	a,(hl+)
 	ld	e, (hl)
@@ -362,7 +326,7 @@ _moveGameCharacter::
 	inc	sp
 	call	_move_sprite
 	add	sp, #3
-;main.c:40: move_sprite(character->spriteId[2],x,y + 8);
+;main.c:33: move_sprite(character->spriteId[2],x,y + 8);
 	ldhl	sp,#8
 	ld	a,(hl)
 	add	a, #0x08
@@ -387,48 +351,48 @@ _moveGameCharacter::
 	add	sp, #3
 	add	sp, #3
 	ret
-;main.c:44: void setupSpider(){
+;main.c:37: void setupSpider(){
 ;	---------------------------------
 ; Function setupSpider
 ; ---------------------------------
 _setupSpider::
-;main.c:45: spider.x=80;
+;main.c:38: spider.x=80;
 	ld	hl,#(_spider + 0x0005)
 	ld	(hl),#0x50
-;main.c:46: spider.y=130;
+;main.c:39: spider.y=130;
 	ld	hl,#(_spider + 0x0006)
 	ld	(hl),#0x82
-;main.c:47: spider.width=8;
+;main.c:40: spider.width=8;
 	ld	hl,#(_spider + 0x0007)
 	ld	(hl),#0x08
-;main.c:48: spider.height=16;
+;main.c:41: spider.height=16;
 	ld	hl,#(_spider + 0x0008)
 	ld	(hl),#0x10
-;main.c:50: set_sprite_tile(0,0);
+;main.c:43: set_sprite_tile(0,0);
 	ld	hl,#0x0000
 	push	hl
 	call	_set_sprite_tile
 	add	sp, #2
-;main.c:51: spider.spriteId[0]=0;
+;main.c:44: spider.spriteId[0]=0;
 	ld	hl,#_spider
 	ld	(hl),#0x00
-;main.c:53: set_sprite_tile(1,1);
+;main.c:46: set_sprite_tile(1,1);
 	ld	hl,#0x0101
 	push	hl
 	call	_set_sprite_tile
 	add	sp, #2
-;main.c:54: spider.spriteId[1]=1;
+;main.c:47: spider.spriteId[1]=1;
 	ld	hl,#(_spider + 0x0001)
 	ld	(hl),#0x01
-;main.c:55: set_sprite_tile(2,2);
+;main.c:48: set_sprite_tile(2,2);
 	ld	hl,#0x0202
 	push	hl
 	call	_set_sprite_tile
 	add	sp, #2
-;main.c:56: spider.spriteId[2]=2;
+;main.c:49: spider.spriteId[2]=2;
 	ld	hl,#(_spider + 0x0002)
 	ld	(hl),#0x02
-;main.c:63: moveGameCharacter(&spider,spider.x,spider.y);
+;main.c:56: moveGameCharacter(&spider,spider.x,spider.y);
 	ld	de, #(_spider + 0x0006) + 0
 	ld	a,(de)
 	ld	c,a
@@ -445,21 +409,21 @@ _setupSpider::
 	call	_moveGameCharacter
 	add	sp, #4
 	ret
-;main.c:66: void main(){
+;main.c:59: void main(){
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
 _main::
-;main.c:67: set_sprite_data(0,5,sprite);
+;main.c:60: set_sprite_data(0,5,sprite);
 	ld	de,#_sprite
 	push	de
 	ld	hl,#0x0500
 	push	hl
 	call	_set_sprite_data
 	add	sp, #4
-;main.c:68: setupSpider();
+;main.c:61: setupSpider();
 	call	_setupSpider
-;main.c:71: SHOW_SPRITES;
+;main.c:64: SHOW_SPRITES;
 	ld	de,#0xFF40
 	ld	a,(de)
 	ld	e,a
@@ -469,7 +433,7 @@ _main::
 	ld	b,a
 	ld	hl,#0xFF40
 	ld	(hl),b
-;main.c:72: DISPLAY_ON;
+;main.c:65: DISPLAY_ON;
 	ld	de,#0xFF40
 	ld	a,(de)
 	ld	e,a
@@ -479,20 +443,48 @@ _main::
 	ld	b,a
 	ld	l, #0x40
 	ld	(hl),b
-;main.c:75: while(1){
+;main.c:68: while(1){
 00106$:
-;main.c:76: moveGameCharAnim();
+;main.c:69: moveGameCharAnim();
 	call	_moveGameCharAnim
-;main.c:79: if(joypad() & J_LEFT){
+;main.c:72: if(joypad() & J_LEFT){
 	call	_joypad
 	ld	d,#0x00
 	bit	1, e
 	jr	Z,00102$
-;main.c:80: spider.x -= 2;
+;main.c:73: spider.x -= 2;
 	ld	a, (#(_spider + 0x0005) + 0)
 	ld	b,a
 	dec	b
 	dec	b
+	ld	hl,#(_spider + 0x0005)
+	ld	(hl),b
+;main.c:74: moveGameCharacter(&spider,spider.x,spider.y);
+	ld	de, #(_spider + 0x0006) + 0
+	ld	a,(de)
+	ld	c,a
+	ld	de,#_spider
+	ld	a,c
+	push	af
+	inc	sp
+	push	bc
+	inc	sp
+	push	de
+	call	_moveGameCharacter
+	add	sp, #4
+;main.c:75: moveGameCharAnim();
+	call	_moveGameCharAnim
+00102$:
+;main.c:79: if(joypad() & J_RIGHT){
+	call	_joypad
+	ld	d,#0x00
+	bit	0, e
+	jr	Z,00104$
+;main.c:80: spider.x += 2;
+	ld	a, (#(_spider + 0x0005) + 0)
+	ld	b,a
+	inc	b
+	inc	b
 	ld	hl,#(_spider + 0x0005)
 	ld	(hl),b
 ;main.c:81: moveGameCharacter(&spider,spider.x,spider.y);
@@ -510,36 +502,8 @@ _main::
 	add	sp, #4
 ;main.c:82: moveGameCharAnim();
 	call	_moveGameCharAnim
-00102$:
-;main.c:86: if(joypad() & J_RIGHT){
-	call	_joypad
-	ld	d,#0x00
-	bit	0, e
-	jr	Z,00104$
-;main.c:87: spider.x += 2;
-	ld	a, (#(_spider + 0x0005) + 0)
-	ld	b,a
-	inc	b
-	inc	b
-	ld	hl,#(_spider + 0x0005)
-	ld	(hl),b
-;main.c:88: moveGameCharacter(&spider,spider.x,spider.y);
-	ld	de, #(_spider + 0x0006) + 0
-	ld	a,(de)
-	ld	c,a
-	ld	de,#_spider
-	ld	a,c
-	push	af
-	inc	sp
-	push	bc
-	inc	sp
-	push	de
-	call	_moveGameCharacter
-	add	sp, #4
-;main.c:89: moveGameCharAnim();
-	call	_moveGameCharAnim
 00104$:
-;main.c:93: performantDelay(1);
+;main.c:85: performantDelay(1);
 	ld	a,#0x01
 	push	af
 	inc	sp

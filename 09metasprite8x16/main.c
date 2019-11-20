@@ -2,9 +2,9 @@
 #include "gameCharacter.c"
 #include "gameSprite.c"
 
-struct gameCharacter spider;
-
 UINT8 timer = 0;
+
+struct gameCharacter spider;
 
 void performantDelay(UINT8 numloops){
 
