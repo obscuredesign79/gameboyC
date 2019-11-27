@@ -7,21 +7,21 @@ Symbol Table
     .__.ABS.                                                    =  0000 G
     .__.CPU.                                                    =  0000 L
     .__.H$L.                                                    =  0000 L
-  0 ___str_0                                                       0040 R
-  0 ___str_1                                                       0046 R
-  0 ___str_2                                                       004C R
+  0 ___str_0                                                       0049 R
+  0 ___str_1                                                       004F R
+  0 ___str_2                                                       0055 R
+  0 ___str_3                                                       0061 R
   0 _main                                                          0010 GR
   0 _performantDelay                                               0000 GR
     _printf                                                        **** GX
     _wait_vbl_done                                                 **** GX
-
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 2.
 Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE                                      size   57   flags    0
+   0 _CODE                                      size   75   flags    0
    1 _DATA                                      size    0   flags    0
    2 _DABS                                      size    0   flags    8
    3 _HOME                                      size    0   flags    0

@@ -1,7 +1,7 @@
                               1 ;--------------------------------------------------------
                               2 ; File Created by SDCC : free open source ANSI-C Compiler
                               3 ; Version 3.5.0 #9253 (Mar 19 2016) (Linux)
-                              4 ; This file was generated Fri Nov 15 10:40:49 2019
+                              4 ; This file was generated Thu Nov 28 00:08:02 2019
                               5 ;--------------------------------------------------------
                               6 	.module main
                               7 	.optsdcc -mgbz80
@@ -11,11 +11,11 @@
                              11 ;--------------------------------------------------------
                              12 	.globl _main
                              13 	.globl _performantDelay
-                             14 	.globl _scroll_sprite
-                             15 	.globl _move_sprite
-                             16 	.globl _set_sprite_tile
-                             17 	.globl _set_sprite_data
-                             18 	.globl _wait_vbl_done
+                             14 	.globl _move_sprite
+                             15 	.globl _set_sprite_tile
+                             16 	.globl _set_sprite_data
+                             17 	.globl _wait_vbl_done
+                             18 	.globl _blinker
                              19 	.globl _pacMan
                              20 ;--------------------------------------------------------
                              21 ; ram data
@@ -23,200 +23,284 @@
                              23 	.area _DATA
    0000                      24 _pacMan::
    0000                      25 	.ds 32
-                             26 ;--------------------------------------------------------
-                             27 ; absolute external ram data
+   0020                      26 _blinker::
+   0020                      27 	.ds 32
                              28 ;--------------------------------------------------------
-                             29 	.area _DABS (ABS)
+                             29 ; absolute external ram data
                              30 ;--------------------------------------------------------
-                             31 ; global & static initialisations
+                             31 	.area _DABS (ABS)
                              32 ;--------------------------------------------------------
-                             33 	.area _HOME
-                             34 	.area _GSINIT
-                             35 	.area _GSFINAL
+                             33 ; global & static initialisations
+                             34 ;--------------------------------------------------------
+                             35 	.area _HOME
                              36 	.area _GSINIT
-                             37 ;spritePac.c:26: unsigned char pacMan[] =
-   0000 21r00r00             38 	ld	hl,#_pacMan
-   0003 36 3C                39 	ld	(hl),#0x3C
-   0005 21r01r00             40 	ld	hl,#(_pacMan + 0x0001)
-   0008 36 3C                41 	ld	(hl),#0x3C
-   000A 21r02r00             42 	ld	hl,#(_pacMan + 0x0002)
-   000D 36 7E                43 	ld	(hl),#0x7E
-   000F 21r03r00             44 	ld	hl,#(_pacMan + 0x0003)
-   0012 36 42                45 	ld	(hl),#0x42
-   0014 21r04r00             46 	ld	hl,#(_pacMan + 0x0004)
-   0017 36 FF                47 	ld	(hl),#0xFF
-   0019 21r05r00             48 	ld	hl,#(_pacMan + 0x0005)
-   001C 36 91                49 	ld	(hl),#0x91
-   001E 21r06r00             50 	ld	hl,#(_pacMan + 0x0006)
-   0021 36 FF                51 	ld	(hl),#0xFF
-   0023 21r07r00             52 	ld	hl,#(_pacMan + 0x0007)
-   0026 36 81                53 	ld	(hl),#0x81
-   0028 21r08r00             54 	ld	hl,#(_pacMan + 0x0008)
-   002B 36 FF                55 	ld	(hl),#0xFF
-   002D 21r09r00             56 	ld	hl,#(_pacMan + 0x0009)
-   0030 36 8F                57 	ld	(hl),#0x8F
-   0032 21r0Ar00             58 	ld	hl,#(_pacMan + 0x000a)
-   0035 36 FF                59 	ld	(hl),#0xFF
-   0037 21r0Br00             60 	ld	hl,#(_pacMan + 0x000b)
-   003A 36 81                61 	ld	(hl),#0x81
-   003C 21r0Cr00             62 	ld	hl,#(_pacMan + 0x000c)
-   003F 36 7E                63 	ld	(hl),#0x7E
-   0041 21r0Dr00             64 	ld	hl,#(_pacMan + 0x000d)
-   0044 36 42                65 	ld	(hl),#0x42
-   0046 21r0Er00             66 	ld	hl,#(_pacMan + 0x000e)
-   0049 36 3C                67 	ld	(hl),#0x3C
-   004B 21r0Fr00             68 	ld	hl,#(_pacMan + 0x000f)
-   004E 36 3C                69 	ld	(hl),#0x3C
-   0050 21r10r00             70 	ld	hl,#(_pacMan + 0x0010)
-   0053 36 3C                71 	ld	(hl),#0x3C
-   0055 21r11r00             72 	ld	hl,#(_pacMan + 0x0011)
-   0058 36 3C                73 	ld	(hl),#0x3C
-   005A 21r12r00             74 	ld	hl,#(_pacMan + 0x0012)
-   005D 36 7E                75 	ld	(hl),#0x7E
-   005F 21r13r00             76 	ld	hl,#(_pacMan + 0x0013)
-   0062 36 42                77 	ld	(hl),#0x42
-   0064 21r14r00             78 	ld	hl,#(_pacMan + 0x0014)
-   0067 36 FF                79 	ld	(hl),#0xFF
-   0069 21r15r00             80 	ld	hl,#(_pacMan + 0x0015)
-   006C 36 91                81 	ld	(hl),#0x91
-   006E 21r16r00             82 	ld	hl,#(_pacMan + 0x0016)
-   0071 36 FE                83 	ld	(hl),#0xFE
-   0073 21r17r00             84 	ld	hl,#(_pacMan + 0x0017)
-   0076 36 86                85 	ld	(hl),#0x86
-   0078 21r18r00             86 	ld	hl,#(_pacMan + 0x0018)
-   007B 36 F0                87 	ld	(hl),#0xF0
-   007D 21r19r00             88 	ld	hl,#(_pacMan + 0x0019)
-   0080 36 90                89 	ld	(hl),#0x90
-   0082 21r1Ar00             90 	ld	hl,#(_pacMan + 0x001a)
-   0085 36 F8                91 	ld	(hl),#0xF8
-   0087 21r1Br00             92 	ld	hl,#(_pacMan + 0x001b)
-   008A 36 88                93 	ld	(hl),#0x88
-   008C 21r1Cr00             94 	ld	hl,#(_pacMan + 0x001c)
-   008F 36 7C                95 	ld	(hl),#0x7C
-   0091 21r1Dr00             96 	ld	hl,#(_pacMan + 0x001d)
-   0094 36 44                97 	ld	(hl),#0x44
-   0096 21r1Er00             98 	ld	hl,#(_pacMan + 0x001e)
-   0099 36 38                99 	ld	(hl),#0x38
-   009B 21r1Fr00            100 	ld	hl,#(_pacMan + 0x001f)
-   009E 36 38               101 	ld	(hl),#0x38
-                            102 ;--------------------------------------------------------
-                            103 ; Home
-                            104 ;--------------------------------------------------------
-                            105 	.area _HOME
-                            106 	.area _HOME
-                            107 ;--------------------------------------------------------
-                            108 ; code
-                            109 ;--------------------------------------------------------
-                            110 	.area _CODE
-                            111 ;main.c:5: void performantDelay(UINT8 numloops){
-                            112 ;	---------------------------------
-                            113 ; Function performantDelay
-                            114 ; ---------------------------------
-   0000                     115 _performantDelay::
-                            116 ;main.c:8: for(i=0;i<numloops;i++){
-   0000 06 00               117 	ld	b,#0x00
-   0002                     118 00103$:
-   0002 78                  119 	ld	a,b
-   0003 F8 02               120 	ldhl	sp,#2
-   0005 96                  121 	sub	a, (hl)
-   0006 D0                  122 	ret	NC
-                            123 ;main.c:9: wait_vbl_done();
-   0007 C5                  124 	push	bc
-   0008 CDr00r00            125 	call	_wait_vbl_done
-   000B C1                  126 	pop	bc
-                            127 ;main.c:8: for(i=0;i<numloops;i++){
-   000C 04                  128 	inc	b
-   000D 18 F3               129 	jr	00103$
-   000F C9                  130 	ret
-                            131 ;main.c:12: void main(){
-                            132 ;	---------------------------------
-                            133 ; Function main
-                            134 ; ---------------------------------
-   0010                     135 _main::
-                            136 ;main.c:13: UINT8 currentSpriteIndex = 0;
-   0010 06 00               137 	ld	b,#0x00
-                            138 ;main.c:15: set_sprite_data(0, 2, pacMan);//set_sprite_data(starts of tile, how manytiles, name of variable sprite)
-   0012 11r00r00            139 	ld	de,#_pacMan
-   0015 C5                  140 	push	bc
-   0016 D5                  141 	push	de
-   0017 21 00 02            142 	ld	hl,#0x0200
-   001A E5                  143 	push	hl
-   001B CDr00r00            144 	call	_set_sprite_data
-   001E E8 04               145 	add	sp, #4
-   0020 C1                  146 	pop	bc
-                            147 ;main.c:16: set_sprite_tile(0, 0);//set_sprite_tile(tile number to load, sprite index if more than one tile can change)
-   0021 C5                  148 	push	bc
-   0022 21 00 00            149 	ld	hl,#0x0000
-   0025 E5                  150 	push	hl
-   0026 CDr00r00            151 	call	_set_sprite_tile
-   0029 E8 02               152 	add	sp, #2
-   002B C1                  153 	pop	bc
-                            154 ;main.c:17: move_sprite(0, 88, 78);//move_sprite(sprite ID, x, y)
-   002C C5                  155 	push	bc
-   002D 21 58 4E            156 	ld	hl,#0x4E58
-   0030 E5                  157 	push	hl
-   0031 AF                  158 	xor	a, a
-   0032 F5                  159 	push	af
-   0033 33                  160 	inc	sp
-   0034 CDr00r00            161 	call	_move_sprite
-   0037 E8 03               162 	add	sp, #3
-   0039 C1                  163 	pop	bc
-                            164 ;main.c:18: SHOW_SPRITES;
-   003A 11 40 FF            165 	ld	de,#0xFF40
-   003D 1A                  166 	ld	a,(de)
-   003E 5F                  167 	ld	e,a
-   003F 16 00               168 	ld	d,#0x00
-   0041 7B                  169 	ld	a,e
-   0042 CB CF               170 	set	1, a
-   0044 4F                  171 	ld	c,a
-   0045 21 40 FF            172 	ld	hl,#0xFF40
-   0048 71                  173 	ld	(hl),c
-                            174 ;main.c:20: while(1){
-   0049                     175 00105$:
-                            176 ;main.c:21: if(currentSpriteIndex == 0){
-   0049 78                  177 	ld	a,b
-   004A B7                  178 	or	a, a
-   004B 20 04               179 	jr	NZ,00102$
-                            180 ;main.c:22: currentSpriteIndex = 1;
-   004D 06 01               181 	ld	b,#0x01
-   004F 18 02               182 	jr	00103$
-   0051                     183 00102$:
-                            184 ;main.c:25: currentSpriteIndex = 0;
-   0051 06 00               185 	ld	b,#0x00
-   0053                     186 00103$:
-                            187 ;main.c:27: set_sprite_tile(0, currentSpriteIndex);
-   0053 C5                  188 	push	bc
-   0054 C5                  189 	push	bc
-   0055 33                  190 	inc	sp
-   0056 AF                  191 	xor	a, a
-   0057 F5                  192 	push	af
-   0058 33                  193 	inc	sp
-   0059 CDr00r00            194 	call	_set_sprite_tile
-   005C E8 02               195 	add	sp, #2
-   005E C1                  196 	pop	bc
-                            197 ;main.c:29: performantDelay(4);
-   005F C5                  198 	push	bc
-   0060 3E 04               199 	ld	a,#0x04
-   0062 F5                  200 	push	af
-   0063 33                  201 	inc	sp
-   0064 CDr00r00            202 	call	_performantDelay
-   0067 33                  203 	inc	sp
-   0068 C1                  204 	pop	bc
-                            205 ;main.c:30: scroll_sprite(0, 1, 0);
-   0069 C5                  206 	push	bc
-   006A 21 01 00            207 	ld	hl,#0x0001
-   006D E5                  208 	push	hl
-   006E AF                  209 	xor	a, a
-   006F F5                  210 	push	af
-   0070 33                  211 	inc	sp
-   0071 CDr00r00            212 	call	_scroll_sprite
-   0074 E8 03               213 	add	sp, #3
-   0076 C1                  214 	pop	bc
-                            215 ;main.c:32: wait_vbl_done();
-   0077 C5                  216 	push	bc
-   0078 CDr00r00            217 	call	_wait_vbl_done
-   007B C1                  218 	pop	bc
-   007C C3r49r00            219 	jp	00105$
-   007F C9                  220 	ret
-                            221 	.area _CODE
-                            222 	.area _CABS (ABS)
+                             37 	.area _GSFINAL
+                             38 	.area _GSINIT
+                             39 ;spritePac.c:26: unsigned char pacMan[] =
+   0000 21r00r00             40 	ld	hl,#_pacMan
+   0003 36 3C                41 	ld	(hl),#0x3C
+   0005 21r01r00             42 	ld	hl,#(_pacMan + 0x0001)
+   0008 36 3C                43 	ld	(hl),#0x3C
+   000A 21r02r00             44 	ld	hl,#(_pacMan + 0x0002)
+   000D 36 7E                45 	ld	(hl),#0x7E
+   000F 21r03r00             46 	ld	hl,#(_pacMan + 0x0003)
+   0012 36 42                47 	ld	(hl),#0x42
+   0014 21r04r00             48 	ld	hl,#(_pacMan + 0x0004)
+   0017 36 FF                49 	ld	(hl),#0xFF
+   0019 21r05r00             50 	ld	hl,#(_pacMan + 0x0005)
+   001C 36 91                51 	ld	(hl),#0x91
+   001E 21r06r00             52 	ld	hl,#(_pacMan + 0x0006)
+   0021 36 FF                53 	ld	(hl),#0xFF
+   0023 21r07r00             54 	ld	hl,#(_pacMan + 0x0007)
+   0026 36 81                55 	ld	(hl),#0x81
+   0028 21r08r00             56 	ld	hl,#(_pacMan + 0x0008)
+   002B 36 FF                57 	ld	(hl),#0xFF
+   002D 21r09r00             58 	ld	hl,#(_pacMan + 0x0009)
+   0030 36 8F                59 	ld	(hl),#0x8F
+   0032 21r0Ar00             60 	ld	hl,#(_pacMan + 0x000a)
+   0035 36 FF                61 	ld	(hl),#0xFF
+   0037 21r0Br00             62 	ld	hl,#(_pacMan + 0x000b)
+   003A 36 81                63 	ld	(hl),#0x81
+   003C 21r0Cr00             64 	ld	hl,#(_pacMan + 0x000c)
+   003F 36 7E                65 	ld	(hl),#0x7E
+   0041 21r0Dr00             66 	ld	hl,#(_pacMan + 0x000d)
+   0044 36 42                67 	ld	(hl),#0x42
+   0046 21r0Er00             68 	ld	hl,#(_pacMan + 0x000e)
+   0049 36 3C                69 	ld	(hl),#0x3C
+   004B 21r0Fr00             70 	ld	hl,#(_pacMan + 0x000f)
+   004E 36 3C                71 	ld	(hl),#0x3C
+   0050 21r10r00             72 	ld	hl,#(_pacMan + 0x0010)
+   0053 36 3C                73 	ld	(hl),#0x3C
+   0055 21r11r00             74 	ld	hl,#(_pacMan + 0x0011)
+   0058 36 3C                75 	ld	(hl),#0x3C
+   005A 21r12r00             76 	ld	hl,#(_pacMan + 0x0012)
+   005D 36 7E                77 	ld	(hl),#0x7E
+   005F 21r13r00             78 	ld	hl,#(_pacMan + 0x0013)
+   0062 36 42                79 	ld	(hl),#0x42
+   0064 21r14r00             80 	ld	hl,#(_pacMan + 0x0014)
+   0067 36 FF                81 	ld	(hl),#0xFF
+   0069 21r15r00             82 	ld	hl,#(_pacMan + 0x0015)
+   006C 36 91                83 	ld	(hl),#0x91
+   006E 21r16r00             84 	ld	hl,#(_pacMan + 0x0016)
+   0071 36 FE                85 	ld	(hl),#0xFE
+   0073 21r17r00             86 	ld	hl,#(_pacMan + 0x0017)
+   0076 36 86                87 	ld	(hl),#0x86
+   0078 21r18r00             88 	ld	hl,#(_pacMan + 0x0018)
+   007B 36 F0                89 	ld	(hl),#0xF0
+   007D 21r19r00             90 	ld	hl,#(_pacMan + 0x0019)
+   0080 36 90                91 	ld	(hl),#0x90
+   0082 21r1Ar00             92 	ld	hl,#(_pacMan + 0x001a)
+   0085 36 F8                93 	ld	(hl),#0xF8
+   0087 21r1Br00             94 	ld	hl,#(_pacMan + 0x001b)
+   008A 36 88                95 	ld	(hl),#0x88
+   008C 21r1Cr00             96 	ld	hl,#(_pacMan + 0x001c)
+   008F 36 7C                97 	ld	(hl),#0x7C
+   0091 21r1Dr00             98 	ld	hl,#(_pacMan + 0x001d)
+   0094 36 44                99 	ld	(hl),#0x44
+   0096 21r1Er00            100 	ld	hl,#(_pacMan + 0x001e)
+   0099 36 38               101 	ld	(hl),#0x38
+   009B 21r1Fr00            102 	ld	hl,#(_pacMan + 0x001f)
+   009E 36 38               103 	ld	(hl),#0x38
+                            104 ;spriteBlink.c:26: unsigned char blinker[] =
+   00A0 21r20r00            105 	ld	hl,#_blinker
+   00A3 36 7E               106 	ld	(hl),#0x7E
+   00A5 21r21r00            107 	ld	hl,#(_blinker + 0x0001)
+   00A8 36 7E               108 	ld	(hl),#0x7E
+   00AA 21r22r00            109 	ld	hl,#(_blinker + 0x0002)
+   00AD 36 81               110 	ld	(hl),#0x81
+   00AF 21r23r00            111 	ld	hl,#(_blinker + 0x0003)
+   00B2 36 FF               112 	ld	(hl),#0xFF
+   00B4 21r24r00            113 	ld	hl,#(_blinker + 0x0004)
+   00B7 36 99               114 	ld	(hl),#0x99
+   00B9 21r25r00            115 	ld	hl,#(_blinker + 0x0005)
+   00BC 36 FF               116 	ld	(hl),#0xFF
+   00BE 21r26r00            117 	ld	hl,#(_blinker + 0x0006)
+   00C1 36 A5               118 	ld	(hl),#0xA5
+   00C3 21r27r00            119 	ld	hl,#(_blinker + 0x0007)
+   00C6 36 FF               120 	ld	(hl),#0xFF
+   00C8 21r28r00            121 	ld	hl,#(_blinker + 0x0008)
+   00CB 36 DB               122 	ld	(hl),#0xDB
+   00CD 21r29r00            123 	ld	hl,#(_blinker + 0x0009)
+   00D0 36 FF               124 	ld	(hl),#0xFF
+   00D2 21r2Ar00            125 	ld	hl,#(_blinker + 0x000a)
+   00D5 36 99               126 	ld	(hl),#0x99
+   00D7 21r2Br00            127 	ld	hl,#(_blinker + 0x000b)
+   00DA 36 FF               128 	ld	(hl),#0xFF
+   00DC 21r2Cr00            129 	ld	hl,#(_blinker + 0x000c)
+   00DF 36 81               130 	ld	(hl),#0x81
+   00E1 21r2Dr00            131 	ld	hl,#(_blinker + 0x000d)
+   00E4 36 FF               132 	ld	(hl),#0xFF
+   00E6 21r2Er00            133 	ld	hl,#(_blinker + 0x000e)
+   00E9 36 7E               134 	ld	(hl),#0x7E
+   00EB 21r2Fr00            135 	ld	hl,#(_blinker + 0x000f)
+   00EE 36 7E               136 	ld	(hl),#0x7E
+   00F0 21r30r00            137 	ld	hl,#(_blinker + 0x0010)
+   00F3 36 7E               138 	ld	(hl),#0x7E
+   00F5 21r31r00            139 	ld	hl,#(_blinker + 0x0011)
+   00F8 36 7E               140 	ld	(hl),#0x7E
+   00FA 21r32r00            141 	ld	hl,#(_blinker + 0x0012)
+   00FD 36 81               142 	ld	(hl),#0x81
+   00FF 21r33r00            143 	ld	hl,#(_blinker + 0x0013)
+   0102 36 FF               144 	ld	(hl),#0xFF
+   0104 21r34r00            145 	ld	hl,#(_blinker + 0x0014)
+   0107 36 81               146 	ld	(hl),#0x81
+   0109 21r35r00            147 	ld	hl,#(_blinker + 0x0015)
+   010C 36 FF               148 	ld	(hl),#0xFF
+   010E 21r36r00            149 	ld	hl,#(_blinker + 0x0016)
+   0111 36 81               150 	ld	(hl),#0x81
+   0113 21r37r00            151 	ld	hl,#(_blinker + 0x0017)
+   0116 36 FF               152 	ld	(hl),#0xFF
+   0118 21r38r00            153 	ld	hl,#(_blinker + 0x0018)
+   011B 36 C3               154 	ld	(hl),#0xC3
+   011D 21r39r00            155 	ld	hl,#(_blinker + 0x0019)
+   0120 36 FF               156 	ld	(hl),#0xFF
+   0122 21r3Ar00            157 	ld	hl,#(_blinker + 0x001a)
+   0125 36 BD               158 	ld	(hl),#0xBD
+   0127 21r3Br00            159 	ld	hl,#(_blinker + 0x001b)
+   012A 36 FF               160 	ld	(hl),#0xFF
+   012C 21r3Cr00            161 	ld	hl,#(_blinker + 0x001c)
+   012F 36 81               162 	ld	(hl),#0x81
+   0131 21r3Dr00            163 	ld	hl,#(_blinker + 0x001d)
+   0134 36 FF               164 	ld	(hl),#0xFF
+   0136 21r3Er00            165 	ld	hl,#(_blinker + 0x001e)
+   0139 36 7E               166 	ld	(hl),#0x7E
+   013B 21r3Fr00            167 	ld	hl,#(_blinker + 0x001f)
+   013E 36 7E               168 	ld	(hl),#0x7E
+                            169 ;--------------------------------------------------------
+                            170 ; Home
+                            171 ;--------------------------------------------------------
+                            172 	.area _HOME
+                            173 	.area _HOME
+                            174 ;--------------------------------------------------------
+                            175 ; code
+                            176 ;--------------------------------------------------------
+                            177 	.area _CODE
+                            178 ;main.c:6: void performantDelay(UINT8 numloops)
+                            179 ;	---------------------------------
+                            180 ; Function performantDelay
+                            181 ; ---------------------------------
+   0000                     182 _performantDelay::
+                            183 ;main.c:10: for(i=0;i<numloops;i++)
+   0000 06 00               184 	ld	b,#0x00
+   0002                     185 00103$:
+   0002 78                  186 	ld	a,b
+   0003 F8 02               187 	ldhl	sp,#2
+   0005 96                  188 	sub	a, (hl)
+   0006 D0                  189 	ret	NC
+                            190 ;main.c:12: wait_vbl_done();
+   0007 C5                  191 	push	bc
+   0008 CDr00r00            192 	call	_wait_vbl_done
+   000B C1                  193 	pop	bc
+                            194 ;main.c:10: for(i=0;i<numloops;i++)
+   000C 04                  195 	inc	b
+   000D 18 F3               196 	jr	00103$
+   000F C9                  197 	ret
+                            198 ;main.c:15: void main()
+                            199 ;	---------------------------------
+                            200 ; Function main
+                            201 ; ---------------------------------
+   0010                     202 _main::
+   0010 3B                  203 	dec	sp
+                            204 ;main.c:17: UINT8 currentSpriteBlinker = 0;
+   0011 F8 00               205 	ldhl	sp,#0
+   0013 36 00               206 	ld	(hl),#0x00
+                            207 ;main.c:20: set_sprite_data(0, 2, blinker);//(starts of tile, how manytiles, name of variable sprite(not the fileName.c))
+   0015 11r20r00            208 	ld	de,#_blinker
+   0018 D5                  209 	push	de
+   0019 21 00 02            210 	ld	hl,#0x0200
+   001C E5                  211 	push	hl
+   001D CDr00r00            212 	call	_set_sprite_data
+   0020 E8 04               213 	add	sp, #4
+                            214 ;main.c:21: set_sprite_tile(0, 0);//(tile number to load, sprite index if more than one tile can change)
+   0022 21 00 00            215 	ld	hl,#0x0000
+   0025 E5                  216 	push	hl
+   0026 CDr00r00            217 	call	_set_sprite_tile
+   0029 E8 02               218 	add	sp, #2
+                            219 ;main.c:22: move_sprite(0, 8, 16);//(sprite ID, x, y)
+   002B 21 08 10            220 	ld	hl,#0x1008
+   002E E5                  221 	push	hl
+   002F AF                  222 	xor	a, a
+   0030 F5                  223 	push	af
+   0031 33                  224 	inc	sp
+   0032 CDr00r00            225 	call	_move_sprite
+   0035 E8 03               226 	add	sp, #3
+                            227 ;main.c:24: set_sprite_data(2, 2, pacMan);
+   0037 11r00r00            228 	ld	de,#_pacMan
+   003A D5                  229 	push	de
+   003B 21 02 02            230 	ld	hl,#0x0202
+   003E E5                  231 	push	hl
+   003F CDr00r00            232 	call	_set_sprite_data
+   0042 E8 04               233 	add	sp, #4
+                            234 ;main.c:25: set_sprite_tile(2, 1);
+   0044 21 02 01            235 	ld	hl,#0x0102
+   0047 E5                  236 	push	hl
+   0048 CDr00r00            237 	call	_set_sprite_tile
+   004B E8 02               238 	add	sp, #2
+                            239 ;main.c:26: move_sprite(1, 16, 16);
+   004D 21 10 10            240 	ld	hl,#0x1010
+   0050 E5                  241 	push	hl
+   0051 3E 01               242 	ld	a,#0x01
+   0053 F5                  243 	push	af
+   0054 33                  244 	inc	sp
+   0055 CDr00r00            245 	call	_move_sprite
+   0058 E8 03               246 	add	sp, #3
+                            247 ;main.c:29: SHOW_SPRITES;
+   005A 11 40 FF            248 	ld	de,#0xFF40
+   005D 1A                  249 	ld	a,(de)
+   005E 5F                  250 	ld	e,a
+   005F 16 00               251 	ld	d,#0x00
+   0061 7B                  252 	ld	a,e
+   0062 CB CF               253 	set	1, a
+   0064 47                  254 	ld	b,a
+   0065 21 40 FF            255 	ld	hl,#0xFF40
+   0068 70                  256 	ld	(hl),b
+                            257 ;main.c:31: while(1)
+   0069                     258 00105$:
+                            259 ;main.c:33: if(currentSpriteBlinker == 0)
+   0069 F8 00               260 	ldhl	sp,#0
+   006B 7E                  261 	ld	a,(hl)
+   006C B7                  262 	or	a, a
+   006D 20 06               263 	jr	NZ,00102$
+                            264 ;main.c:35: currentSpriteBlinker = 1;
+   006F 36 01               265 	ld	(hl),#0x01
+                            266 ;main.c:36: currentSpritePacMan = 3;
+   0071 16 03               267 	ld	d,#0x03
+   0073 18 06               268 	jr	00103$
+   0075                     269 00102$:
+                            270 ;main.c:40: currentSpriteBlinker = 0;
+   0075 F8 00               271 	ldhl	sp,#0
+   0077 36 00               272 	ld	(hl),#0x00
+                            273 ;main.c:41: currentSpritePacMan = 2;
+   0079 16 02               274 	ld	d,#0x02
+   007B                     275 00103$:
+                            276 ;main.c:43: set_sprite_tile(0, currentSpriteBlinker);
+   007B D5                  277 	push	de
+   007C F8 02               278 	ldhl	sp,#2
+   007E 7E                  279 	ld	a,(hl)
+   007F F5                  280 	push	af
+   0080 33                  281 	inc	sp
+   0081 AF                  282 	xor	a, a
+   0082 F5                  283 	push	af
+   0083 33                  284 	inc	sp
+   0084 CDr00r00            285 	call	_set_sprite_tile
+   0087 E8 02               286 	add	sp, #2
+   0089 D1                  287 	pop	de
+                            288 ;main.c:44: set_sprite_tile(2, currentSpritePacMan);
+   008A D5                  289 	push	de
+   008B 33                  290 	inc	sp
+   008C 3E 02               291 	ld	a,#0x02
+   008E F5                  292 	push	af
+   008F 33                  293 	inc	sp
+   0090 CDr00r00            294 	call	_set_sprite_tile
+   0093 E8 02               295 	add	sp, #2
+                            296 ;main.c:46: performantDelay(5);
+   0095 3E 05               297 	ld	a,#0x05
+   0097 F5                  298 	push	af
+   0098 33                  299 	inc	sp
+   0099 CDr00r00            300 	call	_performantDelay
+   009C 33                  301 	inc	sp
+   009D C3r69r00            302 	jp	00105$
+   00A0 33                  303 	inc	sp
+   00A1 C9                  304 	ret
+                            305 	.area _CODE
+                            306 	.area _CABS (ABS)

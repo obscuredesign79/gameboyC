@@ -1,7 +1,7 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
 ; Version 3.5.0 #9253 (Mar 19 2016) (Linux)
-; This file was generated Sat Nov  9 13:51:00 2019
+; This file was generated Wed Nov 27 22:31:44 2019
 ;--------------------------------------------------------
 	.module main
 	.optsdcc -mgbz80
@@ -76,13 +76,18 @@ _main::
 	push	de
 	call	_printf
 	add	sp, #4
-;main.c:23: printf("a + b = %x",c);
+;main.c:23: printf("a + b = %x\n",c); 
 	ld	de,#___str_2
 	ld	hl,#0x0003
 	push	hl
 	push	de
 	call	_printf
 	add	sp, #4
+;main.c:24: printf("Hello Gameboy World");
+	ld	de,#___str_3
+	push	de
+	call	_printf
+	add	sp, #2
 ;main.c:25: performantDelay(5);
 	ld	a,#0x05
 	push	af
@@ -100,6 +105,10 @@ ___str_1:
 	.db 0x00
 ___str_2:
 	.ascii "a + b = %x"
+	.db 0x0A
+	.db 0x00
+___str_3:
+	.ascii "Hello Gameboy World"
 	.db 0x00
 	.area _CODE
 	.area _CABS (ABS)

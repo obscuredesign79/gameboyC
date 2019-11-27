@@ -7,11 +7,11 @@ Symbol Table
     .__.ABS.                                                    =  0000 G
     .__.CPU.                                                    =  0000 L
     .__.H$L.                                                    =  0000 L
+  1 _blinker                                                       0020 GR
   0 _main                                                          0010 GR
     _move_sprite                                                   **** GX
   1 _pacMan                                                        0000 GR
   0 _performantDelay                                               0000 GR
-    _scroll_sprite                                                 **** GX
     _set_sprite_data                                               **** GX
     _set_sprite_tile                                               **** GX
     _wait_vbl_done                                                 **** GX
@@ -21,11 +21,11 @@ Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE                                      size   80   flags    0
-   1 _DATA                                      size   20   flags    0
+   0 _CODE                                      size   A2   flags    0
+   1 _DATA                                      size   40   flags    0
    2 _DABS                                      size    0   flags    8
    3 _HOME                                      size    0   flags    0
-   4 _GSINIT                                    size   A0   flags    0
+   4 _GSINIT                                    size  140   flags    0
    5 _GSFINAL                                   size    0   flags    0
    6 _CABS                                      size    0   flags    8
 
