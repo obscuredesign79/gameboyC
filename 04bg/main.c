@@ -19,8 +19,8 @@ void main()
     DISPLAY_ON;
 
     while(1){
-	scroll_bkg(1, 0);
-	performantDelay(2);
+	scroll_bkg(12, 0);
+	performantDelay(1);
     }
 
 

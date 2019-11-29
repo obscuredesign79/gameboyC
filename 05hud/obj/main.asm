@@ -1,7 +1,7 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
 ; Version 3.5.0 #9253 (Mar 19 2016) (Linux)
-; This file was generated Fri Nov 29 22:41:42 2019
+; This file was generated Sat Nov 30 00:31:57 2019
 ;--------------------------------------------------------
 	.module main
 	.optsdcc -mgbz80
@@ -11,10 +11,16 @@
 ;--------------------------------------------------------
 	.globl _main
 	.globl _performantDelay
+	.globl _font_set
+	.globl _font_load
+	.globl _font_init
+	.globl _move_win
+	.globl _set_win_tiles
 	.globl _scroll_bkg
 	.globl _set_bkg_tiles
 	.globl _set_bkg_data
 	.globl _wait_vbl_done
+	.globl _window01Map
 	.globl _level01Map
 	.globl _level01Tiles
 ;--------------------------------------------------------
@@ -25,6 +31,8 @@ _level01Tiles::
 	.ds 208
 _level01Map::
 	.ds 720
+_window01Map::
+	.ds 10
 ;--------------------------------------------------------
 ; absolute external ram data
 ;--------------------------------------------------------
@@ -1407,9 +1415,9 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x0124)
-	ld	(hl),#0x02
+	ld	(hl),#0x28
 	ld	hl,#(_level01Map + 0x0125)
-	ld	(hl),#0x03
+	ld	(hl),#0x29
 	ld	bc,#_level01Map + 294
 	xor	a, a
 	ld	(bc),a
@@ -1510,9 +1518,9 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x0147)
-	ld	(hl),#0x02
+	ld	(hl),#0x28
 	ld	hl,#(_level01Map + 0x0148)
-	ld	(hl),#0x03
+	ld	(hl),#0x29
 	ld	bc,#_level01Map + 329
 	xor	a, a
 	ld	(bc),a
@@ -1523,9 +1531,9 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x014c)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x014d)
-	ld	(hl),#0x08
+	ld	(hl),#0x2E
 	ld	bc,#_level01Map + 334
 	xor	a, a
 	ld	(bc),a
@@ -1569,9 +1577,9 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x015c)
-	ld	(hl),#0x02
+	ld	(hl),#0x28
 	ld	hl,#(_level01Map + 0x015d)
-	ld	(hl),#0x03
+	ld	(hl),#0x29
 	ld	bc,#_level01Map + 350
 	xor	a, a
 	ld	(bc),a
@@ -1624,9 +1632,9 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x016f)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x0170)
-	ld	(hl),#0x08
+	ld	(hl),#0x2E
 	ld	bc,#_level01Map + 369
 	xor	a, a
 	ld	(bc),a
@@ -1637,9 +1645,9 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x0174)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x0175)
-	ld	(hl),#0x08
+	ld	(hl),#0x2E
 	ld	bc,#_level01Map + 374
 	xor	a, a
 	ld	(bc),a
@@ -1683,11 +1691,11 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x0184)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x0185)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0186)
-	ld	(hl),#0x03
+	ld	(hl),#0x29
 	ld	bc,#_level01Map + 391
 	xor	a, a
 	ld	(bc),a
@@ -1737,9 +1745,9 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x0197)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x0198)
-	ld	(hl),#0x08
+	ld	(hl),#0x2E
 	ld	bc,#_level01Map + 409
 	xor	a, a
 	ld	(bc),a
@@ -1750,9 +1758,9 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x019c)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x019d)
-	ld	(hl),#0x08
+	ld	(hl),#0x2E
 	ld	bc,#_level01Map + 414
 	xor	a, a
 	ld	(bc),a
@@ -1760,11 +1768,11 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x01a0)
-	ld	(hl),#0x02
+	ld	(hl),#0x28
 	ld	hl,#(_level01Map + 0x01a1)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x01a2)
-	ld	(hl),#0x03
+	ld	(hl),#0x29
 	ld	bc,#_level01Map + 419
 	xor	a, a
 	ld	(bc),a
@@ -1772,9 +1780,9 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x01a5)
-	ld	(hl),#0x02
+	ld	(hl),#0x28
 	ld	hl,#(_level01Map + 0x01a6)
-	ld	(hl),#0x03
+	ld	(hl),#0x29
 	ld	bc,#_level01Map + 423
 	xor	a, a
 	ld	(bc),a
@@ -1791,11 +1799,11 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x01ac)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x01ad)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x01ae)
-	ld	(hl),#0x08
+	ld	(hl),#0x2E
 	ld	bc,#_level01Map + 431
 	xor	a, a
 	ld	(bc),a
@@ -1845,9 +1853,9 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x01bf)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x01c0)
-	ld	(hl),#0x08
+	ld	(hl),#0x2E
 	ld	bc,#_level01Map + 449
 	xor	a, a
 	ld	(bc),a
@@ -1858,9 +1866,9 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x01c4)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x01c5)
-	ld	(hl),#0x08
+	ld	(hl),#0x2E
 	ld	bc,#_level01Map + 454
 	xor	a, a
 	ld	(bc),a
@@ -1868,11 +1876,11 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x01c8)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x01c9)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x01ca)
-	ld	(hl),#0x08
+	ld	(hl),#0x2E
 	ld	bc,#_level01Map + 459
 	xor	a, a
 	ld	(bc),a
@@ -1880,9 +1888,9 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x01cd)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x01ce)
-	ld	(hl),#0x08
+	ld	(hl),#0x2E
 	ld	bc,#_level01Map + 463
 	xor	a, a
 	ld	(bc),a
@@ -1899,11 +1907,11 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x01d4)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x01d5)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x01d6)
-	ld	(hl),#0x08
+	ld	(hl),#0x2E
 	ld	bc,#_level01Map + 471
 	xor	a, a
 	ld	(bc),a
@@ -1953,38 +1961,38 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x01e7)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x01e8)
-	ld	(hl),#0x09
+	ld	(hl),#0x2F
 	ld	hl,#(_level01Map + 0x01e9)
-	ld	(hl),#0x0A
+	ld	(hl),#0x30
 	ld	bc,#_level01Map + 490
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x01eb)
-	ld	(hl),#0x06
+	ld	(hl),#0x2C
 	ld	hl,#(_level01Map + 0x01ec)
-	ld	(hl),#0x05
+	ld	(hl),#0x2B
 	ld	hl,#(_level01Map + 0x01ed)
-	ld	(hl),#0x09
+	ld	(hl),#0x2F
 	ld	hl,#(_level01Map + 0x01ee)
-	ld	(hl),#0x0A
+	ld	(hl),#0x30
 	ld	hl,#(_level01Map + 0x01ef)
-	ld	(hl),#0x06
+	ld	(hl),#0x2C
 	ld	hl,#(_level01Map + 0x01f0)
-	ld	(hl),#0x05
+	ld	(hl),#0x2B
 	ld	hl,#(_level01Map + 0x01f1)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x01f2)
-	ld	(hl),#0x09
+	ld	(hl),#0x2F
 	ld	hl,#(_level01Map + 0x01f3)
-	ld	(hl),#0x0A
+	ld	(hl),#0x30
 	ld	hl,#(_level01Map + 0x01f4)
-	ld	(hl),#0x06
+	ld	(hl),#0x2C
 	ld	hl,#(_level01Map + 0x01f5)
-	ld	(hl),#0x05
+	ld	(hl),#0x2B
 	ld	hl,#(_level01Map + 0x01f6)
-	ld	(hl),#0x08
+	ld	(hl),#0x2E
 	ld	bc,#_level01Map + 503
 	xor	a, a
 	ld	(bc),a
@@ -2001,11 +2009,11 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x01fc)
-	ld	(hl),#0x04
+	ld	(hl),#0x2A
 	ld	hl,#(_level01Map + 0x01fd)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x01fe)
-	ld	(hl),#0x08
+	ld	(hl),#0x2E
 	ld	bc,#_level01Map + 511
 	xor	a, a
 	ld	(bc),a
@@ -2052,41 +2060,41 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x020e)
-	ld	(hl),#0x06
+	ld	(hl),#0x2C
 	ld	hl,#(_level01Map + 0x020f)
-	ld	(hl),#0x05
+	ld	(hl),#0x2B
 	ld	hl,#(_level01Map + 0x0210)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0211)
-	ld	(hl),#0x0B
+	ld	(hl),#0x31
 	ld	hl,#(_level01Map + 0x0212)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0213)
-	ld	(hl),#0x07
+	ld	(hl),#0x2D
 	ld	hl,#(_level01Map + 0x0214)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0215)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0216)
-	ld	(hl),#0x0B
+	ld	(hl),#0x31
 	ld	hl,#(_level01Map + 0x0217)
-	ld	(hl),#0x07
+	ld	(hl),#0x2D
 	ld	hl,#(_level01Map + 0x0218)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0219)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x021a)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x021b)
-	ld	(hl),#0x0B
+	ld	(hl),#0x31
 	ld	hl,#(_level01Map + 0x021c)
-	ld	(hl),#0x07
+	ld	(hl),#0x2D
 	ld	hl,#(_level01Map + 0x021d)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x021e)
-	ld	(hl),#0x09
+	ld	(hl),#0x2F
 	ld	hl,#(_level01Map + 0x021f)
-	ld	(hl),#0x0A
+	ld	(hl),#0x30
 	ld	bc,#_level01Map + 544
 	xor	a, a
 	ld	(bc),a
@@ -2097,15 +2105,15 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x0223)
-	ld	(hl),#0x06
+	ld	(hl),#0x2C
 	ld	hl,#(_level01Map + 0x0224)
-	ld	(hl),#0x05
+	ld	(hl),#0x2B
 	ld	hl,#(_level01Map + 0x0225)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0226)
-	ld	(hl),#0x09
+	ld	(hl),#0x2F
 	ld	hl,#(_level01Map + 0x0227)
-	ld	(hl),#0x0A
+	ld	(hl),#0x30
 	ld	bc,#_level01Map + 552
 	xor	a, a
 	ld	(bc),a
@@ -2131,325 +2139,349 @@ _level01Map::
 	xor	a, a
 	ld	(bc),a
 	ld	hl,#(_level01Map + 0x0230)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0231)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0232)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0233)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0234)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0235)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0236)
-	ld	(hl),#0x07
+	ld	(hl),#0x2D
 	ld	hl,#(_level01Map + 0x0237)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0238)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0239)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x023a)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x023b)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x023c)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x023d)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x023e)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x023f)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0240)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0241)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0242)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0243)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0244)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0245)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0246)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0247)
-	ld	(hl),#0x0B
+	ld	(hl),#0x31
 	ld	hl,#(_level01Map + 0x0248)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0249)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x024a)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x024b)
-	ld	(hl),#0x07
+	ld	(hl),#0x2D
 	ld	hl,#(_level01Map + 0x024c)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x024d)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x024e)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x024f)
-	ld	(hl),#0x0B
+	ld	(hl),#0x31
 	ld	hl,#(_level01Map + 0x0250)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0251)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0252)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0253)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0254)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0255)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0256)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0257)
-	ld	(hl),#0x01
+	ld	(hl),#0x27
 	ld	hl,#(_level01Map + 0x0258)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0259)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x025a)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x025b)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x025c)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x025d)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x025e)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x025f)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0260)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0261)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0262)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0263)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0264)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0265)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0266)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0267)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0268)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0269)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x026a)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x026b)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x026c)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x026d)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x026e)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x026f)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0270)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0271)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0272)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0273)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0274)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0275)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0276)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0277)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0278)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0279)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x027a)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x027b)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x027c)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x027d)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x027e)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x027f)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0280)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0281)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0282)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0283)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0284)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0285)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0286)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0287)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0288)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0289)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x028a)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x028b)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x028c)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x028d)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x028e)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x028f)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0290)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0291)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0292)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0293)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0294)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0295)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0296)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0297)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0298)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x0299)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x029a)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x029b)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x029c)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x029d)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x029e)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x029f)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02a0)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02a1)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02a2)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02a3)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02a4)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02a5)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02a6)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02a7)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02a8)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02a9)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02aa)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02ab)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02ac)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02ad)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02ae)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02af)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02b0)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02b1)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02b2)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02b3)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02b4)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02b5)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02b6)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02b7)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02b8)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02b9)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02ba)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02bb)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02bc)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02bd)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02be)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02bf)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02c0)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02c1)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02c2)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02c3)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02c4)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02c5)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02c6)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02c7)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02c8)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02c9)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02ca)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02cb)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02cc)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02cd)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02ce)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02cf)
-	ld	(hl),#0x0C
+	ld	(hl),#0x32
+;window01Map.c:2: unsigned char window01Map[] =
+	ld	hl,#_window01Map
+	ld	(hl),#0x00
+	ld	hl,#(_window01Map + 0x0001)
+	ld	(hl),#0x17
+	ld	hl,#(_window01Map + 0x0002)
+	ld	(hl),#0x14
+	ld	hl,#(_window01Map + 0x0003)
+	ld	(hl),#0x11
+	ld	hl,#(_window01Map + 0x0004)
+	ld	(hl),#0x10
+	ld	bc,#_window01Map + 5
+	xor	a, a
+	ld	(bc),a
+	ld	hl,#(_window01Map + 0x0006)
+	ld	(hl),#0x23
+	ld	bc,#_window01Map + 7
+	xor	a, a
+	ld	(bc),a
+	ld	hl,#(_window01Map + 0x0008)
+	ld	(hl),#0x06
+	ld	bc,#_window01Map + 9
+	xor	a, a
+	ld	(bc),a
 ;--------------------------------------------------------
 ; Home
 ;--------------------------------------------------------
@@ -2459,39 +2491,50 @@ _level01Map::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;main.c:5: void performantDelay(UINT8 numloops){
+;main.c:7: void performantDelay(UINT8 numloops){
 ;	---------------------------------
 ; Function performantDelay
 ; ---------------------------------
 _performantDelay::
-;main.c:8: for(i=0;i<numloops;i++){
+;main.c:10: for(i=0;i<numloops;i++){
 	ld	b,#0x00
 00103$:
 	ld	a,b
 	ldhl	sp,#2
 	sub	a, (hl)
 	ret	NC
-;main.c:9: wait_vbl_done();
+;main.c:11: wait_vbl_done();
 	push	bc
 	call	_wait_vbl_done
 	pop	bc
-;main.c:8: for(i=0;i<numloops;i++){
+;main.c:10: for(i=0;i<numloops;i++){
 	inc	b
 	jr	00103$
 	ret
-;main.c:13: void main()
+;main.c:15: void main()
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
 _main::
-;main.c:15: set_bkg_data(0, 13, level01Tiles);
+;main.c:20: font_init();
+	call	_font_init
+;main.c:21: minFont = font_load(font_min);
+	ld	de,#_font_min+0
+	push	de
+	call	_font_load
+	add	sp, #2
+;main.c:22: font_set(minFont);
+	push	de
+	call	_font_set
+	add	sp, #2
+;main.c:24: set_bkg_data(38, 13, level01Tiles);
 	ld	de,#_level01Tiles+0
 	push	de
-	ld	hl,#0x0D00
+	ld	hl,#0x0D26
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;main.c:16: set_bkg_tiles(0, 0, 40, 18, level01Map);
+;main.c:25: set_bkg_tiles(0, 0, 40, 18, level01Map);
 	ld	de,#_level01Map+0
 	push	de
 	ld	hl,#0x1228
@@ -2500,7 +2543,16 @@ _main::
 	push	hl
 	call	_set_bkg_tiles
 	add	sp, #6
-;main.c:18: SHOW_BKG;
+;main.c:27: set_win_tiles(0, 0, 10, 1, window01Map);
+	ld	de,#_window01Map+0
+	push	de
+	ld	hl,#0x010A
+	push	hl
+	ld	hl,#0x0000
+	push	hl
+	call	_set_win_tiles
+	add	sp, #6
+;main.c:29: SHOW_BKG;
 	ld	de,#0xFF40
 	ld	a,(de)
 	ld	d,a
@@ -2510,7 +2562,17 @@ _main::
 	ld	b,a
 	ld	hl,#0xFF40
 	ld	(hl),b
-;main.c:19: DISPLAY_ON;
+;main.c:30: SHOW_WIN;
+	ld	de,#0xFF40
+	ld	a,(de)
+	ld	d,a
+	ld	e,#0x00
+	ld	a,d
+	set	5, a
+	ld	b,a
+	ld	l, #0x40
+	ld	(hl),b
+;main.c:31: DISPLAY_ON;
 	ld	de,#0xFF40
 	ld	a,(de)
 	ld	d,a
@@ -2520,14 +2582,19 @@ _main::
 	ld	b,a
 	ld	l, #0x40
 	ld	(hl),b
-;main.c:21: while(1){
+;main.c:33: while(1)
 00102$:
-;main.c:22: scroll_bkg(12, 0);
-	ld	hl,#0x000C
+;main.c:35: scroll_bkg(1, 0);
+	ld	hl,#0x0001
 	push	hl
 	call	_scroll_bkg
 	add	sp, #2
-;main.c:23: performantDelay(1);
+;main.c:36: move_win(0, 136);
+	ld	hl,#0x8800
+	push	hl
+	call	_move_win
+	add	sp, #2
+;main.c:37: performantDelay(1);
 	ld	a,#0x01
 	push	af
 	inc	sp

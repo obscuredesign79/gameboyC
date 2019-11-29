@@ -1,7 +1,7 @@
                               1 ;--------------------------------------------------------
                               2 ; File Created by SDCC : free open source ANSI-C Compiler
                               3 ; Version 3.5.0 #9253 (Mar 19 2016) (Linux)
-                              4 ; This file was generated Fri Nov 29 17:14:30 2019
+                              4 ; This file was generated Fri Nov 29 22:41:42 2019
                               5 ;--------------------------------------------------------
                               6 	.module main
                               7 	.optsdcc -mgbz80
@@ -2522,13 +2522,13 @@
    004A 70                 2522 	ld	(hl),b
                            2523 ;main.c:21: while(1){
    004B                    2524 00102$:
-                           2525 ;main.c:22: scroll_bkg(1, 0);
-   004B 21 01 00           2526 	ld	hl,#0x0001
+                           2525 ;main.c:22: scroll_bkg(12, 0);
+   004B 21 0C 00           2526 	ld	hl,#0x000C
    004E E5                 2527 	push	hl
    004F CDr00r00           2528 	call	_scroll_bkg
    0052 E8 02              2529 	add	sp, #2
-                           2530 ;main.c:23: performantDelay(2);
-   0054 3E 02              2531 	ld	a,#0x02
+                           2530 ;main.c:23: performantDelay(1);
+   0054 3E 01              2531 	ld	a,#0x01
    0056 F5                 2532 	push	af
    0057 33                 2533 	inc	sp
    0058 CDr00r00           2534 	call	_performantDelay

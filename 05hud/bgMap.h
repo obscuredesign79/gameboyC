@@ -9,7 +9,7 @@
    Bank          : 0
    Map size      : 40 x 18
    Tile set      : bgTiles.gbr
-   Plane count   : 1 plane (8 bits)
+   Plane count   : 2 planes (16 bits)
    Plane order   : Tiles are continues
    Tile offset   : 0
    Split data    : No
