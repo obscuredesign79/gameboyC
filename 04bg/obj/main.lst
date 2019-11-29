@@ -1,0 +1,2539 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.5.0 #9253 (Mar 19 2016) (Linux)
+                              4 ; This file was generated Fri Nov 29 17:14:30 2019
+                              5 ;--------------------------------------------------------
+                              6 	.module main
+                              7 	.optsdcc -mgbz80
+                              8 	
+                              9 ;--------------------------------------------------------
+                             10 ; Public variables in this module
+                             11 ;--------------------------------------------------------
+                             12 	.globl _main
+                             13 	.globl _performantDelay
+                             14 	.globl _scroll_bkg
+                             15 	.globl _set_bkg_tiles
+                             16 	.globl _set_bkg_data
+                             17 	.globl _wait_vbl_done
+                             18 	.globl _level01Map
+                             19 	.globl _level01Tiles
+                             20 ;--------------------------------------------------------
+                             21 ; ram data
+                             22 ;--------------------------------------------------------
+                             23 	.area _DATA
+   0000                      24 _level01Tiles::
+   0000                      25 	.ds 208
+   00D0                      26 _level01Map::
+   00D0                      27 	.ds 720
+                             28 ;--------------------------------------------------------
+                             29 ; absolute external ram data
+                             30 ;--------------------------------------------------------
+                             31 	.area _DABS (ABS)
+                             32 ;--------------------------------------------------------
+                             33 ; global & static initialisations
+                             34 ;--------------------------------------------------------
+                             35 	.area _HOME
+                             36 	.area _GSINIT
+                             37 	.area _GSFINAL
+                             38 	.area _GSINIT
+                             39 ;level01Tiles.c:26: unsigned char level01Tiles[] =
+   0000 21r00r00             40 	ld	hl,#_level01Tiles
+   0003 36 00                41 	ld	(hl),#0x00
+   0005 01r01r00             42 	ld	bc,#_level01Tiles + 1
+   0008 AF                   43 	xor	a, a
+   0009 02                   44 	ld	(bc),a
+   000A 01r02r00             45 	ld	bc,#_level01Tiles + 2
+   000D AF                   46 	xor	a, a
+   000E 02                   47 	ld	(bc),a
+   000F 01r03r00             48 	ld	bc,#_level01Tiles + 3
+   0012 AF                   49 	xor	a, a
+   0013 02                   50 	ld	(bc),a
+   0014 01r04r00             51 	ld	bc,#_level01Tiles + 4
+   0017 AF                   52 	xor	a, a
+   0018 02                   53 	ld	(bc),a
+   0019 01r05r00             54 	ld	bc,#_level01Tiles + 5
+   001C AF                   55 	xor	a, a
+   001D 02                   56 	ld	(bc),a
+   001E 01r06r00             57 	ld	bc,#_level01Tiles + 6
+   0021 AF                   58 	xor	a, a
+   0022 02                   59 	ld	(bc),a
+   0023 01r07r00             60 	ld	bc,#_level01Tiles + 7
+   0026 AF                   61 	xor	a, a
+   0027 02                   62 	ld	(bc),a
+   0028 01r08r00             63 	ld	bc,#_level01Tiles + 8
+   002B AF                   64 	xor	a, a
+   002C 02                   65 	ld	(bc),a
+   002D 01r09r00             66 	ld	bc,#_level01Tiles + 9
+   0030 AF                   67 	xor	a, a
+   0031 02                   68 	ld	(bc),a
+   0032 01r0Ar00             69 	ld	bc,#_level01Tiles + 10
+   0035 AF                   70 	xor	a, a
+   0036 02                   71 	ld	(bc),a
+   0037 01r0Br00             72 	ld	bc,#_level01Tiles + 11
+   003A AF                   73 	xor	a, a
+   003B 02                   74 	ld	(bc),a
+   003C 01r0Cr00             75 	ld	bc,#_level01Tiles + 12
+   003F AF                   76 	xor	a, a
+   0040 02                   77 	ld	(bc),a
+   0041 01r0Dr00             78 	ld	bc,#_level01Tiles + 13
+   0044 AF                   79 	xor	a, a
+   0045 02                   80 	ld	(bc),a
+   0046 01r0Er00             81 	ld	bc,#_level01Tiles + 14
+   0049 AF                   82 	xor	a, a
+   004A 02                   83 	ld	(bc),a
+   004B 01r0Fr00             84 	ld	bc,#_level01Tiles + 15
+   004E AF                   85 	xor	a, a
+   004F 02                   86 	ld	(bc),a
+   0050 01r10r00             87 	ld	bc,#_level01Tiles + 16
+   0053 AF                   88 	xor	a, a
+   0054 02                   89 	ld	(bc),a
+   0055 21r11r00             90 	ld	hl,#(_level01Tiles + 0x0011)
+   0058 36 FF                91 	ld	(hl),#0xFF
+   005A 21r12r00             92 	ld	hl,#(_level01Tiles + 0x0012)
+   005D 36 FF                93 	ld	(hl),#0xFF
+   005F 01r13r00             94 	ld	bc,#_level01Tiles + 19
+   0062 AF                   95 	xor	a, a
+   0063 02                   96 	ld	(bc),a
+   0064 21r14r00             97 	ld	hl,#(_level01Tiles + 0x0014)
+   0067 36 FF                98 	ld	(hl),#0xFF
+   0069 01r15r00             99 	ld	bc,#_level01Tiles + 21
+   006C AF                  100 	xor	a, a
+   006D 02                  101 	ld	(bc),a
+   006E 21r16r00            102 	ld	hl,#(_level01Tiles + 0x0016)
+   0071 36 FF               103 	ld	(hl),#0xFF
+   0073 01r17r00            104 	ld	bc,#_level01Tiles + 23
+   0076 AF                  105 	xor	a, a
+   0077 02                  106 	ld	(bc),a
+   0078 21r18r00            107 	ld	hl,#(_level01Tiles + 0x0018)
+   007B 36 FF               108 	ld	(hl),#0xFF
+   007D 01r19r00            109 	ld	bc,#_level01Tiles + 25
+   0080 AF                  110 	xor	a, a
+   0081 02                  111 	ld	(bc),a
+   0082 21r1Ar00            112 	ld	hl,#(_level01Tiles + 0x001a)
+   0085 36 FF               113 	ld	(hl),#0xFF
+   0087 01r1Br00            114 	ld	bc,#_level01Tiles + 27
+   008A AF                  115 	xor	a, a
+   008B 02                  116 	ld	(bc),a
+   008C 21r1Cr00            117 	ld	hl,#(_level01Tiles + 0x001c)
+   008F 36 FF               118 	ld	(hl),#0xFF
+   0091 01r1Dr00            119 	ld	bc,#_level01Tiles + 29
+   0094 AF                  120 	xor	a, a
+   0095 02                  121 	ld	(bc),a
+   0096 21r1Er00            122 	ld	hl,#(_level01Tiles + 0x001e)
+   0099 36 FF               123 	ld	(hl),#0xFF
+   009B 01r1Fr00            124 	ld	bc,#_level01Tiles + 31
+   009E AF                  125 	xor	a, a
+   009F 02                  126 	ld	(bc),a
+   00A0 01r20r00            127 	ld	bc,#_level01Tiles + 32
+   00A3 AF                  128 	xor	a, a
+   00A4 02                  129 	ld	(bc),a
+   00A5 21r21r00            130 	ld	hl,#(_level01Tiles + 0x0021)
+   00A8 36 0F               131 	ld	(hl),#0x0F
+   00AA 21r22r00            132 	ld	hl,#(_level01Tiles + 0x0022)
+   00AD 36 0F               133 	ld	(hl),#0x0F
+   00AF 21r23r00            134 	ld	hl,#(_level01Tiles + 0x0023)
+   00B2 36 30               135 	ld	(hl),#0x30
+   00B4 21r24r00            136 	ld	hl,#(_level01Tiles + 0x0024)
+   00B7 36 3F               137 	ld	(hl),#0x3F
+   00B9 21r25r00            138 	ld	hl,#(_level01Tiles + 0x0025)
+   00BC 36 40               139 	ld	(hl),#0x40
+   00BE 21r26r00            140 	ld	hl,#(_level01Tiles + 0x0026)
+   00C1 36 3F               141 	ld	(hl),#0x3F
+   00C3 21r27r00            142 	ld	hl,#(_level01Tiles + 0x0027)
+   00C6 36 40               143 	ld	(hl),#0x40
+   00C8 21r28r00            144 	ld	hl,#(_level01Tiles + 0x0028)
+   00CB 36 7F               145 	ld	(hl),#0x7F
+   00CD 21r29r00            146 	ld	hl,#(_level01Tiles + 0x0029)
+   00D0 36 80               147 	ld	(hl),#0x80
+   00D2 21r2Ar00            148 	ld	hl,#(_level01Tiles + 0x002a)
+   00D5 36 7F               149 	ld	(hl),#0x7F
+   00D7 21r2Br00            150 	ld	hl,#(_level01Tiles + 0x002b)
+   00DA 36 80               151 	ld	(hl),#0x80
+   00DC 21r2Cr00            152 	ld	hl,#(_level01Tiles + 0x002c)
+   00DF 36 7F               153 	ld	(hl),#0x7F
+   00E1 21r2Dr00            154 	ld	hl,#(_level01Tiles + 0x002d)
+   00E4 36 80               155 	ld	(hl),#0x80
+   00E6 21r2Er00            156 	ld	hl,#(_level01Tiles + 0x002e)
+   00E9 36 7F               157 	ld	(hl),#0x7F
+   00EB 21r2Fr00            158 	ld	hl,#(_level01Tiles + 0x002f)
+   00EE 36 80               159 	ld	(hl),#0x80
+   00F0 01r30r00            160 	ld	bc,#_level01Tiles + 48
+   00F3 AF                  161 	xor	a, a
+   00F4 02                  162 	ld	(bc),a
+   00F5 21r31r00            163 	ld	hl,#(_level01Tiles + 0x0031)
+   00F8 36 F0               164 	ld	(hl),#0xF0
+   00FA 21r32r00            165 	ld	hl,#(_level01Tiles + 0x0032)
+   00FD 36 F0               166 	ld	(hl),#0xF0
+   00FF 21r33r00            167 	ld	hl,#(_level01Tiles + 0x0033)
+   0102 36 0C               168 	ld	(hl),#0x0C
+   0104 21r34r00            169 	ld	hl,#(_level01Tiles + 0x0034)
+   0107 36 FC               170 	ld	(hl),#0xFC
+   0109 21r35r00            171 	ld	hl,#(_level01Tiles + 0x0035)
+   010C 36 02               172 	ld	(hl),#0x02
+   010E 21r36r00            173 	ld	hl,#(_level01Tiles + 0x0036)
+   0111 36 FC               174 	ld	(hl),#0xFC
+   0113 21r37r00            175 	ld	hl,#(_level01Tiles + 0x0037)
+   0116 36 02               176 	ld	(hl),#0x02
+   0118 21r38r00            177 	ld	hl,#(_level01Tiles + 0x0038)
+   011B 36 FE               178 	ld	(hl),#0xFE
+   011D 21r39r00            179 	ld	hl,#(_level01Tiles + 0x0039)
+   0120 36 01               180 	ld	(hl),#0x01
+   0122 21r3Ar00            181 	ld	hl,#(_level01Tiles + 0x003a)
+   0125 36 FE               182 	ld	(hl),#0xFE
+   0127 21r3Br00            183 	ld	hl,#(_level01Tiles + 0x003b)
+   012A 36 01               184 	ld	(hl),#0x01
+   012C 21r3Cr00            185 	ld	hl,#(_level01Tiles + 0x003c)
+   012F 36 FE               186 	ld	(hl),#0xFE
+   0131 21r3Dr00            187 	ld	hl,#(_level01Tiles + 0x003d)
+   0134 36 01               188 	ld	(hl),#0x01
+   0136 21r3Er00            189 	ld	hl,#(_level01Tiles + 0x003e)
+   0139 36 FE               190 	ld	(hl),#0xFE
+   013B 21r3Fr00            191 	ld	hl,#(_level01Tiles + 0x003f)
+   013E 36 01               192 	ld	(hl),#0x01
+   0140 21r40r00            193 	ld	hl,#(_level01Tiles + 0x0040)
+   0143 36 7F               194 	ld	(hl),#0x7F
+   0145 21r41r00            195 	ld	hl,#(_level01Tiles + 0x0041)
+   0148 36 80               196 	ld	(hl),#0x80
+   014A 21r42r00            197 	ld	hl,#(_level01Tiles + 0x0042)
+   014D 36 7F               198 	ld	(hl),#0x7F
+   014F 21r43r00            199 	ld	hl,#(_level01Tiles + 0x0043)
+   0152 36 80               200 	ld	(hl),#0x80
+   0154 21r44r00            201 	ld	hl,#(_level01Tiles + 0x0044)
+   0157 36 7F               202 	ld	(hl),#0x7F
+   0159 21r45r00            203 	ld	hl,#(_level01Tiles + 0x0045)
+   015C 36 80               204 	ld	(hl),#0x80
+   015E 21r46r00            205 	ld	hl,#(_level01Tiles + 0x0046)
+   0161 36 7F               206 	ld	(hl),#0x7F
+   0163 21r47r00            207 	ld	hl,#(_level01Tiles + 0x0047)
+   0166 36 80               208 	ld	(hl),#0x80
+   0168 21r48r00            209 	ld	hl,#(_level01Tiles + 0x0048)
+   016B 36 7F               210 	ld	(hl),#0x7F
+   016D 21r49r00            211 	ld	hl,#(_level01Tiles + 0x0049)
+   0170 36 80               212 	ld	(hl),#0x80
+   0172 21r4Ar00            213 	ld	hl,#(_level01Tiles + 0x004a)
+   0175 36 7F               214 	ld	(hl),#0x7F
+   0177 21r4Br00            215 	ld	hl,#(_level01Tiles + 0x004b)
+   017A 36 80               216 	ld	(hl),#0x80
+   017C 21r4Cr00            217 	ld	hl,#(_level01Tiles + 0x004c)
+   017F 36 7F               218 	ld	(hl),#0x7F
+   0181 21r4Dr00            219 	ld	hl,#(_level01Tiles + 0x004d)
+   0184 36 80               220 	ld	(hl),#0x80
+   0186 21r4Er00            221 	ld	hl,#(_level01Tiles + 0x004e)
+   0189 36 7F               222 	ld	(hl),#0x7F
+   018B 21r4Fr00            223 	ld	hl,#(_level01Tiles + 0x004f)
+   018E 36 80               224 	ld	(hl),#0x80
+   0190 21r50r00            225 	ld	hl,#(_level01Tiles + 0x0050)
+   0193 36 7F               226 	ld	(hl),#0x7F
+   0195 21r51r00            227 	ld	hl,#(_level01Tiles + 0x0051)
+   0198 36 80               228 	ld	(hl),#0x80
+   019A 21r52r00            229 	ld	hl,#(_level01Tiles + 0x0052)
+   019D 36 7F               230 	ld	(hl),#0x7F
+   019F 21r53r00            231 	ld	hl,#(_level01Tiles + 0x0053)
+   01A2 36 80               232 	ld	(hl),#0x80
+   01A4 21r54r00            233 	ld	hl,#(_level01Tiles + 0x0054)
+   01A7 36 7F               234 	ld	(hl),#0x7F
+   01A9 21r55r00            235 	ld	hl,#(_level01Tiles + 0x0055)
+   01AC 36 80               236 	ld	(hl),#0x80
+   01AE 21r56r00            237 	ld	hl,#(_level01Tiles + 0x0056)
+   01B1 36 7F               238 	ld	(hl),#0x7F
+   01B3 21r57r00            239 	ld	hl,#(_level01Tiles + 0x0057)
+   01B6 36 80               240 	ld	(hl),#0x80
+   01B8 21r58r00            241 	ld	hl,#(_level01Tiles + 0x0058)
+   01BB 36 7F               242 	ld	(hl),#0x7F
+   01BD 21r59r00            243 	ld	hl,#(_level01Tiles + 0x0059)
+   01C0 36 80               244 	ld	(hl),#0x80
+   01C2 21r5Ar00            245 	ld	hl,#(_level01Tiles + 0x005a)
+   01C5 36 FF               246 	ld	(hl),#0xFF
+   01C7 01r5Br00            247 	ld	bc,#_level01Tiles + 91
+   01CA AF                  248 	xor	a, a
+   01CB 02                  249 	ld	(bc),a
+   01CC 21r5Cr00            250 	ld	hl,#(_level01Tiles + 0x005c)
+   01CF 36 FF               251 	ld	(hl),#0xFF
+   01D1 01r5Dr00            252 	ld	bc,#_level01Tiles + 93
+   01D4 AF                  253 	xor	a, a
+   01D5 02                  254 	ld	(bc),a
+   01D6 21r5Er00            255 	ld	hl,#(_level01Tiles + 0x005e)
+   01D9 36 FF               256 	ld	(hl),#0xFF
+   01DB 01r5Fr00            257 	ld	bc,#_level01Tiles + 95
+   01DE AF                  258 	xor	a, a
+   01DF 02                  259 	ld	(bc),a
+   01E0 01r60r00            260 	ld	bc,#_level01Tiles + 96
+   01E3 AF                  261 	xor	a, a
+   01E4 02                  262 	ld	(bc),a
+   01E5 01r61r00            263 	ld	bc,#_level01Tiles + 97
+   01E8 AF                  264 	xor	a, a
+   01E9 02                  265 	ld	(bc),a
+   01EA 01r62r00            266 	ld	bc,#_level01Tiles + 98
+   01ED AF                  267 	xor	a, a
+   01EE 02                  268 	ld	(bc),a
+   01EF 01r63r00            269 	ld	bc,#_level01Tiles + 99
+   01F2 AF                  270 	xor	a, a
+   01F3 02                  271 	ld	(bc),a
+   01F4 01r64r00            272 	ld	bc,#_level01Tiles + 100
+   01F7 AF                  273 	xor	a, a
+   01F8 02                  274 	ld	(bc),a
+   01F9 01r65r00            275 	ld	bc,#_level01Tiles + 101
+   01FC AF                  276 	xor	a, a
+   01FD 02                  277 	ld	(bc),a
+   01FE 01r66r00            278 	ld	bc,#_level01Tiles + 102
+   0201 AF                  279 	xor	a, a
+   0202 02                  280 	ld	(bc),a
+   0203 01r67r00            281 	ld	bc,#_level01Tiles + 103
+   0206 AF                  282 	xor	a, a
+   0207 02                  283 	ld	(bc),a
+   0208 01r68r00            284 	ld	bc,#_level01Tiles + 104
+   020B AF                  285 	xor	a, a
+   020C 02                  286 	ld	(bc),a
+   020D 01r69r00            287 	ld	bc,#_level01Tiles + 105
+   0210 AF                  288 	xor	a, a
+   0211 02                  289 	ld	(bc),a
+   0212 01r6Ar00            290 	ld	bc,#_level01Tiles + 106
+   0215 AF                  291 	xor	a, a
+   0216 02                  292 	ld	(bc),a
+   0217 21r6Br00            293 	ld	hl,#(_level01Tiles + 0x006b)
+   021A 36 01               294 	ld	(hl),#0x01
+   021C 01r6Cr00            295 	ld	bc,#_level01Tiles + 108
+   021F AF                  296 	xor	a, a
+   0220 02                  297 	ld	(bc),a
+   0221 21r6Dr00            298 	ld	hl,#(_level01Tiles + 0x006d)
+   0224 36 01               299 	ld	(hl),#0x01
+   0226 21r6Er00            300 	ld	hl,#(_level01Tiles + 0x006e)
+   0229 36 01               301 	ld	(hl),#0x01
+   022B 21r6Fr00            302 	ld	hl,#(_level01Tiles + 0x006f)
+   022E 36 06               303 	ld	(hl),#0x06
+   0230 21r70r00            304 	ld	hl,#(_level01Tiles + 0x0070)
+   0233 36 07               305 	ld	(hl),#0x07
+   0235 21r71r00            306 	ld	hl,#(_level01Tiles + 0x0071)
+   0238 36 F8               307 	ld	(hl),#0xF8
+   023A 21r72r00            308 	ld	hl,#(_level01Tiles + 0x0072)
+   023D 36 FF               309 	ld	(hl),#0xFF
+   023F 01r73r00            310 	ld	bc,#_level01Tiles + 115
+   0242 AF                  311 	xor	a, a
+   0243 02                  312 	ld	(bc),a
+   0244 21r74r00            313 	ld	hl,#(_level01Tiles + 0x0074)
+   0247 36 FF               314 	ld	(hl),#0xFF
+   0249 01r75r00            315 	ld	bc,#_level01Tiles + 117
+   024C AF                  316 	xor	a, a
+   024D 02                  317 	ld	(bc),a
+   024E 21r76r00            318 	ld	hl,#(_level01Tiles + 0x0076)
+   0251 36 FF               319 	ld	(hl),#0xFF
+   0253 01r77r00            320 	ld	bc,#_level01Tiles + 119
+   0256 AF                  321 	xor	a, a
+   0257 02                  322 	ld	(bc),a
+   0258 21r78r00            323 	ld	hl,#(_level01Tiles + 0x0078)
+   025B 36 FF               324 	ld	(hl),#0xFF
+   025D 01r79r00            325 	ld	bc,#_level01Tiles + 121
+   0260 AF                  326 	xor	a, a
+   0261 02                  327 	ld	(bc),a
+   0262 21r7Ar00            328 	ld	hl,#(_level01Tiles + 0x007a)
+   0265 36 FF               329 	ld	(hl),#0xFF
+   0267 01r7Br00            330 	ld	bc,#_level01Tiles + 123
+   026A AF                  331 	xor	a, a
+   026B 02                  332 	ld	(bc),a
+   026C 21r7Cr00            333 	ld	hl,#(_level01Tiles + 0x007c)
+   026F 36 FF               334 	ld	(hl),#0xFF
+   0271 01r7Dr00            335 	ld	bc,#_level01Tiles + 125
+   0274 AF                  336 	xor	a, a
+   0275 02                  337 	ld	(bc),a
+   0276 21r7Er00            338 	ld	hl,#(_level01Tiles + 0x007e)
+   0279 36 FF               339 	ld	(hl),#0xFF
+   027B 01r7Fr00            340 	ld	bc,#_level01Tiles + 127
+   027E AF                  341 	xor	a, a
+   027F 02                  342 	ld	(bc),a
+   0280 21r80r00            343 	ld	hl,#(_level01Tiles + 0x0080)
+   0283 36 FE               344 	ld	(hl),#0xFE
+   0285 21r81r00            345 	ld	hl,#(_level01Tiles + 0x0081)
+   0288 36 01               346 	ld	(hl),#0x01
+   028A 21r82r00            347 	ld	hl,#(_level01Tiles + 0x0082)
+   028D 36 FE               348 	ld	(hl),#0xFE
+   028F 21r83r00            349 	ld	hl,#(_level01Tiles + 0x0083)
+   0292 36 01               350 	ld	(hl),#0x01
+   0294 21r84r00            351 	ld	hl,#(_level01Tiles + 0x0084)
+   0297 36 FE               352 	ld	(hl),#0xFE
+   0299 21r85r00            353 	ld	hl,#(_level01Tiles + 0x0085)
+   029C 36 01               354 	ld	(hl),#0x01
+   029E 21r86r00            355 	ld	hl,#(_level01Tiles + 0x0086)
+   02A1 36 FE               356 	ld	(hl),#0xFE
+   02A3 21r87r00            357 	ld	hl,#(_level01Tiles + 0x0087)
+   02A6 36 01               358 	ld	(hl),#0x01
+   02A8 21r88r00            359 	ld	hl,#(_level01Tiles + 0x0088)
+   02AB 36 FE               360 	ld	(hl),#0xFE
+   02AD 21r89r00            361 	ld	hl,#(_level01Tiles + 0x0089)
+   02B0 36 01               362 	ld	(hl),#0x01
+   02B2 21r8Ar00            363 	ld	hl,#(_level01Tiles + 0x008a)
+   02B5 36 FE               364 	ld	(hl),#0xFE
+   02B7 21r8Br00            365 	ld	hl,#(_level01Tiles + 0x008b)
+   02BA 36 01               366 	ld	(hl),#0x01
+   02BC 21r8Cr00            367 	ld	hl,#(_level01Tiles + 0x008c)
+   02BF 36 FE               368 	ld	(hl),#0xFE
+   02C1 21r8Dr00            369 	ld	hl,#(_level01Tiles + 0x008d)
+   02C4 36 01               370 	ld	(hl),#0x01
+   02C6 21r8Er00            371 	ld	hl,#(_level01Tiles + 0x008e)
+   02C9 36 FE               372 	ld	(hl),#0xFE
+   02CB 21r8Fr00            373 	ld	hl,#(_level01Tiles + 0x008f)
+   02CE 36 01               374 	ld	(hl),#0x01
+   02D0 21r90r00            375 	ld	hl,#(_level01Tiles + 0x0090)
+   02D3 36 FE               376 	ld	(hl),#0xFE
+   02D5 21r91r00            377 	ld	hl,#(_level01Tiles + 0x0091)
+   02D8 36 01               378 	ld	(hl),#0x01
+   02DA 21r92r00            379 	ld	hl,#(_level01Tiles + 0x0092)
+   02DD 36 FE               380 	ld	(hl),#0xFE
+   02DF 21r93r00            381 	ld	hl,#(_level01Tiles + 0x0093)
+   02E2 36 01               382 	ld	(hl),#0x01
+   02E4 21r94r00            383 	ld	hl,#(_level01Tiles + 0x0094)
+   02E7 36 FE               384 	ld	(hl),#0xFE
+   02E9 21r95r00            385 	ld	hl,#(_level01Tiles + 0x0095)
+   02EC 36 01               386 	ld	(hl),#0x01
+   02EE 21r96r00            387 	ld	hl,#(_level01Tiles + 0x0096)
+   02F1 36 FE               388 	ld	(hl),#0xFE
+   02F3 21r97r00            389 	ld	hl,#(_level01Tiles + 0x0097)
+   02F6 36 01               390 	ld	(hl),#0x01
+   02F8 21r98r00            391 	ld	hl,#(_level01Tiles + 0x0098)
+   02FB 36 FE               392 	ld	(hl),#0xFE
+   02FD 21r99r00            393 	ld	hl,#(_level01Tiles + 0x0099)
+   0300 36 01               394 	ld	(hl),#0x01
+   0302 21r9Ar00            395 	ld	hl,#(_level01Tiles + 0x009a)
+   0305 36 FF               396 	ld	(hl),#0xFF
+   0307 01r9Br00            397 	ld	bc,#_level01Tiles + 155
+   030A AF                  398 	xor	a, a
+   030B 02                  399 	ld	(bc),a
+   030C 21r9Cr00            400 	ld	hl,#(_level01Tiles + 0x009c)
+   030F 36 FF               401 	ld	(hl),#0xFF
+   0311 01r9Dr00            402 	ld	bc,#_level01Tiles + 157
+   0314 AF                  403 	xor	a, a
+   0315 02                  404 	ld	(bc),a
+   0316 21r9Er00            405 	ld	hl,#(_level01Tiles + 0x009e)
+   0319 36 FF               406 	ld	(hl),#0xFF
+   031B 01r9Fr00            407 	ld	bc,#_level01Tiles + 159
+   031E AF                  408 	xor	a, a
+   031F 02                  409 	ld	(bc),a
+   0320 01rA0r00            410 	ld	bc,#_level01Tiles + 160
+   0323 AF                  411 	xor	a, a
+   0324 02                  412 	ld	(bc),a
+   0325 01rA1r00            413 	ld	bc,#_level01Tiles + 161
+   0328 AF                  414 	xor	a, a
+   0329 02                  415 	ld	(bc),a
+   032A 01rA2r00            416 	ld	bc,#_level01Tiles + 162
+   032D AF                  417 	xor	a, a
+   032E 02                  418 	ld	(bc),a
+   032F 01rA3r00            419 	ld	bc,#_level01Tiles + 163
+   0332 AF                  420 	xor	a, a
+   0333 02                  421 	ld	(bc),a
+   0334 01rA4r00            422 	ld	bc,#_level01Tiles + 164
+   0337 AF                  423 	xor	a, a
+   0338 02                  424 	ld	(bc),a
+   0339 01rA5r00            425 	ld	bc,#_level01Tiles + 165
+   033C AF                  426 	xor	a, a
+   033D 02                  427 	ld	(bc),a
+   033E 01rA6r00            428 	ld	bc,#_level01Tiles + 166
+   0341 AF                  429 	xor	a, a
+   0342 02                  430 	ld	(bc),a
+   0343 01rA7r00            431 	ld	bc,#_level01Tiles + 167
+   0346 AF                  432 	xor	a, a
+   0347 02                  433 	ld	(bc),a
+   0348 01rA8r00            434 	ld	bc,#_level01Tiles + 168
+   034B AF                  435 	xor	a, a
+   034C 02                  436 	ld	(bc),a
+   034D 01rA9r00            437 	ld	bc,#_level01Tiles + 169
+   0350 AF                  438 	xor	a, a
+   0351 02                  439 	ld	(bc),a
+   0352 01rAAr00            440 	ld	bc,#_level01Tiles + 170
+   0355 AF                  441 	xor	a, a
+   0356 02                  442 	ld	(bc),a
+   0357 21rABr00            443 	ld	hl,#(_level01Tiles + 0x00ab)
+   035A 36 80               444 	ld	(hl),#0x80
+   035C 01rACr00            445 	ld	bc,#_level01Tiles + 172
+   035F AF                  446 	xor	a, a
+   0360 02                  447 	ld	(bc),a
+   0361 21rADr00            448 	ld	hl,#(_level01Tiles + 0x00ad)
+   0364 36 80               449 	ld	(hl),#0x80
+   0366 21rAEr00            450 	ld	hl,#(_level01Tiles + 0x00ae)
+   0369 36 80               451 	ld	(hl),#0x80
+   036B 21rAFr00            452 	ld	hl,#(_level01Tiles + 0x00af)
+   036E 36 60               453 	ld	(hl),#0x60
+   0370 21rB0r00            454 	ld	hl,#(_level01Tiles + 0x00b0)
+   0373 36 E0               455 	ld	(hl),#0xE0
+   0375 21rB1r00            456 	ld	hl,#(_level01Tiles + 0x00b1)
+   0378 36 1F               457 	ld	(hl),#0x1F
+   037A 21rB2r00            458 	ld	hl,#(_level01Tiles + 0x00b2)
+   037D 36 FF               459 	ld	(hl),#0xFF
+   037F 01rB3r00            460 	ld	bc,#_level01Tiles + 179
+   0382 AF                  461 	xor	a, a
+   0383 02                  462 	ld	(bc),a
+   0384 21rB4r00            463 	ld	hl,#(_level01Tiles + 0x00b4)
+   0387 36 FF               464 	ld	(hl),#0xFF
+   0389 01rB5r00            465 	ld	bc,#_level01Tiles + 181
+   038C AF                  466 	xor	a, a
+   038D 02                  467 	ld	(bc),a
+   038E 21rB6r00            468 	ld	hl,#(_level01Tiles + 0x00b6)
+   0391 36 FF               469 	ld	(hl),#0xFF
+   0393 01rB7r00            470 	ld	bc,#_level01Tiles + 183
+   0396 AF                  471 	xor	a, a
+   0397 02                  472 	ld	(bc),a
+   0398 21rB8r00            473 	ld	hl,#(_level01Tiles + 0x00b8)
+   039B 36 FF               474 	ld	(hl),#0xFF
+   039D 01rB9r00            475 	ld	bc,#_level01Tiles + 185
+   03A0 AF                  476 	xor	a, a
+   03A1 02                  477 	ld	(bc),a
+   03A2 21rBAr00            478 	ld	hl,#(_level01Tiles + 0x00ba)
+   03A5 36 FF               479 	ld	(hl),#0xFF
+   03A7 01rBBr00            480 	ld	bc,#_level01Tiles + 187
+   03AA AF                  481 	xor	a, a
+   03AB 02                  482 	ld	(bc),a
+   03AC 21rBCr00            483 	ld	hl,#(_level01Tiles + 0x00bc)
+   03AF 36 FF               484 	ld	(hl),#0xFF
+   03B1 01rBDr00            485 	ld	bc,#_level01Tiles + 189
+   03B4 AF                  486 	xor	a, a
+   03B5 02                  487 	ld	(bc),a
+   03B6 21rBEr00            488 	ld	hl,#(_level01Tiles + 0x00be)
+   03B9 36 FF               489 	ld	(hl),#0xFF
+   03BB 01rBFr00            490 	ld	bc,#_level01Tiles + 191
+   03BE AF                  491 	xor	a, a
+   03BF 02                  492 	ld	(bc),a
+   03C0 21rC0r00            493 	ld	hl,#(_level01Tiles + 0x00c0)
+   03C3 36 FF               494 	ld	(hl),#0xFF
+   03C5 01rC1r00            495 	ld	bc,#_level01Tiles + 193
+   03C8 AF                  496 	xor	a, a
+   03C9 02                  497 	ld	(bc),a
+   03CA 21rC2r00            498 	ld	hl,#(_level01Tiles + 0x00c2)
+   03CD 36 FF               499 	ld	(hl),#0xFF
+   03CF 01rC3r00            500 	ld	bc,#_level01Tiles + 195
+   03D2 AF                  501 	xor	a, a
+   03D3 02                  502 	ld	(bc),a
+   03D4 21rC4r00            503 	ld	hl,#(_level01Tiles + 0x00c4)
+   03D7 36 FF               504 	ld	(hl),#0xFF
+   03D9 01rC5r00            505 	ld	bc,#_level01Tiles + 197
+   03DC AF                  506 	xor	a, a
+   03DD 02                  507 	ld	(bc),a
+   03DE 21rC6r00            508 	ld	hl,#(_level01Tiles + 0x00c6)
+   03E1 36 FF               509 	ld	(hl),#0xFF
+   03E3 01rC7r00            510 	ld	bc,#_level01Tiles + 199
+   03E6 AF                  511 	xor	a, a
+   03E7 02                  512 	ld	(bc),a
+   03E8 21rC8r00            513 	ld	hl,#(_level01Tiles + 0x00c8)
+   03EB 36 FF               514 	ld	(hl),#0xFF
+   03ED 01rC9r00            515 	ld	bc,#_level01Tiles + 201
+   03F0 AF                  516 	xor	a, a
+   03F1 02                  517 	ld	(bc),a
+   03F2 21rCAr00            518 	ld	hl,#(_level01Tiles + 0x00ca)
+   03F5 36 FF               519 	ld	(hl),#0xFF
+   03F7 01rCBr00            520 	ld	bc,#_level01Tiles + 203
+   03FA AF                  521 	xor	a, a
+   03FB 02                  522 	ld	(bc),a
+   03FC 21rCCr00            523 	ld	hl,#(_level01Tiles + 0x00cc)
+   03FF 36 FF               524 	ld	(hl),#0xFF
+   0401 01rCDr00            525 	ld	bc,#_level01Tiles + 205
+   0404 AF                  526 	xor	a, a
+   0405 02                  527 	ld	(bc),a
+   0406 21rCEr00            528 	ld	hl,#(_level01Tiles + 0x00ce)
+   0409 36 FF               529 	ld	(hl),#0xFF
+   040B 01rCFr00            530 	ld	bc,#_level01Tiles + 207
+   040E AF                  531 	xor	a, a
+   040F 02                  532 	ld	(bc),a
+                            533 ;level01Map.c:25: unsigned char level01Map[] =
+   0410 21rD0r00            534 	ld	hl,#_level01Map
+   0413 36 00               535 	ld	(hl),#0x00
+   0415 01rD1r00            536 	ld	bc,#_level01Map + 1
+   0418 AF                  537 	xor	a, a
+   0419 02                  538 	ld	(bc),a
+   041A 01rD2r00            539 	ld	bc,#_level01Map + 2
+   041D AF                  540 	xor	a, a
+   041E 02                  541 	ld	(bc),a
+   041F 01rD3r00            542 	ld	bc,#_level01Map + 3
+   0422 AF                  543 	xor	a, a
+   0423 02                  544 	ld	(bc),a
+   0424 01rD4r00            545 	ld	bc,#_level01Map + 4
+   0427 AF                  546 	xor	a, a
+   0428 02                  547 	ld	(bc),a
+   0429 01rD5r00            548 	ld	bc,#_level01Map + 5
+   042C AF                  549 	xor	a, a
+   042D 02                  550 	ld	(bc),a
+   042E 01rD6r00            551 	ld	bc,#_level01Map + 6
+   0431 AF                  552 	xor	a, a
+   0432 02                  553 	ld	(bc),a
+   0433 01rD7r00            554 	ld	bc,#_level01Map + 7
+   0436 AF                  555 	xor	a, a
+   0437 02                  556 	ld	(bc),a
+   0438 01rD8r00            557 	ld	bc,#_level01Map + 8
+   043B AF                  558 	xor	a, a
+   043C 02                  559 	ld	(bc),a
+   043D 01rD9r00            560 	ld	bc,#_level01Map + 9
+   0440 AF                  561 	xor	a, a
+   0441 02                  562 	ld	(bc),a
+   0442 01rDAr00            563 	ld	bc,#_level01Map + 10
+   0445 AF                  564 	xor	a, a
+   0446 02                  565 	ld	(bc),a
+   0447 01rDBr00            566 	ld	bc,#_level01Map + 11
+   044A AF                  567 	xor	a, a
+   044B 02                  568 	ld	(bc),a
+   044C 01rDCr00            569 	ld	bc,#_level01Map + 12
+   044F AF                  570 	xor	a, a
+   0450 02                  571 	ld	(bc),a
+   0451 01rDDr00            572 	ld	bc,#_level01Map + 13
+   0454 AF                  573 	xor	a, a
+   0455 02                  574 	ld	(bc),a
+   0456 01rDEr00            575 	ld	bc,#_level01Map + 14
+   0459 AF                  576 	xor	a, a
+   045A 02                  577 	ld	(bc),a
+   045B 01rDFr00            578 	ld	bc,#_level01Map + 15
+   045E AF                  579 	xor	a, a
+   045F 02                  580 	ld	(bc),a
+   0460 01rE0r00            581 	ld	bc,#_level01Map + 16
+   0463 AF                  582 	xor	a, a
+   0464 02                  583 	ld	(bc),a
+   0465 01rE1r00            584 	ld	bc,#_level01Map + 17
+   0468 AF                  585 	xor	a, a
+   0469 02                  586 	ld	(bc),a
+   046A 01rE2r00            587 	ld	bc,#_level01Map + 18
+   046D AF                  588 	xor	a, a
+   046E 02                  589 	ld	(bc),a
+   046F 01rE3r00            590 	ld	bc,#_level01Map + 19
+   0472 AF                  591 	xor	a, a
+   0473 02                  592 	ld	(bc),a
+   0474 01rE4r00            593 	ld	bc,#_level01Map + 20
+   0477 AF                  594 	xor	a, a
+   0478 02                  595 	ld	(bc),a
+   0479 01rE5r00            596 	ld	bc,#_level01Map + 21
+   047C AF                  597 	xor	a, a
+   047D 02                  598 	ld	(bc),a
+   047E 01rE6r00            599 	ld	bc,#_level01Map + 22
+   0481 AF                  600 	xor	a, a
+   0482 02                  601 	ld	(bc),a
+   0483 01rE7r00            602 	ld	bc,#_level01Map + 23
+   0486 AF                  603 	xor	a, a
+   0487 02                  604 	ld	(bc),a
+   0488 01rE8r00            605 	ld	bc,#_level01Map + 24
+   048B AF                  606 	xor	a, a
+   048C 02                  607 	ld	(bc),a
+   048D 01rE9r00            608 	ld	bc,#_level01Map + 25
+   0490 AF                  609 	xor	a, a
+   0491 02                  610 	ld	(bc),a
+   0492 01rEAr00            611 	ld	bc,#_level01Map + 26
+   0495 AF                  612 	xor	a, a
+   0496 02                  613 	ld	(bc),a
+   0497 01rEBr00            614 	ld	bc,#_level01Map + 27
+   049A AF                  615 	xor	a, a
+   049B 02                  616 	ld	(bc),a
+   049C 01rECr00            617 	ld	bc,#_level01Map + 28
+   049F AF                  618 	xor	a, a
+   04A0 02                  619 	ld	(bc),a
+   04A1 01rEDr00            620 	ld	bc,#_level01Map + 29
+   04A4 AF                  621 	xor	a, a
+   04A5 02                  622 	ld	(bc),a
+   04A6 01rEEr00            623 	ld	bc,#_level01Map + 30
+   04A9 AF                  624 	xor	a, a
+   04AA 02                  625 	ld	(bc),a
+   04AB 01rEFr00            626 	ld	bc,#_level01Map + 31
+   04AE AF                  627 	xor	a, a
+   04AF 02                  628 	ld	(bc),a
+   04B0 01rF0r00            629 	ld	bc,#_level01Map + 32
+   04B3 AF                  630 	xor	a, a
+   04B4 02                  631 	ld	(bc),a
+   04B5 01rF1r00            632 	ld	bc,#_level01Map + 33
+   04B8 AF                  633 	xor	a, a
+   04B9 02                  634 	ld	(bc),a
+   04BA 01rF2r00            635 	ld	bc,#_level01Map + 34
+   04BD AF                  636 	xor	a, a
+   04BE 02                  637 	ld	(bc),a
+   04BF 01rF3r00            638 	ld	bc,#_level01Map + 35
+   04C2 AF                  639 	xor	a, a
+   04C3 02                  640 	ld	(bc),a
+   04C4 01rF4r00            641 	ld	bc,#_level01Map + 36
+   04C7 AF                  642 	xor	a, a
+   04C8 02                  643 	ld	(bc),a
+   04C9 01rF5r00            644 	ld	bc,#_level01Map + 37
+   04CC AF                  645 	xor	a, a
+   04CD 02                  646 	ld	(bc),a
+   04CE 01rF6r00            647 	ld	bc,#_level01Map + 38
+   04D1 AF                  648 	xor	a, a
+   04D2 02                  649 	ld	(bc),a
+   04D3 01rF7r00            650 	ld	bc,#_level01Map + 39
+   04D6 AF                  651 	xor	a, a
+   04D7 02                  652 	ld	(bc),a
+   04D8 01rF8r00            653 	ld	bc,#_level01Map + 40
+   04DB AF                  654 	xor	a, a
+   04DC 02                  655 	ld	(bc),a
+   04DD 01rF9r00            656 	ld	bc,#_level01Map + 41
+   04E0 AF                  657 	xor	a, a
+   04E1 02                  658 	ld	(bc),a
+   04E2 01rFAr00            659 	ld	bc,#_level01Map + 42
+   04E5 AF                  660 	xor	a, a
+   04E6 02                  661 	ld	(bc),a
+   04E7 01rFBr00            662 	ld	bc,#_level01Map + 43
+   04EA AF                  663 	xor	a, a
+   04EB 02                  664 	ld	(bc),a
+   04EC 01rFCr00            665 	ld	bc,#_level01Map + 44
+   04EF AF                  666 	xor	a, a
+   04F0 02                  667 	ld	(bc),a
+   04F1 01rFDr00            668 	ld	bc,#_level01Map + 45
+   04F4 AF                  669 	xor	a, a
+   04F5 02                  670 	ld	(bc),a
+   04F6 01rFEr00            671 	ld	bc,#_level01Map + 46
+   04F9 AF                  672 	xor	a, a
+   04FA 02                  673 	ld	(bc),a
+   04FB 01rFFr00            674 	ld	bc,#_level01Map + 47
+   04FE AF                  675 	xor	a, a
+   04FF 02                  676 	ld	(bc),a
+   0500 01r00r01            677 	ld	bc,#_level01Map + 48
+   0503 AF                  678 	xor	a, a
+   0504 02                  679 	ld	(bc),a
+   0505 01r01r01            680 	ld	bc,#_level01Map + 49
+   0508 AF                  681 	xor	a, a
+   0509 02                  682 	ld	(bc),a
+   050A 01r02r01            683 	ld	bc,#_level01Map + 50
+   050D AF                  684 	xor	a, a
+   050E 02                  685 	ld	(bc),a
+   050F 01r03r01            686 	ld	bc,#_level01Map + 51
+   0512 AF                  687 	xor	a, a
+   0513 02                  688 	ld	(bc),a
+   0514 01r04r01            689 	ld	bc,#_level01Map + 52
+   0517 AF                  690 	xor	a, a
+   0518 02                  691 	ld	(bc),a
+   0519 01r05r01            692 	ld	bc,#_level01Map + 53
+   051C AF                  693 	xor	a, a
+   051D 02                  694 	ld	(bc),a
+   051E 01r06r01            695 	ld	bc,#_level01Map + 54
+   0521 AF                  696 	xor	a, a
+   0522 02                  697 	ld	(bc),a
+   0523 01r07r01            698 	ld	bc,#_level01Map + 55
+   0526 AF                  699 	xor	a, a
+   0527 02                  700 	ld	(bc),a
+   0528 01r08r01            701 	ld	bc,#_level01Map + 56
+   052B AF                  702 	xor	a, a
+   052C 02                  703 	ld	(bc),a
+   052D 01r09r01            704 	ld	bc,#_level01Map + 57
+   0530 AF                  705 	xor	a, a
+   0531 02                  706 	ld	(bc),a
+   0532 01r0Ar01            707 	ld	bc,#_level01Map + 58
+   0535 AF                  708 	xor	a, a
+   0536 02                  709 	ld	(bc),a
+   0537 01r0Br01            710 	ld	bc,#_level01Map + 59
+   053A AF                  711 	xor	a, a
+   053B 02                  712 	ld	(bc),a
+   053C 01r0Cr01            713 	ld	bc,#_level01Map + 60
+   053F AF                  714 	xor	a, a
+   0540 02                  715 	ld	(bc),a
+   0541 01r0Dr01            716 	ld	bc,#_level01Map + 61
+   0544 AF                  717 	xor	a, a
+   0545 02                  718 	ld	(bc),a
+   0546 01r0Er01            719 	ld	bc,#_level01Map + 62
+   0549 AF                  720 	xor	a, a
+   054A 02                  721 	ld	(bc),a
+   054B 01r0Fr01            722 	ld	bc,#_level01Map + 63
+   054E AF                  723 	xor	a, a
+   054F 02                  724 	ld	(bc),a
+   0550 01r10r01            725 	ld	bc,#_level01Map + 64
+   0553 AF                  726 	xor	a, a
+   0554 02                  727 	ld	(bc),a
+   0555 01r11r01            728 	ld	bc,#_level01Map + 65
+   0558 AF                  729 	xor	a, a
+   0559 02                  730 	ld	(bc),a
+   055A 01r12r01            731 	ld	bc,#_level01Map + 66
+   055D AF                  732 	xor	a, a
+   055E 02                  733 	ld	(bc),a
+   055F 01r13r01            734 	ld	bc,#_level01Map + 67
+   0562 AF                  735 	xor	a, a
+   0563 02                  736 	ld	(bc),a
+   0564 01r14r01            737 	ld	bc,#_level01Map + 68
+   0567 AF                  738 	xor	a, a
+   0568 02                  739 	ld	(bc),a
+   0569 01r15r01            740 	ld	bc,#_level01Map + 69
+   056C AF                  741 	xor	a, a
+   056D 02                  742 	ld	(bc),a
+   056E 01r16r01            743 	ld	bc,#_level01Map + 70
+   0571 AF                  744 	xor	a, a
+   0572 02                  745 	ld	(bc),a
+   0573 01r17r01            746 	ld	bc,#_level01Map + 71
+   0576 AF                  747 	xor	a, a
+   0577 02                  748 	ld	(bc),a
+   0578 01r18r01            749 	ld	bc,#_level01Map + 72
+   057B AF                  750 	xor	a, a
+   057C 02                  751 	ld	(bc),a
+   057D 01r19r01            752 	ld	bc,#_level01Map + 73
+   0580 AF                  753 	xor	a, a
+   0581 02                  754 	ld	(bc),a
+   0582 01r1Ar01            755 	ld	bc,#_level01Map + 74
+   0585 AF                  756 	xor	a, a
+   0586 02                  757 	ld	(bc),a
+   0587 01r1Br01            758 	ld	bc,#_level01Map + 75
+   058A AF                  759 	xor	a, a
+   058B 02                  760 	ld	(bc),a
+   058C 01r1Cr01            761 	ld	bc,#_level01Map + 76
+   058F AF                  762 	xor	a, a
+   0590 02                  763 	ld	(bc),a
+   0591 01r1Dr01            764 	ld	bc,#_level01Map + 77
+   0594 AF                  765 	xor	a, a
+   0595 02                  766 	ld	(bc),a
+   0596 01r1Er01            767 	ld	bc,#_level01Map + 78
+   0599 AF                  768 	xor	a, a
+   059A 02                  769 	ld	(bc),a
+   059B 01r1Fr01            770 	ld	bc,#_level01Map + 79
+   059E AF                  771 	xor	a, a
+   059F 02                  772 	ld	(bc),a
+   05A0 01r20r01            773 	ld	bc,#_level01Map + 80
+   05A3 AF                  774 	xor	a, a
+   05A4 02                  775 	ld	(bc),a
+   05A5 01r21r01            776 	ld	bc,#_level01Map + 81
+   05A8 AF                  777 	xor	a, a
+   05A9 02                  778 	ld	(bc),a
+   05AA 01r22r01            779 	ld	bc,#_level01Map + 82
+   05AD AF                  780 	xor	a, a
+   05AE 02                  781 	ld	(bc),a
+   05AF 01r23r01            782 	ld	bc,#_level01Map + 83
+   05B2 AF                  783 	xor	a, a
+   05B3 02                  784 	ld	(bc),a
+   05B4 01r24r01            785 	ld	bc,#_level01Map + 84
+   05B7 AF                  786 	xor	a, a
+   05B8 02                  787 	ld	(bc),a
+   05B9 01r25r01            788 	ld	bc,#_level01Map + 85
+   05BC AF                  789 	xor	a, a
+   05BD 02                  790 	ld	(bc),a
+   05BE 01r26r01            791 	ld	bc,#_level01Map + 86
+   05C1 AF                  792 	xor	a, a
+   05C2 02                  793 	ld	(bc),a
+   05C3 01r27r01            794 	ld	bc,#_level01Map + 87
+   05C6 AF                  795 	xor	a, a
+   05C7 02                  796 	ld	(bc),a
+   05C8 01r28r01            797 	ld	bc,#_level01Map + 88
+   05CB AF                  798 	xor	a, a
+   05CC 02                  799 	ld	(bc),a
+   05CD 01r29r01            800 	ld	bc,#_level01Map + 89
+   05D0 AF                  801 	xor	a, a
+   05D1 02                  802 	ld	(bc),a
+   05D2 01r2Ar01            803 	ld	bc,#_level01Map + 90
+   05D5 AF                  804 	xor	a, a
+   05D6 02                  805 	ld	(bc),a
+   05D7 01r2Br01            806 	ld	bc,#_level01Map + 91
+   05DA AF                  807 	xor	a, a
+   05DB 02                  808 	ld	(bc),a
+   05DC 01r2Cr01            809 	ld	bc,#_level01Map + 92
+   05DF AF                  810 	xor	a, a
+   05E0 02                  811 	ld	(bc),a
+   05E1 01r2Dr01            812 	ld	bc,#_level01Map + 93
+   05E4 AF                  813 	xor	a, a
+   05E5 02                  814 	ld	(bc),a
+   05E6 01r2Er01            815 	ld	bc,#_level01Map + 94
+   05E9 AF                  816 	xor	a, a
+   05EA 02                  817 	ld	(bc),a
+   05EB 01r2Fr01            818 	ld	bc,#_level01Map + 95
+   05EE AF                  819 	xor	a, a
+   05EF 02                  820 	ld	(bc),a
+   05F0 01r30r01            821 	ld	bc,#_level01Map + 96
+   05F3 AF                  822 	xor	a, a
+   05F4 02                  823 	ld	(bc),a
+   05F5 01r31r01            824 	ld	bc,#_level01Map + 97
+   05F8 AF                  825 	xor	a, a
+   05F9 02                  826 	ld	(bc),a
+   05FA 01r32r01            827 	ld	bc,#_level01Map + 98
+   05FD AF                  828 	xor	a, a
+   05FE 02                  829 	ld	(bc),a
+   05FF 01r33r01            830 	ld	bc,#_level01Map + 99
+   0602 AF                  831 	xor	a, a
+   0603 02                  832 	ld	(bc),a
+   0604 01r34r01            833 	ld	bc,#_level01Map + 100
+   0607 AF                  834 	xor	a, a
+   0608 02                  835 	ld	(bc),a
+   0609 01r35r01            836 	ld	bc,#_level01Map + 101
+   060C AF                  837 	xor	a, a
+   060D 02                  838 	ld	(bc),a
+   060E 01r36r01            839 	ld	bc,#_level01Map + 102
+   0611 AF                  840 	xor	a, a
+   0612 02                  841 	ld	(bc),a
+   0613 01r37r01            842 	ld	bc,#_level01Map + 103
+   0616 AF                  843 	xor	a, a
+   0617 02                  844 	ld	(bc),a
+   0618 01r38r01            845 	ld	bc,#_level01Map + 104
+   061B AF                  846 	xor	a, a
+   061C 02                  847 	ld	(bc),a
+   061D 01r39r01            848 	ld	bc,#_level01Map + 105
+   0620 AF                  849 	xor	a, a
+   0621 02                  850 	ld	(bc),a
+   0622 01r3Ar01            851 	ld	bc,#_level01Map + 106
+   0625 AF                  852 	xor	a, a
+   0626 02                  853 	ld	(bc),a
+   0627 01r3Br01            854 	ld	bc,#_level01Map + 107
+   062A AF                  855 	xor	a, a
+   062B 02                  856 	ld	(bc),a
+   062C 01r3Cr01            857 	ld	bc,#_level01Map + 108
+   062F AF                  858 	xor	a, a
+   0630 02                  859 	ld	(bc),a
+   0631 01r3Dr01            860 	ld	bc,#_level01Map + 109
+   0634 AF                  861 	xor	a, a
+   0635 02                  862 	ld	(bc),a
+   0636 01r3Er01            863 	ld	bc,#_level01Map + 110
+   0639 AF                  864 	xor	a, a
+   063A 02                  865 	ld	(bc),a
+   063B 01r3Fr01            866 	ld	bc,#_level01Map + 111
+   063E AF                  867 	xor	a, a
+   063F 02                  868 	ld	(bc),a
+   0640 01r40r01            869 	ld	bc,#_level01Map + 112
+   0643 AF                  870 	xor	a, a
+   0644 02                  871 	ld	(bc),a
+   0645 01r41r01            872 	ld	bc,#_level01Map + 113
+   0648 AF                  873 	xor	a, a
+   0649 02                  874 	ld	(bc),a
+   064A 01r42r01            875 	ld	bc,#_level01Map + 114
+   064D AF                  876 	xor	a, a
+   064E 02                  877 	ld	(bc),a
+   064F 01r43r01            878 	ld	bc,#_level01Map + 115
+   0652 AF                  879 	xor	a, a
+   0653 02                  880 	ld	(bc),a
+   0654 01r44r01            881 	ld	bc,#_level01Map + 116
+   0657 AF                  882 	xor	a, a
+   0658 02                  883 	ld	(bc),a
+   0659 01r45r01            884 	ld	bc,#_level01Map + 117
+   065C AF                  885 	xor	a, a
+   065D 02                  886 	ld	(bc),a
+   065E 01r46r01            887 	ld	bc,#_level01Map + 118
+   0661 AF                  888 	xor	a, a
+   0662 02                  889 	ld	(bc),a
+   0663 01r47r01            890 	ld	bc,#_level01Map + 119
+   0666 AF                  891 	xor	a, a
+   0667 02                  892 	ld	(bc),a
+   0668 01r48r01            893 	ld	bc,#_level01Map + 120
+   066B AF                  894 	xor	a, a
+   066C 02                  895 	ld	(bc),a
+   066D 01r49r01            896 	ld	bc,#_level01Map + 121
+   0670 AF                  897 	xor	a, a
+   0671 02                  898 	ld	(bc),a
+   0672 01r4Ar01            899 	ld	bc,#_level01Map + 122
+   0675 AF                  900 	xor	a, a
+   0676 02                  901 	ld	(bc),a
+   0677 01r4Br01            902 	ld	bc,#_level01Map + 123
+   067A AF                  903 	xor	a, a
+   067B 02                  904 	ld	(bc),a
+   067C 01r4Cr01            905 	ld	bc,#_level01Map + 124
+   067F AF                  906 	xor	a, a
+   0680 02                  907 	ld	(bc),a
+   0681 01r4Dr01            908 	ld	bc,#_level01Map + 125
+   0684 AF                  909 	xor	a, a
+   0685 02                  910 	ld	(bc),a
+   0686 01r4Er01            911 	ld	bc,#_level01Map + 126
+   0689 AF                  912 	xor	a, a
+   068A 02                  913 	ld	(bc),a
+   068B 01r4Fr01            914 	ld	bc,#_level01Map + 127
+   068E AF                  915 	xor	a, a
+   068F 02                  916 	ld	(bc),a
+   0690 01r50r01            917 	ld	bc,#_level01Map + 128
+   0693 AF                  918 	xor	a, a
+   0694 02                  919 	ld	(bc),a
+   0695 01r51r01            920 	ld	bc,#_level01Map + 129
+   0698 AF                  921 	xor	a, a
+   0699 02                  922 	ld	(bc),a
+   069A 01r52r01            923 	ld	bc,#_level01Map + 130
+   069D AF                  924 	xor	a, a
+   069E 02                  925 	ld	(bc),a
+   069F 01r53r01            926 	ld	bc,#_level01Map + 131
+   06A2 AF                  927 	xor	a, a
+   06A3 02                  928 	ld	(bc),a
+   06A4 01r54r01            929 	ld	bc,#_level01Map + 132
+   06A7 AF                  930 	xor	a, a
+   06A8 02                  931 	ld	(bc),a
+   06A9 01r55r01            932 	ld	bc,#_level01Map + 133
+   06AC AF                  933 	xor	a, a
+   06AD 02                  934 	ld	(bc),a
+   06AE 01r56r01            935 	ld	bc,#_level01Map + 134
+   06B1 AF                  936 	xor	a, a
+   06B2 02                  937 	ld	(bc),a
+   06B3 01r57r01            938 	ld	bc,#_level01Map + 135
+   06B6 AF                  939 	xor	a, a
+   06B7 02                  940 	ld	(bc),a
+   06B8 01r58r01            941 	ld	bc,#_level01Map + 136
+   06BB AF                  942 	xor	a, a
+   06BC 02                  943 	ld	(bc),a
+   06BD 01r59r01            944 	ld	bc,#_level01Map + 137
+   06C0 AF                  945 	xor	a, a
+   06C1 02                  946 	ld	(bc),a
+   06C2 01r5Ar01            947 	ld	bc,#_level01Map + 138
+   06C5 AF                  948 	xor	a, a
+   06C6 02                  949 	ld	(bc),a
+   06C7 01r5Br01            950 	ld	bc,#_level01Map + 139
+   06CA AF                  951 	xor	a, a
+   06CB 02                  952 	ld	(bc),a
+   06CC 01r5Cr01            953 	ld	bc,#_level01Map + 140
+   06CF AF                  954 	xor	a, a
+   06D0 02                  955 	ld	(bc),a
+   06D1 01r5Dr01            956 	ld	bc,#_level01Map + 141
+   06D4 AF                  957 	xor	a, a
+   06D5 02                  958 	ld	(bc),a
+   06D6 01r5Er01            959 	ld	bc,#_level01Map + 142
+   06D9 AF                  960 	xor	a, a
+   06DA 02                  961 	ld	(bc),a
+   06DB 01r5Fr01            962 	ld	bc,#_level01Map + 143
+   06DE AF                  963 	xor	a, a
+   06DF 02                  964 	ld	(bc),a
+   06E0 01r60r01            965 	ld	bc,#_level01Map + 144
+   06E3 AF                  966 	xor	a, a
+   06E4 02                  967 	ld	(bc),a
+   06E5 01r61r01            968 	ld	bc,#_level01Map + 145
+   06E8 AF                  969 	xor	a, a
+   06E9 02                  970 	ld	(bc),a
+   06EA 01r62r01            971 	ld	bc,#_level01Map + 146
+   06ED AF                  972 	xor	a, a
+   06EE 02                  973 	ld	(bc),a
+   06EF 01r63r01            974 	ld	bc,#_level01Map + 147
+   06F2 AF                  975 	xor	a, a
+   06F3 02                  976 	ld	(bc),a
+   06F4 01r64r01            977 	ld	bc,#_level01Map + 148
+   06F7 AF                  978 	xor	a, a
+   06F8 02                  979 	ld	(bc),a
+   06F9 01r65r01            980 	ld	bc,#_level01Map + 149
+   06FC AF                  981 	xor	a, a
+   06FD 02                  982 	ld	(bc),a
+   06FE 01r66r01            983 	ld	bc,#_level01Map + 150
+   0701 AF                  984 	xor	a, a
+   0702 02                  985 	ld	(bc),a
+   0703 01r67r01            986 	ld	bc,#_level01Map + 151
+   0706 AF                  987 	xor	a, a
+   0707 02                  988 	ld	(bc),a
+   0708 01r68r01            989 	ld	bc,#_level01Map + 152
+   070B AF                  990 	xor	a, a
+   070C 02                  991 	ld	(bc),a
+   070D 01r69r01            992 	ld	bc,#_level01Map + 153
+   0710 AF                  993 	xor	a, a
+   0711 02                  994 	ld	(bc),a
+   0712 01r6Ar01            995 	ld	bc,#_level01Map + 154
+   0715 AF                  996 	xor	a, a
+   0716 02                  997 	ld	(bc),a
+   0717 01r6Br01            998 	ld	bc,#_level01Map + 155
+   071A AF                  999 	xor	a, a
+   071B 02                 1000 	ld	(bc),a
+   071C 01r6Cr01           1001 	ld	bc,#_level01Map + 156
+   071F AF                 1002 	xor	a, a
+   0720 02                 1003 	ld	(bc),a
+   0721 01r6Dr01           1004 	ld	bc,#_level01Map + 157
+   0724 AF                 1005 	xor	a, a
+   0725 02                 1006 	ld	(bc),a
+   0726 01r6Er01           1007 	ld	bc,#_level01Map + 158
+   0729 AF                 1008 	xor	a, a
+   072A 02                 1009 	ld	(bc),a
+   072B 01r6Fr01           1010 	ld	bc,#_level01Map + 159
+   072E AF                 1011 	xor	a, a
+   072F 02                 1012 	ld	(bc),a
+   0730 01r70r01           1013 	ld	bc,#_level01Map + 160
+   0733 AF                 1014 	xor	a, a
+   0734 02                 1015 	ld	(bc),a
+   0735 01r71r01           1016 	ld	bc,#_level01Map + 161
+   0738 AF                 1017 	xor	a, a
+   0739 02                 1018 	ld	(bc),a
+   073A 01r72r01           1019 	ld	bc,#_level01Map + 162
+   073D AF                 1020 	xor	a, a
+   073E 02                 1021 	ld	(bc),a
+   073F 01r73r01           1022 	ld	bc,#_level01Map + 163
+   0742 AF                 1023 	xor	a, a
+   0743 02                 1024 	ld	(bc),a
+   0744 01r74r01           1025 	ld	bc,#_level01Map + 164
+   0747 AF                 1026 	xor	a, a
+   0748 02                 1027 	ld	(bc),a
+   0749 01r75r01           1028 	ld	bc,#_level01Map + 165
+   074C AF                 1029 	xor	a, a
+   074D 02                 1030 	ld	(bc),a
+   074E 01r76r01           1031 	ld	bc,#_level01Map + 166
+   0751 AF                 1032 	xor	a, a
+   0752 02                 1033 	ld	(bc),a
+   0753 01r77r01           1034 	ld	bc,#_level01Map + 167
+   0756 AF                 1035 	xor	a, a
+   0757 02                 1036 	ld	(bc),a
+   0758 01r78r01           1037 	ld	bc,#_level01Map + 168
+   075B AF                 1038 	xor	a, a
+   075C 02                 1039 	ld	(bc),a
+   075D 01r79r01           1040 	ld	bc,#_level01Map + 169
+   0760 AF                 1041 	xor	a, a
+   0761 02                 1042 	ld	(bc),a
+   0762 01r7Ar01           1043 	ld	bc,#_level01Map + 170
+   0765 AF                 1044 	xor	a, a
+   0766 02                 1045 	ld	(bc),a
+   0767 01r7Br01           1046 	ld	bc,#_level01Map + 171
+   076A AF                 1047 	xor	a, a
+   076B 02                 1048 	ld	(bc),a
+   076C 01r7Cr01           1049 	ld	bc,#_level01Map + 172
+   076F AF                 1050 	xor	a, a
+   0770 02                 1051 	ld	(bc),a
+   0771 01r7Dr01           1052 	ld	bc,#_level01Map + 173
+   0774 AF                 1053 	xor	a, a
+   0775 02                 1054 	ld	(bc),a
+   0776 01r7Er01           1055 	ld	bc,#_level01Map + 174
+   0779 AF                 1056 	xor	a, a
+   077A 02                 1057 	ld	(bc),a
+   077B 01r7Fr01           1058 	ld	bc,#_level01Map + 175
+   077E AF                 1059 	xor	a, a
+   077F 02                 1060 	ld	(bc),a
+   0780 01r80r01           1061 	ld	bc,#_level01Map + 176
+   0783 AF                 1062 	xor	a, a
+   0784 02                 1063 	ld	(bc),a
+   0785 01r81r01           1064 	ld	bc,#_level01Map + 177
+   0788 AF                 1065 	xor	a, a
+   0789 02                 1066 	ld	(bc),a
+   078A 01r82r01           1067 	ld	bc,#_level01Map + 178
+   078D AF                 1068 	xor	a, a
+   078E 02                 1069 	ld	(bc),a
+   078F 01r83r01           1070 	ld	bc,#_level01Map + 179
+   0792 AF                 1071 	xor	a, a
+   0793 02                 1072 	ld	(bc),a
+   0794 01r84r01           1073 	ld	bc,#_level01Map + 180
+   0797 AF                 1074 	xor	a, a
+   0798 02                 1075 	ld	(bc),a
+   0799 01r85r01           1076 	ld	bc,#_level01Map + 181
+   079C AF                 1077 	xor	a, a
+   079D 02                 1078 	ld	(bc),a
+   079E 01r86r01           1079 	ld	bc,#_level01Map + 182
+   07A1 AF                 1080 	xor	a, a
+   07A2 02                 1081 	ld	(bc),a
+   07A3 01r87r01           1082 	ld	bc,#_level01Map + 183
+   07A6 AF                 1083 	xor	a, a
+   07A7 02                 1084 	ld	(bc),a
+   07A8 01r88r01           1085 	ld	bc,#_level01Map + 184
+   07AB AF                 1086 	xor	a, a
+   07AC 02                 1087 	ld	(bc),a
+   07AD 01r89r01           1088 	ld	bc,#_level01Map + 185
+   07B0 AF                 1089 	xor	a, a
+   07B1 02                 1090 	ld	(bc),a
+   07B2 01r8Ar01           1091 	ld	bc,#_level01Map + 186
+   07B5 AF                 1092 	xor	a, a
+   07B6 02                 1093 	ld	(bc),a
+   07B7 01r8Br01           1094 	ld	bc,#_level01Map + 187
+   07BA AF                 1095 	xor	a, a
+   07BB 02                 1096 	ld	(bc),a
+   07BC 01r8Cr01           1097 	ld	bc,#_level01Map + 188
+   07BF AF                 1098 	xor	a, a
+   07C0 02                 1099 	ld	(bc),a
+   07C1 01r8Dr01           1100 	ld	bc,#_level01Map + 189
+   07C4 AF                 1101 	xor	a, a
+   07C5 02                 1102 	ld	(bc),a
+   07C6 01r8Er01           1103 	ld	bc,#_level01Map + 190
+   07C9 AF                 1104 	xor	a, a
+   07CA 02                 1105 	ld	(bc),a
+   07CB 01r8Fr01           1106 	ld	bc,#_level01Map + 191
+   07CE AF                 1107 	xor	a, a
+   07CF 02                 1108 	ld	(bc),a
+   07D0 01r90r01           1109 	ld	bc,#_level01Map + 192
+   07D3 AF                 1110 	xor	a, a
+   07D4 02                 1111 	ld	(bc),a
+   07D5 01r91r01           1112 	ld	bc,#_level01Map + 193
+   07D8 AF                 1113 	xor	a, a
+   07D9 02                 1114 	ld	(bc),a
+   07DA 01r92r01           1115 	ld	bc,#_level01Map + 194
+   07DD AF                 1116 	xor	a, a
+   07DE 02                 1117 	ld	(bc),a
+   07DF 01r93r01           1118 	ld	bc,#_level01Map + 195
+   07E2 AF                 1119 	xor	a, a
+   07E3 02                 1120 	ld	(bc),a
+   07E4 01r94r01           1121 	ld	bc,#_level01Map + 196
+   07E7 AF                 1122 	xor	a, a
+   07E8 02                 1123 	ld	(bc),a
+   07E9 01r95r01           1124 	ld	bc,#_level01Map + 197
+   07EC AF                 1125 	xor	a, a
+   07ED 02                 1126 	ld	(bc),a
+   07EE 01r96r01           1127 	ld	bc,#_level01Map + 198
+   07F1 AF                 1128 	xor	a, a
+   07F2 02                 1129 	ld	(bc),a
+   07F3 01r97r01           1130 	ld	bc,#_level01Map + 199
+   07F6 AF                 1131 	xor	a, a
+   07F7 02                 1132 	ld	(bc),a
+   07F8 01r98r01           1133 	ld	bc,#_level01Map + 200
+   07FB AF                 1134 	xor	a, a
+   07FC 02                 1135 	ld	(bc),a
+   07FD 01r99r01           1136 	ld	bc,#_level01Map + 201
+   0800 AF                 1137 	xor	a, a
+   0801 02                 1138 	ld	(bc),a
+   0802 01r9Ar01           1139 	ld	bc,#_level01Map + 202
+   0805 AF                 1140 	xor	a, a
+   0806 02                 1141 	ld	(bc),a
+   0807 01r9Br01           1142 	ld	bc,#_level01Map + 203
+   080A AF                 1143 	xor	a, a
+   080B 02                 1144 	ld	(bc),a
+   080C 01r9Cr01           1145 	ld	bc,#_level01Map + 204
+   080F AF                 1146 	xor	a, a
+   0810 02                 1147 	ld	(bc),a
+   0811 01r9Dr01           1148 	ld	bc,#_level01Map + 205
+   0814 AF                 1149 	xor	a, a
+   0815 02                 1150 	ld	(bc),a
+   0816 01r9Er01           1151 	ld	bc,#_level01Map + 206
+   0819 AF                 1152 	xor	a, a
+   081A 02                 1153 	ld	(bc),a
+   081B 01r9Fr01           1154 	ld	bc,#_level01Map + 207
+   081E AF                 1155 	xor	a, a
+   081F 02                 1156 	ld	(bc),a
+   0820 01rA0r01           1157 	ld	bc,#_level01Map + 208
+   0823 AF                 1158 	xor	a, a
+   0824 02                 1159 	ld	(bc),a
+   0825 01rA1r01           1160 	ld	bc,#_level01Map + 209
+   0828 AF                 1161 	xor	a, a
+   0829 02                 1162 	ld	(bc),a
+   082A 01rA2r01           1163 	ld	bc,#_level01Map + 210
+   082D AF                 1164 	xor	a, a
+   082E 02                 1165 	ld	(bc),a
+   082F 01rA3r01           1166 	ld	bc,#_level01Map + 211
+   0832 AF                 1167 	xor	a, a
+   0833 02                 1168 	ld	(bc),a
+   0834 01rA4r01           1169 	ld	bc,#_level01Map + 212
+   0837 AF                 1170 	xor	a, a
+   0838 02                 1171 	ld	(bc),a
+   0839 01rA5r01           1172 	ld	bc,#_level01Map + 213
+   083C AF                 1173 	xor	a, a
+   083D 02                 1174 	ld	(bc),a
+   083E 01rA6r01           1175 	ld	bc,#_level01Map + 214
+   0841 AF                 1176 	xor	a, a
+   0842 02                 1177 	ld	(bc),a
+   0843 01rA7r01           1178 	ld	bc,#_level01Map + 215
+   0846 AF                 1179 	xor	a, a
+   0847 02                 1180 	ld	(bc),a
+   0848 01rA8r01           1181 	ld	bc,#_level01Map + 216
+   084B AF                 1182 	xor	a, a
+   084C 02                 1183 	ld	(bc),a
+   084D 01rA9r01           1184 	ld	bc,#_level01Map + 217
+   0850 AF                 1185 	xor	a, a
+   0851 02                 1186 	ld	(bc),a
+   0852 01rAAr01           1187 	ld	bc,#_level01Map + 218
+   0855 AF                 1188 	xor	a, a
+   0856 02                 1189 	ld	(bc),a
+   0857 01rABr01           1190 	ld	bc,#_level01Map + 219
+   085A AF                 1191 	xor	a, a
+   085B 02                 1192 	ld	(bc),a
+   085C 01rACr01           1193 	ld	bc,#_level01Map + 220
+   085F AF                 1194 	xor	a, a
+   0860 02                 1195 	ld	(bc),a
+   0861 01rADr01           1196 	ld	bc,#_level01Map + 221
+   0864 AF                 1197 	xor	a, a
+   0865 02                 1198 	ld	(bc),a
+   0866 01rAEr01           1199 	ld	bc,#_level01Map + 222
+   0869 AF                 1200 	xor	a, a
+   086A 02                 1201 	ld	(bc),a
+   086B 01rAFr01           1202 	ld	bc,#_level01Map + 223
+   086E AF                 1203 	xor	a, a
+   086F 02                 1204 	ld	(bc),a
+   0870 01rB0r01           1205 	ld	bc,#_level01Map + 224
+   0873 AF                 1206 	xor	a, a
+   0874 02                 1207 	ld	(bc),a
+   0875 01rB1r01           1208 	ld	bc,#_level01Map + 225
+   0878 AF                 1209 	xor	a, a
+   0879 02                 1210 	ld	(bc),a
+   087A 01rB2r01           1211 	ld	bc,#_level01Map + 226
+   087D AF                 1212 	xor	a, a
+   087E 02                 1213 	ld	(bc),a
+   087F 01rB3r01           1214 	ld	bc,#_level01Map + 227
+   0882 AF                 1215 	xor	a, a
+   0883 02                 1216 	ld	(bc),a
+   0884 01rB4r01           1217 	ld	bc,#_level01Map + 228
+   0887 AF                 1218 	xor	a, a
+   0888 02                 1219 	ld	(bc),a
+   0889 01rB5r01           1220 	ld	bc,#_level01Map + 229
+   088C AF                 1221 	xor	a, a
+   088D 02                 1222 	ld	(bc),a
+   088E 01rB6r01           1223 	ld	bc,#_level01Map + 230
+   0891 AF                 1224 	xor	a, a
+   0892 02                 1225 	ld	(bc),a
+   0893 01rB7r01           1226 	ld	bc,#_level01Map + 231
+   0896 AF                 1227 	xor	a, a
+   0897 02                 1228 	ld	(bc),a
+   0898 01rB8r01           1229 	ld	bc,#_level01Map + 232
+   089B AF                 1230 	xor	a, a
+   089C 02                 1231 	ld	(bc),a
+   089D 01rB9r01           1232 	ld	bc,#_level01Map + 233
+   08A0 AF                 1233 	xor	a, a
+   08A1 02                 1234 	ld	(bc),a
+   08A2 01rBAr01           1235 	ld	bc,#_level01Map + 234
+   08A5 AF                 1236 	xor	a, a
+   08A6 02                 1237 	ld	(bc),a
+   08A7 01rBBr01           1238 	ld	bc,#_level01Map + 235
+   08AA AF                 1239 	xor	a, a
+   08AB 02                 1240 	ld	(bc),a
+   08AC 01rBCr01           1241 	ld	bc,#_level01Map + 236
+   08AF AF                 1242 	xor	a, a
+   08B0 02                 1243 	ld	(bc),a
+   08B1 01rBDr01           1244 	ld	bc,#_level01Map + 237
+   08B4 AF                 1245 	xor	a, a
+   08B5 02                 1246 	ld	(bc),a
+   08B6 01rBEr01           1247 	ld	bc,#_level01Map + 238
+   08B9 AF                 1248 	xor	a, a
+   08BA 02                 1249 	ld	(bc),a
+   08BB 01rBFr01           1250 	ld	bc,#_level01Map + 239
+   08BE AF                 1251 	xor	a, a
+   08BF 02                 1252 	ld	(bc),a
+   08C0 01rC0r01           1253 	ld	bc,#_level01Map + 240
+   08C3 AF                 1254 	xor	a, a
+   08C4 02                 1255 	ld	(bc),a
+   08C5 01rC1r01           1256 	ld	bc,#_level01Map + 241
+   08C8 AF                 1257 	xor	a, a
+   08C9 02                 1258 	ld	(bc),a
+   08CA 01rC2r01           1259 	ld	bc,#_level01Map + 242
+   08CD AF                 1260 	xor	a, a
+   08CE 02                 1261 	ld	(bc),a
+   08CF 01rC3r01           1262 	ld	bc,#_level01Map + 243
+   08D2 AF                 1263 	xor	a, a
+   08D3 02                 1264 	ld	(bc),a
+   08D4 01rC4r01           1265 	ld	bc,#_level01Map + 244
+   08D7 AF                 1266 	xor	a, a
+   08D8 02                 1267 	ld	(bc),a
+   08D9 01rC5r01           1268 	ld	bc,#_level01Map + 245
+   08DC AF                 1269 	xor	a, a
+   08DD 02                 1270 	ld	(bc),a
+   08DE 01rC6r01           1271 	ld	bc,#_level01Map + 246
+   08E1 AF                 1272 	xor	a, a
+   08E2 02                 1273 	ld	(bc),a
+   08E3 01rC7r01           1274 	ld	bc,#_level01Map + 247
+   08E6 AF                 1275 	xor	a, a
+   08E7 02                 1276 	ld	(bc),a
+   08E8 01rC8r01           1277 	ld	bc,#_level01Map + 248
+   08EB AF                 1278 	xor	a, a
+   08EC 02                 1279 	ld	(bc),a
+   08ED 01rC9r01           1280 	ld	bc,#_level01Map + 249
+   08F0 AF                 1281 	xor	a, a
+   08F1 02                 1282 	ld	(bc),a
+   08F2 01rCAr01           1283 	ld	bc,#_level01Map + 250
+   08F5 AF                 1284 	xor	a, a
+   08F6 02                 1285 	ld	(bc),a
+   08F7 01rCBr01           1286 	ld	bc,#_level01Map + 251
+   08FA AF                 1287 	xor	a, a
+   08FB 02                 1288 	ld	(bc),a
+   08FC 01rCCr01           1289 	ld	bc,#_level01Map + 252
+   08FF AF                 1290 	xor	a, a
+   0900 02                 1291 	ld	(bc),a
+   0901 01rCDr01           1292 	ld	bc,#_level01Map + 253
+   0904 AF                 1293 	xor	a, a
+   0905 02                 1294 	ld	(bc),a
+   0906 01rCEr01           1295 	ld	bc,#_level01Map + 254
+   0909 AF                 1296 	xor	a, a
+   090A 02                 1297 	ld	(bc),a
+   090B 01rCFr01           1298 	ld	bc,#_level01Map + 255
+   090E AF                 1299 	xor	a, a
+   090F 02                 1300 	ld	(bc),a
+   0910 01rD0r01           1301 	ld	bc,#_level01Map + 256
+   0913 AF                 1302 	xor	a, a
+   0914 02                 1303 	ld	(bc),a
+   0915 01rD1r01           1304 	ld	bc,#_level01Map + 257
+   0918 AF                 1305 	xor	a, a
+   0919 02                 1306 	ld	(bc),a
+   091A 01rD2r01           1307 	ld	bc,#_level01Map + 258
+   091D AF                 1308 	xor	a, a
+   091E 02                 1309 	ld	(bc),a
+   091F 01rD3r01           1310 	ld	bc,#_level01Map + 259
+   0922 AF                 1311 	xor	a, a
+   0923 02                 1312 	ld	(bc),a
+   0924 01rD4r01           1313 	ld	bc,#_level01Map + 260
+   0927 AF                 1314 	xor	a, a
+   0928 02                 1315 	ld	(bc),a
+   0929 01rD5r01           1316 	ld	bc,#_level01Map + 261
+   092C AF                 1317 	xor	a, a
+   092D 02                 1318 	ld	(bc),a
+   092E 01rD6r01           1319 	ld	bc,#_level01Map + 262
+   0931 AF                 1320 	xor	a, a
+   0932 02                 1321 	ld	(bc),a
+   0933 01rD7r01           1322 	ld	bc,#_level01Map + 263
+   0936 AF                 1323 	xor	a, a
+   0937 02                 1324 	ld	(bc),a
+   0938 01rD8r01           1325 	ld	bc,#_level01Map + 264
+   093B AF                 1326 	xor	a, a
+   093C 02                 1327 	ld	(bc),a
+   093D 01rD9r01           1328 	ld	bc,#_level01Map + 265
+   0940 AF                 1329 	xor	a, a
+   0941 02                 1330 	ld	(bc),a
+   0942 01rDAr01           1331 	ld	bc,#_level01Map + 266
+   0945 AF                 1332 	xor	a, a
+   0946 02                 1333 	ld	(bc),a
+   0947 01rDBr01           1334 	ld	bc,#_level01Map + 267
+   094A AF                 1335 	xor	a, a
+   094B 02                 1336 	ld	(bc),a
+   094C 01rDCr01           1337 	ld	bc,#_level01Map + 268
+   094F AF                 1338 	xor	a, a
+   0950 02                 1339 	ld	(bc),a
+   0951 01rDDr01           1340 	ld	bc,#_level01Map + 269
+   0954 AF                 1341 	xor	a, a
+   0955 02                 1342 	ld	(bc),a
+   0956 01rDEr01           1343 	ld	bc,#_level01Map + 270
+   0959 AF                 1344 	xor	a, a
+   095A 02                 1345 	ld	(bc),a
+   095B 01rDFr01           1346 	ld	bc,#_level01Map + 271
+   095E AF                 1347 	xor	a, a
+   095F 02                 1348 	ld	(bc),a
+   0960 01rE0r01           1349 	ld	bc,#_level01Map + 272
+   0963 AF                 1350 	xor	a, a
+   0964 02                 1351 	ld	(bc),a
+   0965 01rE1r01           1352 	ld	bc,#_level01Map + 273
+   0968 AF                 1353 	xor	a, a
+   0969 02                 1354 	ld	(bc),a
+   096A 01rE2r01           1355 	ld	bc,#_level01Map + 274
+   096D AF                 1356 	xor	a, a
+   096E 02                 1357 	ld	(bc),a
+   096F 01rE3r01           1358 	ld	bc,#_level01Map + 275
+   0972 AF                 1359 	xor	a, a
+   0973 02                 1360 	ld	(bc),a
+   0974 01rE4r01           1361 	ld	bc,#_level01Map + 276
+   0977 AF                 1362 	xor	a, a
+   0978 02                 1363 	ld	(bc),a
+   0979 01rE5r01           1364 	ld	bc,#_level01Map + 277
+   097C AF                 1365 	xor	a, a
+   097D 02                 1366 	ld	(bc),a
+   097E 01rE6r01           1367 	ld	bc,#_level01Map + 278
+   0981 AF                 1368 	xor	a, a
+   0982 02                 1369 	ld	(bc),a
+   0983 01rE7r01           1370 	ld	bc,#_level01Map + 279
+   0986 AF                 1371 	xor	a, a
+   0987 02                 1372 	ld	(bc),a
+   0988 01rE8r01           1373 	ld	bc,#_level01Map + 280
+   098B AF                 1374 	xor	a, a
+   098C 02                 1375 	ld	(bc),a
+   098D 01rE9r01           1376 	ld	bc,#_level01Map + 281
+   0990 AF                 1377 	xor	a, a
+   0991 02                 1378 	ld	(bc),a
+   0992 01rEAr01           1379 	ld	bc,#_level01Map + 282
+   0995 AF                 1380 	xor	a, a
+   0996 02                 1381 	ld	(bc),a
+   0997 01rEBr01           1382 	ld	bc,#_level01Map + 283
+   099A AF                 1383 	xor	a, a
+   099B 02                 1384 	ld	(bc),a
+   099C 01rECr01           1385 	ld	bc,#_level01Map + 284
+   099F AF                 1386 	xor	a, a
+   09A0 02                 1387 	ld	(bc),a
+   09A1 01rEDr01           1388 	ld	bc,#_level01Map + 285
+   09A4 AF                 1389 	xor	a, a
+   09A5 02                 1390 	ld	(bc),a
+   09A6 01rEEr01           1391 	ld	bc,#_level01Map + 286
+   09A9 AF                 1392 	xor	a, a
+   09AA 02                 1393 	ld	(bc),a
+   09AB 01rEFr01           1394 	ld	bc,#_level01Map + 287
+   09AE AF                 1395 	xor	a, a
+   09AF 02                 1396 	ld	(bc),a
+   09B0 01rF0r01           1397 	ld	bc,#_level01Map + 288
+   09B3 AF                 1398 	xor	a, a
+   09B4 02                 1399 	ld	(bc),a
+   09B5 01rF1r01           1400 	ld	bc,#_level01Map + 289
+   09B8 AF                 1401 	xor	a, a
+   09B9 02                 1402 	ld	(bc),a
+   09BA 01rF2r01           1403 	ld	bc,#_level01Map + 290
+   09BD AF                 1404 	xor	a, a
+   09BE 02                 1405 	ld	(bc),a
+   09BF 01rF3r01           1406 	ld	bc,#_level01Map + 291
+   09C2 AF                 1407 	xor	a, a
+   09C3 02                 1408 	ld	(bc),a
+   09C4 21rF4r01           1409 	ld	hl,#(_level01Map + 0x0124)
+   09C7 36 02              1410 	ld	(hl),#0x02
+   09C9 21rF5r01           1411 	ld	hl,#(_level01Map + 0x0125)
+   09CC 36 03              1412 	ld	(hl),#0x03
+   09CE 01rF6r01           1413 	ld	bc,#_level01Map + 294
+   09D1 AF                 1414 	xor	a, a
+   09D2 02                 1415 	ld	(bc),a
+   09D3 01rF7r01           1416 	ld	bc,#_level01Map + 295
+   09D6 AF                 1417 	xor	a, a
+   09D7 02                 1418 	ld	(bc),a
+   09D8 01rF8r01           1419 	ld	bc,#_level01Map + 296
+   09DB AF                 1420 	xor	a, a
+   09DC 02                 1421 	ld	(bc),a
+   09DD 01rF9r01           1422 	ld	bc,#_level01Map + 297
+   09E0 AF                 1423 	xor	a, a
+   09E1 02                 1424 	ld	(bc),a
+   09E2 01rFAr01           1425 	ld	bc,#_level01Map + 298
+   09E5 AF                 1426 	xor	a, a
+   09E6 02                 1427 	ld	(bc),a
+   09E7 01rFBr01           1428 	ld	bc,#_level01Map + 299
+   09EA AF                 1429 	xor	a, a
+   09EB 02                 1430 	ld	(bc),a
+   09EC 01rFCr01           1431 	ld	bc,#_level01Map + 300
+   09EF AF                 1432 	xor	a, a
+   09F0 02                 1433 	ld	(bc),a
+   09F1 01rFDr01           1434 	ld	bc,#_level01Map + 301
+   09F4 AF                 1435 	xor	a, a
+   09F5 02                 1436 	ld	(bc),a
+   09F6 01rFEr01           1437 	ld	bc,#_level01Map + 302
+   09F9 AF                 1438 	xor	a, a
+   09FA 02                 1439 	ld	(bc),a
+   09FB 01rFFr01           1440 	ld	bc,#_level01Map + 303
+   09FE AF                 1441 	xor	a, a
+   09FF 02                 1442 	ld	(bc),a
+   0A00 01r00r02           1443 	ld	bc,#_level01Map + 304
+   0A03 AF                 1444 	xor	a, a
+   0A04 02                 1445 	ld	(bc),a
+   0A05 01r01r02           1446 	ld	bc,#_level01Map + 305
+   0A08 AF                 1447 	xor	a, a
+   0A09 02                 1448 	ld	(bc),a
+   0A0A 01r02r02           1449 	ld	bc,#_level01Map + 306
+   0A0D AF                 1450 	xor	a, a
+   0A0E 02                 1451 	ld	(bc),a
+   0A0F 01r03r02           1452 	ld	bc,#_level01Map + 307
+   0A12 AF                 1453 	xor	a, a
+   0A13 02                 1454 	ld	(bc),a
+   0A14 01r04r02           1455 	ld	bc,#_level01Map + 308
+   0A17 AF                 1456 	xor	a, a
+   0A18 02                 1457 	ld	(bc),a
+   0A19 01r05r02           1458 	ld	bc,#_level01Map + 309
+   0A1C AF                 1459 	xor	a, a
+   0A1D 02                 1460 	ld	(bc),a
+   0A1E 01r06r02           1461 	ld	bc,#_level01Map + 310
+   0A21 AF                 1462 	xor	a, a
+   0A22 02                 1463 	ld	(bc),a
+   0A23 01r07r02           1464 	ld	bc,#_level01Map + 311
+   0A26 AF                 1465 	xor	a, a
+   0A27 02                 1466 	ld	(bc),a
+   0A28 01r08r02           1467 	ld	bc,#_level01Map + 312
+   0A2B AF                 1468 	xor	a, a
+   0A2C 02                 1469 	ld	(bc),a
+   0A2D 01r09r02           1470 	ld	bc,#_level01Map + 313
+   0A30 AF                 1471 	xor	a, a
+   0A31 02                 1472 	ld	(bc),a
+   0A32 01r0Ar02           1473 	ld	bc,#_level01Map + 314
+   0A35 AF                 1474 	xor	a, a
+   0A36 02                 1475 	ld	(bc),a
+   0A37 01r0Br02           1476 	ld	bc,#_level01Map + 315
+   0A3A AF                 1477 	xor	a, a
+   0A3B 02                 1478 	ld	(bc),a
+   0A3C 01r0Cr02           1479 	ld	bc,#_level01Map + 316
+   0A3F AF                 1480 	xor	a, a
+   0A40 02                 1481 	ld	(bc),a
+   0A41 01r0Dr02           1482 	ld	bc,#_level01Map + 317
+   0A44 AF                 1483 	xor	a, a
+   0A45 02                 1484 	ld	(bc),a
+   0A46 01r0Er02           1485 	ld	bc,#_level01Map + 318
+   0A49 AF                 1486 	xor	a, a
+   0A4A 02                 1487 	ld	(bc),a
+   0A4B 01r0Fr02           1488 	ld	bc,#_level01Map + 319
+   0A4E AF                 1489 	xor	a, a
+   0A4F 02                 1490 	ld	(bc),a
+   0A50 01r10r02           1491 	ld	bc,#_level01Map + 320
+   0A53 AF                 1492 	xor	a, a
+   0A54 02                 1493 	ld	(bc),a
+   0A55 01r11r02           1494 	ld	bc,#_level01Map + 321
+   0A58 AF                 1495 	xor	a, a
+   0A59 02                 1496 	ld	(bc),a
+   0A5A 01r12r02           1497 	ld	bc,#_level01Map + 322
+   0A5D AF                 1498 	xor	a, a
+   0A5E 02                 1499 	ld	(bc),a
+   0A5F 01r13r02           1500 	ld	bc,#_level01Map + 323
+   0A62 AF                 1501 	xor	a, a
+   0A63 02                 1502 	ld	(bc),a
+   0A64 01r14r02           1503 	ld	bc,#_level01Map + 324
+   0A67 AF                 1504 	xor	a, a
+   0A68 02                 1505 	ld	(bc),a
+   0A69 01r15r02           1506 	ld	bc,#_level01Map + 325
+   0A6C AF                 1507 	xor	a, a
+   0A6D 02                 1508 	ld	(bc),a
+   0A6E 01r16r02           1509 	ld	bc,#_level01Map + 326
+   0A71 AF                 1510 	xor	a, a
+   0A72 02                 1511 	ld	(bc),a
+   0A73 21r17r02           1512 	ld	hl,#(_level01Map + 0x0147)
+   0A76 36 02              1513 	ld	(hl),#0x02
+   0A78 21r18r02           1514 	ld	hl,#(_level01Map + 0x0148)
+   0A7B 36 03              1515 	ld	(hl),#0x03
+   0A7D 01r19r02           1516 	ld	bc,#_level01Map + 329
+   0A80 AF                 1517 	xor	a, a
+   0A81 02                 1518 	ld	(bc),a
+   0A82 01r1Ar02           1519 	ld	bc,#_level01Map + 330
+   0A85 AF                 1520 	xor	a, a
+   0A86 02                 1521 	ld	(bc),a
+   0A87 01r1Br02           1522 	ld	bc,#_level01Map + 331
+   0A8A AF                 1523 	xor	a, a
+   0A8B 02                 1524 	ld	(bc),a
+   0A8C 21r1Cr02           1525 	ld	hl,#(_level01Map + 0x014c)
+   0A8F 36 04              1526 	ld	(hl),#0x04
+   0A91 21r1Dr02           1527 	ld	hl,#(_level01Map + 0x014d)
+   0A94 36 08              1528 	ld	(hl),#0x08
+   0A96 01r1Er02           1529 	ld	bc,#_level01Map + 334
+   0A99 AF                 1530 	xor	a, a
+   0A9A 02                 1531 	ld	(bc),a
+   0A9B 01r1Fr02           1532 	ld	bc,#_level01Map + 335
+   0A9E AF                 1533 	xor	a, a
+   0A9F 02                 1534 	ld	(bc),a
+   0AA0 01r20r02           1535 	ld	bc,#_level01Map + 336
+   0AA3 AF                 1536 	xor	a, a
+   0AA4 02                 1537 	ld	(bc),a
+   0AA5 01r21r02           1538 	ld	bc,#_level01Map + 337
+   0AA8 AF                 1539 	xor	a, a
+   0AA9 02                 1540 	ld	(bc),a
+   0AAA 01r22r02           1541 	ld	bc,#_level01Map + 338
+   0AAD AF                 1542 	xor	a, a
+   0AAE 02                 1543 	ld	(bc),a
+   0AAF 01r23r02           1544 	ld	bc,#_level01Map + 339
+   0AB2 AF                 1545 	xor	a, a
+   0AB3 02                 1546 	ld	(bc),a
+   0AB4 01r24r02           1547 	ld	bc,#_level01Map + 340
+   0AB7 AF                 1548 	xor	a, a
+   0AB8 02                 1549 	ld	(bc),a
+   0AB9 01r25r02           1550 	ld	bc,#_level01Map + 341
+   0ABC AF                 1551 	xor	a, a
+   0ABD 02                 1552 	ld	(bc),a
+   0ABE 01r26r02           1553 	ld	bc,#_level01Map + 342
+   0AC1 AF                 1554 	xor	a, a
+   0AC2 02                 1555 	ld	(bc),a
+   0AC3 01r27r02           1556 	ld	bc,#_level01Map + 343
+   0AC6 AF                 1557 	xor	a, a
+   0AC7 02                 1558 	ld	(bc),a
+   0AC8 01r28r02           1559 	ld	bc,#_level01Map + 344
+   0ACB AF                 1560 	xor	a, a
+   0ACC 02                 1561 	ld	(bc),a
+   0ACD 01r29r02           1562 	ld	bc,#_level01Map + 345
+   0AD0 AF                 1563 	xor	a, a
+   0AD1 02                 1564 	ld	(bc),a
+   0AD2 01r2Ar02           1565 	ld	bc,#_level01Map + 346
+   0AD5 AF                 1566 	xor	a, a
+   0AD6 02                 1567 	ld	(bc),a
+   0AD7 01r2Br02           1568 	ld	bc,#_level01Map + 347
+   0ADA AF                 1569 	xor	a, a
+   0ADB 02                 1570 	ld	(bc),a
+   0ADC 21r2Cr02           1571 	ld	hl,#(_level01Map + 0x015c)
+   0ADF 36 02              1572 	ld	(hl),#0x02
+   0AE1 21r2Dr02           1573 	ld	hl,#(_level01Map + 0x015d)
+   0AE4 36 03              1574 	ld	(hl),#0x03
+   0AE6 01r2Er02           1575 	ld	bc,#_level01Map + 350
+   0AE9 AF                 1576 	xor	a, a
+   0AEA 02                 1577 	ld	(bc),a
+   0AEB 01r2Fr02           1578 	ld	bc,#_level01Map + 351
+   0AEE AF                 1579 	xor	a, a
+   0AEF 02                 1580 	ld	(bc),a
+   0AF0 01r30r02           1581 	ld	bc,#_level01Map + 352
+   0AF3 AF                 1582 	xor	a, a
+   0AF4 02                 1583 	ld	(bc),a
+   0AF5 01r31r02           1584 	ld	bc,#_level01Map + 353
+   0AF8 AF                 1585 	xor	a, a
+   0AF9 02                 1586 	ld	(bc),a
+   0AFA 01r32r02           1587 	ld	bc,#_level01Map + 354
+   0AFD AF                 1588 	xor	a, a
+   0AFE 02                 1589 	ld	(bc),a
+   0AFF 01r33r02           1590 	ld	bc,#_level01Map + 355
+   0B02 AF                 1591 	xor	a, a
+   0B03 02                 1592 	ld	(bc),a
+   0B04 01r34r02           1593 	ld	bc,#_level01Map + 356
+   0B07 AF                 1594 	xor	a, a
+   0B08 02                 1595 	ld	(bc),a
+   0B09 01r35r02           1596 	ld	bc,#_level01Map + 357
+   0B0C AF                 1597 	xor	a, a
+   0B0D 02                 1598 	ld	(bc),a
+   0B0E 01r36r02           1599 	ld	bc,#_level01Map + 358
+   0B11 AF                 1600 	xor	a, a
+   0B12 02                 1601 	ld	(bc),a
+   0B13 01r37r02           1602 	ld	bc,#_level01Map + 359
+   0B16 AF                 1603 	xor	a, a
+   0B17 02                 1604 	ld	(bc),a
+   0B18 01r38r02           1605 	ld	bc,#_level01Map + 360
+   0B1B AF                 1606 	xor	a, a
+   0B1C 02                 1607 	ld	(bc),a
+   0B1D 01r39r02           1608 	ld	bc,#_level01Map + 361
+   0B20 AF                 1609 	xor	a, a
+   0B21 02                 1610 	ld	(bc),a
+   0B22 01r3Ar02           1611 	ld	bc,#_level01Map + 362
+   0B25 AF                 1612 	xor	a, a
+   0B26 02                 1613 	ld	(bc),a
+   0B27 01r3Br02           1614 	ld	bc,#_level01Map + 363
+   0B2A AF                 1615 	xor	a, a
+   0B2B 02                 1616 	ld	(bc),a
+   0B2C 01r3Cr02           1617 	ld	bc,#_level01Map + 364
+   0B2F AF                 1618 	xor	a, a
+   0B30 02                 1619 	ld	(bc),a
+   0B31 01r3Dr02           1620 	ld	bc,#_level01Map + 365
+   0B34 AF                 1621 	xor	a, a
+   0B35 02                 1622 	ld	(bc),a
+   0B36 01r3Er02           1623 	ld	bc,#_level01Map + 366
+   0B39 AF                 1624 	xor	a, a
+   0B3A 02                 1625 	ld	(bc),a
+   0B3B 21r3Fr02           1626 	ld	hl,#(_level01Map + 0x016f)
+   0B3E 36 04              1627 	ld	(hl),#0x04
+   0B40 21r40r02           1628 	ld	hl,#(_level01Map + 0x0170)
+   0B43 36 08              1629 	ld	(hl),#0x08
+   0B45 01r41r02           1630 	ld	bc,#_level01Map + 369
+   0B48 AF                 1631 	xor	a, a
+   0B49 02                 1632 	ld	(bc),a
+   0B4A 01r42r02           1633 	ld	bc,#_level01Map + 370
+   0B4D AF                 1634 	xor	a, a
+   0B4E 02                 1635 	ld	(bc),a
+   0B4F 01r43r02           1636 	ld	bc,#_level01Map + 371
+   0B52 AF                 1637 	xor	a, a
+   0B53 02                 1638 	ld	(bc),a
+   0B54 21r44r02           1639 	ld	hl,#(_level01Map + 0x0174)
+   0B57 36 04              1640 	ld	(hl),#0x04
+   0B59 21r45r02           1641 	ld	hl,#(_level01Map + 0x0175)
+   0B5C 36 08              1642 	ld	(hl),#0x08
+   0B5E 01r46r02           1643 	ld	bc,#_level01Map + 374
+   0B61 AF                 1644 	xor	a, a
+   0B62 02                 1645 	ld	(bc),a
+   0B63 01r47r02           1646 	ld	bc,#_level01Map + 375
+   0B66 AF                 1647 	xor	a, a
+   0B67 02                 1648 	ld	(bc),a
+   0B68 01r48r02           1649 	ld	bc,#_level01Map + 376
+   0B6B AF                 1650 	xor	a, a
+   0B6C 02                 1651 	ld	(bc),a
+   0B6D 01r49r02           1652 	ld	bc,#_level01Map + 377
+   0B70 AF                 1653 	xor	a, a
+   0B71 02                 1654 	ld	(bc),a
+   0B72 01r4Ar02           1655 	ld	bc,#_level01Map + 378
+   0B75 AF                 1656 	xor	a, a
+   0B76 02                 1657 	ld	(bc),a
+   0B77 01r4Br02           1658 	ld	bc,#_level01Map + 379
+   0B7A AF                 1659 	xor	a, a
+   0B7B 02                 1660 	ld	(bc),a
+   0B7C 01r4Cr02           1661 	ld	bc,#_level01Map + 380
+   0B7F AF                 1662 	xor	a, a
+   0B80 02                 1663 	ld	(bc),a
+   0B81 01r4Dr02           1664 	ld	bc,#_level01Map + 381
+   0B84 AF                 1665 	xor	a, a
+   0B85 02                 1666 	ld	(bc),a
+   0B86 01r4Er02           1667 	ld	bc,#_level01Map + 382
+   0B89 AF                 1668 	xor	a, a
+   0B8A 02                 1669 	ld	(bc),a
+   0B8B 01r4Fr02           1670 	ld	bc,#_level01Map + 383
+   0B8E AF                 1671 	xor	a, a
+   0B8F 02                 1672 	ld	(bc),a
+   0B90 01r50r02           1673 	ld	bc,#_level01Map + 384
+   0B93 AF                 1674 	xor	a, a
+   0B94 02                 1675 	ld	(bc),a
+   0B95 01r51r02           1676 	ld	bc,#_level01Map + 385
+   0B98 AF                 1677 	xor	a, a
+   0B99 02                 1678 	ld	(bc),a
+   0B9A 01r52r02           1679 	ld	bc,#_level01Map + 386
+   0B9D AF                 1680 	xor	a, a
+   0B9E 02                 1681 	ld	(bc),a
+   0B9F 01r53r02           1682 	ld	bc,#_level01Map + 387
+   0BA2 AF                 1683 	xor	a, a
+   0BA3 02                 1684 	ld	(bc),a
+   0BA4 21r54r02           1685 	ld	hl,#(_level01Map + 0x0184)
+   0BA7 36 04              1686 	ld	(hl),#0x04
+   0BA9 21r55r02           1687 	ld	hl,#(_level01Map + 0x0185)
+   0BAC 36 0C              1688 	ld	(hl),#0x0C
+   0BAE 21r56r02           1689 	ld	hl,#(_level01Map + 0x0186)
+   0BB1 36 03              1690 	ld	(hl),#0x03
+   0BB3 01r57r02           1691 	ld	bc,#_level01Map + 391
+   0BB6 AF                 1692 	xor	a, a
+   0BB7 02                 1693 	ld	(bc),a
+   0BB8 01r58r02           1694 	ld	bc,#_level01Map + 392
+   0BBB AF                 1695 	xor	a, a
+   0BBC 02                 1696 	ld	(bc),a
+   0BBD 01r59r02           1697 	ld	bc,#_level01Map + 393
+   0BC0 AF                 1698 	xor	a, a
+   0BC1 02                 1699 	ld	(bc),a
+   0BC2 01r5Ar02           1700 	ld	bc,#_level01Map + 394
+   0BC5 AF                 1701 	xor	a, a
+   0BC6 02                 1702 	ld	(bc),a
+   0BC7 01r5Br02           1703 	ld	bc,#_level01Map + 395
+   0BCA AF                 1704 	xor	a, a
+   0BCB 02                 1705 	ld	(bc),a
+   0BCC 01r5Cr02           1706 	ld	bc,#_level01Map + 396
+   0BCF AF                 1707 	xor	a, a
+   0BD0 02                 1708 	ld	(bc),a
+   0BD1 01r5Dr02           1709 	ld	bc,#_level01Map + 397
+   0BD4 AF                 1710 	xor	a, a
+   0BD5 02                 1711 	ld	(bc),a
+   0BD6 01r5Er02           1712 	ld	bc,#_level01Map + 398
+   0BD9 AF                 1713 	xor	a, a
+   0BDA 02                 1714 	ld	(bc),a
+   0BDB 01r5Fr02           1715 	ld	bc,#_level01Map + 399
+   0BDE AF                 1716 	xor	a, a
+   0BDF 02                 1717 	ld	(bc),a
+   0BE0 01r60r02           1718 	ld	bc,#_level01Map + 400
+   0BE3 AF                 1719 	xor	a, a
+   0BE4 02                 1720 	ld	(bc),a
+   0BE5 01r61r02           1721 	ld	bc,#_level01Map + 401
+   0BE8 AF                 1722 	xor	a, a
+   0BE9 02                 1723 	ld	(bc),a
+   0BEA 01r62r02           1724 	ld	bc,#_level01Map + 402
+   0BED AF                 1725 	xor	a, a
+   0BEE 02                 1726 	ld	(bc),a
+   0BEF 01r63r02           1727 	ld	bc,#_level01Map + 403
+   0BF2 AF                 1728 	xor	a, a
+   0BF3 02                 1729 	ld	(bc),a
+   0BF4 01r64r02           1730 	ld	bc,#_level01Map + 404
+   0BF7 AF                 1731 	xor	a, a
+   0BF8 02                 1732 	ld	(bc),a
+   0BF9 01r65r02           1733 	ld	bc,#_level01Map + 405
+   0BFC AF                 1734 	xor	a, a
+   0BFD 02                 1735 	ld	(bc),a
+   0BFE 01r66r02           1736 	ld	bc,#_level01Map + 406
+   0C01 AF                 1737 	xor	a, a
+   0C02 02                 1738 	ld	(bc),a
+   0C03 21r67r02           1739 	ld	hl,#(_level01Map + 0x0197)
+   0C06 36 04              1740 	ld	(hl),#0x04
+   0C08 21r68r02           1741 	ld	hl,#(_level01Map + 0x0198)
+   0C0B 36 08              1742 	ld	(hl),#0x08
+   0C0D 01r69r02           1743 	ld	bc,#_level01Map + 409
+   0C10 AF                 1744 	xor	a, a
+   0C11 02                 1745 	ld	(bc),a
+   0C12 01r6Ar02           1746 	ld	bc,#_level01Map + 410
+   0C15 AF                 1747 	xor	a, a
+   0C16 02                 1748 	ld	(bc),a
+   0C17 01r6Br02           1749 	ld	bc,#_level01Map + 411
+   0C1A AF                 1750 	xor	a, a
+   0C1B 02                 1751 	ld	(bc),a
+   0C1C 21r6Cr02           1752 	ld	hl,#(_level01Map + 0x019c)
+   0C1F 36 04              1753 	ld	(hl),#0x04
+   0C21 21r6Dr02           1754 	ld	hl,#(_level01Map + 0x019d)
+   0C24 36 08              1755 	ld	(hl),#0x08
+   0C26 01r6Er02           1756 	ld	bc,#_level01Map + 414
+   0C29 AF                 1757 	xor	a, a
+   0C2A 02                 1758 	ld	(bc),a
+   0C2B 01r6Fr02           1759 	ld	bc,#_level01Map + 415
+   0C2E AF                 1760 	xor	a, a
+   0C2F 02                 1761 	ld	(bc),a
+   0C30 21r70r02           1762 	ld	hl,#(_level01Map + 0x01a0)
+   0C33 36 02              1763 	ld	(hl),#0x02
+   0C35 21r71r02           1764 	ld	hl,#(_level01Map + 0x01a1)
+   0C38 36 01              1765 	ld	(hl),#0x01
+   0C3A 21r72r02           1766 	ld	hl,#(_level01Map + 0x01a2)
+   0C3D 36 03              1767 	ld	(hl),#0x03
+   0C3F 01r73r02           1768 	ld	bc,#_level01Map + 419
+   0C42 AF                 1769 	xor	a, a
+   0C43 02                 1770 	ld	(bc),a
+   0C44 01r74r02           1771 	ld	bc,#_level01Map + 420
+   0C47 AF                 1772 	xor	a, a
+   0C48 02                 1773 	ld	(bc),a
+   0C49 21r75r02           1774 	ld	hl,#(_level01Map + 0x01a5)
+   0C4C 36 02              1775 	ld	(hl),#0x02
+   0C4E 21r76r02           1776 	ld	hl,#(_level01Map + 0x01a6)
+   0C51 36 03              1777 	ld	(hl),#0x03
+   0C53 01r77r02           1778 	ld	bc,#_level01Map + 423
+   0C56 AF                 1779 	xor	a, a
+   0C57 02                 1780 	ld	(bc),a
+   0C58 01r78r02           1781 	ld	bc,#_level01Map + 424
+   0C5B AF                 1782 	xor	a, a
+   0C5C 02                 1783 	ld	(bc),a
+   0C5D 01r79r02           1784 	ld	bc,#_level01Map + 425
+   0C60 AF                 1785 	xor	a, a
+   0C61 02                 1786 	ld	(bc),a
+   0C62 01r7Ar02           1787 	ld	bc,#_level01Map + 426
+   0C65 AF                 1788 	xor	a, a
+   0C66 02                 1789 	ld	(bc),a
+   0C67 01r7Br02           1790 	ld	bc,#_level01Map + 427
+   0C6A AF                 1791 	xor	a, a
+   0C6B 02                 1792 	ld	(bc),a
+   0C6C 21r7Cr02           1793 	ld	hl,#(_level01Map + 0x01ac)
+   0C6F 36 04              1794 	ld	(hl),#0x04
+   0C71 21r7Dr02           1795 	ld	hl,#(_level01Map + 0x01ad)
+   0C74 36 0C              1796 	ld	(hl),#0x0C
+   0C76 21r7Er02           1797 	ld	hl,#(_level01Map + 0x01ae)
+   0C79 36 08              1798 	ld	(hl),#0x08
+   0C7B 01r7Fr02           1799 	ld	bc,#_level01Map + 431
+   0C7E AF                 1800 	xor	a, a
+   0C7F 02                 1801 	ld	(bc),a
+   0C80 01r80r02           1802 	ld	bc,#_level01Map + 432
+   0C83 AF                 1803 	xor	a, a
+   0C84 02                 1804 	ld	(bc),a
+   0C85 01r81r02           1805 	ld	bc,#_level01Map + 433
+   0C88 AF                 1806 	xor	a, a
+   0C89 02                 1807 	ld	(bc),a
+   0C8A 01r82r02           1808 	ld	bc,#_level01Map + 434
+   0C8D AF                 1809 	xor	a, a
+   0C8E 02                 1810 	ld	(bc),a
+   0C8F 01r83r02           1811 	ld	bc,#_level01Map + 435
+   0C92 AF                 1812 	xor	a, a
+   0C93 02                 1813 	ld	(bc),a
+   0C94 01r84r02           1814 	ld	bc,#_level01Map + 436
+   0C97 AF                 1815 	xor	a, a
+   0C98 02                 1816 	ld	(bc),a
+   0C99 01r85r02           1817 	ld	bc,#_level01Map + 437
+   0C9C AF                 1818 	xor	a, a
+   0C9D 02                 1819 	ld	(bc),a
+   0C9E 01r86r02           1820 	ld	bc,#_level01Map + 438
+   0CA1 AF                 1821 	xor	a, a
+   0CA2 02                 1822 	ld	(bc),a
+   0CA3 01r87r02           1823 	ld	bc,#_level01Map + 439
+   0CA6 AF                 1824 	xor	a, a
+   0CA7 02                 1825 	ld	(bc),a
+   0CA8 01r88r02           1826 	ld	bc,#_level01Map + 440
+   0CAB AF                 1827 	xor	a, a
+   0CAC 02                 1828 	ld	(bc),a
+   0CAD 01r89r02           1829 	ld	bc,#_level01Map + 441
+   0CB0 AF                 1830 	xor	a, a
+   0CB1 02                 1831 	ld	(bc),a
+   0CB2 01r8Ar02           1832 	ld	bc,#_level01Map + 442
+   0CB5 AF                 1833 	xor	a, a
+   0CB6 02                 1834 	ld	(bc),a
+   0CB7 01r8Br02           1835 	ld	bc,#_level01Map + 443
+   0CBA AF                 1836 	xor	a, a
+   0CBB 02                 1837 	ld	(bc),a
+   0CBC 01r8Cr02           1838 	ld	bc,#_level01Map + 444
+   0CBF AF                 1839 	xor	a, a
+   0CC0 02                 1840 	ld	(bc),a
+   0CC1 01r8Dr02           1841 	ld	bc,#_level01Map + 445
+   0CC4 AF                 1842 	xor	a, a
+   0CC5 02                 1843 	ld	(bc),a
+   0CC6 01r8Er02           1844 	ld	bc,#_level01Map + 446
+   0CC9 AF                 1845 	xor	a, a
+   0CCA 02                 1846 	ld	(bc),a
+   0CCB 21r8Fr02           1847 	ld	hl,#(_level01Map + 0x01bf)
+   0CCE 36 04              1848 	ld	(hl),#0x04
+   0CD0 21r90r02           1849 	ld	hl,#(_level01Map + 0x01c0)
+   0CD3 36 08              1850 	ld	(hl),#0x08
+   0CD5 01r91r02           1851 	ld	bc,#_level01Map + 449
+   0CD8 AF                 1852 	xor	a, a
+   0CD9 02                 1853 	ld	(bc),a
+   0CDA 01r92r02           1854 	ld	bc,#_level01Map + 450
+   0CDD AF                 1855 	xor	a, a
+   0CDE 02                 1856 	ld	(bc),a
+   0CDF 01r93r02           1857 	ld	bc,#_level01Map + 451
+   0CE2 AF                 1858 	xor	a, a
+   0CE3 02                 1859 	ld	(bc),a
+   0CE4 21r94r02           1860 	ld	hl,#(_level01Map + 0x01c4)
+   0CE7 36 04              1861 	ld	(hl),#0x04
+   0CE9 21r95r02           1862 	ld	hl,#(_level01Map + 0x01c5)
+   0CEC 36 08              1863 	ld	(hl),#0x08
+   0CEE 01r96r02           1864 	ld	bc,#_level01Map + 454
+   0CF1 AF                 1865 	xor	a, a
+   0CF2 02                 1866 	ld	(bc),a
+   0CF3 01r97r02           1867 	ld	bc,#_level01Map + 455
+   0CF6 AF                 1868 	xor	a, a
+   0CF7 02                 1869 	ld	(bc),a
+   0CF8 21r98r02           1870 	ld	hl,#(_level01Map + 0x01c8)
+   0CFB 36 04              1871 	ld	(hl),#0x04
+   0CFD 21r99r02           1872 	ld	hl,#(_level01Map + 0x01c9)
+   0D00 36 0C              1873 	ld	(hl),#0x0C
+   0D02 21r9Ar02           1874 	ld	hl,#(_level01Map + 0x01ca)
+   0D05 36 08              1875 	ld	(hl),#0x08
+   0D07 01r9Br02           1876 	ld	bc,#_level01Map + 459
+   0D0A AF                 1877 	xor	a, a
+   0D0B 02                 1878 	ld	(bc),a
+   0D0C 01r9Cr02           1879 	ld	bc,#_level01Map + 460
+   0D0F AF                 1880 	xor	a, a
+   0D10 02                 1881 	ld	(bc),a
+   0D11 21r9Dr02           1882 	ld	hl,#(_level01Map + 0x01cd)
+   0D14 36 04              1883 	ld	(hl),#0x04
+   0D16 21r9Er02           1884 	ld	hl,#(_level01Map + 0x01ce)
+   0D19 36 08              1885 	ld	(hl),#0x08
+   0D1B 01r9Fr02           1886 	ld	bc,#_level01Map + 463
+   0D1E AF                 1887 	xor	a, a
+   0D1F 02                 1888 	ld	(bc),a
+   0D20 01rA0r02           1889 	ld	bc,#_level01Map + 464
+   0D23 AF                 1890 	xor	a, a
+   0D24 02                 1891 	ld	(bc),a
+   0D25 01rA1r02           1892 	ld	bc,#_level01Map + 465
+   0D28 AF                 1893 	xor	a, a
+   0D29 02                 1894 	ld	(bc),a
+   0D2A 01rA2r02           1895 	ld	bc,#_level01Map + 466
+   0D2D AF                 1896 	xor	a, a
+   0D2E 02                 1897 	ld	(bc),a
+   0D2F 01rA3r02           1898 	ld	bc,#_level01Map + 467
+   0D32 AF                 1899 	xor	a, a
+   0D33 02                 1900 	ld	(bc),a
+   0D34 21rA4r02           1901 	ld	hl,#(_level01Map + 0x01d4)
+   0D37 36 04              1902 	ld	(hl),#0x04
+   0D39 21rA5r02           1903 	ld	hl,#(_level01Map + 0x01d5)
+   0D3C 36 0C              1904 	ld	(hl),#0x0C
+   0D3E 21rA6r02           1905 	ld	hl,#(_level01Map + 0x01d6)
+   0D41 36 08              1906 	ld	(hl),#0x08
+   0D43 01rA7r02           1907 	ld	bc,#_level01Map + 471
+   0D46 AF                 1908 	xor	a, a
+   0D47 02                 1909 	ld	(bc),a
+   0D48 01rA8r02           1910 	ld	bc,#_level01Map + 472
+   0D4B AF                 1911 	xor	a, a
+   0D4C 02                 1912 	ld	(bc),a
+   0D4D 01rA9r02           1913 	ld	bc,#_level01Map + 473
+   0D50 AF                 1914 	xor	a, a
+   0D51 02                 1915 	ld	(bc),a
+   0D52 01rAAr02           1916 	ld	bc,#_level01Map + 474
+   0D55 AF                 1917 	xor	a, a
+   0D56 02                 1918 	ld	(bc),a
+   0D57 01rABr02           1919 	ld	bc,#_level01Map + 475
+   0D5A AF                 1920 	xor	a, a
+   0D5B 02                 1921 	ld	(bc),a
+   0D5C 01rACr02           1922 	ld	bc,#_level01Map + 476
+   0D5F AF                 1923 	xor	a, a
+   0D60 02                 1924 	ld	(bc),a
+   0D61 01rADr02           1925 	ld	bc,#_level01Map + 477
+   0D64 AF                 1926 	xor	a, a
+   0D65 02                 1927 	ld	(bc),a
+   0D66 01rAEr02           1928 	ld	bc,#_level01Map + 478
+   0D69 AF                 1929 	xor	a, a
+   0D6A 02                 1930 	ld	(bc),a
+   0D6B 01rAFr02           1931 	ld	bc,#_level01Map + 479
+   0D6E AF                 1932 	xor	a, a
+   0D6F 02                 1933 	ld	(bc),a
+   0D70 01rB0r02           1934 	ld	bc,#_level01Map + 480
+   0D73 AF                 1935 	xor	a, a
+   0D74 02                 1936 	ld	(bc),a
+   0D75 01rB1r02           1937 	ld	bc,#_level01Map + 481
+   0D78 AF                 1938 	xor	a, a
+   0D79 02                 1939 	ld	(bc),a
+   0D7A 01rB2r02           1940 	ld	bc,#_level01Map + 482
+   0D7D AF                 1941 	xor	a, a
+   0D7E 02                 1942 	ld	(bc),a
+   0D7F 01rB3r02           1943 	ld	bc,#_level01Map + 483
+   0D82 AF                 1944 	xor	a, a
+   0D83 02                 1945 	ld	(bc),a
+   0D84 01rB4r02           1946 	ld	bc,#_level01Map + 484
+   0D87 AF                 1947 	xor	a, a
+   0D88 02                 1948 	ld	(bc),a
+   0D89 01rB5r02           1949 	ld	bc,#_level01Map + 485
+   0D8C AF                 1950 	xor	a, a
+   0D8D 02                 1951 	ld	(bc),a
+   0D8E 01rB6r02           1952 	ld	bc,#_level01Map + 486
+   0D91 AF                 1953 	xor	a, a
+   0D92 02                 1954 	ld	(bc),a
+   0D93 21rB7r02           1955 	ld	hl,#(_level01Map + 0x01e7)
+   0D96 36 04              1956 	ld	(hl),#0x04
+   0D98 21rB8r02           1957 	ld	hl,#(_level01Map + 0x01e8)
+   0D9B 36 09              1958 	ld	(hl),#0x09
+   0D9D 21rB9r02           1959 	ld	hl,#(_level01Map + 0x01e9)
+   0DA0 36 0A              1960 	ld	(hl),#0x0A
+   0DA2 01rBAr02           1961 	ld	bc,#_level01Map + 490
+   0DA5 AF                 1962 	xor	a, a
+   0DA6 02                 1963 	ld	(bc),a
+   0DA7 21rBBr02           1964 	ld	hl,#(_level01Map + 0x01eb)
+   0DAA 36 06              1965 	ld	(hl),#0x06
+   0DAC 21rBCr02           1966 	ld	hl,#(_level01Map + 0x01ec)
+   0DAF 36 05              1967 	ld	(hl),#0x05
+   0DB1 21rBDr02           1968 	ld	hl,#(_level01Map + 0x01ed)
+   0DB4 36 09              1969 	ld	(hl),#0x09
+   0DB6 21rBEr02           1970 	ld	hl,#(_level01Map + 0x01ee)
+   0DB9 36 0A              1971 	ld	(hl),#0x0A
+   0DBB 21rBFr02           1972 	ld	hl,#(_level01Map + 0x01ef)
+   0DBE 36 06              1973 	ld	(hl),#0x06
+   0DC0 21rC0r02           1974 	ld	hl,#(_level01Map + 0x01f0)
+   0DC3 36 05              1975 	ld	(hl),#0x05
+   0DC5 21rC1r02           1976 	ld	hl,#(_level01Map + 0x01f1)
+   0DC8 36 0C              1977 	ld	(hl),#0x0C
+   0DCA 21rC2r02           1978 	ld	hl,#(_level01Map + 0x01f2)
+   0DCD 36 09              1979 	ld	(hl),#0x09
+   0DCF 21rC3r02           1980 	ld	hl,#(_level01Map + 0x01f3)
+   0DD2 36 0A              1981 	ld	(hl),#0x0A
+   0DD4 21rC4r02           1982 	ld	hl,#(_level01Map + 0x01f4)
+   0DD7 36 06              1983 	ld	(hl),#0x06
+   0DD9 21rC5r02           1984 	ld	hl,#(_level01Map + 0x01f5)
+   0DDC 36 05              1985 	ld	(hl),#0x05
+   0DDE 21rC6r02           1986 	ld	hl,#(_level01Map + 0x01f6)
+   0DE1 36 08              1987 	ld	(hl),#0x08
+   0DE3 01rC7r02           1988 	ld	bc,#_level01Map + 503
+   0DE6 AF                 1989 	xor	a, a
+   0DE7 02                 1990 	ld	(bc),a
+   0DE8 01rC8r02           1991 	ld	bc,#_level01Map + 504
+   0DEB AF                 1992 	xor	a, a
+   0DEC 02                 1993 	ld	(bc),a
+   0DED 01rC9r02           1994 	ld	bc,#_level01Map + 505
+   0DF0 AF                 1995 	xor	a, a
+   0DF1 02                 1996 	ld	(bc),a
+   0DF2 01rCAr02           1997 	ld	bc,#_level01Map + 506
+   0DF5 AF                 1998 	xor	a, a
+   0DF6 02                 1999 	ld	(bc),a
+   0DF7 01rCBr02           2000 	ld	bc,#_level01Map + 507
+   0DFA AF                 2001 	xor	a, a
+   0DFB 02                 2002 	ld	(bc),a
+   0DFC 21rCCr02           2003 	ld	hl,#(_level01Map + 0x01fc)
+   0DFF 36 04              2004 	ld	(hl),#0x04
+   0E01 21rCDr02           2005 	ld	hl,#(_level01Map + 0x01fd)
+   0E04 36 0C              2006 	ld	(hl),#0x0C
+   0E06 21rCEr02           2007 	ld	hl,#(_level01Map + 0x01fe)
+   0E09 36 08              2008 	ld	(hl),#0x08
+   0E0B 01rCFr02           2009 	ld	bc,#_level01Map + 511
+   0E0E AF                 2010 	xor	a, a
+   0E0F 02                 2011 	ld	(bc),a
+   0E10 01rD0r02           2012 	ld	bc,#_level01Map + 512
+   0E13 AF                 2013 	xor	a, a
+   0E14 02                 2014 	ld	(bc),a
+   0E15 01rD1r02           2015 	ld	bc,#_level01Map + 513
+   0E18 AF                 2016 	xor	a, a
+   0E19 02                 2017 	ld	(bc),a
+   0E1A 01rD2r02           2018 	ld	bc,#_level01Map + 514
+   0E1D AF                 2019 	xor	a, a
+   0E1E 02                 2020 	ld	(bc),a
+   0E1F 01rD3r02           2021 	ld	bc,#_level01Map + 515
+   0E22 AF                 2022 	xor	a, a
+   0E23 02                 2023 	ld	(bc),a
+   0E24 01rD4r02           2024 	ld	bc,#_level01Map + 516
+   0E27 AF                 2025 	xor	a, a
+   0E28 02                 2026 	ld	(bc),a
+   0E29 01rD5r02           2027 	ld	bc,#_level01Map + 517
+   0E2C AF                 2028 	xor	a, a
+   0E2D 02                 2029 	ld	(bc),a
+   0E2E 01rD6r02           2030 	ld	bc,#_level01Map + 518
+   0E31 AF                 2031 	xor	a, a
+   0E32 02                 2032 	ld	(bc),a
+   0E33 01rD7r02           2033 	ld	bc,#_level01Map + 519
+   0E36 AF                 2034 	xor	a, a
+   0E37 02                 2035 	ld	(bc),a
+   0E38 01rD8r02           2036 	ld	bc,#_level01Map + 520
+   0E3B AF                 2037 	xor	a, a
+   0E3C 02                 2038 	ld	(bc),a
+   0E3D 01rD9r02           2039 	ld	bc,#_level01Map + 521
+   0E40 AF                 2040 	xor	a, a
+   0E41 02                 2041 	ld	(bc),a
+   0E42 01rDAr02           2042 	ld	bc,#_level01Map + 522
+   0E45 AF                 2043 	xor	a, a
+   0E46 02                 2044 	ld	(bc),a
+   0E47 01rDBr02           2045 	ld	bc,#_level01Map + 523
+   0E4A AF                 2046 	xor	a, a
+   0E4B 02                 2047 	ld	(bc),a
+   0E4C 01rDCr02           2048 	ld	bc,#_level01Map + 524
+   0E4F AF                 2049 	xor	a, a
+   0E50 02                 2050 	ld	(bc),a
+   0E51 01rDDr02           2051 	ld	bc,#_level01Map + 525
+   0E54 AF                 2052 	xor	a, a
+   0E55 02                 2053 	ld	(bc),a
+   0E56 21rDEr02           2054 	ld	hl,#(_level01Map + 0x020e)
+   0E59 36 06              2055 	ld	(hl),#0x06
+   0E5B 21rDFr02           2056 	ld	hl,#(_level01Map + 0x020f)
+   0E5E 36 05              2057 	ld	(hl),#0x05
+   0E60 21rE0r02           2058 	ld	hl,#(_level01Map + 0x0210)
+   0E63 36 0C              2059 	ld	(hl),#0x0C
+   0E65 21rE1r02           2060 	ld	hl,#(_level01Map + 0x0211)
+   0E68 36 0B              2061 	ld	(hl),#0x0B
+   0E6A 21rE2r02           2062 	ld	hl,#(_level01Map + 0x0212)
+   0E6D 36 01              2063 	ld	(hl),#0x01
+   0E6F 21rE3r02           2064 	ld	hl,#(_level01Map + 0x0213)
+   0E72 36 07              2065 	ld	(hl),#0x07
+   0E74 21rE4r02           2066 	ld	hl,#(_level01Map + 0x0214)
+   0E77 36 0C              2067 	ld	(hl),#0x0C
+   0E79 21rE5r02           2068 	ld	hl,#(_level01Map + 0x0215)
+   0E7C 36 0C              2069 	ld	(hl),#0x0C
+   0E7E 21rE6r02           2070 	ld	hl,#(_level01Map + 0x0216)
+   0E81 36 0B              2071 	ld	(hl),#0x0B
+   0E83 21rE7r02           2072 	ld	hl,#(_level01Map + 0x0217)
+   0E86 36 07              2073 	ld	(hl),#0x07
+   0E88 21rE8r02           2074 	ld	hl,#(_level01Map + 0x0218)
+   0E8B 36 0C              2075 	ld	(hl),#0x0C
+   0E8D 21rE9r02           2076 	ld	hl,#(_level01Map + 0x0219)
+   0E90 36 0C              2077 	ld	(hl),#0x0C
+   0E92 21rEAr02           2078 	ld	hl,#(_level01Map + 0x021a)
+   0E95 36 0C              2079 	ld	(hl),#0x0C
+   0E97 21rEBr02           2080 	ld	hl,#(_level01Map + 0x021b)
+   0E9A 36 0B              2081 	ld	(hl),#0x0B
+   0E9C 21rECr02           2082 	ld	hl,#(_level01Map + 0x021c)
+   0E9F 36 07              2083 	ld	(hl),#0x07
+   0EA1 21rEDr02           2084 	ld	hl,#(_level01Map + 0x021d)
+   0EA4 36 0C              2085 	ld	(hl),#0x0C
+   0EA6 21rEEr02           2086 	ld	hl,#(_level01Map + 0x021e)
+   0EA9 36 09              2087 	ld	(hl),#0x09
+   0EAB 21rEFr02           2088 	ld	hl,#(_level01Map + 0x021f)
+   0EAE 36 0A              2089 	ld	(hl),#0x0A
+   0EB0 01rF0r02           2090 	ld	bc,#_level01Map + 544
+   0EB3 AF                 2091 	xor	a, a
+   0EB4 02                 2092 	ld	(bc),a
+   0EB5 01rF1r02           2093 	ld	bc,#_level01Map + 545
+   0EB8 AF                 2094 	xor	a, a
+   0EB9 02                 2095 	ld	(bc),a
+   0EBA 01rF2r02           2096 	ld	bc,#_level01Map + 546
+   0EBD AF                 2097 	xor	a, a
+   0EBE 02                 2098 	ld	(bc),a
+   0EBF 21rF3r02           2099 	ld	hl,#(_level01Map + 0x0223)
+   0EC2 36 06              2100 	ld	(hl),#0x06
+   0EC4 21rF4r02           2101 	ld	hl,#(_level01Map + 0x0224)
+   0EC7 36 05              2102 	ld	(hl),#0x05
+   0EC9 21rF5r02           2103 	ld	hl,#(_level01Map + 0x0225)
+   0ECC 36 0C              2104 	ld	(hl),#0x0C
+   0ECE 21rF6r02           2105 	ld	hl,#(_level01Map + 0x0226)
+   0ED1 36 09              2106 	ld	(hl),#0x09
+   0ED3 21rF7r02           2107 	ld	hl,#(_level01Map + 0x0227)
+   0ED6 36 0A              2108 	ld	(hl),#0x0A
+   0ED8 01rF8r02           2109 	ld	bc,#_level01Map + 552
+   0EDB AF                 2110 	xor	a, a
+   0EDC 02                 2111 	ld	(bc),a
+   0EDD 01rF9r02           2112 	ld	bc,#_level01Map + 553
+   0EE0 AF                 2113 	xor	a, a
+   0EE1 02                 2114 	ld	(bc),a
+   0EE2 01rFAr02           2115 	ld	bc,#_level01Map + 554
+   0EE5 AF                 2116 	xor	a, a
+   0EE6 02                 2117 	ld	(bc),a
+   0EE7 01rFBr02           2118 	ld	bc,#_level01Map + 555
+   0EEA AF                 2119 	xor	a, a
+   0EEB 02                 2120 	ld	(bc),a
+   0EEC 01rFCr02           2121 	ld	bc,#_level01Map + 556
+   0EEF AF                 2122 	xor	a, a
+   0EF0 02                 2123 	ld	(bc),a
+   0EF1 01rFDr02           2124 	ld	bc,#_level01Map + 557
+   0EF4 AF                 2125 	xor	a, a
+   0EF5 02                 2126 	ld	(bc),a
+   0EF6 01rFEr02           2127 	ld	bc,#_level01Map + 558
+   0EF9 AF                 2128 	xor	a, a
+   0EFA 02                 2129 	ld	(bc),a
+   0EFB 01rFFr02           2130 	ld	bc,#_level01Map + 559
+   0EFE AF                 2131 	xor	a, a
+   0EFF 02                 2132 	ld	(bc),a
+   0F00 21r00r03           2133 	ld	hl,#(_level01Map + 0x0230)
+   0F03 36 01              2134 	ld	(hl),#0x01
+   0F05 21r01r03           2135 	ld	hl,#(_level01Map + 0x0231)
+   0F08 36 01              2136 	ld	(hl),#0x01
+   0F0A 21r02r03           2137 	ld	hl,#(_level01Map + 0x0232)
+   0F0D 36 01              2138 	ld	(hl),#0x01
+   0F0F 21r03r03           2139 	ld	hl,#(_level01Map + 0x0233)
+   0F12 36 01              2140 	ld	(hl),#0x01
+   0F14 21r04r03           2141 	ld	hl,#(_level01Map + 0x0234)
+   0F17 36 01              2142 	ld	(hl),#0x01
+   0F19 21r05r03           2143 	ld	hl,#(_level01Map + 0x0235)
+   0F1C 36 01              2144 	ld	(hl),#0x01
+   0F1E 21r06r03           2145 	ld	hl,#(_level01Map + 0x0236)
+   0F21 36 07              2146 	ld	(hl),#0x07
+   0F23 21r07r03           2147 	ld	hl,#(_level01Map + 0x0237)
+   0F26 36 0C              2148 	ld	(hl),#0x0C
+   0F28 21r08r03           2149 	ld	hl,#(_level01Map + 0x0238)
+   0F2B 36 0C              2150 	ld	(hl),#0x0C
+   0F2D 21r09r03           2151 	ld	hl,#(_level01Map + 0x0239)
+   0F30 36 0C              2152 	ld	(hl),#0x0C
+   0F32 21r0Ar03           2153 	ld	hl,#(_level01Map + 0x023a)
+   0F35 36 0C              2154 	ld	(hl),#0x0C
+   0F37 21r0Br03           2155 	ld	hl,#(_level01Map + 0x023b)
+   0F3A 36 0C              2156 	ld	(hl),#0x0C
+   0F3C 21r0Cr03           2157 	ld	hl,#(_level01Map + 0x023c)
+   0F3F 36 0C              2158 	ld	(hl),#0x0C
+   0F41 21r0Dr03           2159 	ld	hl,#(_level01Map + 0x023d)
+   0F44 36 0C              2160 	ld	(hl),#0x0C
+   0F46 21r0Er03           2161 	ld	hl,#(_level01Map + 0x023e)
+   0F49 36 0C              2162 	ld	(hl),#0x0C
+   0F4B 21r0Fr03           2163 	ld	hl,#(_level01Map + 0x023f)
+   0F4E 36 0C              2164 	ld	(hl),#0x0C
+   0F50 21r10r03           2165 	ld	hl,#(_level01Map + 0x0240)
+   0F53 36 0C              2166 	ld	(hl),#0x0C
+   0F55 21r11r03           2167 	ld	hl,#(_level01Map + 0x0241)
+   0F58 36 0C              2168 	ld	(hl),#0x0C
+   0F5A 21r12r03           2169 	ld	hl,#(_level01Map + 0x0242)
+   0F5D 36 0C              2170 	ld	(hl),#0x0C
+   0F5F 21r13r03           2171 	ld	hl,#(_level01Map + 0x0243)
+   0F62 36 0C              2172 	ld	(hl),#0x0C
+   0F64 21r14r03           2173 	ld	hl,#(_level01Map + 0x0244)
+   0F67 36 0C              2174 	ld	(hl),#0x0C
+   0F69 21r15r03           2175 	ld	hl,#(_level01Map + 0x0245)
+   0F6C 36 0C              2176 	ld	(hl),#0x0C
+   0F6E 21r16r03           2177 	ld	hl,#(_level01Map + 0x0246)
+   0F71 36 0C              2178 	ld	(hl),#0x0C
+   0F73 21r17r03           2179 	ld	hl,#(_level01Map + 0x0247)
+   0F76 36 0B              2180 	ld	(hl),#0x0B
+   0F78 21r18r03           2181 	ld	hl,#(_level01Map + 0x0248)
+   0F7B 36 01              2182 	ld	(hl),#0x01
+   0F7D 21r19r03           2183 	ld	hl,#(_level01Map + 0x0249)
+   0F80 36 01              2184 	ld	(hl),#0x01
+   0F82 21r1Ar03           2185 	ld	hl,#(_level01Map + 0x024a)
+   0F85 36 01              2186 	ld	(hl),#0x01
+   0F87 21r1Br03           2187 	ld	hl,#(_level01Map + 0x024b)
+   0F8A 36 07              2188 	ld	(hl),#0x07
+   0F8C 21r1Cr03           2189 	ld	hl,#(_level01Map + 0x024c)
+   0F8F 36 0C              2190 	ld	(hl),#0x0C
+   0F91 21r1Dr03           2191 	ld	hl,#(_level01Map + 0x024d)
+   0F94 36 0C              2192 	ld	(hl),#0x0C
+   0F96 21r1Er03           2193 	ld	hl,#(_level01Map + 0x024e)
+   0F99 36 0C              2194 	ld	(hl),#0x0C
+   0F9B 21r1Fr03           2195 	ld	hl,#(_level01Map + 0x024f)
+   0F9E 36 0B              2196 	ld	(hl),#0x0B
+   0FA0 21r20r03           2197 	ld	hl,#(_level01Map + 0x0250)
+   0FA3 36 01              2198 	ld	(hl),#0x01
+   0FA5 21r21r03           2199 	ld	hl,#(_level01Map + 0x0251)
+   0FA8 36 01              2200 	ld	(hl),#0x01
+   0FAA 21r22r03           2201 	ld	hl,#(_level01Map + 0x0252)
+   0FAD 36 01              2202 	ld	(hl),#0x01
+   0FAF 21r23r03           2203 	ld	hl,#(_level01Map + 0x0253)
+   0FB2 36 01              2204 	ld	(hl),#0x01
+   0FB4 21r24r03           2205 	ld	hl,#(_level01Map + 0x0254)
+   0FB7 36 01              2206 	ld	(hl),#0x01
+   0FB9 21r25r03           2207 	ld	hl,#(_level01Map + 0x0255)
+   0FBC 36 01              2208 	ld	(hl),#0x01
+   0FBE 21r26r03           2209 	ld	hl,#(_level01Map + 0x0256)
+   0FC1 36 01              2210 	ld	(hl),#0x01
+   0FC3 21r27r03           2211 	ld	hl,#(_level01Map + 0x0257)
+   0FC6 36 01              2212 	ld	(hl),#0x01
+   0FC8 21r28r03           2213 	ld	hl,#(_level01Map + 0x0258)
+   0FCB 36 0C              2214 	ld	(hl),#0x0C
+   0FCD 21r29r03           2215 	ld	hl,#(_level01Map + 0x0259)
+   0FD0 36 0C              2216 	ld	(hl),#0x0C
+   0FD2 21r2Ar03           2217 	ld	hl,#(_level01Map + 0x025a)
+   0FD5 36 0C              2218 	ld	(hl),#0x0C
+   0FD7 21r2Br03           2219 	ld	hl,#(_level01Map + 0x025b)
+   0FDA 36 0C              2220 	ld	(hl),#0x0C
+   0FDC 21r2Cr03           2221 	ld	hl,#(_level01Map + 0x025c)
+   0FDF 36 0C              2222 	ld	(hl),#0x0C
+   0FE1 21r2Dr03           2223 	ld	hl,#(_level01Map + 0x025d)
+   0FE4 36 0C              2224 	ld	(hl),#0x0C
+   0FE6 21r2Er03           2225 	ld	hl,#(_level01Map + 0x025e)
+   0FE9 36 0C              2226 	ld	(hl),#0x0C
+   0FEB 21r2Fr03           2227 	ld	hl,#(_level01Map + 0x025f)
+   0FEE 36 0C              2228 	ld	(hl),#0x0C
+   0FF0 21r30r03           2229 	ld	hl,#(_level01Map + 0x0260)
+   0FF3 36 0C              2230 	ld	(hl),#0x0C
+   0FF5 21r31r03           2231 	ld	hl,#(_level01Map + 0x0261)
+   0FF8 36 0C              2232 	ld	(hl),#0x0C
+   0FFA 21r32r03           2233 	ld	hl,#(_level01Map + 0x0262)
+   0FFD 36 0C              2234 	ld	(hl),#0x0C
+   0FFF 21r33r03           2235 	ld	hl,#(_level01Map + 0x0263)
+   1002 36 0C              2236 	ld	(hl),#0x0C
+   1004 21r34r03           2237 	ld	hl,#(_level01Map + 0x0264)
+   1007 36 0C              2238 	ld	(hl),#0x0C
+   1009 21r35r03           2239 	ld	hl,#(_level01Map + 0x0265)
+   100C 36 0C              2240 	ld	(hl),#0x0C
+   100E 21r36r03           2241 	ld	hl,#(_level01Map + 0x0266)
+   1011 36 0C              2242 	ld	(hl),#0x0C
+   1013 21r37r03           2243 	ld	hl,#(_level01Map + 0x0267)
+   1016 36 0C              2244 	ld	(hl),#0x0C
+   1018 21r38r03           2245 	ld	hl,#(_level01Map + 0x0268)
+   101B 36 0C              2246 	ld	(hl),#0x0C
+   101D 21r39r03           2247 	ld	hl,#(_level01Map + 0x0269)
+   1020 36 0C              2248 	ld	(hl),#0x0C
+   1022 21r3Ar03           2249 	ld	hl,#(_level01Map + 0x026a)
+   1025 36 0C              2250 	ld	(hl),#0x0C
+   1027 21r3Br03           2251 	ld	hl,#(_level01Map + 0x026b)
+   102A 36 0C              2252 	ld	(hl),#0x0C
+   102C 21r3Cr03           2253 	ld	hl,#(_level01Map + 0x026c)
+   102F 36 0C              2254 	ld	(hl),#0x0C
+   1031 21r3Dr03           2255 	ld	hl,#(_level01Map + 0x026d)
+   1034 36 0C              2256 	ld	(hl),#0x0C
+   1036 21r3Er03           2257 	ld	hl,#(_level01Map + 0x026e)
+   1039 36 0C              2258 	ld	(hl),#0x0C
+   103B 21r3Fr03           2259 	ld	hl,#(_level01Map + 0x026f)
+   103E 36 0C              2260 	ld	(hl),#0x0C
+   1040 21r40r03           2261 	ld	hl,#(_level01Map + 0x0270)
+   1043 36 0C              2262 	ld	(hl),#0x0C
+   1045 21r41r03           2263 	ld	hl,#(_level01Map + 0x0271)
+   1048 36 0C              2264 	ld	(hl),#0x0C
+   104A 21r42r03           2265 	ld	hl,#(_level01Map + 0x0272)
+   104D 36 0C              2266 	ld	(hl),#0x0C
+   104F 21r43r03           2267 	ld	hl,#(_level01Map + 0x0273)
+   1052 36 0C              2268 	ld	(hl),#0x0C
+   1054 21r44r03           2269 	ld	hl,#(_level01Map + 0x0274)
+   1057 36 0C              2270 	ld	(hl),#0x0C
+   1059 21r45r03           2271 	ld	hl,#(_level01Map + 0x0275)
+   105C 36 0C              2272 	ld	(hl),#0x0C
+   105E 21r46r03           2273 	ld	hl,#(_level01Map + 0x0276)
+   1061 36 0C              2274 	ld	(hl),#0x0C
+   1063 21r47r03           2275 	ld	hl,#(_level01Map + 0x0277)
+   1066 36 0C              2276 	ld	(hl),#0x0C
+   1068 21r48r03           2277 	ld	hl,#(_level01Map + 0x0278)
+   106B 36 0C              2278 	ld	(hl),#0x0C
+   106D 21r49r03           2279 	ld	hl,#(_level01Map + 0x0279)
+   1070 36 0C              2280 	ld	(hl),#0x0C
+   1072 21r4Ar03           2281 	ld	hl,#(_level01Map + 0x027a)
+   1075 36 0C              2282 	ld	(hl),#0x0C
+   1077 21r4Br03           2283 	ld	hl,#(_level01Map + 0x027b)
+   107A 36 0C              2284 	ld	(hl),#0x0C
+   107C 21r4Cr03           2285 	ld	hl,#(_level01Map + 0x027c)
+   107F 36 0C              2286 	ld	(hl),#0x0C
+   1081 21r4Dr03           2287 	ld	hl,#(_level01Map + 0x027d)
+   1084 36 0C              2288 	ld	(hl),#0x0C
+   1086 21r4Er03           2289 	ld	hl,#(_level01Map + 0x027e)
+   1089 36 0C              2290 	ld	(hl),#0x0C
+   108B 21r4Fr03           2291 	ld	hl,#(_level01Map + 0x027f)
+   108E 36 0C              2292 	ld	(hl),#0x0C
+   1090 21r50r03           2293 	ld	hl,#(_level01Map + 0x0280)
+   1093 36 0C              2294 	ld	(hl),#0x0C
+   1095 21r51r03           2295 	ld	hl,#(_level01Map + 0x0281)
+   1098 36 0C              2296 	ld	(hl),#0x0C
+   109A 21r52r03           2297 	ld	hl,#(_level01Map + 0x0282)
+   109D 36 0C              2298 	ld	(hl),#0x0C
+   109F 21r53r03           2299 	ld	hl,#(_level01Map + 0x0283)
+   10A2 36 0C              2300 	ld	(hl),#0x0C
+   10A4 21r54r03           2301 	ld	hl,#(_level01Map + 0x0284)
+   10A7 36 0C              2302 	ld	(hl),#0x0C
+   10A9 21r55r03           2303 	ld	hl,#(_level01Map + 0x0285)
+   10AC 36 0C              2304 	ld	(hl),#0x0C
+   10AE 21r56r03           2305 	ld	hl,#(_level01Map + 0x0286)
+   10B1 36 0C              2306 	ld	(hl),#0x0C
+   10B3 21r57r03           2307 	ld	hl,#(_level01Map + 0x0287)
+   10B6 36 0C              2308 	ld	(hl),#0x0C
+   10B8 21r58r03           2309 	ld	hl,#(_level01Map + 0x0288)
+   10BB 36 0C              2310 	ld	(hl),#0x0C
+   10BD 21r59r03           2311 	ld	hl,#(_level01Map + 0x0289)
+   10C0 36 0C              2312 	ld	(hl),#0x0C
+   10C2 21r5Ar03           2313 	ld	hl,#(_level01Map + 0x028a)
+   10C5 36 0C              2314 	ld	(hl),#0x0C
+   10C7 21r5Br03           2315 	ld	hl,#(_level01Map + 0x028b)
+   10CA 36 0C              2316 	ld	(hl),#0x0C
+   10CC 21r5Cr03           2317 	ld	hl,#(_level01Map + 0x028c)
+   10CF 36 0C              2318 	ld	(hl),#0x0C
+   10D1 21r5Dr03           2319 	ld	hl,#(_level01Map + 0x028d)
+   10D4 36 0C              2320 	ld	(hl),#0x0C
+   10D6 21r5Er03           2321 	ld	hl,#(_level01Map + 0x028e)
+   10D9 36 0C              2322 	ld	(hl),#0x0C
+   10DB 21r5Fr03           2323 	ld	hl,#(_level01Map + 0x028f)
+   10DE 36 0C              2324 	ld	(hl),#0x0C
+   10E0 21r60r03           2325 	ld	hl,#(_level01Map + 0x0290)
+   10E3 36 0C              2326 	ld	(hl),#0x0C
+   10E5 21r61r03           2327 	ld	hl,#(_level01Map + 0x0291)
+   10E8 36 0C              2328 	ld	(hl),#0x0C
+   10EA 21r62r03           2329 	ld	hl,#(_level01Map + 0x0292)
+   10ED 36 0C              2330 	ld	(hl),#0x0C
+   10EF 21r63r03           2331 	ld	hl,#(_level01Map + 0x0293)
+   10F2 36 0C              2332 	ld	(hl),#0x0C
+   10F4 21r64r03           2333 	ld	hl,#(_level01Map + 0x0294)
+   10F7 36 0C              2334 	ld	(hl),#0x0C
+   10F9 21r65r03           2335 	ld	hl,#(_level01Map + 0x0295)
+   10FC 36 0C              2336 	ld	(hl),#0x0C
+   10FE 21r66r03           2337 	ld	hl,#(_level01Map + 0x0296)
+   1101 36 0C              2338 	ld	(hl),#0x0C
+   1103 21r67r03           2339 	ld	hl,#(_level01Map + 0x0297)
+   1106 36 0C              2340 	ld	(hl),#0x0C
+   1108 21r68r03           2341 	ld	hl,#(_level01Map + 0x0298)
+   110B 36 0C              2342 	ld	(hl),#0x0C
+   110D 21r69r03           2343 	ld	hl,#(_level01Map + 0x0299)
+   1110 36 0C              2344 	ld	(hl),#0x0C
+   1112 21r6Ar03           2345 	ld	hl,#(_level01Map + 0x029a)
+   1115 36 0C              2346 	ld	(hl),#0x0C
+   1117 21r6Br03           2347 	ld	hl,#(_level01Map + 0x029b)
+   111A 36 0C              2348 	ld	(hl),#0x0C
+   111C 21r6Cr03           2349 	ld	hl,#(_level01Map + 0x029c)
+   111F 36 0C              2350 	ld	(hl),#0x0C
+   1121 21r6Dr03           2351 	ld	hl,#(_level01Map + 0x029d)
+   1124 36 0C              2352 	ld	(hl),#0x0C
+   1126 21r6Er03           2353 	ld	hl,#(_level01Map + 0x029e)
+   1129 36 0C              2354 	ld	(hl),#0x0C
+   112B 21r6Fr03           2355 	ld	hl,#(_level01Map + 0x029f)
+   112E 36 0C              2356 	ld	(hl),#0x0C
+   1130 21r70r03           2357 	ld	hl,#(_level01Map + 0x02a0)
+   1133 36 0C              2358 	ld	(hl),#0x0C
+   1135 21r71r03           2359 	ld	hl,#(_level01Map + 0x02a1)
+   1138 36 0C              2360 	ld	(hl),#0x0C
+   113A 21r72r03           2361 	ld	hl,#(_level01Map + 0x02a2)
+   113D 36 0C              2362 	ld	(hl),#0x0C
+   113F 21r73r03           2363 	ld	hl,#(_level01Map + 0x02a3)
+   1142 36 0C              2364 	ld	(hl),#0x0C
+   1144 21r74r03           2365 	ld	hl,#(_level01Map + 0x02a4)
+   1147 36 0C              2366 	ld	(hl),#0x0C
+   1149 21r75r03           2367 	ld	hl,#(_level01Map + 0x02a5)
+   114C 36 0C              2368 	ld	(hl),#0x0C
+   114E 21r76r03           2369 	ld	hl,#(_level01Map + 0x02a6)
+   1151 36 0C              2370 	ld	(hl),#0x0C
+   1153 21r77r03           2371 	ld	hl,#(_level01Map + 0x02a7)
+   1156 36 0C              2372 	ld	(hl),#0x0C
+   1158 21r78r03           2373 	ld	hl,#(_level01Map + 0x02a8)
+   115B 36 0C              2374 	ld	(hl),#0x0C
+   115D 21r79r03           2375 	ld	hl,#(_level01Map + 0x02a9)
+   1160 36 0C              2376 	ld	(hl),#0x0C
+   1162 21r7Ar03           2377 	ld	hl,#(_level01Map + 0x02aa)
+   1165 36 0C              2378 	ld	(hl),#0x0C
+   1167 21r7Br03           2379 	ld	hl,#(_level01Map + 0x02ab)
+   116A 36 0C              2380 	ld	(hl),#0x0C
+   116C 21r7Cr03           2381 	ld	hl,#(_level01Map + 0x02ac)
+   116F 36 0C              2382 	ld	(hl),#0x0C
+   1171 21r7Dr03           2383 	ld	hl,#(_level01Map + 0x02ad)
+   1174 36 0C              2384 	ld	(hl),#0x0C
+   1176 21r7Er03           2385 	ld	hl,#(_level01Map + 0x02ae)
+   1179 36 0C              2386 	ld	(hl),#0x0C
+   117B 21r7Fr03           2387 	ld	hl,#(_level01Map + 0x02af)
+   117E 36 0C              2388 	ld	(hl),#0x0C
+   1180 21r80r03           2389 	ld	hl,#(_level01Map + 0x02b0)
+   1183 36 0C              2390 	ld	(hl),#0x0C
+   1185 21r81r03           2391 	ld	hl,#(_level01Map + 0x02b1)
+   1188 36 0C              2392 	ld	(hl),#0x0C
+   118A 21r82r03           2393 	ld	hl,#(_level01Map + 0x02b2)
+   118D 36 0C              2394 	ld	(hl),#0x0C
+   118F 21r83r03           2395 	ld	hl,#(_level01Map + 0x02b3)
+   1192 36 0C              2396 	ld	(hl),#0x0C
+   1194 21r84r03           2397 	ld	hl,#(_level01Map + 0x02b4)
+   1197 36 0C              2398 	ld	(hl),#0x0C
+   1199 21r85r03           2399 	ld	hl,#(_level01Map + 0x02b5)
+   119C 36 0C              2400 	ld	(hl),#0x0C
+   119E 21r86r03           2401 	ld	hl,#(_level01Map + 0x02b6)
+   11A1 36 0C              2402 	ld	(hl),#0x0C
+   11A3 21r87r03           2403 	ld	hl,#(_level01Map + 0x02b7)
+   11A6 36 0C              2404 	ld	(hl),#0x0C
+   11A8 21r88r03           2405 	ld	hl,#(_level01Map + 0x02b8)
+   11AB 36 0C              2406 	ld	(hl),#0x0C
+   11AD 21r89r03           2407 	ld	hl,#(_level01Map + 0x02b9)
+   11B0 36 0C              2408 	ld	(hl),#0x0C
+   11B2 21r8Ar03           2409 	ld	hl,#(_level01Map + 0x02ba)
+   11B5 36 0C              2410 	ld	(hl),#0x0C
+   11B7 21r8Br03           2411 	ld	hl,#(_level01Map + 0x02bb)
+   11BA 36 0C              2412 	ld	(hl),#0x0C
+   11BC 21r8Cr03           2413 	ld	hl,#(_level01Map + 0x02bc)
+   11BF 36 0C              2414 	ld	(hl),#0x0C
+   11C1 21r8Dr03           2415 	ld	hl,#(_level01Map + 0x02bd)
+   11C4 36 0C              2416 	ld	(hl),#0x0C
+   11C6 21r8Er03           2417 	ld	hl,#(_level01Map + 0x02be)
+   11C9 36 0C              2418 	ld	(hl),#0x0C
+   11CB 21r8Fr03           2419 	ld	hl,#(_level01Map + 0x02bf)
+   11CE 36 0C              2420 	ld	(hl),#0x0C
+   11D0 21r90r03           2421 	ld	hl,#(_level01Map + 0x02c0)
+   11D3 36 0C              2422 	ld	(hl),#0x0C
+   11D5 21r91r03           2423 	ld	hl,#(_level01Map + 0x02c1)
+   11D8 36 0C              2424 	ld	(hl),#0x0C
+   11DA 21r92r03           2425 	ld	hl,#(_level01Map + 0x02c2)
+   11DD 36 0C              2426 	ld	(hl),#0x0C
+   11DF 21r93r03           2427 	ld	hl,#(_level01Map + 0x02c3)
+   11E2 36 0C              2428 	ld	(hl),#0x0C
+   11E4 21r94r03           2429 	ld	hl,#(_level01Map + 0x02c4)
+   11E7 36 0C              2430 	ld	(hl),#0x0C
+   11E9 21r95r03           2431 	ld	hl,#(_level01Map + 0x02c5)
+   11EC 36 0C              2432 	ld	(hl),#0x0C
+   11EE 21r96r03           2433 	ld	hl,#(_level01Map + 0x02c6)
+   11F1 36 0C              2434 	ld	(hl),#0x0C
+   11F3 21r97r03           2435 	ld	hl,#(_level01Map + 0x02c7)
+   11F6 36 0C              2436 	ld	(hl),#0x0C
+   11F8 21r98r03           2437 	ld	hl,#(_level01Map + 0x02c8)
+   11FB 36 0C              2438 	ld	(hl),#0x0C
+   11FD 21r99r03           2439 	ld	hl,#(_level01Map + 0x02c9)
+   1200 36 0C              2440 	ld	(hl),#0x0C
+   1202 21r9Ar03           2441 	ld	hl,#(_level01Map + 0x02ca)
+   1205 36 0C              2442 	ld	(hl),#0x0C
+   1207 21r9Br03           2443 	ld	hl,#(_level01Map + 0x02cb)
+   120A 36 0C              2444 	ld	(hl),#0x0C
+   120C 21r9Cr03           2445 	ld	hl,#(_level01Map + 0x02cc)
+   120F 36 0C              2446 	ld	(hl),#0x0C
+   1211 21r9Dr03           2447 	ld	hl,#(_level01Map + 0x02cd)
+   1214 36 0C              2448 	ld	(hl),#0x0C
+   1216 21r9Er03           2449 	ld	hl,#(_level01Map + 0x02ce)
+   1219 36 0C              2450 	ld	(hl),#0x0C
+   121B 21r9Fr03           2451 	ld	hl,#(_level01Map + 0x02cf)
+   121E 36 0C              2452 	ld	(hl),#0x0C
+                           2453 ;--------------------------------------------------------
+                           2454 ; Home
+                           2455 ;--------------------------------------------------------
+                           2456 	.area _HOME
+                           2457 	.area _HOME
+                           2458 ;--------------------------------------------------------
+                           2459 ; code
+                           2460 ;--------------------------------------------------------
+                           2461 	.area _CODE
+                           2462 ;main.c:5: void performantDelay(UINT8 numloops){
+                           2463 ;	---------------------------------
+                           2464 ; Function performantDelay
+                           2465 ; ---------------------------------
+   0000                    2466 _performantDelay::
+                           2467 ;main.c:8: for(i=0;i<numloops;i++){
+   0000 06 00              2468 	ld	b,#0x00
+   0002                    2469 00103$:
+   0002 78                 2470 	ld	a,b
+   0003 F8 02              2471 	ldhl	sp,#2
+   0005 96                 2472 	sub	a, (hl)
+   0006 D0                 2473 	ret	NC
+                           2474 ;main.c:9: wait_vbl_done();
+   0007 C5                 2475 	push	bc
+   0008 CDr00r00           2476 	call	_wait_vbl_done
+   000B C1                 2477 	pop	bc
+                           2478 ;main.c:8: for(i=0;i<numloops;i++){
+   000C 04                 2479 	inc	b
+   000D 18 F3              2480 	jr	00103$
+   000F C9                 2481 	ret
+                           2482 ;main.c:13: void main()
+                           2483 ;	---------------------------------
+                           2484 ; Function main
+                           2485 ; ---------------------------------
+   0010                    2486 _main::
+                           2487 ;main.c:15: set_bkg_data(0, 13, level01Tiles);
+   0010 11r00r00           2488 	ld	de,#_level01Tiles+0
+   0013 D5                 2489 	push	de
+   0014 21 00 0D           2490 	ld	hl,#0x0D00
+   0017 E5                 2491 	push	hl
+   0018 CDr00r00           2492 	call	_set_bkg_data
+   001B E8 04              2493 	add	sp, #4
+                           2494 ;main.c:16: set_bkg_tiles(0, 0, 40, 18, level01Map);
+   001D 11rD0r00           2495 	ld	de,#_level01Map+0
+   0020 D5                 2496 	push	de
+   0021 21 28 12           2497 	ld	hl,#0x1228
+   0024 E5                 2498 	push	hl
+   0025 21 00 00           2499 	ld	hl,#0x0000
+   0028 E5                 2500 	push	hl
+   0029 CDr00r00           2501 	call	_set_bkg_tiles
+   002C E8 06              2502 	add	sp, #6
+                           2503 ;main.c:18: SHOW_BKG;
+   002E 11 40 FF           2504 	ld	de,#0xFF40
+   0031 1A                 2505 	ld	a,(de)
+   0032 57                 2506 	ld	d,a
+   0033 1E 00              2507 	ld	e,#0x00
+   0035 7A                 2508 	ld	a,d
+   0036 CB C7              2509 	set	0, a
+   0038 47                 2510 	ld	b,a
+   0039 21 40 FF           2511 	ld	hl,#0xFF40
+   003C 70                 2512 	ld	(hl),b
+                           2513 ;main.c:19: DISPLAY_ON;
+   003D 11 40 FF           2514 	ld	de,#0xFF40
+   0040 1A                 2515 	ld	a,(de)
+   0041 57                 2516 	ld	d,a
+   0042 1E 00              2517 	ld	e,#0x00
+   0044 7A                 2518 	ld	a,d
+   0045 CB FF              2519 	set	7, a
+   0047 47                 2520 	ld	b,a
+   0048 2E 40              2521 	ld	l, #0x40
+   004A 70                 2522 	ld	(hl),b
+                           2523 ;main.c:21: while(1){
+   004B                    2524 00102$:
+                           2525 ;main.c:22: scroll_bkg(1, 0);
+   004B 21 01 00           2526 	ld	hl,#0x0001
+   004E E5                 2527 	push	hl
+   004F CDr00r00           2528 	call	_scroll_bkg
+   0052 E8 02              2529 	add	sp, #2
+                           2530 ;main.c:23: performantDelay(2);
+   0054 3E 02              2531 	ld	a,#0x02
+   0056 F5                 2532 	push	af
+   0057 33                 2533 	inc	sp
+   0058 CDr00r00           2534 	call	_performantDelay
+   005B 33                 2535 	inc	sp
+   005C 18 ED              2536 	jr	00102$
+   005E C9                 2537 	ret
+                           2538 	.area _CODE
+                           2539 	.area _CABS (ABS)

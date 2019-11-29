@@ -1,3 +1,5 @@
+//	Gameboy sprite study using 2 sprites
+
 #include <gb/gb.h>
 #include <stdio.h>
 #include "spritePac.c"
@@ -12,6 +14,7 @@ void performantDelay(UINT8 numloops)
 		wait_vbl_done();
 	}
 }
+
 void main()
 {
 	UINT8 currentSpriteBlinker = 0;
