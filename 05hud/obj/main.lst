@@ -1,7 +1,7 @@
                               1 ;--------------------------------------------------------
                               2 ; File Created by SDCC : free open source ANSI-C Compiler
                               3 ; Version 3.5.0 #9253 (Mar 19 2016) (Linux)
-                              4 ; This file was generated Sun Dec  1 21:29:10 2019
+                              4 ; This file was generated Mon Dec  2 00:54:10 2019
                               5 ;--------------------------------------------------------
                               6 	.module main
                               7 	.optsdcc -mgbz80
@@ -11,8 +11,8 @@
                              11 ;--------------------------------------------------------
                              12 	.globl _main
                              13 	.globl _fontINIT
-                             14 	.globl _performantDelay
-                             15 	.globl _counterDigit
+                             14 	.globl _counter
+                             15 	.globl _performantDelay
                              16 	.globl _font_set
                              17 	.globl _font_load
                              18 	.globl _font_init
@@ -24,8 +24,8 @@
                              24 	.globl _wait_vbl_done
                              25 	.globl _window01Map
                              26 	.globl _numberCount
-                             27 	.globl _counterDigit2
-                             28 	.globl _counterDigit1
+                             27 	.globl _timer
+                             28 	.globl _result
                              29 	.globl _indexForLoop
                              30 	.globl _level01Map
                              31 	.globl _level01Tiles
@@ -39,14 +39,14 @@
    00D0                      39 	.ds 720
    03A0                      40 _indexForLoop::
    03A0                      41 	.ds 1
-   03A1                      42 _counterDigit1::
+   03A1                      42 _result::
    03A1                      43 	.ds 1
-   03A2                      44 _counterDigit2::
+   03A2                      44 _timer::
    03A2                      45 	.ds 1
    03A3                      46 _numberCount::
-   03A3                      47 	.ds 10
-   03AD                      48 _window01Map::
-   03AD                      49 	.ds 7
+   03A3                      47 	.ds 40
+   03CB                      48 _window01Map::
+   03CB                      49 	.ds 7
                              50 ;--------------------------------------------------------
                              51 ; absolute external ram data
                              52 ;--------------------------------------------------------
@@ -2472,207 +2472,256 @@
    1219 36 32              2472 	ld	(hl),#0x32
    121B 21r9Fr03           2473 	ld	hl,#(_level01Map + 0x02cf)
    121E 36 32              2474 	ld	(hl),#0x32
-                           2475 ;main.c:7: unsigned char counterDigit1[] =
-   1220 11rA1r03           2476 	ld	de,#_counterDigit1+0
-   1223 AF                 2477 	xor	a, a
-   1224 12                 2478 	ld	(de),a
-                           2479 ;main.c:13: unsigned char numberCount[10] =
-   1225 21rA3r03           2480 	ld	hl,#_numberCount
-   1228 36 02              2481 	ld	(hl),#0x02
-   122A 21rA4r03           2482 	ld	hl,#(_numberCount + 0x0001)
-   122D 36 03              2483 	ld	(hl),#0x03
-   122F 21rA5r03           2484 	ld	hl,#(_numberCount + 0x0002)
-   1232 36 04              2485 	ld	(hl),#0x04
-   1234 21rA6r03           2486 	ld	hl,#(_numberCount + 0x0003)
-   1237 36 05              2487 	ld	(hl),#0x05
-   1239 21rA7r03           2488 	ld	hl,#(_numberCount + 0x0004)
-   123C 36 06              2489 	ld	(hl),#0x06
-   123E 21rA8r03           2490 	ld	hl,#(_numberCount + 0x0005)
-   1241 36 07              2491 	ld	(hl),#0x07
-   1243 21rA9r03           2492 	ld	hl,#(_numberCount + 0x0006)
-   1246 36 08              2493 	ld	(hl),#0x08
-   1248 21rAAr03           2494 	ld	hl,#(_numberCount + 0x0007)
-   124B 36 09              2495 	ld	(hl),#0x09
-   124D 21rABr03           2496 	ld	hl,#(_numberCount + 0x0008)
-   1250 36 0A              2497 	ld	(hl),#0x0A
-   1252 21rACr03           2498 	ld	hl,#(_numberCount + 0x0009)
-   1255 36 0B              2499 	ld	(hl),#0x0B
-                           2500 ;main.c:18: unsigned char window01Map[7] =
-   1257 21rADr03           2501 	ld	hl,#_window01Map
-   125A 36 17              2502 	ld	(hl),#0x17
-   125C 21rAEr03           2503 	ld	hl,#(_window01Map + 0x0001)
-   125F 36 14              2504 	ld	(hl),#0x14
-   1261 21rAFr03           2505 	ld	hl,#(_window01Map + 0x0002)
-   1264 36 11              2506 	ld	(hl),#0x11
-   1266 21rB0r03           2507 	ld	hl,#(_window01Map + 0x0003)
-   1269 36 10              2508 	ld	(hl),#0x10
-   126B 01rB1r03           2509 	ld	bc,#_window01Map + 4
-   126E AF                 2510 	xor	a, a
-   126F 02                 2511 	ld	(bc),a
-   1270 21rB2r03           2512 	ld	hl,#(_window01Map + 0x0005)
-   1273 36 02              2513 	ld	(hl),#0x02
-   1275 21rB3r03           2514 	ld	hl,#(_window01Map + 0x0006)
-   1278 36 02              2515 	ld	(hl),#0x02
-                           2516 ;--------------------------------------------------------
-                           2517 ; Home
-                           2518 ;--------------------------------------------------------
-                           2519 	.area _HOME
-                           2520 	.area _HOME
-                           2521 ;--------------------------------------------------------
-                           2522 ; code
-                           2523 ;--------------------------------------------------------
-                           2524 	.area _CODE
-                           2525 ;main.c:23: void counterDigit()
-                           2526 ;	---------------------------------
-                           2527 ; Function counterDigit
-                           2528 ; ---------------------------------
-   0000                    2529 _counterDigit::
-                           2530 ;main.c:25: for(indexForLoop = 0; indexForLoop < 10; indexForLoop++)
-   0000 21rA0r03           2531 	ld	hl,#_indexForLoop
-   0003 36 00              2532 	ld	(hl),#0x00
-   0005                    2533 00102$:
-                           2534 ;main.c:27: counterDigit1[0] = numberCount[indexForLoop];
-   0005 3ErA3              2535 	ld	a,#<(_numberCount)
-   0007 21rA0r03           2536 	ld	hl,#_indexForLoop
-   000A 86                 2537 	add	a, (hl)
-   000B 4F                 2538 	ld	c,a
-   000C 3Es03              2539 	ld	a,#>(_numberCount)
-   000E CE 00              2540 	adc	a, #0x00
-   0010 47                 2541 	ld	b,a
-   0011 0A                 2542 	ld	a,(bc)
-   0012 11rA1r03           2543 	ld	de,#_counterDigit1
-   0015 12                 2544 	ld	(de),a
-                           2545 ;main.c:25: for(indexForLoop = 0; indexForLoop < 10; indexForLoop++)
-   0016 34                 2546 	inc	(hl)
-   0017 7E                 2547 	ld	a,(hl)
-   0018 D6 0A              2548 	sub	a, #0x0A
-   001A 38 E9              2549 	jr	C,00102$
-   001C C9                 2550 	ret
-                           2551 ;main.c:30: void performantDelay(UINT8 numloops){
-                           2552 ;	---------------------------------
-                           2553 ; Function performantDelay
-                           2554 ; ---------------------------------
-   001D                    2555 _performantDelay::
-                           2556 ;main.c:32: for(indexForLoop = 0;indexForLoop < numloops;indexForLoop++){
-   001D 21rA0r03           2557 	ld	hl,#_indexForLoop
-   0020 36 00              2558 	ld	(hl),#0x00
-   0022                    2559 00103$:
-   0022 21rA0r03           2560 	ld	hl,#_indexForLoop
-   0025 7E                 2561 	ld	a,(hl)
-   0026 F8 02              2562 	ldhl	sp,#2
-   0028 96                 2563 	sub	a, (hl)
-   0029 D0                 2564 	ret	NC
-                           2565 ;main.c:33: wait_vbl_done();
-   002A CDr00r00           2566 	call	_wait_vbl_done
-                           2567 ;main.c:32: for(indexForLoop = 0;indexForLoop < numloops;indexForLoop++){
-   002D 21rA0r03           2568 	ld	hl,#_indexForLoop
-   0030 34                 2569 	inc	(hl)
-   0031 18 EF              2570 	jr	00103$
-   0033 C9                 2571 	ret
-                           2572 ;main.c:37: void fontINIT()
-                           2573 ;	---------------------------------
-                           2574 ; Function fontINIT
-                           2575 ; ---------------------------------
-   0034                    2576 _fontINIT::
-                           2577 ;main.c:40: font_init();
-   0034 CDr00r00           2578 	call	_font_init
-                           2579 ;main.c:41: minFont = font_load(font_min);
-   0037 11r00r00           2580 	ld	de,#_font_min
-   003A D5                 2581 	push	de
-   003B CDr00r00           2582 	call	_font_load
-   003E E8 02              2583 	add	sp, #2
-                           2584 ;main.c:42: font_set(minFont);
-   0040 D5                 2585 	push	de
-   0041 CDr00r00           2586 	call	_font_set
-   0044 E8 02              2587 	add	sp, #2
-   0046 C9                 2588 	ret
-                           2589 ;main.c:45: void main()
-                           2590 ;	---------------------------------
-                           2591 ; Function main
-                           2592 ; ---------------------------------
-   0047                    2593 _main::
-                           2594 ;main.c:48: SHOW_BKG;
-   0047 11 40 FF           2595 	ld	de,#0xFF40
-   004A 1A                 2596 	ld	a,(de)
-   004B 5F                 2597 	ld	e,a
-   004C 16 00              2598 	ld	d,#0x00
-   004E 7B                 2599 	ld	a,e
-   004F CB C7              2600 	set	0, a
-   0051 47                 2601 	ld	b,a
-   0052 21 40 FF           2602 	ld	hl,#0xFF40
-   0055 70                 2603 	ld	(hl),b
-                           2604 ;main.c:49: SHOW_WIN;
-   0056 11 40 FF           2605 	ld	de,#0xFF40
-   0059 1A                 2606 	ld	a,(de)
-   005A 5F                 2607 	ld	e,a
-   005B 16 00              2608 	ld	d,#0x00
-   005D 7B                 2609 	ld	a,e
-   005E CB EF              2610 	set	5, a
-   0060 47                 2611 	ld	b,a
-   0061 2E 40              2612 	ld	l, #0x40
-   0063 70                 2613 	ld	(hl),b
-                           2614 ;main.c:50: DISPLAY_ON;
-   0064 11 40 FF           2615 	ld	de,#0xFF40
-   0067 1A                 2616 	ld	a,(de)
-   0068 5F                 2617 	ld	e,a
-   0069 16 00              2618 	ld	d,#0x00
-   006B 7B                 2619 	ld	a,e
-   006C CB FF              2620 	set	7, a
-   006E 47                 2621 	ld	b,a
-   006F 2E 40              2622 	ld	l, #0x40
-   0071 70                 2623 	ld	(hl),b
-                           2624 ;main.c:52: fontINIT();
-   0072 CDr34r00           2625 	call	_fontINIT
-                           2626 ;main.c:54: set_bkg_data(38, 13, level01Tiles);
-   0075 11r00r00           2627 	ld	de,#_level01Tiles
-   0078 D5                 2628 	push	de
-   0079 21 26 0D           2629 	ld	hl,#0x0D26
-   007C E5                 2630 	push	hl
-   007D CDr00r00           2631 	call	_set_bkg_data
-   0080 E8 04              2632 	add	sp, #4
-                           2633 ;main.c:55: set_bkg_tiles(0, 0, 40, 18, level01Map);
-   0082 11rD0r00           2634 	ld	de,#_level01Map
-   0085 D5                 2635 	push	de
-   0086 21 28 12           2636 	ld	hl,#0x1228
-   0089 E5                 2637 	push	hl
-   008A 21 00 00           2638 	ld	hl,#0x0000
-   008D E5                 2639 	push	hl
-   008E CDr00r00           2640 	call	_set_bkg_tiles
-   0091 E8 06              2641 	add	sp, #6
-                           2642 ;main.c:57: set_win_tiles(0, 0, 7, 1, window01Map);
-   0093 11rADr03           2643 	ld	de,#_window01Map
-   0096 D5                 2644 	push	de
-   0097 21 07 01           2645 	ld	hl,#0x0107
-   009A E5                 2646 	push	hl
-   009B 21 00 00           2647 	ld	hl,#0x0000
-   009E E5                 2648 	push	hl
-   009F CDr00r00           2649 	call	_set_win_tiles
-   00A2 E8 06              2650 	add	sp, #6
-                           2651 ;main.c:58: move_win(7, 130);
-   00A4 21 07 82           2652 	ld	hl,#0x8207
-   00A7 E5                 2653 	push	hl
-   00A8 CDr00r00           2654 	call	_move_win
-   00AB E8 02              2655 	add	sp, #2
-                           2656 ;main.c:61: while(1)
-   00AD                    2657 00102$:
-                           2658 ;main.c:63: counterDigit();
-   00AD CDr00r00           2659 	call	_counterDigit
-                           2660 ;main.c:64: window01Map[6] = counterDigit1[0];
-   00B0 FArA1r03           2661 	ld	a, (#_counterDigit1 + 0)
-   00B3 11rB3r03           2662 	ld	de,#(_window01Map + 0x0006)
-   00B6 12                 2663 	ld	(de),a
-                           2664 ;main.c:65: scroll_bkg(1, 0);
-   00B7 21 01 00           2665 	ld	hl,#0x0001
-   00BA E5                 2666 	push	hl
-   00BB CDr00r00           2667 	call	_scroll_bkg
-   00BE E8 02              2668 	add	sp, #2
-                           2669 ;main.c:66: performantDelay(1);
-   00C0 3E 01              2670 	ld	a,#0x01
-   00C2 F5                 2671 	push	af
-   00C3 33                 2672 	inc	sp
-   00C4 CDr1Dr00           2673 	call	_performantDelay
-   00C7 33                 2674 	inc	sp
-   00C8 18 E3              2675 	jr	00102$
-   00CA C9                 2676 	ret
-                           2677 	.area _CODE
-                           2678 	.area _CABS (ABS)
+                           2475 ;main.c:9: UINT8 timer = 0;
+   1220 21rA2r03           2476 	ld	hl,#_timer
+   1223 36 00              2477 	ld	(hl),#0x00
+                           2478 ;main.c:11: unsigned char numberCount[40] =
+   1225 21rA3r03           2479 	ld	hl,#_numberCount
+   1228 36 03              2480 	ld	(hl),#0x03
+   122A 21rA4r03           2481 	ld	hl,#(_numberCount + 0x0001)
+   122D 36 03              2482 	ld	(hl),#0x03
+   122F 21rA5r03           2483 	ld	hl,#(_numberCount + 0x0002)
+   1232 36 03              2484 	ld	(hl),#0x03
+   1234 21rA6r03           2485 	ld	hl,#(_numberCount + 0x0003)
+   1237 36 03              2486 	ld	(hl),#0x03
+   1239 21rA7r03           2487 	ld	hl,#(_numberCount + 0x0004)
+   123C 36 04              2488 	ld	(hl),#0x04
+   123E 21rA8r03           2489 	ld	hl,#(_numberCount + 0x0005)
+   1241 36 04              2490 	ld	(hl),#0x04
+   1243 21rA9r03           2491 	ld	hl,#(_numberCount + 0x0006)
+   1246 36 04              2492 	ld	(hl),#0x04
+   1248 21rAAr03           2493 	ld	hl,#(_numberCount + 0x0007)
+   124B 36 04              2494 	ld	(hl),#0x04
+   124D 21rABr03           2495 	ld	hl,#(_numberCount + 0x0008)
+   1250 36 05              2496 	ld	(hl),#0x05
+   1252 21rACr03           2497 	ld	hl,#(_numberCount + 0x0009)
+   1255 36 05              2498 	ld	(hl),#0x05
+   1257 21rADr03           2499 	ld	hl,#(_numberCount + 0x000a)
+   125A 36 05              2500 	ld	(hl),#0x05
+   125C 21rAEr03           2501 	ld	hl,#(_numberCount + 0x000b)
+   125F 36 05              2502 	ld	(hl),#0x05
+   1261 21rAFr03           2503 	ld	hl,#(_numberCount + 0x000c)
+   1264 36 06              2504 	ld	(hl),#0x06
+   1266 21rB0r03           2505 	ld	hl,#(_numberCount + 0x000d)
+   1269 36 06              2506 	ld	(hl),#0x06
+   126B 21rB1r03           2507 	ld	hl,#(_numberCount + 0x000e)
+   126E 36 06              2508 	ld	(hl),#0x06
+   1270 21rB2r03           2509 	ld	hl,#(_numberCount + 0x000f)
+   1273 36 06              2510 	ld	(hl),#0x06
+   1275 21rB3r03           2511 	ld	hl,#(_numberCount + 0x0010)
+   1278 36 07              2512 	ld	(hl),#0x07
+   127A 21rB4r03           2513 	ld	hl,#(_numberCount + 0x0011)
+   127D 36 07              2514 	ld	(hl),#0x07
+   127F 21rB5r03           2515 	ld	hl,#(_numberCount + 0x0012)
+   1282 36 07              2516 	ld	(hl),#0x07
+   1284 21rB6r03           2517 	ld	hl,#(_numberCount + 0x0013)
+   1287 36 07              2518 	ld	(hl),#0x07
+   1289 21rB7r03           2519 	ld	hl,#(_numberCount + 0x0014)
+   128C 36 08              2520 	ld	(hl),#0x08
+   128E 21rB8r03           2521 	ld	hl,#(_numberCount + 0x0015)
+   1291 36 08              2522 	ld	(hl),#0x08
+   1293 21rB9r03           2523 	ld	hl,#(_numberCount + 0x0016)
+   1296 36 08              2524 	ld	(hl),#0x08
+   1298 21rBAr03           2525 	ld	hl,#(_numberCount + 0x0017)
+   129B 36 08              2526 	ld	(hl),#0x08
+   129D 21rBBr03           2527 	ld	hl,#(_numberCount + 0x0018)
+   12A0 36 09              2528 	ld	(hl),#0x09
+   12A2 21rBCr03           2529 	ld	hl,#(_numberCount + 0x0019)
+   12A5 36 09              2530 	ld	(hl),#0x09
+   12A7 21rBDr03           2531 	ld	hl,#(_numberCount + 0x001a)
+   12AA 36 09              2532 	ld	(hl),#0x09
+   12AC 21rBEr03           2533 	ld	hl,#(_numberCount + 0x001b)
+   12AF 36 09              2534 	ld	(hl),#0x09
+   12B1 21rBFr03           2535 	ld	hl,#(_numberCount + 0x001c)
+   12B4 36 0A              2536 	ld	(hl),#0x0A
+   12B6 21rC0r03           2537 	ld	hl,#(_numberCount + 0x001d)
+   12B9 36 0A              2538 	ld	(hl),#0x0A
+   12BB 21rC1r03           2539 	ld	hl,#(_numberCount + 0x001e)
+   12BE 36 0A              2540 	ld	(hl),#0x0A
+   12C0 21rC2r03           2541 	ld	hl,#(_numberCount + 0x001f)
+   12C3 36 0A              2542 	ld	(hl),#0x0A
+   12C5 21rC3r03           2543 	ld	hl,#(_numberCount + 0x0020)
+   12C8 36 0B              2544 	ld	(hl),#0x0B
+   12CA 21rC4r03           2545 	ld	hl,#(_numberCount + 0x0021)
+   12CD 36 0B              2546 	ld	(hl),#0x0B
+   12CF 21rC5r03           2547 	ld	hl,#(_numberCount + 0x0022)
+   12D2 36 0B              2548 	ld	(hl),#0x0B
+   12D4 21rC6r03           2549 	ld	hl,#(_numberCount + 0x0023)
+   12D7 36 0B              2550 	ld	(hl),#0x0B
+                           2551 ;main.c:24: unsigned char window01Map[] =
+   12D9 21rCBr03           2552 	ld	hl,#_window01Map
+   12DC 36 17              2553 	ld	(hl),#0x17
+   12DE 21rCCr03           2554 	ld	hl,#(_window01Map + 0x0001)
+   12E1 36 14              2555 	ld	(hl),#0x14
+   12E3 21rCDr03           2556 	ld	hl,#(_window01Map + 0x0002)
+   12E6 36 11              2557 	ld	(hl),#0x11
+   12E8 21rCEr03           2558 	ld	hl,#(_window01Map + 0x0003)
+   12EB 36 10              2559 	ld	(hl),#0x10
+   12ED 01rCFr03           2560 	ld	bc,#_window01Map + 4
+   12F0 AF                 2561 	xor	a, a
+   12F1 02                 2562 	ld	(bc),a
+   12F2 21rD0r03           2563 	ld	hl,#(_window01Map + 0x0005)
+   12F5 36 02              2564 	ld	(hl),#0x02
+   12F7 21rD1r03           2565 	ld	hl,#(_window01Map + 0x0006)
+   12FA 36 02              2566 	ld	(hl),#0x02
+                           2567 ;--------------------------------------------------------
+                           2568 ; Home
+                           2569 ;--------------------------------------------------------
+                           2570 	.area _HOME
+                           2571 	.area _HOME
+                           2572 ;--------------------------------------------------------
+                           2573 ; code
+                           2574 ;--------------------------------------------------------
+                           2575 	.area _CODE
+                           2576 ;main.c:29: void performantDelay(UINT8 numloops)
+                           2577 ;	---------------------------------
+                           2578 ; Function performantDelay
+                           2579 ; ---------------------------------
+   0000                    2580 _performantDelay::
+                           2581 ;main.c:31: for(indexForLoop = 0;indexForLoop < numloops;indexForLoop++)
+   0000 21rA0r03           2582 	ld	hl,#_indexForLoop
+   0003 36 00              2583 	ld	(hl),#0x00
+   0005                    2584 00103$:
+   0005 21rA0r03           2585 	ld	hl,#_indexForLoop
+   0008 7E                 2586 	ld	a,(hl)
+   0009 F8 02              2587 	ldhl	sp,#2
+   000B 96                 2588 	sub	a, (hl)
+   000C D0                 2589 	ret	NC
+                           2590 ;main.c:33: wait_vbl_done();
+   000D CDr00r00           2591 	call	_wait_vbl_done
+                           2592 ;main.c:31: for(indexForLoop = 0;indexForLoop < numloops;indexForLoop++)
+   0010 21rA0r03           2593 	ld	hl,#_indexForLoop
+   0013 34                 2594 	inc	(hl)
+   0014 18 EF              2595 	jr	00103$
+   0016 C9                 2596 	ret
+                           2597 ;main.c:37: void counter()
+                           2598 ;	---------------------------------
+                           2599 ; Function counter
+                           2600 ; ---------------------------------
+   0017                    2601 _counter::
+                           2602 ;main.c:39: window01Map[6] = numberCount[timer];
+   0017 3ErA3              2603 	ld	a,#<(_numberCount)
+   0019 21rA2r03           2604 	ld	hl,#_timer
+   001C 86                 2605 	add	a, (hl)
+   001D 4F                 2606 	ld	c,a
+   001E 3Es03              2607 	ld	a,#>(_numberCount)
+   0020 CE 00              2608 	adc	a, #0x00
+   0022 47                 2609 	ld	b,a
+   0023 0A                 2610 	ld	a,(bc)
+   0024 11rD1r03           2611 	ld	de,#(_window01Map + 0x0006)
+   0027 12                 2612 	ld	(de),a
+                           2613 ;main.c:40: set_win_tiles(0, 0, 7, 1, window01Map);
+   0028 11rCBr03           2614 	ld	de,#_window01Map
+   002B D5                 2615 	push	de
+   002C 21 07 01           2616 	ld	hl,#0x0107
+   002F E5                 2617 	push	hl
+   0030 21 00 00           2618 	ld	hl,#0x0000
+   0033 E5                 2619 	push	hl
+   0034 CDr00r00           2620 	call	_set_win_tiles
+   0037 E8 06              2621 	add	sp, #6
+                           2622 ;main.c:41: if(timer > 39)
+   0039 3E 27              2623 	ld	a,#0x27
+   003B 21rA2r03           2624 	ld	hl,#_timer
+   003E 96                 2625 	sub	a, (hl)
+   003F 30 02              2626 	jr	NC,00102$
+                           2627 ;main.c:43: timer = 0;
+   0041 36 00              2628 	ld	(hl),#0x00
+   0043                    2629 00102$:
+                           2630 ;main.c:45: timer++;
+   0043 21rA2r03           2631 	ld	hl,#_timer
+   0046 34                 2632 	inc	(hl)
+   0047 C9                 2633 	ret
+                           2634 ;main.c:48: void fontINIT()
+                           2635 ;	---------------------------------
+                           2636 ; Function fontINIT
+                           2637 ; ---------------------------------
+   0048                    2638 _fontINIT::
+                           2639 ;main.c:51: font_init();
+   0048 CDr00r00           2640 	call	_font_init
+                           2641 ;main.c:52: minFont = font_load(font_min);
+   004B 11r00r00           2642 	ld	de,#_font_min
+   004E D5                 2643 	push	de
+   004F CDr00r00           2644 	call	_font_load
+   0052 E8 02              2645 	add	sp, #2
+                           2646 ;main.c:53: font_set(minFont);
+   0054 D5                 2647 	push	de
+   0055 CDr00r00           2648 	call	_font_set
+   0058 E8 02              2649 	add	sp, #2
+   005A C9                 2650 	ret
+                           2651 ;main.c:56: void main()
+                           2652 ;	---------------------------------
+                           2653 ; Function main
+                           2654 ; ---------------------------------
+   005B                    2655 _main::
+                           2656 ;main.c:59: SHOW_BKG;
+   005B 11 40 FF           2657 	ld	de,#0xFF40
+   005E 1A                 2658 	ld	a,(de)
+   005F 5F                 2659 	ld	e,a
+   0060 16 00              2660 	ld	d,#0x00
+   0062 7B                 2661 	ld	a,e
+   0063 CB C7              2662 	set	0, a
+   0065 47                 2663 	ld	b,a
+   0066 21 40 FF           2664 	ld	hl,#0xFF40
+   0069 70                 2665 	ld	(hl),b
+                           2666 ;main.c:60: SHOW_WIN;
+   006A 11 40 FF           2667 	ld	de,#0xFF40
+   006D 1A                 2668 	ld	a,(de)
+   006E 5F                 2669 	ld	e,a
+   006F 16 00              2670 	ld	d,#0x00
+   0071 7B                 2671 	ld	a,e
+   0072 CB EF              2672 	set	5, a
+   0074 47                 2673 	ld	b,a
+   0075 2E 40              2674 	ld	l, #0x40
+   0077 70                 2675 	ld	(hl),b
+                           2676 ;main.c:61: DISPLAY_ON;
+   0078 11 40 FF           2677 	ld	de,#0xFF40
+   007B 1A                 2678 	ld	a,(de)
+   007C 5F                 2679 	ld	e,a
+   007D 16 00              2680 	ld	d,#0x00
+   007F 7B                 2681 	ld	a,e
+   0080 CB FF              2682 	set	7, a
+   0082 47                 2683 	ld	b,a
+   0083 2E 40              2684 	ld	l, #0x40
+   0085 70                 2685 	ld	(hl),b
+                           2686 ;main.c:63: fontINIT();
+   0086 CDr48r00           2687 	call	_fontINIT
+                           2688 ;main.c:65: set_bkg_data(38, 13, level01Tiles);
+   0089 11r00r00           2689 	ld	de,#_level01Tiles
+   008C D5                 2690 	push	de
+   008D 21 26 0D           2691 	ld	hl,#0x0D26
+   0090 E5                 2692 	push	hl
+   0091 CDr00r00           2693 	call	_set_bkg_data
+   0094 E8 04              2694 	add	sp, #4
+                           2695 ;main.c:66: set_bkg_tiles(0, 0, 40, 18, level01Map);
+   0096 11rD0r00           2696 	ld	de,#_level01Map
+   0099 D5                 2697 	push	de
+   009A 21 28 12           2698 	ld	hl,#0x1228
+   009D E5                 2699 	push	hl
+   009E 21 00 00           2700 	ld	hl,#0x0000
+   00A1 E5                 2701 	push	hl
+   00A2 CDr00r00           2702 	call	_set_bkg_tiles
+   00A5 E8 06              2703 	add	sp, #6
+                           2704 ;main.c:67: move_win(7, 130);
+   00A7 21 07 82           2705 	ld	hl,#0x8207
+   00AA E5                 2706 	push	hl
+   00AB CDr00r00           2707 	call	_move_win
+   00AE E8 02              2708 	add	sp, #2
+                           2709 ;main.c:69: while(1)
+   00B0                    2710 00102$:
+                           2711 ;main.c:72: counter();
+   00B0 CDr17r00           2712 	call	_counter
+                           2713 ;main.c:74: scroll_bkg(1, 0);
+   00B3 21 01 00           2714 	ld	hl,#0x0001
+   00B6 E5                 2715 	push	hl
+   00B7 CDr00r00           2716 	call	_scroll_bkg
+   00BA E8 02              2717 	add	sp, #2
+                           2718 ;main.c:75: performantDelay(1);
+   00BC 3E 01              2719 	ld	a,#0x01
+   00BE F5                 2720 	push	af
+   00BF 33                 2721 	inc	sp
+   00C0 CDr00r00           2722 	call	_performantDelay
+   00C3 33                 2723 	inc	sp
+   00C4 18 EA              2724 	jr	00102$
+   00C6 C9                 2725 	ret
+                           2726 	.area _CODE
+                           2727 	.area _CABS (ABS)

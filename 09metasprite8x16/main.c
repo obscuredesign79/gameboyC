@@ -70,15 +70,15 @@ void main(){
 //		moveGameCharAnim();
 
 
-		if(joypad() & J_LEFT){
-			spider.x -= 2;
+		if(joypad() & J_LEFT && spider.x > 8){
+			spider.x -= 4;
 			moveGameCharacter(&spider,spider.x,spider.y);
 			moveGameCharAnim();
 
 		}
 
-		if(joypad() & J_RIGHT){
-			spider.x += 2;
+		if(joypad() & J_RIGHT && spider.x < 160){
+			spider.x += 4;
 			moveGameCharacter(&spider,spider.x,spider.y);
 			moveGameCharAnim();
 			
