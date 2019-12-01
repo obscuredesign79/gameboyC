@@ -11,7 +11,8 @@ build:
 
 clean:
 	rm -rf $(OBJ)
-	rm -f main.gb
+	rm -f gameRom.gb
 
 run:
-	wine bgb gameRom.gb
+#	wine bgb gameRom.gb
+	wine visualboyadvance-m gameRom.gb

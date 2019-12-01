@@ -7,31 +7,25 @@ Symbol Table
     .__.ABS.                                                    =  0000 G
     .__.CPU.                                                    =  0000 L
     .__.H$L.                                                    =  0000 L
-    _joypad                                                        **** GX
-  0 _main                                                          00E6 GR
-  0 _moveGameCharAnim                                              0010 GR
-  0 _moveGameCharacter                                             0050 GR
+  1 _blinker                                                       0020 GR
+  0 _main                                                          0010 GR
     _move_sprite                                                   **** GX
+  1 _pacMan                                                        0000 GR
   0 _performantDelay                                               0000 GR
     _set_sprite_data                                               **** GX
     _set_sprite_tile                                               **** GX
-  0 _setupSpider                                                   008F GR
-  1 _spider                                                        0051 GR
-  1 _sprite                                                        0000 GR
-  1 _timer                                                         0050 GR
     _wait_vbl_done                                                 **** GX
-
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 2.
 Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE                                      size  171   flags    0
-   1 _DATA                                      size   5A   flags    0
+   0 _CODE                                      size   A2   flags    0
+   1 _DATA                                      size   40   flags    0
    2 _DABS                                      size    0   flags    8
    3 _HOME                                      size    0   flags    0
-   4 _GSINIT                                    size  195   flags    0
+   4 _GSINIT                                    size  140   flags    0
    5 _GSFINAL                                   size    0   flags    0
    6 _CABS                                      size    0   flags    8
 

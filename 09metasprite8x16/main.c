@@ -14,6 +14,7 @@ void performantDelay(UINT8 numloops){
 	}
 }
 
+// cycle through tiles for animation
 void moveGameCharAnim(){
 	
 	if(timer == 5){
@@ -28,7 +29,7 @@ void moveGameCharAnim(){
 	timer++;
 }
 
-void moveGameCharacter(struct gameCharacter* character, UINT8 x, UINT8 y){
+void moveGameCharacter(struct gameCharacter *character, UINT8 x, UINT8 y){
 	move_sprite(character->spriteId[1],x,y);
 	move_sprite(character->spriteId[2],x,y + 8);
 
@@ -66,7 +67,7 @@ void main(){
 
 
 	while(1){
-		moveGameCharAnim();
+//		moveGameCharAnim();
 
 
 		if(joypad() & J_LEFT){

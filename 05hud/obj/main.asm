@@ -1,7 +1,7 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
 ; Version 3.5.0 #9253 (Mar 19 2016) (Linux)
-; This file was generated Sat Nov 30 00:31:57 2019
+; This file was generated Sun Dec  1 21:29:10 2019
 ;--------------------------------------------------------
 	.module main
 	.optsdcc -mgbz80
@@ -10,7 +10,9 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _main
+	.globl _fontINIT
 	.globl _performantDelay
+	.globl _counterDigit
 	.globl _font_set
 	.globl _font_load
 	.globl _font_init
@@ -21,6 +23,10 @@
 	.globl _set_bkg_data
 	.globl _wait_vbl_done
 	.globl _window01Map
+	.globl _numberCount
+	.globl _counterDigit2
+	.globl _counterDigit1
+	.globl _indexForLoop
 	.globl _level01Map
 	.globl _level01Tiles
 ;--------------------------------------------------------
@@ -31,8 +37,16 @@ _level01Tiles::
 	.ds 208
 _level01Map::
 	.ds 720
-_window01Map::
+_indexForLoop::
+	.ds 1
+_counterDigit1::
+	.ds 1
+_counterDigit2::
+	.ds 1
+_numberCount::
 	.ds 10
+_window01Map::
+	.ds 7
 ;--------------------------------------------------------
 ; absolute external ram data
 ;--------------------------------------------------------
@@ -2458,30 +2472,47 @@ _window01Map::
 	ld	(hl),#0x32
 	ld	hl,#(_level01Map + 0x02cf)
 	ld	(hl),#0x32
-;window01Map.c:2: unsigned char window01Map[] =
-	ld	hl,#_window01Map
-	ld	(hl),#0x00
-	ld	hl,#(_window01Map + 0x0001)
-	ld	(hl),#0x17
-	ld	hl,#(_window01Map + 0x0002)
-	ld	(hl),#0x14
-	ld	hl,#(_window01Map + 0x0003)
-	ld	(hl),#0x11
-	ld	hl,#(_window01Map + 0x0004)
-	ld	(hl),#0x10
-	ld	bc,#_window01Map + 5
+;main.c:7: unsigned char counterDigit1[] =
+	ld	de,#_counterDigit1+0
 	xor	a, a
-	ld	(bc),a
-	ld	hl,#(_window01Map + 0x0006)
-	ld	(hl),#0x23
-	ld	bc,#_window01Map + 7
-	xor	a, a
-	ld	(bc),a
-	ld	hl,#(_window01Map + 0x0008)
+	ld	(de),a
+;main.c:13: unsigned char numberCount[10] =
+	ld	hl,#_numberCount
+	ld	(hl),#0x02
+	ld	hl,#(_numberCount + 0x0001)
+	ld	(hl),#0x03
+	ld	hl,#(_numberCount + 0x0002)
+	ld	(hl),#0x04
+	ld	hl,#(_numberCount + 0x0003)
+	ld	(hl),#0x05
+	ld	hl,#(_numberCount + 0x0004)
 	ld	(hl),#0x06
-	ld	bc,#_window01Map + 9
+	ld	hl,#(_numberCount + 0x0005)
+	ld	(hl),#0x07
+	ld	hl,#(_numberCount + 0x0006)
+	ld	(hl),#0x08
+	ld	hl,#(_numberCount + 0x0007)
+	ld	(hl),#0x09
+	ld	hl,#(_numberCount + 0x0008)
+	ld	(hl),#0x0A
+	ld	hl,#(_numberCount + 0x0009)
+	ld	(hl),#0x0B
+;main.c:18: unsigned char window01Map[7] =
+	ld	hl,#_window01Map
+	ld	(hl),#0x17
+	ld	hl,#(_window01Map + 0x0001)
+	ld	(hl),#0x14
+	ld	hl,#(_window01Map + 0x0002)
+	ld	(hl),#0x11
+	ld	hl,#(_window01Map + 0x0003)
+	ld	(hl),#0x10
+	ld	bc,#_window01Map + 4
 	xor	a, a
 	ld	(bc),a
+	ld	hl,#(_window01Map + 0x0005)
+	ld	(hl),#0x02
+	ld	hl,#(_window01Map + 0x0006)
+	ld	(hl),#0x02
 ;--------------------------------------------------------
 ; Home
 ;--------------------------------------------------------
@@ -2491,51 +2522,116 @@ _window01Map::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;main.c:7: void performantDelay(UINT8 numloops){
+;main.c:23: void counterDigit()
+;	---------------------------------
+; Function counterDigit
+; ---------------------------------
+_counterDigit::
+;main.c:25: for(indexForLoop = 0; indexForLoop < 10; indexForLoop++)
+	ld	hl,#_indexForLoop
+	ld	(hl),#0x00
+00102$:
+;main.c:27: counterDigit1[0] = numberCount[indexForLoop];
+	ld	a,#<(_numberCount)
+	ld	hl,#_indexForLoop
+	add	a, (hl)
+	ld	c,a
+	ld	a,#>(_numberCount)
+	adc	a, #0x00
+	ld	b,a
+	ld	a,(bc)
+	ld	de,#_counterDigit1
+	ld	(de),a
+;main.c:25: for(indexForLoop = 0; indexForLoop < 10; indexForLoop++)
+	inc	(hl)
+	ld	a,(hl)
+	sub	a, #0x0A
+	jr	C,00102$
+	ret
+;main.c:30: void performantDelay(UINT8 numloops){
 ;	---------------------------------
 ; Function performantDelay
 ; ---------------------------------
 _performantDelay::
-;main.c:10: for(i=0;i<numloops;i++){
-	ld	b,#0x00
+;main.c:32: for(indexForLoop = 0;indexForLoop < numloops;indexForLoop++){
+	ld	hl,#_indexForLoop
+	ld	(hl),#0x00
 00103$:
-	ld	a,b
+	ld	hl,#_indexForLoop
+	ld	a,(hl)
 	ldhl	sp,#2
 	sub	a, (hl)
 	ret	NC
-;main.c:11: wait_vbl_done();
-	push	bc
+;main.c:33: wait_vbl_done();
 	call	_wait_vbl_done
-	pop	bc
-;main.c:10: for(i=0;i<numloops;i++){
-	inc	b
+;main.c:32: for(indexForLoop = 0;indexForLoop < numloops;indexForLoop++){
+	ld	hl,#_indexForLoop
+	inc	(hl)
 	jr	00103$
 	ret
-;main.c:15: void main()
+;main.c:37: void fontINIT()
+;	---------------------------------
+; Function fontINIT
+; ---------------------------------
+_fontINIT::
+;main.c:40: font_init();
+	call	_font_init
+;main.c:41: minFont = font_load(font_min);
+	ld	de,#_font_min
+	push	de
+	call	_font_load
+	add	sp, #2
+;main.c:42: font_set(minFont);
+	push	de
+	call	_font_set
+	add	sp, #2
+	ret
+;main.c:45: void main()
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
 _main::
-;main.c:20: font_init();
-	call	_font_init
-;main.c:21: minFont = font_load(font_min);
-	ld	de,#_font_min+0
-	push	de
-	call	_font_load
-	add	sp, #2
-;main.c:22: font_set(minFont);
-	push	de
-	call	_font_set
-	add	sp, #2
-;main.c:24: set_bkg_data(38, 13, level01Tiles);
-	ld	de,#_level01Tiles+0
+;main.c:48: SHOW_BKG;
+	ld	de,#0xFF40
+	ld	a,(de)
+	ld	e,a
+	ld	d,#0x00
+	ld	a,e
+	set	0, a
+	ld	b,a
+	ld	hl,#0xFF40
+	ld	(hl),b
+;main.c:49: SHOW_WIN;
+	ld	de,#0xFF40
+	ld	a,(de)
+	ld	e,a
+	ld	d,#0x00
+	ld	a,e
+	set	5, a
+	ld	b,a
+	ld	l, #0x40
+	ld	(hl),b
+;main.c:50: DISPLAY_ON;
+	ld	de,#0xFF40
+	ld	a,(de)
+	ld	e,a
+	ld	d,#0x00
+	ld	a,e
+	set	7, a
+	ld	b,a
+	ld	l, #0x40
+	ld	(hl),b
+;main.c:52: fontINIT();
+	call	_fontINIT
+;main.c:54: set_bkg_data(38, 13, level01Tiles);
+	ld	de,#_level01Tiles
 	push	de
 	ld	hl,#0x0D26
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;main.c:25: set_bkg_tiles(0, 0, 40, 18, level01Map);
-	ld	de,#_level01Map+0
+;main.c:55: set_bkg_tiles(0, 0, 40, 18, level01Map);
+	ld	de,#_level01Map
 	push	de
 	ld	hl,#0x1228
 	push	hl
@@ -2543,58 +2639,34 @@ _main::
 	push	hl
 	call	_set_bkg_tiles
 	add	sp, #6
-;main.c:27: set_win_tiles(0, 0, 10, 1, window01Map);
-	ld	de,#_window01Map+0
+;main.c:57: set_win_tiles(0, 0, 7, 1, window01Map);
+	ld	de,#_window01Map
 	push	de
-	ld	hl,#0x010A
+	ld	hl,#0x0107
 	push	hl
 	ld	hl,#0x0000
 	push	hl
 	call	_set_win_tiles
 	add	sp, #6
-;main.c:29: SHOW_BKG;
-	ld	de,#0xFF40
-	ld	a,(de)
-	ld	d,a
-	ld	e,#0x00
-	ld	a,d
-	set	0, a
-	ld	b,a
-	ld	hl,#0xFF40
-	ld	(hl),b
-;main.c:30: SHOW_WIN;
-	ld	de,#0xFF40
-	ld	a,(de)
-	ld	d,a
-	ld	e,#0x00
-	ld	a,d
-	set	5, a
-	ld	b,a
-	ld	l, #0x40
-	ld	(hl),b
-;main.c:31: DISPLAY_ON;
-	ld	de,#0xFF40
-	ld	a,(de)
-	ld	d,a
-	ld	e,#0x00
-	ld	a,d
-	set	7, a
-	ld	b,a
-	ld	l, #0x40
-	ld	(hl),b
-;main.c:33: while(1)
+;main.c:58: move_win(7, 130);
+	ld	hl,#0x8207
+	push	hl
+	call	_move_win
+	add	sp, #2
+;main.c:61: while(1)
 00102$:
-;main.c:35: scroll_bkg(1, 0);
+;main.c:63: counterDigit();
+	call	_counterDigit
+;main.c:64: window01Map[6] = counterDigit1[0];
+	ld	a, (#_counterDigit1 + 0)
+	ld	de,#(_window01Map + 0x0006)
+	ld	(de),a
+;main.c:65: scroll_bkg(1, 0);
 	ld	hl,#0x0001
 	push	hl
 	call	_scroll_bkg
 	add	sp, #2
-;main.c:36: move_win(0, 136);
-	ld	hl,#0x8800
-	push	hl
-	call	_move_win
-	add	sp, #2
-;main.c:37: performantDelay(1);
+;main.c:66: performantDelay(1);
 	ld	a,#0x01
 	push	af
 	inc	sp

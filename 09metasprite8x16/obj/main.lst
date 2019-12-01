@@ -1,7 +1,7 @@
                               1 ;--------------------------------------------------------
                               2 ; File Created by SDCC : free open source ANSI-C Compiler
                               3 ; Version 3.5.0 #9253 (Mar 19 2016) (Linux)
-                              4 ; This file was generated Wed Nov 20 16:47:56 2019
+                              4 ; This file was generated Sun Dec  1 16:48:48 2019
                               5 ;--------------------------------------------------------
                               6 	.module main
                               7 	.optsdcc -mgbz80
@@ -251,58 +251,58 @@
    000C 04                  251 	inc	b
    000D 18 F3               252 	jr	00103$
    000F C9                  253 	ret
-                            254 ;main.c:17: void moveGameCharAnim(){
+                            254 ;main.c:18: void moveGameCharAnim(){
                             255 ;	---------------------------------
                             256 ; Function moveGameCharAnim
                             257 ; ---------------------------------
    0010                     258 _moveGameCharAnim::
-                            259 ;main.c:19: if(timer == 5){
+                            259 ;main.c:20: if(timer == 5){
    0010 21r50r00            260 	ld	hl,#_timer
    0013 7E                  261 	ld	a,(hl)
    0014 D6 05               262 	sub	a, #0x05
    0016 20 14               263 	jr	NZ,00104$
-                            264 ;main.c:20: set_sprite_tile(1, 3);
+                            264 ;main.c:21: set_sprite_tile(1, 3);
    0018 21 01 03            265 	ld	hl,#0x0301
    001B E5                  266 	push	hl
    001C CDr00r00            267 	call	_set_sprite_tile
    001F E8 02               268 	add	sp, #2
-                            269 ;main.c:21: set_sprite_tile(2, 4);
+                            269 ;main.c:22: set_sprite_tile(2, 4);
    0021 21 02 04            270 	ld	hl,#0x0402
    0024 E5                  271 	push	hl
    0025 CDr00r00            272 	call	_set_sprite_tile
    0028 E8 02               273 	add	sp, #2
    002A 18 1F               274 	jr	00105$
    002C                     275 00104$:
-                            276 ;main.c:23: else if(timer == 10){
+                            276 ;main.c:24: else if(timer == 10){
    002C 21r50r00            277 	ld	hl,#_timer
    002F 7E                  278 	ld	a,(hl)
    0030 D6 0A               279 	sub	a, #0x0A
    0032 20 17               280 	jr	NZ,00105$
-                            281 ;main.c:24: set_sprite_tile(1, 1);
+                            281 ;main.c:25: set_sprite_tile(1, 1);
    0034 21 01 01            282 	ld	hl,#0x0101
    0037 E5                  283 	push	hl
    0038 CDr00r00            284 	call	_set_sprite_tile
    003B E8 02               285 	add	sp, #2
-                            286 ;main.c:25: set_sprite_tile(2, 2);
+                            286 ;main.c:26: set_sprite_tile(2, 2);
    003D 21 02 02            287 	ld	hl,#0x0202
    0040 E5                  288 	push	hl
    0041 CDr00r00            289 	call	_set_sprite_tile
    0044 E8 02               290 	add	sp, #2
-                            291 ;main.c:26: timer = 0;
+                            291 ;main.c:27: timer = 0;
    0046 21r50r00            292 	ld	hl,#_timer
    0049 36 00               293 	ld	(hl),#0x00
    004B                     294 00105$:
-                            295 ;main.c:28: timer++;
+                            295 ;main.c:29: timer++;
    004B 21r50r00            296 	ld	hl,#_timer
    004E 34                  297 	inc	(hl)
    004F C9                  298 	ret
-                            299 ;main.c:31: void moveGameCharacter(struct gameCharacter* character, UINT8 x, UINT8 y){
+                            299 ;main.c:32: void moveGameCharacter(struct gameCharacter *character, UINT8 x, UINT8 y){
                             300 ;	---------------------------------
                             301 ; Function moveGameCharacter
                             302 ; ---------------------------------
    0050                     303 _moveGameCharacter::
    0050 E8 FD               304 	add	sp, #-3
-                            305 ;main.c:32: move_sprite(character->spriteId[1],x,y);
+                            305 ;main.c:33: move_sprite(character->spriteId[1],x,y);
    0052 F8 05               306 	ldhl	sp,#5
    0054 2A                  307 	ld	a,(hl+)
    0055 5E                  308 	ld	e, (hl)
@@ -326,7 +326,7 @@
    0069 33                  326 	inc	sp
    006A CDr00r00            327 	call	_move_sprite
    006D E8 03               328 	add	sp, #3
-                            329 ;main.c:33: move_sprite(character->spriteId[2],x,y + 8);
+                            329 ;main.c:34: move_sprite(character->spriteId[2],x,y + 8);
    006F F8 08               330 	ldhl	sp,#8
    0071 7E                  331 	ld	a,(hl)
    0072 C6 08               332 	add	a, #0x08
@@ -351,48 +351,48 @@
    008A E8 03               351 	add	sp, #3
    008C E8 03               352 	add	sp, #3
    008E C9                  353 	ret
-                            354 ;main.c:37: void setupSpider(){
+                            354 ;main.c:38: void setupSpider(){
                             355 ;	---------------------------------
                             356 ; Function setupSpider
                             357 ; ---------------------------------
    008F                     358 _setupSpider::
-                            359 ;main.c:38: spider.x=80;
+                            359 ;main.c:39: spider.x=80;
    008F 21r56r00            360 	ld	hl,#(_spider + 0x0005)
    0092 36 50               361 	ld	(hl),#0x50
-                            362 ;main.c:39: spider.y=130;
+                            362 ;main.c:40: spider.y=130;
    0094 21r57r00            363 	ld	hl,#(_spider + 0x0006)
    0097 36 82               364 	ld	(hl),#0x82
-                            365 ;main.c:40: spider.width=8;
+                            365 ;main.c:41: spider.width=8;
    0099 21r58r00            366 	ld	hl,#(_spider + 0x0007)
    009C 36 08               367 	ld	(hl),#0x08
-                            368 ;main.c:41: spider.height=16;
+                            368 ;main.c:42: spider.height=16;
    009E 21r59r00            369 	ld	hl,#(_spider + 0x0008)
    00A1 36 10               370 	ld	(hl),#0x10
-                            371 ;main.c:43: set_sprite_tile(0,0);
+                            371 ;main.c:44: set_sprite_tile(0,0);
    00A3 21 00 00            372 	ld	hl,#0x0000
    00A6 E5                  373 	push	hl
    00A7 CDr00r00            374 	call	_set_sprite_tile
    00AA E8 02               375 	add	sp, #2
-                            376 ;main.c:44: spider.spriteId[0]=0;
+                            376 ;main.c:45: spider.spriteId[0]=0;
    00AC 21r51r00            377 	ld	hl,#_spider
    00AF 36 00               378 	ld	(hl),#0x00
-                            379 ;main.c:46: set_sprite_tile(1,1);
+                            379 ;main.c:47: set_sprite_tile(1,1);
    00B1 21 01 01            380 	ld	hl,#0x0101
    00B4 E5                  381 	push	hl
    00B5 CDr00r00            382 	call	_set_sprite_tile
    00B8 E8 02               383 	add	sp, #2
-                            384 ;main.c:47: spider.spriteId[1]=1;
+                            384 ;main.c:48: spider.spriteId[1]=1;
    00BA 21r52r00            385 	ld	hl,#(_spider + 0x0001)
    00BD 36 01               386 	ld	(hl),#0x01
-                            387 ;main.c:48: set_sprite_tile(2,2);
+                            387 ;main.c:49: set_sprite_tile(2,2);
    00BF 21 02 02            388 	ld	hl,#0x0202
    00C2 E5                  389 	push	hl
    00C3 CDr00r00            390 	call	_set_sprite_tile
    00C6 E8 02               391 	add	sp, #2
-                            392 ;main.c:49: spider.spriteId[2]=2;
+                            392 ;main.c:50: spider.spriteId[2]=2;
    00C8 21r53r00            393 	ld	hl,#(_spider + 0x0002)
    00CB 36 02               394 	ld	(hl),#0x02
-                            395 ;main.c:56: moveGameCharacter(&spider,spider.x,spider.y);
+                            395 ;main.c:57: moveGameCharacter(&spider,spider.x,spider.y);
    00CD 11r57r00            396 	ld	de, #(_spider + 0x0006) + 0
    00D0 1A                  397 	ld	a,(de)
    00D1 4F                  398 	ld	c,a
@@ -409,21 +409,21 @@
    00E0 CDr50r00            409 	call	_moveGameCharacter
    00E3 E8 04               410 	add	sp, #4
    00E5 C9                  411 	ret
-                            412 ;main.c:59: void main(){
+                            412 ;main.c:60: void main(){
                             413 ;	---------------------------------
                             414 ; Function main
                             415 ; ---------------------------------
    00E6                     416 _main::
-                            417 ;main.c:60: set_sprite_data(0,5,sprite);
+                            417 ;main.c:61: set_sprite_data(0,5,sprite);
    00E6 11r00r00            418 	ld	de,#_sprite
    00E9 D5                  419 	push	de
    00EA 21 00 05            420 	ld	hl,#0x0500
    00ED E5                  421 	push	hl
    00EE CDr00r00            422 	call	_set_sprite_data
    00F1 E8 04               423 	add	sp, #4
-                            424 ;main.c:61: setupSpider();
+                            424 ;main.c:62: setupSpider();
    00F3 CDr8Fr00            425 	call	_setupSpider
-                            426 ;main.c:64: SHOW_SPRITES;
+                            426 ;main.c:65: SHOW_SPRITES;
    00F6 11 40 FF            427 	ld	de,#0xFF40
    00F9 1A                  428 	ld	a,(de)
    00FA 5F                  429 	ld	e,a
@@ -433,7 +433,7 @@
    0100 47                  433 	ld	b,a
    0101 21 40 FF            434 	ld	hl,#0xFF40
    0104 70                  435 	ld	(hl),b
-                            436 ;main.c:65: DISPLAY_ON;
+                            436 ;main.c:66: DISPLAY_ON;
    0105 11 40 FF            437 	ld	de,#0xFF40
    0108 1A                  438 	ld	a,(de)
    0109 5F                  439 	ld	e,a
@@ -443,73 +443,71 @@
    010F 47                  443 	ld	b,a
    0110 2E 40               444 	ld	l, #0x40
    0112 70                  445 	ld	(hl),b
-                            446 ;main.c:68: while(1){
+                            446 ;main.c:69: while(1){
    0113                     447 00106$:
-                            448 ;main.c:69: moveGameCharAnim();
-   0113 CDr10r00            449 	call	_moveGameCharAnim
-                            450 ;main.c:72: if(joypad() & J_LEFT){
-   0116 CDr00r00            451 	call	_joypad
-   0119 16 00               452 	ld	d,#0x00
-   011B CB 4B               453 	bit	1, e
-   011D 28 20               454 	jr	Z,00102$
-                            455 ;main.c:73: spider.x -= 2;
-   011F FAr56r00            456 	ld	a, (#(_spider + 0x0005) + 0)
-   0122 47                  457 	ld	b,a
-   0123 05                  458 	dec	b
-   0124 05                  459 	dec	b
-   0125 21r56r00            460 	ld	hl,#(_spider + 0x0005)
-   0128 70                  461 	ld	(hl),b
-                            462 ;main.c:74: moveGameCharacter(&spider,spider.x,spider.y);
-   0129 11r57r00            463 	ld	de, #(_spider + 0x0006) + 0
-   012C 1A                  464 	ld	a,(de)
-   012D 4F                  465 	ld	c,a
-   012E 11r51r00            466 	ld	de,#_spider
-   0131 79                  467 	ld	a,c
-   0132 F5                  468 	push	af
-   0133 33                  469 	inc	sp
-   0134 C5                  470 	push	bc
-   0135 33                  471 	inc	sp
-   0136 D5                  472 	push	de
-   0137 CDr50r00            473 	call	_moveGameCharacter
-   013A E8 04               474 	add	sp, #4
-                            475 ;main.c:75: moveGameCharAnim();
-   013C CDr10r00            476 	call	_moveGameCharAnim
-   013F                     477 00102$:
-                            478 ;main.c:79: if(joypad() & J_RIGHT){
-   013F CDr00r00            479 	call	_joypad
-   0142 16 00               480 	ld	d,#0x00
-   0144 CB 43               481 	bit	0, e
-   0146 28 20               482 	jr	Z,00104$
-                            483 ;main.c:80: spider.x += 2;
-   0148 FAr56r00            484 	ld	a, (#(_spider + 0x0005) + 0)
-   014B 47                  485 	ld	b,a
-   014C 04                  486 	inc	b
-   014D 04                  487 	inc	b
-   014E 21r56r00            488 	ld	hl,#(_spider + 0x0005)
-   0151 70                  489 	ld	(hl),b
-                            490 ;main.c:81: moveGameCharacter(&spider,spider.x,spider.y);
-   0152 11r57r00            491 	ld	de, #(_spider + 0x0006) + 0
-   0155 1A                  492 	ld	a,(de)
-   0156 4F                  493 	ld	c,a
-   0157 11r51r00            494 	ld	de,#_spider
-   015A 79                  495 	ld	a,c
-   015B F5                  496 	push	af
-   015C 33                  497 	inc	sp
-   015D C5                  498 	push	bc
-   015E 33                  499 	inc	sp
-   015F D5                  500 	push	de
-   0160 CDr50r00            501 	call	_moveGameCharacter
-   0163 E8 04               502 	add	sp, #4
-                            503 ;main.c:82: moveGameCharAnim();
-   0165 CDr10r00            504 	call	_moveGameCharAnim
-   0168                     505 00104$:
-                            506 ;main.c:85: performantDelay(1);
-   0168 3E 01               507 	ld	a,#0x01
-   016A F5                  508 	push	af
-   016B 33                  509 	inc	sp
-   016C CDr00r00            510 	call	_performantDelay
-   016F 33                  511 	inc	sp
-   0170 C3r13r01            512 	jp	00106$
-   0173 C9                  513 	ret
-                            514 	.area _CODE
-                            515 	.area _CABS (ABS)
+                            448 ;main.c:73: if(joypad() & J_LEFT){
+   0113 CDr00r00            449 	call	_joypad
+   0116 16 00               450 	ld	d,#0x00
+   0118 CB 4B               451 	bit	1, e
+   011A 28 20               452 	jr	Z,00102$
+                            453 ;main.c:74: spider.x -= 2;
+   011C FAr56r00            454 	ld	a, (#(_spider + 0x0005) + 0)
+   011F 47                  455 	ld	b,a
+   0120 05                  456 	dec	b
+   0121 05                  457 	dec	b
+   0122 21r56r00            458 	ld	hl,#(_spider + 0x0005)
+   0125 70                  459 	ld	(hl),b
+                            460 ;main.c:75: moveGameCharacter(&spider,spider.x,spider.y);
+   0126 11r57r00            461 	ld	de, #(_spider + 0x0006) + 0
+   0129 1A                  462 	ld	a,(de)
+   012A 4F                  463 	ld	c,a
+   012B 11r51r00            464 	ld	de,#_spider
+   012E 79                  465 	ld	a,c
+   012F F5                  466 	push	af
+   0130 33                  467 	inc	sp
+   0131 C5                  468 	push	bc
+   0132 33                  469 	inc	sp
+   0133 D5                  470 	push	de
+   0134 CDr50r00            471 	call	_moveGameCharacter
+   0137 E8 04               472 	add	sp, #4
+                            473 ;main.c:76: moveGameCharAnim();
+   0139 CDr10r00            474 	call	_moveGameCharAnim
+   013C                     475 00102$:
+                            476 ;main.c:80: if(joypad() & J_RIGHT){
+   013C CDr00r00            477 	call	_joypad
+   013F 16 00               478 	ld	d,#0x00
+   0141 CB 43               479 	bit	0, e
+   0143 28 20               480 	jr	Z,00104$
+                            481 ;main.c:81: spider.x += 2;
+   0145 FAr56r00            482 	ld	a, (#(_spider + 0x0005) + 0)
+   0148 47                  483 	ld	b,a
+   0149 04                  484 	inc	b
+   014A 04                  485 	inc	b
+   014B 21r56r00            486 	ld	hl,#(_spider + 0x0005)
+   014E 70                  487 	ld	(hl),b
+                            488 ;main.c:82: moveGameCharacter(&spider,spider.x,spider.y);
+   014F 11r57r00            489 	ld	de, #(_spider + 0x0006) + 0
+   0152 1A                  490 	ld	a,(de)
+   0153 4F                  491 	ld	c,a
+   0154 11r51r00            492 	ld	de,#_spider
+   0157 79                  493 	ld	a,c
+   0158 F5                  494 	push	af
+   0159 33                  495 	inc	sp
+   015A C5                  496 	push	bc
+   015B 33                  497 	inc	sp
+   015C D5                  498 	push	de
+   015D CDr50r00            499 	call	_moveGameCharacter
+   0160 E8 04               500 	add	sp, #4
+                            501 ;main.c:83: moveGameCharAnim();
+   0162 CDr10r00            502 	call	_moveGameCharAnim
+   0165                     503 00104$:
+                            504 ;main.c:86: performantDelay(1);
+   0165 3E 01               505 	ld	a,#0x01
+   0167 F5                  506 	push	af
+   0168 33                  507 	inc	sp
+   0169 CDr00r00            508 	call	_performantDelay
+   016C 33                  509 	inc	sp
+   016D C3r13r01            510 	jp	00106$
+   0170 C9                  511 	ret
+                            512 	.area _CODE
+                            513 	.area _CABS (ABS)

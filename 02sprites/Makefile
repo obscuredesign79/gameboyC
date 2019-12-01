@@ -14,4 +14,5 @@ clean:
 	rm -f gameRom.gb
 
 run:
-	wine bgb gameRom.gb
+#	wine bgb gameRom.gb
+	wine visualboyadvance-m gameRom.gb
