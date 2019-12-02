@@ -7,8 +7,8 @@ Symbol Table
     .__.ABS.                                                    =  0000 G
     .__.CPU.                                                    =  0000 L
     .__.H$L.                                                    =  0000 L
-  0 _counter                                                       0017 GR
-  0 _fontINIT                                                      0048 GR
+  0 _counter                                                       0062 GR
+  0 _fontINIT                                                      009C GR
     _font_init                                                     **** GX
     _font_load                                                     **** GX
     _font_min                                                      **** GX
@@ -16,18 +16,19 @@ Symbol Table
   1 _indexForLoop                                                  03A0 GR
   1 _level01Map                                                    00D0 GR
   1 _level01Tiles                                                  0000 GR
-  0 _main                                                          005B GR
+  0 _loadBkg                                                       002C GR
+  0 _main                                                          00AF GR
     _move_win                                                      **** GX
-  1 _numberCount                                                   03A3 GR
-  0 _performantDelay                                               0000 GR
-  1 _result                                                        03A1 GR
+  1 _numberCount                                                   03A2 GR
+  0 _performantDelay                                               004B GR
     _scroll_bkg                                                    **** GX
     _set_bkg_data                                                  **** GX
     _set_bkg_tiles                                                 **** GX
     _set_win_tiles                                                 **** GX
-  1 _timer                                                         03A2 GR
+  1 _timer                                                         03A1 GR
+  0 _vInit                                                         0000 GR
     _wait_vbl_done                                                 **** GX
-  1 _window01Map                                                   03CB GR
+  1 _window01Map                                                   03CA GR
 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 2.
@@ -35,11 +36,11 @@ Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE                                      size   C7   flags    0
-   1 _DATA                                      size  3D2   flags    0
+   0 _CODE                                      size   CF   flags    0
+   1 _DATA                                      size  3D1   flags    0
    2 _DABS                                      size    0   flags    8
    3 _HOME                                      size    0   flags    0
-   4 _GSINIT                                    size 12FC   flags    0
+   4 _GSINIT                                    size 1310   flags    0
    5 _GSFINAL                                   size    0   flags    0
    6 _CABS                                      size    0   flags    8
 

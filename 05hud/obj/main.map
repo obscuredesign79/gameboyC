@@ -68,61 +68,62 @@ Area                                    Addr        Size        Decimal Bytes (A
       -----  --------------------------------   ------------------------
      000001AC  l__HOME                         
      00000200  s__CODE                         
-     000003D2  l__DATA                         
-     00000838  l__CODE                         
-     00000A38  s__HOME                         
-     00000BE4  s__BASE                         
+     000003D1  l__DATA                         
+     00000840  l__CODE                         
+     00000A40  s__HOME                         
+     00000BEC  s__BASE                         
      000010FB  l__BASE                         
-     000012FC  l__GSINIT                       
-     00001CDF  s__GSINIT                       
-     00001CDF  s__LIT                          
-     00002FDB  s__GSINITTAIL                   
-     00002FDC  s__GSFINAL                      
+     00001310  l__GSINIT                       
+     00001CE7  s__GSINIT                       
+     00001CE7  s__LIT                          
+     00002FF7  s__GSINITTAIL                   
+     00002FF8  s__GSFINAL                      
      0000C0A0  s__DATA                         
-     0000C472  s__BSS                          
-     0000C4F6  s__HEAP                         
+     0000C471  s__BSS                          
+     0000C4F5  s__HEAP                         
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00000200    00000838 =        2104. bytes (REL,CON)
+_CODE                               00000200    00000840 =        2112. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00000200  _performantDelay                   main
-     00000217  _counter                           main
-     00000248  _fontINIT                          main
-     0000025B  _main                              main
-     000002C7  _putchar                           font.ms
-     000002D0  _setchar                           font.ms
-     000002D9  _gotoxy                            font.ms
-     000002E4  _posx                              font.ms
-     000002F5  _posy                              font.ms
-     00000306  .adv_gcurs                         Drawing1
-     00000323  .circle                            Drawing1
-     000003C6  .horlin                            Drawing1
-     000003FE  .verlin                            Drawing1
-     0000045A  .circplot                          Drawing1
-     000004D8  .box                               Drawing1
-     000005AE  .line                              Drawing1
-     000006CF  .xonly                             Drawing1
-     0000081E  .yonly                             Drawing1
-     0000083F  .plot                              Drawing1
-     0000085C  .wrbyte                            Drawing1
-     000008DE  .getpix                            Drawing1
-     00000913  .wrtchr                            Drawing1
-     00000977  _gotogxy                           Drawing1
-     00000982  _wrtchr                            Drawing1
-     00000997  _getpix                            Drawing1
-     000009A3  _color                             Drawing1
-     000009B2  _circle                            Drawing1
-     000009CC  _box                               Drawing1
-     000009F0  _line                              Drawing1
-     00000A08  _plot_point                        Drawing1
-     00000A1C  _plot                              Drawing1
-
+     00000200  _vInit                             main
+     0000022C  _loadBkg                           main
+     0000024B  _performantDelay                   main
+     00000262  _counter                           main
+     0000029C  _fontINIT                          main
+     000002AF  _main                              main
+     000002CF  _putchar                           font.ms
+     000002D8  _setchar                           font.ms
+     000002E1  _gotoxy                            font.ms
+     000002EC  _posx                              font.ms
+     000002FD  _posy                              font.ms
+     0000030E  .adv_gcurs                         Drawing1
+     0000032B  .circle                            Drawing1
+     000003CE  .horlin                            Drawing1
+     00000406  .verlin                            Drawing1
+     00000462  .circplot                          Drawing1
+     000004E0  .box                               Drawing1
+     000005B6  .line                              Drawing1
+     000006D7  .xonly                             Drawing1
+     00000826  .yonly                             Drawing1
+     00000847  .plot                              Drawing1
+     00000864  .wrbyte                            Drawing1
+     000008E6  .getpix                            Drawing1
+     0000091B  .wrtchr                            Drawing1
+     0000097F  _gotogxy                           Drawing1
+     0000098A  _wrtchr                            Drawing1
+     0000099F  _getpix                            Drawing1
+     000009AB  _color                             Drawing1
+     000009BA  _circle                            Drawing1
+     000009D4  _box                               Drawing1
+     000009F8  _line                              Drawing1
+     00000A10  _plot_point                        Drawing1
+     00000A24  _plot                              Drawing1
 ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
 Hexadecimal  [32-Bits]
 
@@ -301,123 +302,123 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_HOME                               00000A38    000001AC =         428. bytes (REL,CON)
+_HOME                               00000A40    000001AC =         428. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00000A38  .set_mode                          Runtime
-     00000A48  .remove_VBL                        Runtime
-     00000A4E  .remove_LCD                        Runtime
-     00000A54  .remove_TIM                        Runtime
-     00000A5A  .remove_SIO                        Runtime
-     00000A60  .remove_JOY                        Runtime
-     00000A66  .add_VBL                           Runtime
-     00000A6C  .add_LCD                           Runtime
-     00000A72  .add_TIM                           Runtime
-     00000A78  .add_SIO                           Runtime
-     00000A7E  .add_JOY                           Runtime
-     00000A84  .remove_int                        Runtime
-     00000AA4  .add_int                           Runtime
-     00000AC0  .wait_vbl_done                     Runtime
-     00000AC0  _wait_vbl_done                     Runtime
-     00000AD7  .display_off                       Runtime
-     00000AD7  _display_off                       Runtime
-     00000AF8  .serial_IO                         Runtime
-     00000B27  _mode                              Runtime
-     00000B30  _get_mode                          Runtime
-     00000B35  _enable_interrupts                 Runtime
-     00000B37  _disable_interrupts                Runtime
-     00000B39  .reset                             Runtime
-     00000B39  _reset                             Runtime
-     00000B3F  _set_interrupts                    Runtime
-     00000B4A  _remove_VBL                        Runtime
-     00000B55  _remove_LCD                        Runtime
-     00000B60  _remove_TIM                        Runtime
-     00000B6B  _remove_SIO                        Runtime
-     00000B76  _remove_JOY                        Runtime
-     00000B81  _add_VBL                           Runtime
-     00000B8C  _add_LCD                           Runtime
-     00000B97  _add_TIM                           Runtime
-     00000BA2  _add_SIO                           Runtime
-     00000BAD  _add_JOY                           Runtime
-     00000BB8  _clock                             Runtime
-     00000BC1  __printTStates                     Runtime
-     00000BC2  banked_call                        Runtime
-     00000BDB  banked_ret                         Runtime
+     00000A40  .set_mode                          Runtime
+     00000A50  .remove_VBL                        Runtime
+     00000A56  .remove_LCD                        Runtime
+     00000A5C  .remove_TIM                        Runtime
+     00000A62  .remove_SIO                        Runtime
+     00000A68  .remove_JOY                        Runtime
+     00000A6E  .add_VBL                           Runtime
+     00000A74  .add_LCD                           Runtime
+     00000A7A  .add_TIM                           Runtime
+     00000A80  .add_SIO                           Runtime
+     00000A86  .add_JOY                           Runtime
+     00000A8C  .remove_int                        Runtime
+     00000AAC  .add_int                           Runtime
+     00000AC8  .wait_vbl_done                     Runtime
+     00000AC8  _wait_vbl_done                     Runtime
+     00000ADF  .display_off                       Runtime
+     00000ADF  _display_off                       Runtime
+     00000B00  .serial_IO                         Runtime
+     00000B2F  _mode                              Runtime
+     00000B38  _get_mode                          Runtime
+     00000B3D  _enable_interrupts                 Runtime
+     00000B3F  _disable_interrupts                Runtime
+     00000B41  .reset                             Runtime
+     00000B41  _reset                             Runtime
+     00000B47  _set_interrupts                    Runtime
+     00000B52  _remove_VBL                        Runtime
+     00000B5D  _remove_LCD                        Runtime
+     00000B68  _remove_TIM                        Runtime
+     00000B73  _remove_SIO                        Runtime
+     00000B7E  _remove_JOY                        Runtime
+     00000B89  _add_VBL                           Runtime
+     00000B94  _add_LCD                           Runtime
+     00000B9F  _add_TIM                           Runtime
+     00000BAA  _add_SIO                           Runtime
+     00000BB5  _add_JOY                           Runtime
+     00000BC0  _clock                             Runtime
+     00000BC9  __printTStates                     Runtime
+     00000BCA  banked_call                        Runtime
+     00000BE3  banked_ret                         Runtime
 ASxxxx Linker V03.00 + NoICE + sdld,  page 24.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_BASE                               00000BE4    000010FB =        4347. bytes (REL,CON)
+_BASE                               00000BEC    000010FB =        4347. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00000BE4  font_copy_uncompressed             font.ms
-     00000C1A  font_copy_compressed               font.ms
-     00000C6F  font_load                          font.ms
-     00000CB7  font_copy_current                  font.ms
-     00000CFF  font_set                           font.ms
-     00000D0C  .put_char                          font.ms
-     00000D25  .out_char                          font.ms
-     00000D2C  .del_char                          font.ms
-     00000D87  _font_load                         font.ms
-     00000D95  _font_set                          font.ms
-     00000DA4  _font_init                         font.ms
-     00000DC6  .cls                               font.ms
-     00000DC6  _cls                               font.ms
-     00000DF8  .cr_curs                           font.ms
-     00000E0D  .adv_curs                          font.ms
-     00000E69  .tmode                             font.ms
-     00000E92  .tmode_out                         font.ms
-     00000EA2  _scroll_bkg                        
-     00000EB8  _move_win                          
-     00000EC1  _set_win_tiles                     
-     00000ED5  _font_load_ibm_fixed               
-     00000EDC  _font_ibm_fixed                    
-     00000FDE  _font_ibm_fixed_tiles              
-     000017DE  .gmode                             Drawing1
-     00001840  .vbl                               Drawing1
-     0000184B  .lcd                               Drawing1
-     00001858  .draw_image                        Drawing1
-     00001862  .switch_data                       Drawing1
-     00001899  _switch_data                       Drawing1
-     000018B4  _draw_image                        Drawing1
-     000018C7  .y_table                           Drawing1
-     000019E7  .init_vram                         
-     000019F5  .init_wtt                          
-     00001A05  .init_btt                          
-     00001A13  .init_tt                           
-     00001A19  _set_bkg_data                      
-     00001A19  _set_win_data                      
-     00001A66  _set_sprite_data                   
-     00001A95  _font_min                          font_min
-     00001C3F  .copy_vram                         
-     00001C4E  _get_data                          
-     00001C4E  _set_data                          
-     00001C61  _set_bkg_tiles                     
-     00001C75  .set_xy_wtt                        
-     00001C86  .set_xy_btt                        
-     00001C95  .set_xy_tt                         
-     00001CC6  _set_tiles                         
+     00000BEC  font_copy_uncompressed             font.ms
+     00000C22  font_copy_compressed               font.ms
+     00000C77  font_load                          font.ms
+     00000CBF  font_copy_current                  font.ms
+     00000D07  font_set                           font.ms
+     00000D14  .put_char                          font.ms
+     00000D2D  .out_char                          font.ms
+     00000D34  .del_char                          font.ms
+     00000D8F  _font_load                         font.ms
+     00000D9D  _font_set                          font.ms
+     00000DAC  _font_init                         font.ms
+     00000DCE  .cls                               font.ms
+     00000DCE  _cls                               font.ms
+     00000E00  .cr_curs                           font.ms
+     00000E15  .adv_curs                          font.ms
+     00000E71  .tmode                             font.ms
+     00000E9A  .tmode_out                         font.ms
+     00000EAA  _scroll_bkg                        
+     00000EC0  _move_win                          
+     00000EC9  _set_win_tiles                     
+     00000EDD  _font_load_ibm_fixed               
+     00000EE4  _font_ibm_fixed                    
+     00000FE6  _font_ibm_fixed_tiles              
+     000017E6  .gmode                             Drawing1
+     00001848  .vbl                               Drawing1
+     00001853  .lcd                               Drawing1
+     00001860  .draw_image                        Drawing1
+     0000186A  .switch_data                       Drawing1
+     000018A1  _switch_data                       Drawing1
+     000018BC  _draw_image                        Drawing1
+     000018CF  .y_table                           Drawing1
+     000019EF  .init_vram                         
+     000019FD  .init_wtt                          
+     00001A0D  .init_btt                          
+     00001A1B  .init_tt                           
+     00001A21  _set_bkg_data                      
+     00001A21  _set_win_data                      
+     00001A6E  _set_sprite_data                   
+     00001A9D  _font_min                          font_min
+     00001C47  .copy_vram                         
+     00001C56  _get_data                          
+     00001C56  _set_data                          
+     00001C69  _set_bkg_tiles                     
+     00001C7D  .set_xy_wtt                        
+     00001C8E  .set_xy_btt                        
+     00001C9D  .set_xy_tt                         
+     00001CCE  _set_tiles                         
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 25.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_GSINIT                             00001CDF    000012FC =        4860. bytes (REL,CON)
+_GSINIT                             00001CE7    00001310 =        4880. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00001CDF  gsinit                             Runtime
+     00001CE7  gsinit                             Runtime
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 26.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_GSINITTAIL                         00002FDB    00000001 =           1. bytes (REL,CON)
+_GSINITTAIL                         00002FF7    00000001 =           1. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -426,58 +427,56 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_DATA                               0000C0A0    000003D2 =         978. bytes (REL,CON)
+_DATA                               0000C0A0    000003D1 =         977. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
      0000C0A0  _level01Tiles                      main
      0000C170  _level01Map                        main
      0000C440  _indexForLoop                      main
-     0000C441  _result                            main
-     0000C442  _timer                             main
-     0000C443  _numberCount                       main
-     0000C46B  _window01Map                       main
-
+     0000C441  _timer                             main
+     0000C442  _numberCount                       main
+     0000C46A  _window01Map                       main
 ASxxxx Linker V03.00 + NoICE + sdld,  page 28.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_BSS                                0000C472    00000084 =         132. bytes (REL,CON)
+_BSS                                0000C471    00000084 =         132. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     0000C472  __cpu                              Runtime
-     0000C473  .mode                              Runtime
-     0000C474  __io_out                           Runtime
-     0000C475  __io_in                            Runtime
-     0000C476  __io_status                        Runtime
-     0000C477  .vbl_done                          Runtime
-     0000C478  __current_bank                     Runtime
-     0000C479  .sys_time                          Runtime
-     0000C479  _sys_time                          Runtime
-     0000C47B  .int_0x40                          Runtime
-     0000C48B  .int_0x48                          Runtime
-     0000C49B  .int_0x50                          Runtime
-     0000C4AB  .int_0x58                          Runtime
-     0000C4BB  .int_0x60                          Runtime
-     0000C4CB  font_current                       font.ms
-     0000C4CE  font_first_free_tile               font.ms
-     0000C4CF  font_table                         font.ms
-     0000C4E1  .curx                              font.ms
-     0000C4E2  .cury                              font.ms
-     0000C4E3  .fg_colour                         Drawing1
-     0000C4E4  .bg_colour                         Drawing1
+     0000C471  __cpu                              Runtime
+     0000C472  .mode                              Runtime
+     0000C473  __io_out                           Runtime
+     0000C474  __io_in                            Runtime
+     0000C475  __io_status                        Runtime
+     0000C476  .vbl_done                          Runtime
+     0000C477  __current_bank                     Runtime
+     0000C478  .sys_time                          Runtime
+     0000C478  _sys_time                          Runtime
+     0000C47A  .int_0x40                          Runtime
+     0000C48A  .int_0x48                          Runtime
+     0000C49A  .int_0x50                          Runtime
+     0000C4AA  .int_0x58                          Runtime
+     0000C4BA  .int_0x60                          Runtime
+     0000C4CA  font_current                       font.ms
+     0000C4CD  font_first_free_tile               font.ms
+     0000C4CE  font_table                         font.ms
+     0000C4E0  .curx                              font.ms
+     0000C4E1  .cury                              font.ms
+     0000C4E2  .fg_colour                         Drawing1
+     0000C4E3  .bg_colour                         Drawing1
 ASxxxx Linker V03.00 + NoICE + sdld,  page 29.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_HEAP                               0000C4F6    00000000 =           0. bytes (REL,CON)
+_HEAP                               0000C4F5    00000000 =           0. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     0000C4F6  _malloc_heap_start                 Runtime
+     0000C4F5  _malloc_heap_start                 Runtime
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 30.
 
