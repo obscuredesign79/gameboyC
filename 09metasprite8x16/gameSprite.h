@@ -24,7 +24,7 @@
 
 
 /* Bank of tiles. */
-#define spiderBank 0
+#define spiderBank 1
 /* Start of tile array. */
 extern unsigned char spider[];
 

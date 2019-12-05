@@ -1,11 +1,17 @@
+/*
+   code by obscuredesign79
+   A.K.A. Ayan
+
+   Bryan Lorenzo
+*/
+
 #include <gb/gb.h>
-#include "gameCharacter.c"
 #include "gameSprite.c"
 
+//global variables
 UINT8 timer = 0;
 
-struct gameCharacter spider;
-
+//performance delay to free up CPU
 void performantDelay(UINT8 numloops){
 
 	UINT8 i;
@@ -13,29 +19,40 @@ void performantDelay(UINT8 numloops){
 		wait_vbl_done();
 	}
 }
-
-// cycle through tiles for animation
-void moveGameCharAnim(){
+//gameCharacter struct
+struct gameCharacter{
+	UBYTE spriteId[5];
+	UINT8 x;
+	UINT8 y;
+	UINT8 width;
+	UINT8 height;
+};
+//inializes gameCharacter to spider
+struct gameCharacter spider;
+//cycle through tiles for animation
+void gameCharAnim01(){
 	
-	if(timer == 5){
+	if(timer == 30){
 		set_sprite_tile(1, 3);
 		set_sprite_tile(2, 4);
 	}
-	else if(timer == 10){
+	else if(timer == 60){
 		set_sprite_tile(1, 1);
 		set_sprite_tile(2, 2);
 		timer = 0;
 	}
 	timer++;
 }
-
+//moving metaSprite in unison
 void moveGameCharacter(struct gameCharacter *character, UINT8 x, UINT8 y){
 	move_sprite(character->spriteId[1],x,y);
 	move_sprite(character->spriteId[2],x,y + 8);
 
 }
-
+//setup the spider sprite struct
 void setupSpider(){
+	set_sprite_data(0,5,sprite);
+	
 	spider.x=80;
 	spider.y=130;
 	spider.width=8;
@@ -49,38 +66,32 @@ void setupSpider(){
 	set_sprite_tile(2,2);
 	spider.spriteId[2]=2;
 
-//	set_sprite_tile(3,3);
-//	spider.spriteId[3]=3;
-//	set_sprite_tile(4,4);
-//	spider.spriteId[4]=4;
-
 	moveGameCharacter(&spider,spider.x,spider.y);
 }
 
 void main(){
-	set_sprite_data(0,5,sprite);
+	//loads spider sprite
 	setupSpider();
-
 
 	SHOW_SPRITES;
 	DISPLAY_ON;
 
 
 	while(1){
-//		moveGameCharAnim();
+		gameCharAnim01();
 
 
 		if(joypad() & J_LEFT && spider.x > 8){
-			spider.x -= 4;
+			spider.x -= 3;
 			moveGameCharacter(&spider,spider.x,spider.y);
-			moveGameCharAnim();
+			gameCharAnim01();
 
 		}
 
 		if(joypad() & J_RIGHT && spider.x < 160){
-			spider.x += 4;
+			spider.x += 3;
 			moveGameCharacter(&spider,spider.x,spider.y);
-			moveGameCharAnim();
+			gameCharAnim01();
 			
 		}
 		performantDelay(1);
