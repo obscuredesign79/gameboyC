@@ -1,6 +1,6 @@
 /*
 
- BLOKE2.H
+ GAMESPRITE.H
 
  Include File.
 
@@ -10,7 +10,7 @@
   Compression          : None.
   Counter              : None.
   Tile size            : 8 x 8
-  Tiles                : 0 to 0
+  Tiles                : 0 to 4
 
   Palette colors       : None.
   SGB Palette          : None.
@@ -24,8 +24,8 @@
 
 
 /* Bank of tiles. */
-#define bloke2Bank 0
+#define spiderBank 1
 /* Start of tile array. */
-extern unsigned char bloke2[];
+extern unsigned char spider[];
 
-/* End of BLOKE2.H */
+/* End of GAMESPRITE.H */

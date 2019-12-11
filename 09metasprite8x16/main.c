@@ -12,45 +12,54 @@
 UINT8 timer = 0;
 
 //performance delay to free up CPU
-void performantDelay(UINT8 numloops){
-
+void performantDelay(UINT8 numloops)
+{
 	UINT8 i;
 	for(i=0;i<numloops;i++){
 		wait_vbl_done();
 	}
 }
+
 //gameCharacter struct
-struct gameCharacter{
-	UBYTE spriteId[5];
+struct gameCharacter
+{
+	UBYTE spriteId[5];//change this according to sprite size (16x16, 24x24..)
 	UINT8 x;
 	UINT8 y;
 	UINT8 width;
 	UINT8 height;
 };
+
 //inializes gameCharacter to spider
 struct gameCharacter spider;
+
 //cycle through tiles for animation
-void gameCharAnim01(){
-	
-	if(timer == 30){
+void gameCharAnim01()
+{
+	if(timer == 30)
+	{
 		set_sprite_tile(1, 3);
 		set_sprite_tile(2, 4);
 	}
-	else if(timer == 60){
+	else if(timer == 60)
+	{
 		set_sprite_tile(1, 1);
 		set_sprite_tile(2, 2);
 		timer = 0;
 	}
 	timer++;
 }
+
 //moving metaSprite in unison
-void moveGameCharacter(struct gameCharacter *character, UINT8 x, UINT8 y){
+void moveGameCharacter(struct gameCharacter *character, UINT8 x, UINT8 y)
+{
 	move_sprite(character->spriteId[1],x,y);
 	move_sprite(character->spriteId[2],x,y + 8);
-
 }
+
 //setup the spider sprite struct
-void setupSpider(){
+void setupSpider()
+{
 	set_sprite_data(0,5,sprite);
 	
 	spider.x=80;

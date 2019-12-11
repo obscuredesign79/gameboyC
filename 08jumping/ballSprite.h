@@ -1,8 +1,8 @@
 /*
 
- BLOKE2.C
+ BALLSPRITE.H
 
- Tile Source File.
+ Include File.
 
  Info:
   Form                 : All tiles as one unit.
@@ -10,7 +10,7 @@
   Compression          : None.
   Counter              : None.
   Tile size            : 8 x 8
-  Tiles                : 0 to 0
+  Tiles                : 0 to 12
 
   Palette colors       : None.
   SGB Palette          : None.
@@ -22,11 +22,10 @@
 
 */
 
-/* Start of tile array. */
-unsigned char bloke2[] =
-{
-  0x7E,0x7E,0x81,0xFF,0x00,0xFF,0x1C,0xE7,
-  0x1C,0xE3,0x00,0xFE,0x1E,0x7E,0x3F,0x3F
-};
 
-/* End of BLOKE2.C */
+/* Bank of tiles. */
+#define ballSpriteBank 0
+/* Start of tile array. */
+extern unsigned char ballSprite[];
+
+/* End of BALLSPRITE.H */
