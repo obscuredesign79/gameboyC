@@ -1,21 +1,20 @@
 #include <gb/gb.h>
 #include "ballSprite.c"
 
-// stores two INT8 x and y position of player
+//global variables
 BYTE jumping;
 INT8 gravity = -2;
 UINT8 currentSpeedY;
 UINT8 floorYPosition = 136;
 INT8 possibleYSurface;
-
-//global variables
+UINT8 index;
 UINT8 timer = 0;
 
 //performance delay to free up CPU
 void performantDelay(UINT8 numloops)
 {
-	UINT8 i;
-	for(i=0;i<numloops;i++){
+	for(index=0;index < numloops;index++)
+	{
 		wait_vbl_done();
 	}
 }
@@ -34,17 +33,16 @@ struct gameCharacter
 struct gameCharacter ballSprite01;
 
 //cycle through tiles for animation
-
-void gameBallAnim01()
+void gameBallAnimRollLoop()//looping ball moving animation.(highlight jitters)
 {
-	if(timer == 2)
+	if(timer == 4)
 	{
 		set_sprite_tile(1, 5);
 		set_sprite_tile(2, 6);
 		set_sprite_tile(3, 7);
 		set_sprite_tile(4, 8);
 	}
-	else if(timer == 4)
+	else if(timer == 8)
 	{
 		set_sprite_tile(1, 1);
 		set_sprite_tile(2, 2);
@@ -56,7 +54,7 @@ void gameBallAnim01()
 	timer++;
 }
 
-void gameBallAnim02()
+void gameBallStaticStretched()//static ball stretch
 {
 	set_sprite_tile(1, 9);
 	set_sprite_tile(2, 10);
@@ -64,15 +62,27 @@ void gameBallAnim02()
 	set_sprite_tile(4, 12);
 }
 
-void gameBallAnim03()
+void gameBallStaticRest()//static ball rest
 {
 	set_sprite_tile(1, 1);
 	set_sprite_tile(2, 2);
 	set_sprite_tile(3, 3);
 	set_sprite_tile(4, 4);
 }
+void gameBallAnimSquashed(INT8 numloops)//static ball squashed
+{
+	for(index=0;index < numloops;index++)
+	{
+		set_sprite_tile(1, 0);
+		set_sprite_tile(2, 0);
+		set_sprite_tile(3, 13);
+		set_sprite_tile(4, 14);
+	}
 
-//moving metaSprite in unison
+	gameBallStaticRest();
+}
+
+//moving a 16x16 metaSprite in unison
 void moveGameCharacter(struct gameCharacter *character, UINT8 x, UINT8 y)
 {
 	move_sprite(character->spriteId[0],x, y);
@@ -110,18 +120,21 @@ INT8 wouldHitSurf(INT8 projectedYPosition)
 	}
 	return -1;
 }
+
+//jump algorythm
 void jump()
 {
 	if(jumping == 0)
 	{
 		jumping = 1;
-		currentSpeedY = 16;
+		currentSpeedY = 10;
 	}
 	currentSpeedY = currentSpeedY + gravity;
 
 	ballSprite01.y -= currentSpeedY;
 
 	possibleYSurface = wouldHitSurf(ballSprite01.y);
+
 
 	if(possibleYSurface < -1)
 	{
@@ -141,27 +154,49 @@ void main()
 	//initialize jumping variable
 	jumping = 0;
 
+
 	DISPLAY_ON;
 	SHOW_SPRITES;
 
-	while(1){
-		if((joypad() & J_A)|| jumping == 1){
-			gameBallAnim02();
+	while(1)
+	{
+		if((joypad() & J_A) || jumping == 1)
+		{
 			jump();	
+			gameBallStaticStretched();
 			if(jumping == 0)
 			{
-				gameBallAnim03();
+				gameBallAnimSquashed(500);
+				wait_vbl_done();
 			}
 		}
-		if(joypad() & J_LEFT){
+		if(joypad() & J_LEFT)
+		{
 			ballSprite01.x -= 3;
 			moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
-			gameBallAnim01();
+			gameBallAnimRollLoop();
+			if(joypad() & J_A)
+			{
+				gameBallStaticStretched();
+				if(jumping == 0)
+				{
+					gameBallAnimSquashed(500);
+				}
+			}
 		}
-		if(joypad() & J_RIGHT){
+		if(joypad() & J_RIGHT)
+		{
 			ballSprite01.x += 3;
 			moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
-			gameBallAnim01();
+			gameBallAnimRollLoop();
+			if(joypad() & J_A)
+			{
+				gameBallStaticStretched();
+				if(jumping == 0)
+				{
+					gameBallAnimSquashed(500);
+				}
+			}
 		}
 
 		performantDelay(2);
