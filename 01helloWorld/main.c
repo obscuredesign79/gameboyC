@@ -17,7 +17,7 @@ void main() {
 
 	c=a+b;
 
-	printf("a=%x\n",a);
+	printf("a=%x\n",&a);
 	printf("b=%x\n",b);
 
     printf("a + b = %x\n",c); 

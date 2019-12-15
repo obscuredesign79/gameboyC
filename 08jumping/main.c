@@ -62,7 +62,7 @@ void jump(UINT8 spriteId,UINT8 spriteLocation[2]){
 	spriteLocation[1]=spriteLocation[1]-currentSpeedY;
 	possibleSurfaceY=wouldHitSurf(spriteLocation[1]);
 
-	if(possibleSurfaceY>-1){
+	if(possibleSurfaceY != -1){
 		jumping=0;
 		move_sprite(spriteId,spriteLocation[0],possibleSurfaceY);
 	}

@@ -1,0 +1,27 @@
+XL2
+H 7 areas 4 global symbols
+M main
+O -mgbz80
+S .__.ABS. Def0000
+S _joypad Ref0000
+S _delay Ref0000
+A _CODE size 31 flags 0 addr 0
+S _main Def0000
+A _DATA size 0 flags 0 addr 0
+A _DABS size 0 flags 8 addr 0
+A _HOME size 0 flags 0 addr 0
+A _GSINIT size 0 flags 0 addr 0
+A _GSFINAL size 0 flags 0 addr 0
+A _CABS size 0 flags 8 addr 0
+T 00 00
+R 00 00 00 00
+T 00 00 21 26 FF 36 80 2E 24 36 77 2E 25 36 FF
+R 00 00 00 00
+T 0D 00
+R 00 00 00 00
+T 0D 00 CD 00 00 7B B7 28 F9 21 20 FF 36 1F 2E 21
+R 00 00 00 00 02 03 01 00
+T 1B 00 36 F1 2E 22 36 30 2E 23 36 C0 21 64 00 E5
+R 00 00 00 00
+T 29 00 CD 00 00 E8 02 18 DD C9
+R 00 00 00 00 02 03 02 00

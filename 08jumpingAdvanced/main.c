@@ -1,19 +1,23 @@
+#include <stdio.h>
 #include <gb/gb.h>
-#include "ballSprite.c"
+#include "ballSprite.c"//16x16 sprite with animation
 
 //global variables
+BYTE keyPressed_A;
+BYTE keyPressed_RIGHT;
 BYTE jumping;
 INT8 gravity = -2;
 UINT8 currentSpeedY;
 UINT8 floorYPosition = 136;
-INT8 possibleYSurface;
-UINT8 index;
+UINT8 possibleYSurface;
 UINT8 timer = 0;
+
 
 //performance delay to free up CPU
 void performantDelay(UINT8 numloops)
 {
-	for(index=0;index < numloops;index++)
+	UINT8 i;
+	for(i=0;i < numloops;i++)
 	{
 		wait_vbl_done();
 	}
@@ -35,23 +39,10 @@ struct gameCharacter ballSprite01;
 //cycle through tiles for animation
 void gameBallAnimRollLoop()//looping ball moving animation.(highlight jitters)
 {
-	if(timer == 4)
-	{
-		set_sprite_tile(1, 5);
-		set_sprite_tile(2, 6);
-		set_sprite_tile(3, 7);
-		set_sprite_tile(4, 8);
-	}
-	else if(timer == 8)
-	{
-		set_sprite_tile(1, 1);
-		set_sprite_tile(2, 2);
-		set_sprite_tile(3, 3);
-		set_sprite_tile(4, 4);
-
-		timer = 0;
-	}
-	timer++;
+	set_sprite_tile(1, 5);
+	set_sprite_tile(2, 6);
+	set_sprite_tile(3, 7);
+	set_sprite_tile(4, 8);
 }
 
 void gameBallStaticStretched()//static ball stretch
@@ -69,9 +60,10 @@ void gameBallStaticRest()//static ball rest
 	set_sprite_tile(3, 3);
 	set_sprite_tile(4, 4);
 }
-void gameBallAnimSquashed(INT8 numloops)//static ball squashed
+void gameBallAnimSquashed(UINT8 numloops)//static ball squashed
 {
-	for(index=0;index < numloops;index++)
+	UINT8 i;
+	for(i=0;i < numloops;i++)
 	{
 		set_sprite_tile(1, 0);
 		set_sprite_tile(2, 0);
@@ -96,7 +88,7 @@ void setupBallSprite01()
 {
 	set_sprite_data(0, 15, ballSprite);
 	
-	ballSprite01.x=80;
+	ballSprite01.x=16;
 	ballSprite01.y = floorYPosition;
 	ballSprite01.width=16;
 	ballSprite01.height=16;
@@ -113,7 +105,7 @@ void setupBallSprite01()
 	moveGameCharacter(&ballSprite01,ballSprite01.x,ballSprite01.y);
 }
 
-INT8 wouldHitSurf(INT8 projectedYPosition)
+INT8 wouldHitSurf(UINT8 projectedYPosition)
 {
 	if(projectedYPosition >= floorYPosition){
 		return floorYPosition;
@@ -121,7 +113,7 @@ INT8 wouldHitSurf(INT8 projectedYPosition)
 	return -1;
 }
 
-//jump algorythm
+//jump algorithm
 void jump()
 {
 	if(jumping == 0)
@@ -136,14 +128,15 @@ void jump()
 	possibleYSurface = wouldHitSurf(ballSprite01.y);
 
 
-	if(possibleYSurface < -1)
+	if(possibleYSurface == floorYPosition)
 	{
 		jumping = 0;
-		moveGameCharacter(&ballSprite01, ballSprite01.x, possibleYSurface);
+		moveGameCharacter(&ballSprite01,ballSprite01.x, possibleYSurface);
+
 	}
 	else
 	{
-		moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
+		moveGameCharacter(&ballSprite01,ballSprite01.x,ballSprite01.y);
 	}
 }
 void main()
@@ -154,49 +147,50 @@ void main()
 	//initialize jumping variable
 	jumping = 0;
 
+	keyPressed_A = 1;
+
 
 	DISPLAY_ON;
 	SHOW_SPRITES;
 
 	while(1)
 	{
-		if((joypad() & J_A) || jumping == 1)
+//		printf("%d", joypad());
+
+		if((joypad() & J_A || jumping == 1) && keyPressed_A == 1)
 		{
 			jump();	
 			gameBallStaticStretched();
 			if(jumping == 0)
 			{
 				gameBallAnimSquashed(500);
-				wait_vbl_done();
+				keyPressed_A = 0;
 			}
 		}
-		if(joypad() & J_LEFT)
+
+		else if(joypad() != J_A)
 		{
-			ballSprite01.x -= 3;
-			moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
-			gameBallAnimRollLoop();
-			if(joypad() & J_A)
-			{
-				gameBallStaticStretched();
-				if(jumping == 0)
-				{
-					gameBallAnimSquashed(500);
-				}
-			}
+			keyPressed_A = 1;
 		}
-		if(joypad() & J_RIGHT)
+
+
+
+		if((joypad() & J_RIGHT) && keyPressed_RIGHT == 1)
 		{
+
 			ballSprite01.x += 3;
 			moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
 			gameBallAnimRollLoop();
-			if(joypad() & J_A)
+			if(jumping == 0)
 			{
-				gameBallStaticStretched();
-				if(jumping == 0)
-				{
-					gameBallAnimSquashed(500);
-				}
+				keyPressed_A = 1;
 			}
+
+
+		}
+		else if(joypad() != J_RIGHT)
+		{
+			keyPressed_RIGHT = 1;
 		}
 
 		performantDelay(2);

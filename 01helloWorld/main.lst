@@ -1,0 +1,216 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : FreeWare ANSI-C Compiler
+                              3 ; Version 2.3.1 Sat Dec 14 19:49:11 2019
+                              4 
+                              5 ;--------------------------------------------------------
+                              6 	.module lcc192900
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _performantDelay
+                             13 ;--------------------------------------------------------
+                             14 ; special function registers
+                             15 ;--------------------------------------------------------
+                             16 ;--------------------------------------------------------
+                             17 ; special function bits 
+                             18 ;--------------------------------------------------------
+                             19 ;--------------------------------------------------------
+                             20 ; internal ram data
+                             21 ;--------------------------------------------------------
+                             22 	.area _DATA
+                             23 ;--------------------------------------------------------
+                             24 ; overlayable items in internal ram 
+                             25 ;--------------------------------------------------------
+                             26 	.area _OVERLAY
+                             27 ;--------------------------------------------------------
+                             28 ; indirectly addressable internal ram data
+                             29 ;--------------------------------------------------------
+                             30 	.area _ISEG
+                             31 ;--------------------------------------------------------
+                             32 ; bit data
+                             33 ;--------------------------------------------------------
+                             34 	.area _BSEG
+                             35 ;--------------------------------------------------------
+                             36 ; external ram data
+                             37 ;--------------------------------------------------------
+                             38 	.area _XSEG
+                             39 ;--------------------------------------------------------
+                             40 ; global & static initialisations
+                             41 ;--------------------------------------------------------
+                             42 	.area _GSINIT
+                             43 	.area _GSFINAL
+                             44 	.area _GSINIT
+                             45 ;--------------------------------------------------------
+                             46 ; Home
+                             47 ;--------------------------------------------------------
+                             48 	.area _HOME
+                             49 	.area _CODE
+                             50 ;--------------------------------------------------------
+                             51 ; code
+                             52 ;--------------------------------------------------------
+                             53 	.area _CODE
+                             54 ;	main.c 4
+                             55 ;	genLabel
+                             56 ;	genFunction
+                             57 ;	---------------------------------
+                             58 ; Function performantDelay
+                             59 ; ---------------------------------
+   0000                      60 ___performantDelay_start:
+   0000                      61 _performantDelay:
+                             62 	
+                             63 ;	main.c 7
+                             64 ;	genAssign
+   0000 0E 00                65 	ld	c,#0x00
+                             66 ;	genLabel
+   0002                      67 00101$:
+                             68 ;	genCmpLt
+                             69 ;	AOP_STK for 
+   0002 79                   70 	ld	a,c
+   0003 F8 02                71 	lda	hl,2(sp)
+   0005 96                   72 	sub	a,(hl)
+   0006 D2 13 00             73 	jp	nc,00105$
+                             74 ;	main.c 8
+                             75 ;	genCall
+                             76 ; _saveRegsForCall: sendSetSize: 0 deInUse: 0 bcInUse: 1 deSending: 0
+   0009 C5                   77 	push	bc
+   000A CD 00 00             78 	call	_wait_vbl_done
+   000D E1                   79 	pop	hl
+   000E 4D                   80 	ld	c,l
+                             81 ;	main.c 7
+                             82 ;	genPlus
+                             83 ;	genPlusIncr
+                             84 ; Removed redundent load
+   000F 0C                   85 	inc	c
+                             86 ;	genGoto
+   0010 C3 02 00             87 	jp	00101$
+                             88 ;	genLabel
+   0013                      89 00105$:
+                             90 ;	genEndFunction
+                             91 	
+   0013 C9                   92 	ret
+   0014                      93 ___performantDelay_end:
+                             94 ;	main.c 13
+                             95 ;	genLabel
+                             96 ;	genFunction
+                             97 ;	---------------------------------
+                             98 ; Function main
+                             99 ; ---------------------------------
+   0014                     100 ___main_start:
+   0014                     101 _main:
+   0014 E8 FF               102 	lda	sp,-1(sp)
+                            103 ;	main.c 14
+                            104 ;	genAssign
+                            105 ;	AOP_STK for _main_a_1_1
+   0016 F8 00               106 	lda	hl,0(sp)
+   0018 36 01               107 	ld	(hl),#0x01
+                            108 ;	main.c 20
+                            109 ;	genAddrOf
+   001A F8 00               110 	lda	hl,0(sp)
+   001C 4D                  111 	ld	c,l
+   001D 44                  112 	ld	b,h
+                            113 ;	genIpush
+                            114 ; _saveRegsForCall: sendSetSize: 0 deInUse: 0 bcInUse: 0 deSending: 0
+   001E C5                  115 	push	bc
+                            116 ;	genIpush
+   001F 21 57 00            117 	ld	hl,#__str_0
+   0022 E5                  118 	push	hl
+                            119 ;	genCall
+   0023 CD 00 00            120 	call	_printf
+   0026 E8 04               121 	lda	sp,4(sp)
+                            122 ;	main.c 21
+                            123 ;	genIpush
+                            124 ; _saveRegsForCall: sendSetSize: 0 deInUse: 0 bcInUse: 0 deSending: 0
+   0028 21 02 00            125 	ld	hl,#0x0002
+   002B E5                  126 	push	hl
+                            127 ;	genIpush
+   002C 21 5D 00            128 	ld	hl,#__str_1
+   002F E5                  129 	push	hl
+                            130 ;	genCall
+   0030 CD 00 00            131 	call	_printf
+   0033 E8 04               132 	lda	sp,4(sp)
+                            133 ;	main.c 23
+                            134 ;	genIpush
+                            135 ; _saveRegsForCall: sendSetSize: 0 deInUse: 0 bcInUse: 0 deSending: 0
+   0035 21 03 00            136 	ld	hl,#0x0003
+   0038 E5                  137 	push	hl
+                            138 ;	genIpush
+   0039 21 63 00            139 	ld	hl,#__str_2
+   003C E5                  140 	push	hl
+                            141 ;	genCall
+   003D CD 00 00            142 	call	_printf
+   0040 E8 04               143 	lda	sp,4(sp)
+                            144 ;	main.c 24
+                            145 ;	genIpush
+                            146 ; _saveRegsForCall: sendSetSize: 0 deInUse: 0 bcInUse: 0 deSending: 0
+   0042 21 6F 00            147 	ld	hl,#__str_3
+   0045 E5                  148 	push	hl
+                            149 ;	genCall
+   0046 CD 00 00            150 	call	_printf
+   0049 E8 02               151 	lda	sp,2(sp)
+                            152 ;	main.c 25
+                            153 ;	genIpush
+                            154 ; _saveRegsForCall: sendSetSize: 0 deInUse: 0 bcInUse: 0 deSending: 0
+   004B 3E 05               155 	ld	a,#0x05
+   004D F5                  156 	push	af
+   004E 33                  157 	inc	sp
+                            158 ;	genCall
+   004F CD 00 00            159 	call	_performantDelay
+   0052 E8 01               160 	lda	sp,1(sp)
+                            161 ;	genLabel
+   0054                     162 00101$:
+                            163 ;	genEndFunction
+   0054 E8 01               164 	lda	sp,1(sp)
+   0056 C9                  165 	ret
+   0057                     166 ___main_end:
+   0057                     167 __str_0:
+   0057 61 3D 25 78         168 	.ascii "a=%x"
+   005B 0A                  169 	.db 0x0A
+   005C 00                  170 	.db 0x00
+   005D                     171 __str_1:
+   005D 62 3D 25 78         172 	.ascii "b=%x"
+   0061 0A                  173 	.db 0x0A
+   0062 00                  174 	.db 0x00
+   0063                     175 __str_2:
+   0063 61 20 2B 20 62 20   176 	.ascii "a + b = %x"
+        3D 20 25 78
+   006D 0A                  177 	.db 0x0A
+   006E 00                  178 	.db 0x00
+   006F                     179 __str_3:
+   006F 48 65 6C 6C 6F 20   180 	.ascii "Hello Gameboy World"
+        47 61 6D 65 62 6F
+        79 20 57 6F 72 6C
+        64
+   0082 00                  181 	.db 0x00
+                            182 	.area _CODE
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 1.
+
+Symbol Table
+
+  0 ___main_end                        0057 R
+  0 ___main_start                      0014 R
+  0 ___performantDelay_end             0014 R
+  0 ___performantDelay_start           0000 R
+  0 __str_0                            0057 R
+  0 __str_1                            005D R
+  0 __str_2                            0063 R
+  0 __str_3                            006F R
+  0 _main                              0014 GR
+  0 _performantDelay                   0000 GR
+    _printf                            **** GX
+    _wait_vbl_done                     **** GX
+
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 2.
+
+Area Table
+
+   0 _CODE                              size   83   flags 0
+   1 _DATA                              size    0   flags 0
+   2 _OVERLAY                           size    0   flags 0
+   3 _ISEG                              size    0   flags 0
+   4 _BSEG                              size    0   flags 0
+   5 _XSEG                              size    0   flags 0
+   6 _GSINIT                            size    0   flags 0
+   7 _GSFINAL                           size    0   flags 0
+   8 _HOME                              size    0   flags 0

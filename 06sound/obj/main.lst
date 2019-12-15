@@ -1,0 +1,106 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.6.0 #9615 (Linux)
+                              4 ;--------------------------------------------------------
+                              5 	.module main
+                              6 	.optsdcc -mgbz80
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _performantDelay
+                             13 	.globl _wait_vbl_done
+                             14 	.globl _joypad
+                             15 ;--------------------------------------------------------
+                             16 ; ram data
+                             17 ;--------------------------------------------------------
+                             18 	.area _DATA
+                             19 ;--------------------------------------------------------
+                             20 ; absolute external ram data
+                             21 ;--------------------------------------------------------
+                             22 	.area _DABS (ABS)
+                             23 ;--------------------------------------------------------
+                             24 ; global & static initialisations
+                             25 ;--------------------------------------------------------
+                             26 	.area _HOME
+                             27 	.area _GSINIT
+                             28 	.area _GSFINAL
+                             29 	.area _GSINIT
+                             30 ;--------------------------------------------------------
+                             31 ; Home
+                             32 ;--------------------------------------------------------
+                             33 	.area _HOME
+                             34 	.area _HOME
+                             35 ;--------------------------------------------------------
+                             36 ; code
+                             37 ;--------------------------------------------------------
+                             38 	.area _CODE
+                             39 ;main.c:4: void performantDelay(UINT8 numloops){
+                             40 ;	---------------------------------
+                             41 ; Function performantDelay
+                             42 ; ---------------------------------
+   0000                      43 _performantDelay::
+                             44 ;main.c:7: for(i=0;i<numloops;i++){
+   0000 0E 00                45 	ld	c,#0x00
+   0002                      46 00103$:
+   0002 79                   47 	ld	a,c
+   0003 F8 02                48 	ldhl	sp,#2
+   0005 96                   49 	sub	a, (hl)
+   0006 D0                   50 	ret	NC
+                             51 ;main.c:8: wait_vbl_done();
+   0007 C5                   52 	push	bc
+   0008 CDr00r00             53 	call	_wait_vbl_done
+   000B C1                   54 	pop	bc
+                             55 ;main.c:7: for(i=0;i<numloops;i++){
+   000C 0C                   56 	inc	c
+   000D 18 F3                57 	jr	00103$
+   000F C9                   58 	ret
+                             59 ;main.c:11: void main(){
+                             60 ;	---------------------------------
+                             61 ; Function main
+                             62 ; ---------------------------------
+   0010                      63 _main::
+                             64 ;main.c:13: NR52_REG = 0x80;
+   0010 21 26 FF             65 	ld	hl,#0xff26
+   0013 36 80                66 	ld	(hl),#0x80
+                             67 ;main.c:14: NR50_REG = 0x77;
+   0015 2E 24                68 	ld	l, #0x24
+   0017 36 77                69 	ld	(hl),#0x77
+                             70 ;main.c:15: NR51_REG = 0xFF;
+   0019 2E 25                71 	ld	l, #0x25
+   001B 36 FF                72 	ld	(hl),#0xff
+                             73 ;main.c:18: while(1){
+   001D                      74 00104$:
+                             75 ;main.c:19: UBYTE joypad_state = joypad();
+   001D CDr00r00             76 	call	_joypad
+                             77 ;main.c:21: if(joypad_state){ 
+   0020 7B                   78 	ld	a,e
+   0021 B7                   79 	or	a, a
+   0022 28 15                80 	jr	Z,00102$
+                             81 ;main.c:22: NR10_REG = 0x16;
+   0024 21 10 FF             82 	ld	hl,#0xff10
+   0027 36 16                83 	ld	(hl),#0x16
+                             84 ;main.c:23: NR11_REG = 0x40;
+   0029 2E 11                85 	ld	l, #0x11
+   002B 36 40                86 	ld	(hl),#0x40
+                             87 ;main.c:24: NR12_REG = 0x73;
+   002D 2E 12                88 	ld	l, #0x12
+   002F 36 73                89 	ld	(hl),#0x73
+                             90 ;main.c:25: NR13_REG = 0x00;
+   0031 2E 13                91 	ld	l, #0x13
+   0033 36 00                92 	ld	(hl),#0x00
+                             93 ;main.c:26: NR14_REG = 0xc3;
+   0035 2E 14                94 	ld	l, #0x14
+   0037 36 C3                95 	ld	(hl),#0xc3
+   0039                      96 00102$:
+                             97 ;main.c:30: performantDelay(5);
+   0039 3E 05                98 	ld	a,#0x05
+   003B F5                   99 	push	af
+   003C 33                  100 	inc	sp
+   003D CDr00r00            101 	call	_performantDelay
+   0040 33                  102 	inc	sp
+   0041 18 DA               103 	jr	00104$
+   0043 C9                  104 	ret
+                            105 	.area _CODE
+                            106 	.area _CABS (ABS)
