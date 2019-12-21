@@ -61,41 +61,41 @@ _performantDelay::
 ; Function main
 ; ---------------------------------
 _main::
-;main.c:13: NR52_REG = 0x80;
+;main.c:14: NR52_REG = 0x80;//is 1000 0000 in binary and turns on sound
 	ld	hl,#0xff26
 	ld	(hl),#0x80
-;main.c:14: NR50_REG = 0x77;
+;main.c:15: NR50_REG = 0x77;//sets the volume for both left and right channel and just set to the max 0x77
 	ld	l, #0x24
 	ld	(hl),#0x77
-;main.c:15: NR51_REG = 0xFF;
+;main.c:16: NR51_REG = 0xFF;//is 1111 1111 in binary, select which channels we want to use in this case, all of them. One bit for the L one bit for the R of all four channels.
 	ld	l, #0x25
 	ld	(hl),#0xff
-;main.c:18: while(1){
+;main.c:19: while(1){
 00104$:
-;main.c:19: UBYTE joypad_state = joypad();
+;main.c:20: UBYTE joypad_state = joypad();
 	call	_joypad
-;main.c:21: if(joypad_state){ 
+;main.c:22: if(joypad_state){ 
 	ld	a,e
 	or	a, a
 	jr	Z,00102$
-;main.c:22: NR10_REG = 0x16;
+;main.c:29: NR10_REG = 0x16;
 	ld	hl,#0xff10
 	ld	(hl),#0x16
-;main.c:23: NR11_REG = 0x40;
+;main.c:30: NR11_REG = 0x40;
 	ld	l, #0x11
 	ld	(hl),#0x40
-;main.c:24: NR12_REG = 0x73;
+;main.c:31: NR12_REG = 0x73;
 	ld	l, #0x12
 	ld	(hl),#0x73
-;main.c:25: NR13_REG = 0x00;
+;main.c:32: NR13_REG = 0x00;
 	ld	l, #0x13
 	ld	(hl),#0x00
-;main.c:26: NR14_REG = 0xc3;
+;main.c:33: NR14_REG = 0xc3;
 	ld	l, #0x14
 	ld	(hl),#0xc3
 00102$:
-;main.c:30: performantDelay(5);
-	ld	a,#0x05
+;main.c:37: performantDelay(2);
+	ld	a,#0x02
 	push	af
 	inc	sp
 	call	_performantDelay

@@ -1,0 +1,250 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.6.0 #9615 (Linux)
+                              4 ;--------------------------------------------------------
+                              5 	.module main
+                              6 	.optsdcc -mgbz80
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _keyPressedRight
+                             13 	.globl _performantDelay
+                             14 	.globl _move_sprite
+                             15 	.globl _set_sprite_tile
+                             16 	.globl _set_sprite_data
+                             17 	.globl _wait_vbl_done
+                             18 	.globl _joypad
+                             19 	.globl _currentSpritePacMan
+                             20 	.globl _keyPress
+                             21 	.globl _pacMan
+                             22 ;--------------------------------------------------------
+                             23 ; ram data
+                             24 ;--------------------------------------------------------
+                             25 	.area _DATA
+   0000                      26 _pacMan::
+   0000                      27 	.ds 32
+   0020                      28 _keyPress::
+   0020                      29 	.ds 1
+   0021                      30 _currentSpritePacMan::
+   0021                      31 	.ds 1
+                             32 ;--------------------------------------------------------
+                             33 ; absolute external ram data
+                             34 ;--------------------------------------------------------
+                             35 	.area _DABS (ABS)
+                             36 ;--------------------------------------------------------
+                             37 ; global & static initialisations
+                             38 ;--------------------------------------------------------
+                             39 	.area _HOME
+                             40 	.area _GSINIT
+                             41 	.area _GSFINAL
+                             42 	.area _GSINIT
+                             43 ;spritePac.c:26: unsigned char pacMan[] =
+   0000 21r00r00             44 	ld	hl,#_pacMan
+   0003 36 3C                45 	ld	(hl),#0x3c
+   0005 21r01r00             46 	ld	hl,#(_pacMan + 0x0001)
+   0008 36 3C                47 	ld	(hl),#0x3c
+   000A 21r02r00             48 	ld	hl,#(_pacMan + 0x0002)
+   000D 36 7E                49 	ld	(hl),#0x7e
+   000F 21r03r00             50 	ld	hl,#(_pacMan + 0x0003)
+   0012 36 42                51 	ld	(hl),#0x42
+   0014 21r04r00             52 	ld	hl,#(_pacMan + 0x0004)
+   0017 36 FF                53 	ld	(hl),#0xff
+   0019 21r05r00             54 	ld	hl,#(_pacMan + 0x0005)
+   001C 36 91                55 	ld	(hl),#0x91
+   001E 21r06r00             56 	ld	hl,#(_pacMan + 0x0006)
+   0021 36 FF                57 	ld	(hl),#0xff
+   0023 21r07r00             58 	ld	hl,#(_pacMan + 0x0007)
+   0026 36 81                59 	ld	(hl),#0x81
+   0028 21r08r00             60 	ld	hl,#(_pacMan + 0x0008)
+   002B 36 FF                61 	ld	(hl),#0xff
+   002D 21r09r00             62 	ld	hl,#(_pacMan + 0x0009)
+   0030 36 8F                63 	ld	(hl),#0x8f
+   0032 21r0Ar00             64 	ld	hl,#(_pacMan + 0x000a)
+   0035 36 FF                65 	ld	(hl),#0xff
+   0037 21r0Br00             66 	ld	hl,#(_pacMan + 0x000b)
+   003A 36 81                67 	ld	(hl),#0x81
+   003C 21r0Cr00             68 	ld	hl,#(_pacMan + 0x000c)
+   003F 36 7E                69 	ld	(hl),#0x7e
+   0041 21r0Dr00             70 	ld	hl,#(_pacMan + 0x000d)
+   0044 36 42                71 	ld	(hl),#0x42
+   0046 21r0Er00             72 	ld	hl,#(_pacMan + 0x000e)
+   0049 36 3C                73 	ld	(hl),#0x3c
+   004B 21r0Fr00             74 	ld	hl,#(_pacMan + 0x000f)
+   004E 36 3C                75 	ld	(hl),#0x3c
+   0050 21r10r00             76 	ld	hl,#(_pacMan + 0x0010)
+   0053 36 3C                77 	ld	(hl),#0x3c
+   0055 21r11r00             78 	ld	hl,#(_pacMan + 0x0011)
+   0058 36 3C                79 	ld	(hl),#0x3c
+   005A 21r12r00             80 	ld	hl,#(_pacMan + 0x0012)
+   005D 36 7E                81 	ld	(hl),#0x7e
+   005F 21r13r00             82 	ld	hl,#(_pacMan + 0x0013)
+   0062 36 42                83 	ld	(hl),#0x42
+   0064 21r14r00             84 	ld	hl,#(_pacMan + 0x0014)
+   0067 36 FF                85 	ld	(hl),#0xff
+   0069 21r15r00             86 	ld	hl,#(_pacMan + 0x0015)
+   006C 36 91                87 	ld	(hl),#0x91
+   006E 21r16r00             88 	ld	hl,#(_pacMan + 0x0016)
+   0071 36 FE                89 	ld	(hl),#0xfe
+   0073 21r17r00             90 	ld	hl,#(_pacMan + 0x0017)
+   0076 36 86                91 	ld	(hl),#0x86
+   0078 21r18r00             92 	ld	hl,#(_pacMan + 0x0018)
+   007B 36 F0                93 	ld	(hl),#0xf0
+   007D 21r19r00             94 	ld	hl,#(_pacMan + 0x0019)
+   0080 36 90                95 	ld	(hl),#0x90
+   0082 21r1Ar00             96 	ld	hl,#(_pacMan + 0x001a)
+   0085 36 F8                97 	ld	(hl),#0xf8
+   0087 21r1Br00             98 	ld	hl,#(_pacMan + 0x001b)
+   008A 36 88                99 	ld	(hl),#0x88
+   008C 21r1Cr00            100 	ld	hl,#(_pacMan + 0x001c)
+   008F 36 7C               101 	ld	(hl),#0x7c
+   0091 21r1Dr00            102 	ld	hl,#(_pacMan + 0x001d)
+   0094 36 44               103 	ld	(hl),#0x44
+   0096 21r1Er00            104 	ld	hl,#(_pacMan + 0x001e)
+   0099 36 38               105 	ld	(hl),#0x38
+   009B 21r1Fr00            106 	ld	hl,#(_pacMan + 0x001f)
+   009E 36 38               107 	ld	(hl),#0x38
+                            108 ;--------------------------------------------------------
+                            109 ; Home
+                            110 ;--------------------------------------------------------
+                            111 	.area _HOME
+                            112 	.area _HOME
+                            113 ;--------------------------------------------------------
+                            114 ; code
+                            115 ;--------------------------------------------------------
+                            116 	.area _CODE
+                            117 ;main.c:8: void performantDelay(UINT8 numloops)
+                            118 ;	---------------------------------
+                            119 ; Function performantDelay
+                            120 ; ---------------------------------
+   0000                     121 _performantDelay::
+                            122 ;main.c:12: for(i=0;i<numloops;i++)
+   0000 0E 00               123 	ld	c,#0x00
+   0002                     124 00103$:
+   0002 79                  125 	ld	a,c
+   0003 F8 02               126 	ldhl	sp,#2
+   0005 96                  127 	sub	a, (hl)
+   0006 D0                  128 	ret	NC
+                            129 ;main.c:14: wait_vbl_done();
+   0007 C5                  130 	push	bc
+   0008 CDr00r00            131 	call	_wait_vbl_done
+   000B C1                  132 	pop	bc
+                            133 ;main.c:12: for(i=0;i<numloops;i++)
+   000C 0C                  134 	inc	c
+   000D 18 F3               135 	jr	00103$
+   000F C9                  136 	ret
+                            137 ;main.c:18: void keyPressedRight()
+                            138 ;	---------------------------------
+                            139 ; Function keyPressedRight
+                            140 ; ---------------------------------
+   0010                     141 _keyPressedRight::
+                            142 ;main.c:20: if(keyPress & J_A)
+   0010 21r20r00            143 	ld	hl,#_keyPress
+   0013 4E                  144 	ld	c,(hl)
+   0014 06 00               145 	ld	b,#0x00
+   0016 CB 61               146 	bit	4, c
+   0018 C8                  147 	ret	Z
+                            148 ;main.c:22: currentSpritePacMan = 1;
+   0019 21r21r00            149 	ld	hl,#_currentSpritePacMan
+   001C 36 01               150 	ld	(hl),#0x01
+                            151 ;main.c:23: set_sprite_tile(0, currentSpritePacMan);
+   001E 21 00 01            152 	ld	hl,#0x0100
+   0021 E5                  153 	push	hl
+   0022 CDr00r00            154 	call	_set_sprite_tile
+   0025 E8 02               155 	add	sp, #2
+   0027 C9                  156 	ret
+                            157 ;main.c:28: void main()
+                            158 ;	---------------------------------
+                            159 ; Function main
+                            160 ; ---------------------------------
+   0028                     161 _main::
+                            162 ;main.c:35: set_sprite_data(0, 2, pacMan);
+   0028 21r00r00            163 	ld	hl,#_pacMan
+   002B E5                  164 	push	hl
+   002C 21 00 02            165 	ld	hl,#0x0200
+   002F E5                  166 	push	hl
+   0030 CDr00r00            167 	call	_set_sprite_data
+   0033 E8 04               168 	add	sp, #4
+                            169 ;main.c:36: move_sprite(0, x, y);
+   0035 21 58 4E            170 	ld	hl,#0x4e58
+   0038 E5                  171 	push	hl
+   0039 AF                  172 	xor	a, a
+   003A F5                  173 	push	af
+   003B 33                  174 	inc	sp
+   003C CDr00r00            175 	call	_move_sprite
+   003F E8 03               176 	add	sp, #3
+                            177 ;main.c:37: SHOW_SPRITES;
+   0041 11 40 FF            178 	ld	de,#0xff40
+   0044 1A                  179 	ld	a,(de)
+   0045 4F                  180 	ld	c,a
+   0046 06 00               181 	ld	b,#0x00
+   0048 79                  182 	ld	a,c
+   0049 CB CF               183 	set	1, a
+   004B 4F                  184 	ld	c,a
+   004C 21 40 FF            185 	ld	hl,#0xff40
+   004F 71                  186 	ld	(hl),c
+                            187 ;main.c:40: while(1)
+   0050 06 58               188 	ld	b,#0x58
+   0052                     189 00107$:
+                            190 ;main.c:42: keyPress = joypad();
+   0052 C5                  191 	push	bc
+   0053 CDr00r00            192 	call	_joypad
+   0056 C1                  193 	pop	bc
+   0057 21r20r00            194 	ld	hl,#_keyPress
+   005A 73                  195 	ld	(hl),e
+                            196 ;main.c:49: set_sprite_tile(0, currentSpritePacMan);
+   005B C5                  197 	push	bc
+   005C 21 00 00            198 	ld	hl,#0x0000
+   005F E5                  199 	push	hl
+   0060 CDr00r00            200 	call	_set_sprite_tile
+   0063 E8 02               201 	add	sp, #2
+   0065 C1                  202 	pop	bc
+                            203 ;main.c:51: if(keyPress == J_RIGHT)
+   0066 21r20r00            204 	ld	hl,#_keyPress
+   0069 7E                  205 	ld	a,(hl)
+   006A 3D                  206 	dec	a
+   006B 20 14               207 	jr	NZ,00104$
+                            208 ;main.c:53: x += 2;
+   006D 04                  209 	inc	b
+   006E 04                  210 	inc	b
+                            211 ;main.c:54: move_sprite(0, x, y);
+   006F C5                  212 	push	bc
+   0070 3E 4E               213 	ld	a,#0x4e
+   0072 F5                  214 	push	af
+   0073 33                  215 	inc	sp
+   0074 C5                  216 	push	bc
+   0075 33                  217 	inc	sp
+   0076 AF                  218 	xor	a, a
+   0077 F5                  219 	push	af
+   0078 33                  220 	inc	sp
+   0079 CDr00r00            221 	call	_move_sprite
+   007C E8 03               222 	add	sp, #3
+   007E C1                  223 	pop	bc
+   007F 18 13               224 	jr	00105$
+   0081                     225 00104$:
+                            226 ;main.c:57: else if(keyPress == J_A)
+   0081 21r20r00            227 	ld	hl,#_keyPress
+   0084 7E                  228 	ld	a,(hl)
+   0085 D6 10               229 	sub	a, #0x10
+   0087 20 0B               230 	jr	NZ,00105$
+                            231 ;main.c:60: set_sprite_tile(0, currentSpritePacMan);
+   0089 C5                  232 	push	bc
+   008A 21 00 01            233 	ld	hl,#0x0100
+   008D E5                  234 	push	hl
+   008E CDr00r00            235 	call	_set_sprite_tile
+   0091 E8 02               236 	add	sp, #2
+   0093 C1                  237 	pop	bc
+   0094                     238 00105$:
+                            239 ;main.c:63: performantDelay(1);
+   0094 C5                  240 	push	bc
+   0095 3E 01               241 	ld	a,#0x01
+   0097 F5                  242 	push	af
+   0098 33                  243 	inc	sp
+   0099 CDr00r00            244 	call	_performantDelay
+   009C 33                  245 	inc	sp
+   009D C1                  246 	pop	bc
+   009E C3r52r00            247 	jp	00107$
+   00A1 C9                  248 	ret
+                            249 	.area _CODE
+                            250 	.area _CABS (ABS)

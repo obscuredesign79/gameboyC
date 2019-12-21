@@ -11,7 +11,8 @@ UINT8 currentSpeedY;
 UINT8 floorYPosition = 136;
 UINT8 possibleYSurface;
 UINT8 timer = 0;
-
+UINT8 jPad;
+BYTE result;
 
 //performance delay to free up CPU
 void performantDelay(UINT8 numloops)
@@ -139,6 +140,37 @@ void jump()
 		moveGameCharacter(&ballSprite01,ballSprite01.x,ballSprite01.y);
 	}
 }
+
+INT8 keyTicked(UINT8 jPad)
+{
+	
+	if(jPad == J_A)
+	{
+				
+		result = 1;
+
+	}
+	else if(jPad != J_A)
+	{
+		if(jPad == J_A)
+		{
+			result = 0;
+		}
+	}
+
+	return result;
+
+}
+
+//jump sound
+void jumpSound()
+{
+	NR10_REG = 0x16;
+	NR11_REG = 0x40;
+	NR12_REG = 0x73;
+	NR13_REG = 0x00;
+	NR14_REG = 0xC3;
+}
 void main()
 {
 	//loads ballSprite
@@ -147,7 +179,13 @@ void main()
 	//initialize jumping variable
 	jumping = 0;
 
+	//initialize sound
+	NR52_REG = 0x80;
+	NR50_REG = 0x77;
+	NR51_REG = 0xFF;
+
 	keyPressed_A = 1;
+	jPad = joypad();
 
 
 	DISPLAY_ON;
@@ -155,15 +193,16 @@ void main()
 
 	while(1)
 	{
-//		printf("%d", joypad());
 
 		if((joypad() & J_A || jumping == 1) && keyPressed_A == 1)
 		{
+				
 			jump();	
-			gameBallStaticStretched();
+			jumpSound();
+			gameBallStaticStretched();//sprite for stretched ball
 			if(jumping == 0)
 			{
-				gameBallAnimSquashed(500);
+				gameBallAnimSquashed(500);//hold squashed sprite for a period of time using for loops
 				keyPressed_A = 0;
 			}
 		}
@@ -173,8 +212,7 @@ void main()
 			keyPressed_A = 1;
 		}
 
-
-
+				
 		if((joypad() & J_RIGHT) && keyPressed_RIGHT == 1)
 		{
 
@@ -182,6 +220,10 @@ void main()
 			moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
 			gameBallAnimRollLoop();
 			if(jumping == 0)
+			{
+				keyPressed_A = 1;
+			}
+			if(joypad() == 16)
 			{
 				keyPressed_A = 1;
 			}

@@ -61,41 +61,41 @@
                              61 ; Function main
                              62 ; ---------------------------------
    0010                      63 _main::
-                             64 ;main.c:13: NR52_REG = 0x80;
+                             64 ;main.c:14: NR52_REG = 0x80;//is 1000 0000 in binary and turns on sound
    0010 21 26 FF             65 	ld	hl,#0xff26
    0013 36 80                66 	ld	(hl),#0x80
-                             67 ;main.c:14: NR50_REG = 0x77;
+                             67 ;main.c:15: NR50_REG = 0x77;//sets the volume for both left and right channel and just set to the max 0x77
    0015 2E 24                68 	ld	l, #0x24
    0017 36 77                69 	ld	(hl),#0x77
-                             70 ;main.c:15: NR51_REG = 0xFF;
+                             70 ;main.c:16: NR51_REG = 0xFF;//is 1111 1111 in binary, select which channels we want to use in this case, all of them. One bit for the L one bit for the R of all four channels.
    0019 2E 25                71 	ld	l, #0x25
    001B 36 FF                72 	ld	(hl),#0xff
-                             73 ;main.c:18: while(1){
+                             73 ;main.c:19: while(1){
    001D                      74 00104$:
-                             75 ;main.c:19: UBYTE joypad_state = joypad();
+                             75 ;main.c:20: UBYTE joypad_state = joypad();
    001D CDr00r00             76 	call	_joypad
-                             77 ;main.c:21: if(joypad_state){ 
+                             77 ;main.c:22: if(joypad_state){ 
    0020 7B                   78 	ld	a,e
    0021 B7                   79 	or	a, a
    0022 28 15                80 	jr	Z,00102$
-                             81 ;main.c:22: NR10_REG = 0x16;
+                             81 ;main.c:29: NR10_REG = 0x16;
    0024 21 10 FF             82 	ld	hl,#0xff10
    0027 36 16                83 	ld	(hl),#0x16
-                             84 ;main.c:23: NR11_REG = 0x40;
+                             84 ;main.c:30: NR11_REG = 0x40;
    0029 2E 11                85 	ld	l, #0x11
    002B 36 40                86 	ld	(hl),#0x40
-                             87 ;main.c:24: NR12_REG = 0x73;
+                             87 ;main.c:31: NR12_REG = 0x73;
    002D 2E 12                88 	ld	l, #0x12
    002F 36 73                89 	ld	(hl),#0x73
-                             90 ;main.c:25: NR13_REG = 0x00;
+                             90 ;main.c:32: NR13_REG = 0x00;
    0031 2E 13                91 	ld	l, #0x13
    0033 36 00                92 	ld	(hl),#0x00
-                             93 ;main.c:26: NR14_REG = 0xc3;
+                             93 ;main.c:33: NR14_REG = 0xc3;
    0035 2E 14                94 	ld	l, #0x14
    0037 36 C3                95 	ld	(hl),#0xc3
    0039                      96 00102$:
-                             97 ;main.c:30: performantDelay(5);
-   0039 3E 05                98 	ld	a,#0x05
+                             97 ;main.c:37: performantDelay(2);
+   0039 3E 02                98 	ld	a,#0x02
    003B F5                   99 	push	af
    003C 33                  100 	inc	sp
    003D CDr00r00            101 	call	_performantDelay
