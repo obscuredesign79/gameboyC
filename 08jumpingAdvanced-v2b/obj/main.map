@@ -66,43 +66,52 @@ Area                                    Addr        Size        Decimal Bytes (A
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00000102  l__DATA                         
-     00000125  l__BASE                         
+     000001A3  l__BASE                         
      000001AC  l__HOME                         
      00000200  s__CODE                         
-     00000343  l__CODE                         
-     000004BF  l__GSINIT                       
-     00000543  s__HOME                         
-     000006EF  s__BASE                         
-     00000814  s__GSINIT                       
-     00000814  s__LIT                          
-     00000CD3  s__GSINITTAIL                   
-     00000CD4  s__GSFINAL                      
+     0000029B  l__DATA                         
+     00000550  l__CODE                         
+     00000750  s__HOME                         
+     000008FC  s__BASE                         
+     00000A9F  s__GSINIT                       
+     00000A9F  s__LIT                          
+     00000CB2  l__GSINIT                       
+     00001751  s__GSINITTAIL                   
+     00001752  s__GSFINAL                      
      0000C0A0  s__DATA                         
-     0000C1A2  s__BSS                          
-     0000C1FB  s__HEAP                         
+     0000C33B  s__BSS                          
+     0000C394  s__HEAP                         
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00000200    00000343 =         835. bytes (REL,CON)
+_CODE                               00000200    00000550 =        1360. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
      00000200  _performantDelay                   main
-     00000210  _gameBallAnimRollLoop              main
-     00000235  _gameBallStaticStretched           main
-     0000025A  _gameBallStaticRest                main
-     0000027F  _gameBallAnimSquashed              main
-     000002BA  _moveGameCharacter                 main
-     00000338  _setupBallSprite01                 main
-     000003AD  _wouldHitSurf                      main
-     000003BB  _jump                              main
-     00000421  _keyTicked                         main
-     00000447  _jumpSound                         main
-     0000045D  _main                              main
+     00000210  _blankMap                          main
+     00000211  _updateKeys                        main
+     00000223  _keyPressed                        main
+     0000022C  _keyTicked                         main
+     00000244  _keyReleased                       main
+     0000025C  _anyKey                            main
+     0000025D  _gameBallSprite01a                 main
+     00000282  _gameBallSprite01b                 main
+     000002A7  _gameBallSprite02                  main
+     000002CC  _gameBallSprite03                  main
+     000002F1  _moveGameCharacter                 main
+     0000036F  _setupBallSprite01                 main
+     000003E4  _canPlayerMove                     main
+     000004A0  _jumpSound                         main
+     000004B6  _wouldHitSurf                      main
+     000004C4  _jump                              main
+     0000052E  _ballMoveX                         main
+     00000585  _ballAfterJumpMoving               main
+     000005AD  _main                              main
+
 ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
 Hexadecimal  [32-Bits]
 
@@ -281,92 +290,96 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_HOME                               00000543    000001AC =         428. bytes (REL,CON)
+_HOME                               00000750    000001AC =         428. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00000543  .set_mode                          Runtime
-     00000553  .remove_VBL                        Runtime
-     00000559  .remove_LCD                        Runtime
-     0000055F  .remove_TIM                        Runtime
-     00000565  .remove_SIO                        Runtime
-     0000056B  .remove_JOY                        Runtime
-     00000571  .add_VBL                           Runtime
-     00000577  .add_LCD                           Runtime
-     0000057D  .add_TIM                           Runtime
-     00000583  .add_SIO                           Runtime
-     00000589  .add_JOY                           Runtime
-     0000058F  .remove_int                        Runtime
-     000005AF  .add_int                           Runtime
-     000005CB  .wait_vbl_done                     Runtime
-     000005CB  _wait_vbl_done                     Runtime
-     000005E2  .display_off                       Runtime
-     000005E2  _display_off                       Runtime
-     00000603  .serial_IO                         Runtime
-     00000632  _mode                              Runtime
-     0000063B  _get_mode                          Runtime
-     00000640  _enable_interrupts                 Runtime
-     00000642  _disable_interrupts                Runtime
-     00000644  .reset                             Runtime
-     00000644  _reset                             Runtime
-     0000064A  _set_interrupts                    Runtime
-     00000655  _remove_VBL                        Runtime
-     00000660  _remove_LCD                        Runtime
-     0000066B  _remove_TIM                        Runtime
-     00000676  _remove_SIO                        Runtime
-     00000681  _remove_JOY                        Runtime
-     0000068C  _add_VBL                           Runtime
-     00000697  _add_LCD                           Runtime
-     000006A2  _add_TIM                           Runtime
-     000006AD  _add_SIO                           Runtime
-     000006B8  _add_JOY                           Runtime
-     000006C3  _clock                             Runtime
-     000006CC  __printTStates                     Runtime
-     000006CD  banked_call                        Runtime
-     000006E6  banked_ret                         Runtime
+     00000750  .set_mode                          Runtime
+     00000760  .remove_VBL                        Runtime
+     00000766  .remove_LCD                        Runtime
+     0000076C  .remove_TIM                        Runtime
+     00000772  .remove_SIO                        Runtime
+     00000778  .remove_JOY                        Runtime
+     0000077E  .add_VBL                           Runtime
+     00000784  .add_LCD                           Runtime
+     0000078A  .add_TIM                           Runtime
+     00000790  .add_SIO                           Runtime
+     00000796  .add_JOY                           Runtime
+     0000079C  .remove_int                        Runtime
+     000007BC  .add_int                           Runtime
+     000007D8  .wait_vbl_done                     Runtime
+     000007D8  _wait_vbl_done                     Runtime
+     000007EF  .display_off                       Runtime
+     000007EF  _display_off                       Runtime
+     00000810  .serial_IO                         Runtime
+     0000083F  _mode                              Runtime
+     00000848  _get_mode                          Runtime
+     0000084D  _enable_interrupts                 Runtime
+     0000084F  _disable_interrupts                Runtime
+     00000851  .reset                             Runtime
+     00000851  _reset                             Runtime
+     00000857  _set_interrupts                    Runtime
+     00000862  _remove_VBL                        Runtime
+     0000086D  _remove_LCD                        Runtime
+     00000878  _remove_TIM                        Runtime
+     00000883  _remove_SIO                        Runtime
+     0000088E  _remove_JOY                        Runtime
+     00000899  _add_VBL                           Runtime
+     000008A4  _add_LCD                           Runtime
+     000008AF  _add_TIM                           Runtime
+     000008BA  _add_SIO                           Runtime
+     000008C5  _add_JOY                           Runtime
+     000008D0  _clock                             Runtime
+     000008D9  __printTStates                     Runtime
+     000008DA  banked_call                        Runtime
+     000008F3  banked_ret                         Runtime
 ASxxxx Linker V03.00 + NoICE + sdld,  page 24.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_BASE                               000006EF    00000125 =         293. bytes (REL,CON)
+_BASE                               000008FC    000001A3 =         419. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     000006EF  .mv_sprite                         
-     000006FE  _move_sprite                       
-     0000070B  _set_bkg_data                      
-     0000070B  _set_win_data                      
-     00000758  _set_sprite_data                   
-     00000787  .padup                             
-     00000787  _waitpadup                         
-     00000797  .jpad                              
-     000007C4  .wait_pad                          
-     000007CB  _joypad                            
-     000007D0  _waitpad                           
-     000007DA  .set_sprite_tile                   
-     000007E7  _set_sprite_tile                   
-     000007F2  .copy_vram                         
-     00000801  _get_data                          
-     00000801  _set_data                          
-
+     000008FC  .mv_sprite                         
+     0000090B  _move_sprite                       
+     00000918  _set_bkg_data                      
+     00000918  _set_win_data                      
+     00000965  _set_sprite_data                   
+     00000994  .padup                             
+     00000994  _waitpadup                         
+     000009A4  .jpad                              
+     000009D1  .wait_pad                          
+     000009D8  _joypad                            
+     000009DD  _waitpad                           
+     000009E7  .set_sprite_tile                   
+     000009F4  _set_sprite_tile                   
+     000009FF  .copy_vram                         
+     00000A0E  _get_data                          
+     00000A0E  _set_data                          
+     00000A21  _set_bkg_tiles                     
+     00000A35  .set_xy_wtt                        
+     00000A46  .set_xy_btt                        
+     00000A55  .set_xy_tt                         
+     00000A86  _set_tiles                         
 ASxxxx Linker V03.00 + NoICE + sdld,  page 25.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_GSINIT                             00000814    000004BF =        1215. bytes (REL,CON)
+_GSINIT                             00000A9F    00000CB2 =        3250. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00000814  gsinit                             Runtime
+     00000A9F  gsinit                             Runtime
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 26.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_GSINITTAIL                         00000CD3    00000001 =           1. bytes (REL,CON)
+_GSINITTAIL                         00001751    00000001 =           1. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -375,56 +388,59 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_DATA                               0000C0A0    00000102 =         258. bytes (REL,CON)
+_DATA                               0000C0A0    0000029B =         667. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
      0000C0A0  _ballSprite                        main
-     0000C190  _keyPressed_A                      main
-     0000C191  _keyPressed_RIGHT                  main
-     0000C192  _jumping                           main
-     0000C193  _gravity                           main
-     0000C194  _currentSpeedY                     main
-     0000C195  _floorYPosition                    main
-     0000C196  _possibleYSurface                  main
-     0000C197  _timer                             main
-     0000C198  _jPad                              main
-     0000C199  _result                            main
-     0000C19A  _ballSprite01                      main
+     0000C190  _levelTile                         main
+     0000C1C0  _levelMap                          main
+     0000C328  _keyPressed_A                      main
+     0000C329  _keyPressed_RIGHT                  main
+     0000C32A  _keyPressed_LEFT                   main
+     0000C32B  _jumping                           main
+     0000C32C  _gravity                           main
+     0000C32D  _floorYPosition                    main
+     0000C32E  _possibleYSurface                  main
+     0000C32F  _timerAnimation                    main
+     0000C330  _currentSpeedY                     main
+     0000C331  _previousKeys                      main
+     0000C332  _keys                              main
+     0000C333  _ballSprite01                      main
 ASxxxx Linker V03.00 + NoICE + sdld,  page 28.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_BSS                                0000C1A2    00000059 =          89. bytes (REL,CON)
+_BSS                                0000C33B    00000059 =          89. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     0000C1A2  __cpu                              Runtime
-     0000C1A3  .mode                              Runtime
-     0000C1A4  __io_out                           Runtime
-     0000C1A5  __io_in                            Runtime
-     0000C1A6  __io_status                        Runtime
-     0000C1A7  .vbl_done                          Runtime
-     0000C1A8  __current_bank                     Runtime
-     0000C1A9  .sys_time                          Runtime
-     0000C1A9  _sys_time                          Runtime
-     0000C1AB  .int_0x40                          Runtime
-     0000C1BB  .int_0x48                          Runtime
-     0000C1CB  .int_0x50                          Runtime
-     0000C1DB  .int_0x58                          Runtime
-     0000C1EB  .int_0x60                          Runtime
+     0000C33B  __cpu                              Runtime
+     0000C33C  .mode                              Runtime
+     0000C33D  __io_out                           Runtime
+     0000C33E  __io_in                            Runtime
+     0000C33F  __io_status                        Runtime
+     0000C340  .vbl_done                          Runtime
+     0000C341  __current_bank                     Runtime
+     0000C342  .sys_time                          Runtime
+     0000C342  _sys_time                          Runtime
+     0000C344  .int_0x40                          Runtime
+     0000C354  .int_0x48                          Runtime
+     0000C364  .int_0x50                          Runtime
+     0000C374  .int_0x58                          Runtime
+     0000C384  .int_0x60                          Runtime
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 29.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_HEAP                               0000C1FB    00000000 =           0. bytes (REL,CON)
+_HEAP                               0000C394    00000000 =           0. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     0000C1FB  _malloc_heap_start                 Runtime
+     0000C394  _malloc_heap_start                 Runtime
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 30.
 
@@ -447,6 +463,10 @@ Libraries Linked                          [ object file ]
                                           [ set_spr.rel ]
 /home/bryan/develop/gbdk-n-master/bin/../lib/gb.lib
                                           [ cpy_data.rel ]
+/home/bryan/develop/gbdk-n-master/bin/../lib/gb.lib
+                                          [ set_bk_t.rel ]
+/home/bryan/develop/gbdk-n-master/bin/../lib/gb.lib
+                                          [ set_xy_t.rel ]
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 31.
 

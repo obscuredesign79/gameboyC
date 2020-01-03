@@ -1,0 +1,1861 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.6.0 #9615 (Linux)
+                              4 ;--------------------------------------------------------
+                              5 	.module main
+                              6 	.optsdcc -mgbz80
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _canPlayerMove
+                             13 	.globl _setupPlayerSprite
+                             14 	.globl _moveGameCharacter
+                             15 	.globl _anyKey
+                             16 	.globl _keyReleased
+                             17 	.globl _keyTicked
+                             18 	.globl _keyPressed
+                             19 	.globl _updateKeys
+                             20 	.globl _performantDelay
+                             21 	.globl _move_sprite
+                             22 	.globl _set_sprite_tile
+                             23 	.globl _set_sprite_data
+                             24 	.globl _set_bkg_tiles
+                             25 	.globl _set_bkg_data
+                             26 	.globl _wait_vbl_done
+                             27 	.globl _joypad
+                             28 	.globl _playerSprite01
+                             29 	.globl _gravity
+                             30 	.globl _keys
+                             31 	.globl _previousKeys
+                             32 	.globl _playerSprite
+                             33 	.globl _level01Tile
+                             34 	.globl _level01Map
+                             35 	.globl _blankMap
+                             36 ;--------------------------------------------------------
+                             37 ; ram data
+                             38 ;--------------------------------------------------------
+                             39 	.area _DATA
+   0000                      40 _level01Map::
+   0000                      41 	.ds 360
+   0168                      42 _level01Tile::
+   0168                      43 	.ds 144
+   01F8                      44 _playerSprite::
+   01F8                      45 	.ds 80
+   0248                      46 _previousKeys::
+   0248                      47 	.ds 1
+   0249                      48 _keys::
+   0249                      49 	.ds 1
+   024A                      50 _gravity::
+   024A                      51 	.ds 1
+   024B                      52 _playerSprite01::
+   024B                      53 	.ds 8
+                             54 ;--------------------------------------------------------
+                             55 ; absolute external ram data
+                             56 ;--------------------------------------------------------
+                             57 	.area _DABS (ABS)
+                             58 ;--------------------------------------------------------
+                             59 ; global & static initialisations
+                             60 ;--------------------------------------------------------
+                             61 	.area _HOME
+                             62 	.area _GSINIT
+                             63 	.area _GSFINAL
+                             64 	.area _GSINIT
+                             65 ;level01Map.c:25: unsigned char level01Map[] =
+   0000 21r00r00             66 	ld	hl,#_level01Map
+   0003 36 00                67 	ld	(hl),#0x00
+   0005 21r01r00             68 	ld	hl,#(_level01Map + 0x0001)
+   0008 36 00                69 	ld	(hl),#0x00
+   000A 21r02r00             70 	ld	hl,#(_level01Map + 0x0002)
+   000D 36 00                71 	ld	(hl),#0x00
+   000F 21r03r00             72 	ld	hl,#(_level01Map + 0x0003)
+   0012 36 00                73 	ld	(hl),#0x00
+   0014 21r04r00             74 	ld	hl,#(_level01Map + 0x0004)
+   0017 36 00                75 	ld	(hl),#0x00
+   0019 21r05r00             76 	ld	hl,#(_level01Map + 0x0005)
+   001C 36 00                77 	ld	(hl),#0x00
+   001E 21r06r00             78 	ld	hl,#(_level01Map + 0x0006)
+   0021 36 00                79 	ld	(hl),#0x00
+   0023 21r07r00             80 	ld	hl,#(_level01Map + 0x0007)
+   0026 36 00                81 	ld	(hl),#0x00
+   0028 21r08r00             82 	ld	hl,#(_level01Map + 0x0008)
+   002B 36 00                83 	ld	(hl),#0x00
+   002D 21r09r00             84 	ld	hl,#(_level01Map + 0x0009)
+   0030 36 00                85 	ld	(hl),#0x00
+   0032 21r0Ar00             86 	ld	hl,#(_level01Map + 0x000a)
+   0035 36 00                87 	ld	(hl),#0x00
+   0037 21r0Br00             88 	ld	hl,#(_level01Map + 0x000b)
+   003A 36 00                89 	ld	(hl),#0x00
+   003C 21r0Cr00             90 	ld	hl,#(_level01Map + 0x000c)
+   003F 36 00                91 	ld	(hl),#0x00
+   0041 21r0Dr00             92 	ld	hl,#(_level01Map + 0x000d)
+   0044 36 00                93 	ld	(hl),#0x00
+   0046 21r0Er00             94 	ld	hl,#(_level01Map + 0x000e)
+   0049 36 00                95 	ld	(hl),#0x00
+   004B 21r0Fr00             96 	ld	hl,#(_level01Map + 0x000f)
+   004E 36 00                97 	ld	(hl),#0x00
+   0050 21r10r00             98 	ld	hl,#(_level01Map + 0x0010)
+   0053 36 00                99 	ld	(hl),#0x00
+   0055 21r11r00            100 	ld	hl,#(_level01Map + 0x0011)
+   0058 36 00               101 	ld	(hl),#0x00
+   005A 21r12r00            102 	ld	hl,#(_level01Map + 0x0012)
+   005D 36 00               103 	ld	(hl),#0x00
+   005F 21r13r00            104 	ld	hl,#(_level01Map + 0x0013)
+   0062 36 00               105 	ld	(hl),#0x00
+   0064 21r14r00            106 	ld	hl,#(_level01Map + 0x0014)
+   0067 36 00               107 	ld	(hl),#0x00
+   0069 21r15r00            108 	ld	hl,#(_level01Map + 0x0015)
+   006C 36 00               109 	ld	(hl),#0x00
+   006E 21r16r00            110 	ld	hl,#(_level01Map + 0x0016)
+   0071 36 00               111 	ld	(hl),#0x00
+   0073 21r17r00            112 	ld	hl,#(_level01Map + 0x0017)
+   0076 36 00               113 	ld	(hl),#0x00
+   0078 21r18r00            114 	ld	hl,#(_level01Map + 0x0018)
+   007B 36 00               115 	ld	(hl),#0x00
+   007D 21r19r00            116 	ld	hl,#(_level01Map + 0x0019)
+   0080 36 00               117 	ld	(hl),#0x00
+   0082 21r1Ar00            118 	ld	hl,#(_level01Map + 0x001a)
+   0085 36 00               119 	ld	(hl),#0x00
+   0087 21r1Br00            120 	ld	hl,#(_level01Map + 0x001b)
+   008A 36 00               121 	ld	(hl),#0x00
+   008C 21r1Cr00            122 	ld	hl,#(_level01Map + 0x001c)
+   008F 36 00               123 	ld	(hl),#0x00
+   0091 21r1Dr00            124 	ld	hl,#(_level01Map + 0x001d)
+   0094 36 00               125 	ld	(hl),#0x00
+   0096 21r1Er00            126 	ld	hl,#(_level01Map + 0x001e)
+   0099 36 00               127 	ld	(hl),#0x00
+   009B 21r1Fr00            128 	ld	hl,#(_level01Map + 0x001f)
+   009E 36 00               129 	ld	(hl),#0x00
+   00A0 21r20r00            130 	ld	hl,#(_level01Map + 0x0020)
+   00A3 36 00               131 	ld	(hl),#0x00
+   00A5 21r21r00            132 	ld	hl,#(_level01Map + 0x0021)
+   00A8 36 00               133 	ld	(hl),#0x00
+   00AA 21r22r00            134 	ld	hl,#(_level01Map + 0x0022)
+   00AD 36 00               135 	ld	(hl),#0x00
+   00AF 21r23r00            136 	ld	hl,#(_level01Map + 0x0023)
+   00B2 36 00               137 	ld	(hl),#0x00
+   00B4 21r24r00            138 	ld	hl,#(_level01Map + 0x0024)
+   00B7 36 00               139 	ld	(hl),#0x00
+   00B9 21r25r00            140 	ld	hl,#(_level01Map + 0x0025)
+   00BC 36 00               141 	ld	(hl),#0x00
+   00BE 21r26r00            142 	ld	hl,#(_level01Map + 0x0026)
+   00C1 36 00               143 	ld	(hl),#0x00
+   00C3 21r27r00            144 	ld	hl,#(_level01Map + 0x0027)
+   00C6 36 00               145 	ld	(hl),#0x00
+   00C8 21r28r00            146 	ld	hl,#(_level01Map + 0x0028)
+   00CB 36 00               147 	ld	(hl),#0x00
+   00CD 21r29r00            148 	ld	hl,#(_level01Map + 0x0029)
+   00D0 36 00               149 	ld	(hl),#0x00
+   00D2 21r2Ar00            150 	ld	hl,#(_level01Map + 0x002a)
+   00D5 36 00               151 	ld	(hl),#0x00
+   00D7 21r2Br00            152 	ld	hl,#(_level01Map + 0x002b)
+   00DA 36 00               153 	ld	(hl),#0x00
+   00DC 21r2Cr00            154 	ld	hl,#(_level01Map + 0x002c)
+   00DF 36 00               155 	ld	(hl),#0x00
+   00E1 21r2Dr00            156 	ld	hl,#(_level01Map + 0x002d)
+   00E4 36 00               157 	ld	(hl),#0x00
+   00E6 21r2Er00            158 	ld	hl,#(_level01Map + 0x002e)
+   00E9 36 00               159 	ld	(hl),#0x00
+   00EB 21r2Fr00            160 	ld	hl,#(_level01Map + 0x002f)
+   00EE 36 00               161 	ld	(hl),#0x00
+   00F0 21r30r00            162 	ld	hl,#(_level01Map + 0x0030)
+   00F3 36 00               163 	ld	(hl),#0x00
+   00F5 21r31r00            164 	ld	hl,#(_level01Map + 0x0031)
+   00F8 36 00               165 	ld	(hl),#0x00
+   00FA 21r32r00            166 	ld	hl,#(_level01Map + 0x0032)
+   00FD 36 00               167 	ld	(hl),#0x00
+   00FF 21r33r00            168 	ld	hl,#(_level01Map + 0x0033)
+   0102 36 00               169 	ld	(hl),#0x00
+   0104 21r34r00            170 	ld	hl,#(_level01Map + 0x0034)
+   0107 36 00               171 	ld	(hl),#0x00
+   0109 21r35r00            172 	ld	hl,#(_level01Map + 0x0035)
+   010C 36 00               173 	ld	(hl),#0x00
+   010E 21r36r00            174 	ld	hl,#(_level01Map + 0x0036)
+   0111 36 00               175 	ld	(hl),#0x00
+   0113 21r37r00            176 	ld	hl,#(_level01Map + 0x0037)
+   0116 36 00               177 	ld	(hl),#0x00
+   0118 21r38r00            178 	ld	hl,#(_level01Map + 0x0038)
+   011B 36 00               179 	ld	(hl),#0x00
+   011D 21r39r00            180 	ld	hl,#(_level01Map + 0x0039)
+   0120 36 00               181 	ld	(hl),#0x00
+   0122 21r3Ar00            182 	ld	hl,#(_level01Map + 0x003a)
+   0125 36 00               183 	ld	(hl),#0x00
+   0127 21r3Br00            184 	ld	hl,#(_level01Map + 0x003b)
+   012A 36 00               185 	ld	(hl),#0x00
+   012C 21r3Cr00            186 	ld	hl,#(_level01Map + 0x003c)
+   012F 36 00               187 	ld	(hl),#0x00
+   0131 21r3Dr00            188 	ld	hl,#(_level01Map + 0x003d)
+   0134 36 00               189 	ld	(hl),#0x00
+   0136 21r3Er00            190 	ld	hl,#(_level01Map + 0x003e)
+   0139 36 00               191 	ld	(hl),#0x00
+   013B 21r3Fr00            192 	ld	hl,#(_level01Map + 0x003f)
+   013E 36 00               193 	ld	(hl),#0x00
+   0140 21r40r00            194 	ld	hl,#(_level01Map + 0x0040)
+   0143 36 00               195 	ld	(hl),#0x00
+   0145 21r41r00            196 	ld	hl,#(_level01Map + 0x0041)
+   0148 36 00               197 	ld	(hl),#0x00
+   014A 21r42r00            198 	ld	hl,#(_level01Map + 0x0042)
+   014D 36 00               199 	ld	(hl),#0x00
+   014F 21r43r00            200 	ld	hl,#(_level01Map + 0x0043)
+   0152 36 00               201 	ld	(hl),#0x00
+   0154 21r44r00            202 	ld	hl,#(_level01Map + 0x0044)
+   0157 36 00               203 	ld	(hl),#0x00
+   0159 21r45r00            204 	ld	hl,#(_level01Map + 0x0045)
+   015C 36 00               205 	ld	(hl),#0x00
+   015E 21r46r00            206 	ld	hl,#(_level01Map + 0x0046)
+   0161 36 00               207 	ld	(hl),#0x00
+   0163 21r47r00            208 	ld	hl,#(_level01Map + 0x0047)
+   0166 36 00               209 	ld	(hl),#0x00
+   0168 21r48r00            210 	ld	hl,#(_level01Map + 0x0048)
+   016B 36 00               211 	ld	(hl),#0x00
+   016D 21r49r00            212 	ld	hl,#(_level01Map + 0x0049)
+   0170 36 00               213 	ld	(hl),#0x00
+   0172 21r4Ar00            214 	ld	hl,#(_level01Map + 0x004a)
+   0175 36 00               215 	ld	(hl),#0x00
+   0177 21r4Br00            216 	ld	hl,#(_level01Map + 0x004b)
+   017A 36 00               217 	ld	(hl),#0x00
+   017C 21r4Cr00            218 	ld	hl,#(_level01Map + 0x004c)
+   017F 36 00               219 	ld	(hl),#0x00
+   0181 21r4Dr00            220 	ld	hl,#(_level01Map + 0x004d)
+   0184 36 00               221 	ld	(hl),#0x00
+   0186 21r4Er00            222 	ld	hl,#(_level01Map + 0x004e)
+   0189 36 00               223 	ld	(hl),#0x00
+   018B 21r4Fr00            224 	ld	hl,#(_level01Map + 0x004f)
+   018E 36 00               225 	ld	(hl),#0x00
+   0190 21r50r00            226 	ld	hl,#(_level01Map + 0x0050)
+   0193 36 00               227 	ld	(hl),#0x00
+   0195 21r51r00            228 	ld	hl,#(_level01Map + 0x0051)
+   0198 36 00               229 	ld	(hl),#0x00
+   019A 21r52r00            230 	ld	hl,#(_level01Map + 0x0052)
+   019D 36 00               231 	ld	(hl),#0x00
+   019F 21r53r00            232 	ld	hl,#(_level01Map + 0x0053)
+   01A2 36 00               233 	ld	(hl),#0x00
+   01A4 21r54r00            234 	ld	hl,#(_level01Map + 0x0054)
+   01A7 36 00               235 	ld	(hl),#0x00
+   01A9 21r55r00            236 	ld	hl,#(_level01Map + 0x0055)
+   01AC 36 00               237 	ld	(hl),#0x00
+   01AE 21r56r00            238 	ld	hl,#(_level01Map + 0x0056)
+   01B1 36 00               239 	ld	(hl),#0x00
+   01B3 21r57r00            240 	ld	hl,#(_level01Map + 0x0057)
+   01B6 36 00               241 	ld	(hl),#0x00
+   01B8 21r58r00            242 	ld	hl,#(_level01Map + 0x0058)
+   01BB 36 00               243 	ld	(hl),#0x00
+   01BD 21r59r00            244 	ld	hl,#(_level01Map + 0x0059)
+   01C0 36 00               245 	ld	(hl),#0x00
+   01C2 21r5Ar00            246 	ld	hl,#(_level01Map + 0x005a)
+   01C5 36 00               247 	ld	(hl),#0x00
+   01C7 21r5Br00            248 	ld	hl,#(_level01Map + 0x005b)
+   01CA 36 00               249 	ld	(hl),#0x00
+   01CC 21r5Cr00            250 	ld	hl,#(_level01Map + 0x005c)
+   01CF 36 00               251 	ld	(hl),#0x00
+   01D1 21r5Dr00            252 	ld	hl,#(_level01Map + 0x005d)
+   01D4 36 00               253 	ld	(hl),#0x00
+   01D6 21r5Er00            254 	ld	hl,#(_level01Map + 0x005e)
+   01D9 36 00               255 	ld	(hl),#0x00
+   01DB 21r5Fr00            256 	ld	hl,#(_level01Map + 0x005f)
+   01DE 36 00               257 	ld	(hl),#0x00
+   01E0 21r60r00            258 	ld	hl,#(_level01Map + 0x0060)
+   01E3 36 00               259 	ld	(hl),#0x00
+   01E5 21r61r00            260 	ld	hl,#(_level01Map + 0x0061)
+   01E8 36 00               261 	ld	(hl),#0x00
+   01EA 21r62r00            262 	ld	hl,#(_level01Map + 0x0062)
+   01ED 36 00               263 	ld	(hl),#0x00
+   01EF 21r63r00            264 	ld	hl,#(_level01Map + 0x0063)
+   01F2 36 00               265 	ld	(hl),#0x00
+   01F4 21r64r00            266 	ld	hl,#(_level01Map + 0x0064)
+   01F7 36 00               267 	ld	(hl),#0x00
+   01F9 21r65r00            268 	ld	hl,#(_level01Map + 0x0065)
+   01FC 36 00               269 	ld	(hl),#0x00
+   01FE 21r66r00            270 	ld	hl,#(_level01Map + 0x0066)
+   0201 36 00               271 	ld	(hl),#0x00
+   0203 21r67r00            272 	ld	hl,#(_level01Map + 0x0067)
+   0206 36 00               273 	ld	(hl),#0x00
+   0208 21r68r00            274 	ld	hl,#(_level01Map + 0x0068)
+   020B 36 00               275 	ld	(hl),#0x00
+   020D 21r69r00            276 	ld	hl,#(_level01Map + 0x0069)
+   0210 36 00               277 	ld	(hl),#0x00
+   0212 21r6Ar00            278 	ld	hl,#(_level01Map + 0x006a)
+   0215 36 00               279 	ld	(hl),#0x00
+   0217 21r6Br00            280 	ld	hl,#(_level01Map + 0x006b)
+   021A 36 00               281 	ld	(hl),#0x00
+   021C 21r6Cr00            282 	ld	hl,#(_level01Map + 0x006c)
+   021F 36 00               283 	ld	(hl),#0x00
+   0221 21r6Dr00            284 	ld	hl,#(_level01Map + 0x006d)
+   0224 36 00               285 	ld	(hl),#0x00
+   0226 21r6Er00            286 	ld	hl,#(_level01Map + 0x006e)
+   0229 36 00               287 	ld	(hl),#0x00
+   022B 21r6Fr00            288 	ld	hl,#(_level01Map + 0x006f)
+   022E 36 00               289 	ld	(hl),#0x00
+   0230 21r70r00            290 	ld	hl,#(_level01Map + 0x0070)
+   0233 36 00               291 	ld	(hl),#0x00
+   0235 21r71r00            292 	ld	hl,#(_level01Map + 0x0071)
+   0238 36 00               293 	ld	(hl),#0x00
+   023A 21r72r00            294 	ld	hl,#(_level01Map + 0x0072)
+   023D 36 00               295 	ld	(hl),#0x00
+   023F 21r73r00            296 	ld	hl,#(_level01Map + 0x0073)
+   0242 36 00               297 	ld	(hl),#0x00
+   0244 21r74r00            298 	ld	hl,#(_level01Map + 0x0074)
+   0247 36 00               299 	ld	(hl),#0x00
+   0249 21r75r00            300 	ld	hl,#(_level01Map + 0x0075)
+   024C 36 00               301 	ld	(hl),#0x00
+   024E 21r76r00            302 	ld	hl,#(_level01Map + 0x0076)
+   0251 36 00               303 	ld	(hl),#0x00
+   0253 21r77r00            304 	ld	hl,#(_level01Map + 0x0077)
+   0256 36 00               305 	ld	(hl),#0x00
+   0258 21r78r00            306 	ld	hl,#(_level01Map + 0x0078)
+   025B 36 00               307 	ld	(hl),#0x00
+   025D 21r79r00            308 	ld	hl,#(_level01Map + 0x0079)
+   0260 36 00               309 	ld	(hl),#0x00
+   0262 21r7Ar00            310 	ld	hl,#(_level01Map + 0x007a)
+   0265 36 00               311 	ld	(hl),#0x00
+   0267 21r7Br00            312 	ld	hl,#(_level01Map + 0x007b)
+   026A 36 00               313 	ld	(hl),#0x00
+   026C 21r7Cr00            314 	ld	hl,#(_level01Map + 0x007c)
+   026F 36 00               315 	ld	(hl),#0x00
+   0271 21r7Dr00            316 	ld	hl,#(_level01Map + 0x007d)
+   0274 36 00               317 	ld	(hl),#0x00
+   0276 21r7Er00            318 	ld	hl,#(_level01Map + 0x007e)
+   0279 36 00               319 	ld	(hl),#0x00
+   027B 21r7Fr00            320 	ld	hl,#(_level01Map + 0x007f)
+   027E 36 00               321 	ld	(hl),#0x00
+   0280 21r80r00            322 	ld	hl,#(_level01Map + 0x0080)
+   0283 36 00               323 	ld	(hl),#0x00
+   0285 21r81r00            324 	ld	hl,#(_level01Map + 0x0081)
+   0288 36 00               325 	ld	(hl),#0x00
+   028A 21r82r00            326 	ld	hl,#(_level01Map + 0x0082)
+   028D 36 00               327 	ld	(hl),#0x00
+   028F 21r83r00            328 	ld	hl,#(_level01Map + 0x0083)
+   0292 36 00               329 	ld	(hl),#0x00
+   0294 21r84r00            330 	ld	hl,#(_level01Map + 0x0084)
+   0297 36 00               331 	ld	(hl),#0x00
+   0299 21r85r00            332 	ld	hl,#(_level01Map + 0x0085)
+   029C 36 00               333 	ld	(hl),#0x00
+   029E 21r86r00            334 	ld	hl,#(_level01Map + 0x0086)
+   02A1 36 00               335 	ld	(hl),#0x00
+   02A3 21r87r00            336 	ld	hl,#(_level01Map + 0x0087)
+   02A6 36 00               337 	ld	(hl),#0x00
+   02A8 21r88r00            338 	ld	hl,#(_level01Map + 0x0088)
+   02AB 36 00               339 	ld	(hl),#0x00
+   02AD 21r89r00            340 	ld	hl,#(_level01Map + 0x0089)
+   02B0 36 00               341 	ld	(hl),#0x00
+   02B2 21r8Ar00            342 	ld	hl,#(_level01Map + 0x008a)
+   02B5 36 00               343 	ld	(hl),#0x00
+   02B7 21r8Br00            344 	ld	hl,#(_level01Map + 0x008b)
+   02BA 36 00               345 	ld	(hl),#0x00
+   02BC 21r8Cr00            346 	ld	hl,#(_level01Map + 0x008c)
+   02BF 36 00               347 	ld	(hl),#0x00
+   02C1 21r8Dr00            348 	ld	hl,#(_level01Map + 0x008d)
+   02C4 36 00               349 	ld	(hl),#0x00
+   02C6 21r8Er00            350 	ld	hl,#(_level01Map + 0x008e)
+   02C9 36 00               351 	ld	(hl),#0x00
+   02CB 21r8Fr00            352 	ld	hl,#(_level01Map + 0x008f)
+   02CE 36 00               353 	ld	(hl),#0x00
+   02D0 21r90r00            354 	ld	hl,#(_level01Map + 0x0090)
+   02D3 36 00               355 	ld	(hl),#0x00
+   02D5 21r91r00            356 	ld	hl,#(_level01Map + 0x0091)
+   02D8 36 00               357 	ld	(hl),#0x00
+   02DA 21r92r00            358 	ld	hl,#(_level01Map + 0x0092)
+   02DD 36 00               359 	ld	(hl),#0x00
+   02DF 21r93r00            360 	ld	hl,#(_level01Map + 0x0093)
+   02E2 36 00               361 	ld	(hl),#0x00
+   02E4 21r94r00            362 	ld	hl,#(_level01Map + 0x0094)
+   02E7 36 00               363 	ld	(hl),#0x00
+   02E9 21r95r00            364 	ld	hl,#(_level01Map + 0x0095)
+   02EC 36 00               365 	ld	(hl),#0x00
+   02EE 21r96r00            366 	ld	hl,#(_level01Map + 0x0096)
+   02F1 36 00               367 	ld	(hl),#0x00
+   02F3 21r97r00            368 	ld	hl,#(_level01Map + 0x0097)
+   02F6 36 00               369 	ld	(hl),#0x00
+   02F8 21r98r00            370 	ld	hl,#(_level01Map + 0x0098)
+   02FB 36 00               371 	ld	(hl),#0x00
+   02FD 21r99r00            372 	ld	hl,#(_level01Map + 0x0099)
+   0300 36 00               373 	ld	(hl),#0x00
+   0302 21r9Ar00            374 	ld	hl,#(_level01Map + 0x009a)
+   0305 36 00               375 	ld	(hl),#0x00
+   0307 21r9Br00            376 	ld	hl,#(_level01Map + 0x009b)
+   030A 36 00               377 	ld	(hl),#0x00
+   030C 21r9Cr00            378 	ld	hl,#(_level01Map + 0x009c)
+   030F 36 00               379 	ld	(hl),#0x00
+   0311 21r9Dr00            380 	ld	hl,#(_level01Map + 0x009d)
+   0314 36 00               381 	ld	(hl),#0x00
+   0316 21r9Er00            382 	ld	hl,#(_level01Map + 0x009e)
+   0319 36 00               383 	ld	(hl),#0x00
+   031B 21r9Fr00            384 	ld	hl,#(_level01Map + 0x009f)
+   031E 36 00               385 	ld	(hl),#0x00
+   0320 21rA0r00            386 	ld	hl,#(_level01Map + 0x00a0)
+   0323 36 02               387 	ld	(hl),#0x02
+   0325 21rA1r00            388 	ld	hl,#(_level01Map + 0x00a1)
+   0328 36 02               389 	ld	(hl),#0x02
+   032A 21rA2r00            390 	ld	hl,#(_level01Map + 0x00a2)
+   032D 36 02               391 	ld	(hl),#0x02
+   032F 21rA3r00            392 	ld	hl,#(_level01Map + 0x00a3)
+   0332 36 02               393 	ld	(hl),#0x02
+   0334 21rA4r00            394 	ld	hl,#(_level01Map + 0x00a4)
+   0337 36 02               395 	ld	(hl),#0x02
+   0339 21rA5r00            396 	ld	hl,#(_level01Map + 0x00a5)
+   033C 36 03               397 	ld	(hl),#0x03
+   033E 21rA6r00            398 	ld	hl,#(_level01Map + 0x00a6)
+   0341 36 00               399 	ld	(hl),#0x00
+   0343 21rA7r00            400 	ld	hl,#(_level01Map + 0x00a7)
+   0346 36 00               401 	ld	(hl),#0x00
+   0348 21rA8r00            402 	ld	hl,#(_level01Map + 0x00a8)
+   034B 36 00               403 	ld	(hl),#0x00
+   034D 21rA9r00            404 	ld	hl,#(_level01Map + 0x00a9)
+   0350 36 00               405 	ld	(hl),#0x00
+   0352 21rAAr00            406 	ld	hl,#(_level01Map + 0x00aa)
+   0355 36 00               407 	ld	(hl),#0x00
+   0357 21rABr00            408 	ld	hl,#(_level01Map + 0x00ab)
+   035A 36 00               409 	ld	(hl),#0x00
+   035C 21rACr00            410 	ld	hl,#(_level01Map + 0x00ac)
+   035F 36 00               411 	ld	(hl),#0x00
+   0361 21rADr00            412 	ld	hl,#(_level01Map + 0x00ad)
+   0364 36 00               413 	ld	(hl),#0x00
+   0366 21rAEr00            414 	ld	hl,#(_level01Map + 0x00ae)
+   0369 36 00               415 	ld	(hl),#0x00
+   036B 21rAFr00            416 	ld	hl,#(_level01Map + 0x00af)
+   036E 36 00               417 	ld	(hl),#0x00
+   0370 21rB0r00            418 	ld	hl,#(_level01Map + 0x00b0)
+   0373 36 00               419 	ld	(hl),#0x00
+   0375 21rB1r00            420 	ld	hl,#(_level01Map + 0x00b1)
+   0378 36 00               421 	ld	(hl),#0x00
+   037A 21rB2r00            422 	ld	hl,#(_level01Map + 0x00b2)
+   037D 36 00               423 	ld	(hl),#0x00
+   037F 21rB3r00            424 	ld	hl,#(_level01Map + 0x00b3)
+   0382 36 00               425 	ld	(hl),#0x00
+   0384 21rB4r00            426 	ld	hl,#(_level01Map + 0x00b4)
+   0387 36 08               427 	ld	(hl),#0x08
+   0389 21rB5r00            428 	ld	hl,#(_level01Map + 0x00b5)
+   038C 36 08               429 	ld	(hl),#0x08
+   038E 21rB6r00            430 	ld	hl,#(_level01Map + 0x00b6)
+   0391 36 08               431 	ld	(hl),#0x08
+   0393 21rB7r00            432 	ld	hl,#(_level01Map + 0x00b7)
+   0396 36 08               433 	ld	(hl),#0x08
+   0398 21rB8r00            434 	ld	hl,#(_level01Map + 0x00b8)
+   039B 36 08               435 	ld	(hl),#0x08
+   039D 21rB9r00            436 	ld	hl,#(_level01Map + 0x00b9)
+   03A0 36 05               437 	ld	(hl),#0x05
+   03A2 21rBAr00            438 	ld	hl,#(_level01Map + 0x00ba)
+   03A5 36 00               439 	ld	(hl),#0x00
+   03A7 21rBBr00            440 	ld	hl,#(_level01Map + 0x00bb)
+   03AA 36 00               441 	ld	(hl),#0x00
+   03AC 21rBCr00            442 	ld	hl,#(_level01Map + 0x00bc)
+   03AF 36 00               443 	ld	(hl),#0x00
+   03B1 21rBDr00            444 	ld	hl,#(_level01Map + 0x00bd)
+   03B4 36 00               445 	ld	(hl),#0x00
+   03B6 21rBEr00            446 	ld	hl,#(_level01Map + 0x00be)
+   03B9 36 00               447 	ld	(hl),#0x00
+   03BB 21rBFr00            448 	ld	hl,#(_level01Map + 0x00bf)
+   03BE 36 00               449 	ld	(hl),#0x00
+   03C0 21rC0r00            450 	ld	hl,#(_level01Map + 0x00c0)
+   03C3 36 00               451 	ld	(hl),#0x00
+   03C5 21rC1r00            452 	ld	hl,#(_level01Map + 0x00c1)
+   03C8 36 00               453 	ld	(hl),#0x00
+   03CA 21rC2r00            454 	ld	hl,#(_level01Map + 0x00c2)
+   03CD 36 00               455 	ld	(hl),#0x00
+   03CF 21rC3r00            456 	ld	hl,#(_level01Map + 0x00c3)
+   03D2 36 00               457 	ld	(hl),#0x00
+   03D4 21rC4r00            458 	ld	hl,#(_level01Map + 0x00c4)
+   03D7 36 00               459 	ld	(hl),#0x00
+   03D9 21rC5r00            460 	ld	hl,#(_level01Map + 0x00c5)
+   03DC 36 00               461 	ld	(hl),#0x00
+   03DE 21rC6r00            462 	ld	hl,#(_level01Map + 0x00c6)
+   03E1 36 00               463 	ld	(hl),#0x00
+   03E3 21rC7r00            464 	ld	hl,#(_level01Map + 0x00c7)
+   03E6 36 00               465 	ld	(hl),#0x00
+   03E8 21rC8r00            466 	ld	hl,#(_level01Map + 0x00c8)
+   03EB 36 08               467 	ld	(hl),#0x08
+   03ED 21rC9r00            468 	ld	hl,#(_level01Map + 0x00c9)
+   03F0 36 08               469 	ld	(hl),#0x08
+   03F2 21rCAr00            470 	ld	hl,#(_level01Map + 0x00ca)
+   03F5 36 08               471 	ld	(hl),#0x08
+   03F7 21rCBr00            472 	ld	hl,#(_level01Map + 0x00cb)
+   03FA 36 08               473 	ld	(hl),#0x08
+   03FC 21rCCr00            474 	ld	hl,#(_level01Map + 0x00cc)
+   03FF 36 08               475 	ld	(hl),#0x08
+   0401 21rCDr00            476 	ld	hl,#(_level01Map + 0x00cd)
+   0404 36 05               477 	ld	(hl),#0x05
+   0406 21rCEr00            478 	ld	hl,#(_level01Map + 0x00ce)
+   0409 36 00               479 	ld	(hl),#0x00
+   040B 21rCFr00            480 	ld	hl,#(_level01Map + 0x00cf)
+   040E 36 00               481 	ld	(hl),#0x00
+   0410 21rD0r00            482 	ld	hl,#(_level01Map + 0x00d0)
+   0413 36 00               483 	ld	(hl),#0x00
+   0415 21rD1r00            484 	ld	hl,#(_level01Map + 0x00d1)
+   0418 36 00               485 	ld	(hl),#0x00
+   041A 21rD2r00            486 	ld	hl,#(_level01Map + 0x00d2)
+   041D 36 00               487 	ld	(hl),#0x00
+   041F 21rD3r00            488 	ld	hl,#(_level01Map + 0x00d3)
+   0422 36 00               489 	ld	(hl),#0x00
+   0424 21rD4r00            490 	ld	hl,#(_level01Map + 0x00d4)
+   0427 36 00               491 	ld	(hl),#0x00
+   0429 21rD5r00            492 	ld	hl,#(_level01Map + 0x00d5)
+   042C 36 00               493 	ld	(hl),#0x00
+   042E 21rD6r00            494 	ld	hl,#(_level01Map + 0x00d6)
+   0431 36 00               495 	ld	(hl),#0x00
+   0433 21rD7r00            496 	ld	hl,#(_level01Map + 0x00d7)
+   0436 36 00               497 	ld	(hl),#0x00
+   0438 21rD8r00            498 	ld	hl,#(_level01Map + 0x00d8)
+   043B 36 00               499 	ld	(hl),#0x00
+   043D 21rD9r00            500 	ld	hl,#(_level01Map + 0x00d9)
+   0440 36 00               501 	ld	(hl),#0x00
+   0442 21rDAr00            502 	ld	hl,#(_level01Map + 0x00da)
+   0445 36 01               503 	ld	(hl),#0x01
+   0447 21rDBr00            504 	ld	hl,#(_level01Map + 0x00db)
+   044A 36 02               505 	ld	(hl),#0x02
+   044C 21rDCr00            506 	ld	hl,#(_level01Map + 0x00dc)
+   044F 36 08               507 	ld	(hl),#0x08
+   0451 21rDDr00            508 	ld	hl,#(_level01Map + 0x00dd)
+   0454 36 08               509 	ld	(hl),#0x08
+   0456 21rDEr00            510 	ld	hl,#(_level01Map + 0x00de)
+   0459 36 08               511 	ld	(hl),#0x08
+   045B 21rDFr00            512 	ld	hl,#(_level01Map + 0x00df)
+   045E 36 08               513 	ld	(hl),#0x08
+   0460 21rE0r00            514 	ld	hl,#(_level01Map + 0x00e0)
+   0463 36 08               515 	ld	(hl),#0x08
+   0465 21rE1r00            516 	ld	hl,#(_level01Map + 0x00e1)
+   0468 36 05               517 	ld	(hl),#0x05
+   046A 21rE2r00            518 	ld	hl,#(_level01Map + 0x00e2)
+   046D 36 00               519 	ld	(hl),#0x00
+   046F 21rE3r00            520 	ld	hl,#(_level01Map + 0x00e3)
+   0472 36 00               521 	ld	(hl),#0x00
+   0474 21rE4r00            522 	ld	hl,#(_level01Map + 0x00e4)
+   0477 36 00               523 	ld	(hl),#0x00
+   0479 21rE5r00            524 	ld	hl,#(_level01Map + 0x00e5)
+   047C 36 00               525 	ld	(hl),#0x00
+   047E 21rE6r00            526 	ld	hl,#(_level01Map + 0x00e6)
+   0481 36 00               527 	ld	(hl),#0x00
+   0483 21rE7r00            528 	ld	hl,#(_level01Map + 0x00e7)
+   0486 36 00               529 	ld	(hl),#0x00
+   0488 21rE8r00            530 	ld	hl,#(_level01Map + 0x00e8)
+   048B 36 00               531 	ld	(hl),#0x00
+   048D 21rE9r00            532 	ld	hl,#(_level01Map + 0x00e9)
+   0490 36 00               533 	ld	(hl),#0x00
+   0492 21rEAr00            534 	ld	hl,#(_level01Map + 0x00ea)
+   0495 36 00               535 	ld	(hl),#0x00
+   0497 21rEBr00            536 	ld	hl,#(_level01Map + 0x00eb)
+   049A 36 00               537 	ld	(hl),#0x00
+   049C 21rECr00            538 	ld	hl,#(_level01Map + 0x00ec)
+   049F 36 00               539 	ld	(hl),#0x00
+   04A1 21rEDr00            540 	ld	hl,#(_level01Map + 0x00ed)
+   04A4 36 00               541 	ld	(hl),#0x00
+   04A6 21rEEr00            542 	ld	hl,#(_level01Map + 0x00ee)
+   04A9 36 04               543 	ld	(hl),#0x04
+   04AB 21rEFr00            544 	ld	hl,#(_level01Map + 0x00ef)
+   04AE 36 08               545 	ld	(hl),#0x08
+   04B0 21rF0r00            546 	ld	hl,#(_level01Map + 0x00f0)
+   04B3 36 08               547 	ld	(hl),#0x08
+   04B5 21rF1r00            548 	ld	hl,#(_level01Map + 0x00f1)
+   04B8 36 08               549 	ld	(hl),#0x08
+   04BA 21rF2r00            550 	ld	hl,#(_level01Map + 0x00f2)
+   04BD 36 08               551 	ld	(hl),#0x08
+   04BF 21rF3r00            552 	ld	hl,#(_level01Map + 0x00f3)
+   04C2 36 08               553 	ld	(hl),#0x08
+   04C4 21rF4r00            554 	ld	hl,#(_level01Map + 0x00f4)
+   04C7 36 08               555 	ld	(hl),#0x08
+   04C9 21rF5r00            556 	ld	hl,#(_level01Map + 0x00f5)
+   04CC 36 05               557 	ld	(hl),#0x05
+   04CE 21rF6r00            558 	ld	hl,#(_level01Map + 0x00f6)
+   04D1 36 00               559 	ld	(hl),#0x00
+   04D3 21rF7r00            560 	ld	hl,#(_level01Map + 0x00f7)
+   04D6 36 00               561 	ld	(hl),#0x00
+   04D8 21rF8r00            562 	ld	hl,#(_level01Map + 0x00f8)
+   04DB 36 00               563 	ld	(hl),#0x00
+   04DD 21rF9r00            564 	ld	hl,#(_level01Map + 0x00f9)
+   04E0 36 00               565 	ld	(hl),#0x00
+   04E2 21rFAr00            566 	ld	hl,#(_level01Map + 0x00fa)
+   04E5 36 00               567 	ld	(hl),#0x00
+   04E7 21rFBr00            568 	ld	hl,#(_level01Map + 0x00fb)
+   04EA 36 00               569 	ld	(hl),#0x00
+   04EC 21rFCr00            570 	ld	hl,#(_level01Map + 0x00fc)
+   04EF 36 00               571 	ld	(hl),#0x00
+   04F1 21rFDr00            572 	ld	hl,#(_level01Map + 0x00fd)
+   04F4 36 00               573 	ld	(hl),#0x00
+   04F6 21rFEr00            574 	ld	hl,#(_level01Map + 0x00fe)
+   04F9 36 00               575 	ld	(hl),#0x00
+   04FB 21rFFr00            576 	ld	hl,#(_level01Map + 0x00ff)
+   04FE 36 00               577 	ld	(hl),#0x00
+   0500 21r00r01            578 	ld	hl,#(_level01Map + 0x0100)
+   0503 36 00               579 	ld	(hl),#0x00
+   0505 21r01r01            580 	ld	hl,#(_level01Map + 0x0101)
+   0508 36 00               581 	ld	(hl),#0x00
+   050A 21r02r01            582 	ld	hl,#(_level01Map + 0x0102)
+   050D 36 04               583 	ld	(hl),#0x04
+   050F 21r03r01            584 	ld	hl,#(_level01Map + 0x0103)
+   0512 36 08               585 	ld	(hl),#0x08
+   0514 21r04r01            586 	ld	hl,#(_level01Map + 0x0104)
+   0517 36 08               587 	ld	(hl),#0x08
+   0519 21r05r01            588 	ld	hl,#(_level01Map + 0x0105)
+   051C 36 08               589 	ld	(hl),#0x08
+   051E 21r06r01            590 	ld	hl,#(_level01Map + 0x0106)
+   0521 36 08               591 	ld	(hl),#0x08
+   0523 21r07r01            592 	ld	hl,#(_level01Map + 0x0107)
+   0526 36 08               593 	ld	(hl),#0x08
+   0528 21r08r01            594 	ld	hl,#(_level01Map + 0x0108)
+   052B 36 08               595 	ld	(hl),#0x08
+   052D 21r09r01            596 	ld	hl,#(_level01Map + 0x0109)
+   0530 36 05               597 	ld	(hl),#0x05
+   0532 21r0Ar01            598 	ld	hl,#(_level01Map + 0x010a)
+   0535 36 00               599 	ld	(hl),#0x00
+   0537 21r0Br01            600 	ld	hl,#(_level01Map + 0x010b)
+   053A 36 00               601 	ld	(hl),#0x00
+   053C 21r0Cr01            602 	ld	hl,#(_level01Map + 0x010c)
+   053F 36 00               603 	ld	(hl),#0x00
+   0541 21r0Dr01            604 	ld	hl,#(_level01Map + 0x010d)
+   0544 36 00               605 	ld	(hl),#0x00
+   0546 21r0Er01            606 	ld	hl,#(_level01Map + 0x010e)
+   0549 36 00               607 	ld	(hl),#0x00
+   054B 21r0Fr01            608 	ld	hl,#(_level01Map + 0x010f)
+   054E 36 00               609 	ld	(hl),#0x00
+   0550 21r10r01            610 	ld	hl,#(_level01Map + 0x0110)
+   0553 36 00               611 	ld	(hl),#0x00
+   0555 21r11r01            612 	ld	hl,#(_level01Map + 0x0111)
+   0558 36 00               613 	ld	(hl),#0x00
+   055A 21r12r01            614 	ld	hl,#(_level01Map + 0x0112)
+   055D 36 00               615 	ld	(hl),#0x00
+   055F 21r13r01            616 	ld	hl,#(_level01Map + 0x0113)
+   0562 36 00               617 	ld	(hl),#0x00
+   0564 21r14r01            618 	ld	hl,#(_level01Map + 0x0114)
+   0567 36 00               619 	ld	(hl),#0x00
+   0569 21r15r01            620 	ld	hl,#(_level01Map + 0x0115)
+   056C 36 00               621 	ld	(hl),#0x00
+   056E 21r16r01            622 	ld	hl,#(_level01Map + 0x0116)
+   0571 36 04               623 	ld	(hl),#0x04
+   0573 21r17r01            624 	ld	hl,#(_level01Map + 0x0117)
+   0576 36 08               625 	ld	(hl),#0x08
+   0578 21r18r01            626 	ld	hl,#(_level01Map + 0x0118)
+   057B 36 08               627 	ld	(hl),#0x08
+   057D 21r19r01            628 	ld	hl,#(_level01Map + 0x0119)
+   0580 36 08               629 	ld	(hl),#0x08
+   0582 21r1Ar01            630 	ld	hl,#(_level01Map + 0x011a)
+   0585 36 08               631 	ld	(hl),#0x08
+   0587 21r1Br01            632 	ld	hl,#(_level01Map + 0x011b)
+   058A 36 08               633 	ld	(hl),#0x08
+   058C 21r1Cr01            634 	ld	hl,#(_level01Map + 0x011c)
+   058F 36 08               635 	ld	(hl),#0x08
+   0591 21r1Dr01            636 	ld	hl,#(_level01Map + 0x011d)
+   0594 36 07               637 	ld	(hl),#0x07
+   0596 21r1Er01            638 	ld	hl,#(_level01Map + 0x011e)
+   0599 36 02               639 	ld	(hl),#0x02
+   059B 21r1Fr01            640 	ld	hl,#(_level01Map + 0x011f)
+   059E 36 02               641 	ld	(hl),#0x02
+   05A0 21r20r01            642 	ld	hl,#(_level01Map + 0x0120)
+   05A3 36 02               643 	ld	(hl),#0x02
+   05A5 21r21r01            644 	ld	hl,#(_level01Map + 0x0121)
+   05A8 36 02               645 	ld	(hl),#0x02
+   05AA 21r22r01            646 	ld	hl,#(_level01Map + 0x0122)
+   05AD 36 02               647 	ld	(hl),#0x02
+   05AF 21r23r01            648 	ld	hl,#(_level01Map + 0x0123)
+   05B2 36 02               649 	ld	(hl),#0x02
+   05B4 21r24r01            650 	ld	hl,#(_level01Map + 0x0124)
+   05B7 36 02               651 	ld	(hl),#0x02
+   05B9 21r25r01            652 	ld	hl,#(_level01Map + 0x0125)
+   05BC 36 02               653 	ld	(hl),#0x02
+   05BE 21r26r01            654 	ld	hl,#(_level01Map + 0x0126)
+   05C1 36 02               655 	ld	(hl),#0x02
+   05C3 21r27r01            656 	ld	hl,#(_level01Map + 0x0127)
+   05C6 36 02               657 	ld	(hl),#0x02
+   05C8 21r28r01            658 	ld	hl,#(_level01Map + 0x0128)
+   05CB 36 02               659 	ld	(hl),#0x02
+   05CD 21r29r01            660 	ld	hl,#(_level01Map + 0x0129)
+   05D0 36 02               661 	ld	(hl),#0x02
+   05D2 21r2Ar01            662 	ld	hl,#(_level01Map + 0x012a)
+   05D5 36 06               663 	ld	(hl),#0x06
+   05D7 21r2Br01            664 	ld	hl,#(_level01Map + 0x012b)
+   05DA 36 08               665 	ld	(hl),#0x08
+   05DC 21r2Cr01            666 	ld	hl,#(_level01Map + 0x012c)
+   05DF 36 08               667 	ld	(hl),#0x08
+   05E1 21r2Dr01            668 	ld	hl,#(_level01Map + 0x012d)
+   05E4 36 08               669 	ld	(hl),#0x08
+   05E6 21r2Er01            670 	ld	hl,#(_level01Map + 0x012e)
+   05E9 36 08               671 	ld	(hl),#0x08
+   05EB 21r2Fr01            672 	ld	hl,#(_level01Map + 0x012f)
+   05EE 36 08               673 	ld	(hl),#0x08
+   05F0 21r30r01            674 	ld	hl,#(_level01Map + 0x0130)
+   05F3 36 08               675 	ld	(hl),#0x08
+   05F5 21r31r01            676 	ld	hl,#(_level01Map + 0x0131)
+   05F8 36 08               677 	ld	(hl),#0x08
+   05FA 21r32r01            678 	ld	hl,#(_level01Map + 0x0132)
+   05FD 36 08               679 	ld	(hl),#0x08
+   05FF 21r33r01            680 	ld	hl,#(_level01Map + 0x0133)
+   0602 36 08               681 	ld	(hl),#0x08
+   0604 21r34r01            682 	ld	hl,#(_level01Map + 0x0134)
+   0607 36 08               683 	ld	(hl),#0x08
+   0609 21r35r01            684 	ld	hl,#(_level01Map + 0x0135)
+   060C 36 08               685 	ld	(hl),#0x08
+   060E 21r36r01            686 	ld	hl,#(_level01Map + 0x0136)
+   0611 36 08               687 	ld	(hl),#0x08
+   0613 21r37r01            688 	ld	hl,#(_level01Map + 0x0137)
+   0616 36 08               689 	ld	(hl),#0x08
+   0618 21r38r01            690 	ld	hl,#(_level01Map + 0x0138)
+   061B 36 08               691 	ld	(hl),#0x08
+   061D 21r39r01            692 	ld	hl,#(_level01Map + 0x0139)
+   0620 36 08               693 	ld	(hl),#0x08
+   0622 21r3Ar01            694 	ld	hl,#(_level01Map + 0x013a)
+   0625 36 08               695 	ld	(hl),#0x08
+   0627 21r3Br01            696 	ld	hl,#(_level01Map + 0x013b)
+   062A 36 08               697 	ld	(hl),#0x08
+   062C 21r3Cr01            698 	ld	hl,#(_level01Map + 0x013c)
+   062F 36 08               699 	ld	(hl),#0x08
+   0631 21r3Dr01            700 	ld	hl,#(_level01Map + 0x013d)
+   0634 36 08               701 	ld	(hl),#0x08
+   0636 21r3Er01            702 	ld	hl,#(_level01Map + 0x013e)
+   0639 36 08               703 	ld	(hl),#0x08
+   063B 21r3Fr01            704 	ld	hl,#(_level01Map + 0x013f)
+   063E 36 08               705 	ld	(hl),#0x08
+   0640 21r40r01            706 	ld	hl,#(_level01Map + 0x0140)
+   0643 36 08               707 	ld	(hl),#0x08
+   0645 21r41r01            708 	ld	hl,#(_level01Map + 0x0141)
+   0648 36 08               709 	ld	(hl),#0x08
+   064A 21r42r01            710 	ld	hl,#(_level01Map + 0x0142)
+   064D 36 08               711 	ld	(hl),#0x08
+   064F 21r43r01            712 	ld	hl,#(_level01Map + 0x0143)
+   0652 36 08               713 	ld	(hl),#0x08
+   0654 21r44r01            714 	ld	hl,#(_level01Map + 0x0144)
+   0657 36 08               715 	ld	(hl),#0x08
+   0659 21r45r01            716 	ld	hl,#(_level01Map + 0x0145)
+   065C 36 08               717 	ld	(hl),#0x08
+   065E 21r46r01            718 	ld	hl,#(_level01Map + 0x0146)
+   0661 36 08               719 	ld	(hl),#0x08
+   0663 21r47r01            720 	ld	hl,#(_level01Map + 0x0147)
+   0666 36 08               721 	ld	(hl),#0x08
+   0668 21r48r01            722 	ld	hl,#(_level01Map + 0x0148)
+   066B 36 08               723 	ld	(hl),#0x08
+   066D 21r49r01            724 	ld	hl,#(_level01Map + 0x0149)
+   0670 36 08               725 	ld	(hl),#0x08
+   0672 21r4Ar01            726 	ld	hl,#(_level01Map + 0x014a)
+   0675 36 08               727 	ld	(hl),#0x08
+   0677 21r4Br01            728 	ld	hl,#(_level01Map + 0x014b)
+   067A 36 08               729 	ld	(hl),#0x08
+   067C 21r4Cr01            730 	ld	hl,#(_level01Map + 0x014c)
+   067F 36 08               731 	ld	(hl),#0x08
+   0681 21r4Dr01            732 	ld	hl,#(_level01Map + 0x014d)
+   0684 36 08               733 	ld	(hl),#0x08
+   0686 21r4Er01            734 	ld	hl,#(_level01Map + 0x014e)
+   0689 36 08               735 	ld	(hl),#0x08
+   068B 21r4Fr01            736 	ld	hl,#(_level01Map + 0x014f)
+   068E 36 08               737 	ld	(hl),#0x08
+   0690 21r50r01            738 	ld	hl,#(_level01Map + 0x0150)
+   0693 36 08               739 	ld	(hl),#0x08
+   0695 21r51r01            740 	ld	hl,#(_level01Map + 0x0151)
+   0698 36 08               741 	ld	(hl),#0x08
+   069A 21r52r01            742 	ld	hl,#(_level01Map + 0x0152)
+   069D 36 08               743 	ld	(hl),#0x08
+   069F 21r53r01            744 	ld	hl,#(_level01Map + 0x0153)
+   06A2 36 08               745 	ld	(hl),#0x08
+   06A4 21r54r01            746 	ld	hl,#(_level01Map + 0x0154)
+   06A7 36 08               747 	ld	(hl),#0x08
+   06A9 21r55r01            748 	ld	hl,#(_level01Map + 0x0155)
+   06AC 36 08               749 	ld	(hl),#0x08
+   06AE 21r56r01            750 	ld	hl,#(_level01Map + 0x0156)
+   06B1 36 08               751 	ld	(hl),#0x08
+   06B3 21r57r01            752 	ld	hl,#(_level01Map + 0x0157)
+   06B6 36 08               753 	ld	(hl),#0x08
+   06B8 21r58r01            754 	ld	hl,#(_level01Map + 0x0158)
+   06BB 36 08               755 	ld	(hl),#0x08
+   06BD 21r59r01            756 	ld	hl,#(_level01Map + 0x0159)
+   06C0 36 08               757 	ld	(hl),#0x08
+   06C2 21r5Ar01            758 	ld	hl,#(_level01Map + 0x015a)
+   06C5 36 08               759 	ld	(hl),#0x08
+   06C7 21r5Br01            760 	ld	hl,#(_level01Map + 0x015b)
+   06CA 36 08               761 	ld	(hl),#0x08
+   06CC 21r5Cr01            762 	ld	hl,#(_level01Map + 0x015c)
+   06CF 36 08               763 	ld	(hl),#0x08
+   06D1 21r5Dr01            764 	ld	hl,#(_level01Map + 0x015d)
+   06D4 36 08               765 	ld	(hl),#0x08
+   06D6 21r5Er01            766 	ld	hl,#(_level01Map + 0x015e)
+   06D9 36 08               767 	ld	(hl),#0x08
+   06DB 21r5Fr01            768 	ld	hl,#(_level01Map + 0x015f)
+   06DE 36 08               769 	ld	(hl),#0x08
+   06E0 21r60r01            770 	ld	hl,#(_level01Map + 0x0160)
+   06E3 36 08               771 	ld	(hl),#0x08
+   06E5 21r61r01            772 	ld	hl,#(_level01Map + 0x0161)
+   06E8 36 08               773 	ld	(hl),#0x08
+   06EA 21r62r01            774 	ld	hl,#(_level01Map + 0x0162)
+   06ED 36 08               775 	ld	(hl),#0x08
+   06EF 21r63r01            776 	ld	hl,#(_level01Map + 0x0163)
+   06F2 36 06               777 	ld	(hl),#0x06
+   06F4 21r64r01            778 	ld	hl,#(_level01Map + 0x0164)
+   06F7 36 06               779 	ld	(hl),#0x06
+   06F9 21r65r01            780 	ld	hl,#(_level01Map + 0x0165)
+   06FC 36 08               781 	ld	(hl),#0x08
+   06FE 21r66r01            782 	ld	hl,#(_level01Map + 0x0166)
+   0701 36 08               783 	ld	(hl),#0x08
+   0703 21r67r01            784 	ld	hl,#(_level01Map + 0x0167)
+   0706 36 08               785 	ld	(hl),#0x08
+                            786 ;level01Tile.c:26: unsigned char level01Tile[] =
+   0708 21r68r01            787 	ld	hl,#_level01Tile
+   070B 36 00               788 	ld	(hl),#0x00
+   070D 21r69r01            789 	ld	hl,#(_level01Tile + 0x0001)
+   0710 36 00               790 	ld	(hl),#0x00
+   0712 21r6Ar01            791 	ld	hl,#(_level01Tile + 0x0002)
+   0715 36 00               792 	ld	(hl),#0x00
+   0717 21r6Br01            793 	ld	hl,#(_level01Tile + 0x0003)
+   071A 36 00               794 	ld	(hl),#0x00
+   071C 21r6Cr01            795 	ld	hl,#(_level01Tile + 0x0004)
+   071F 36 00               796 	ld	(hl),#0x00
+   0721 21r6Dr01            797 	ld	hl,#(_level01Tile + 0x0005)
+   0724 36 00               798 	ld	(hl),#0x00
+   0726 21r6Er01            799 	ld	hl,#(_level01Tile + 0x0006)
+   0729 36 00               800 	ld	(hl),#0x00
+   072B 21r6Fr01            801 	ld	hl,#(_level01Tile + 0x0007)
+   072E 36 00               802 	ld	(hl),#0x00
+   0730 21r70r01            803 	ld	hl,#(_level01Tile + 0x0008)
+   0733 36 00               804 	ld	(hl),#0x00
+   0735 21r71r01            805 	ld	hl,#(_level01Tile + 0x0009)
+   0738 36 00               806 	ld	(hl),#0x00
+   073A 21r72r01            807 	ld	hl,#(_level01Tile + 0x000a)
+   073D 36 00               808 	ld	(hl),#0x00
+   073F 21r73r01            809 	ld	hl,#(_level01Tile + 0x000b)
+   0742 36 00               810 	ld	(hl),#0x00
+   0744 21r74r01            811 	ld	hl,#(_level01Tile + 0x000c)
+   0747 36 00               812 	ld	(hl),#0x00
+   0749 21r75r01            813 	ld	hl,#(_level01Tile + 0x000d)
+   074C 36 00               814 	ld	(hl),#0x00
+   074E 21r76r01            815 	ld	hl,#(_level01Tile + 0x000e)
+   0751 36 00               816 	ld	(hl),#0x00
+   0753 21r77r01            817 	ld	hl,#(_level01Tile + 0x000f)
+   0756 36 00               818 	ld	(hl),#0x00
+   0758 21r78r01            819 	ld	hl,#(_level01Tile + 0x0010)
+   075B 36 00               820 	ld	(hl),#0x00
+   075D 21r79r01            821 	ld	hl,#(_level01Tile + 0x0011)
+   0760 36 FF               822 	ld	(hl),#0xff
+   0762 21r7Ar01            823 	ld	hl,#(_level01Tile + 0x0012)
+   0765 36 7F               824 	ld	(hl),#0x7f
+   0767 21r7Br01            825 	ld	hl,#(_level01Tile + 0x0013)
+   076A 36 80               826 	ld	(hl),#0x80
+   076C 21r7Cr01            827 	ld	hl,#(_level01Tile + 0x0014)
+   076F 36 7F               828 	ld	(hl),#0x7f
+   0771 21r7Dr01            829 	ld	hl,#(_level01Tile + 0x0015)
+   0774 36 80               830 	ld	(hl),#0x80
+   0776 21r7Er01            831 	ld	hl,#(_level01Tile + 0x0016)
+   0779 36 7F               832 	ld	(hl),#0x7f
+   077B 21r7Fr01            833 	ld	hl,#(_level01Tile + 0x0017)
+   077E 36 80               834 	ld	(hl),#0x80
+   0780 21r80r01            835 	ld	hl,#(_level01Tile + 0x0018)
+   0783 36 7F               836 	ld	(hl),#0x7f
+   0785 21r81r01            837 	ld	hl,#(_level01Tile + 0x0019)
+   0788 36 80               838 	ld	(hl),#0x80
+   078A 21r82r01            839 	ld	hl,#(_level01Tile + 0x001a)
+   078D 36 7F               840 	ld	(hl),#0x7f
+   078F 21r83r01            841 	ld	hl,#(_level01Tile + 0x001b)
+   0792 36 80               842 	ld	(hl),#0x80
+   0794 21r84r01            843 	ld	hl,#(_level01Tile + 0x001c)
+   0797 36 7F               844 	ld	(hl),#0x7f
+   0799 21r85r01            845 	ld	hl,#(_level01Tile + 0x001d)
+   079C 36 80               846 	ld	(hl),#0x80
+   079E 21r86r01            847 	ld	hl,#(_level01Tile + 0x001e)
+   07A1 36 7F               848 	ld	(hl),#0x7f
+   07A3 21r87r01            849 	ld	hl,#(_level01Tile + 0x001f)
+   07A6 36 80               850 	ld	(hl),#0x80
+   07A8 21r88r01            851 	ld	hl,#(_level01Tile + 0x0020)
+   07AB 36 00               852 	ld	(hl),#0x00
+   07AD 21r89r01            853 	ld	hl,#(_level01Tile + 0x0021)
+   07B0 36 FF               854 	ld	(hl),#0xff
+   07B2 21r8Ar01            855 	ld	hl,#(_level01Tile + 0x0022)
+   07B5 36 FF               856 	ld	(hl),#0xff
+   07B7 21r8Br01            857 	ld	hl,#(_level01Tile + 0x0023)
+   07BA 36 00               858 	ld	(hl),#0x00
+   07BC 21r8Cr01            859 	ld	hl,#(_level01Tile + 0x0024)
+   07BF 36 FF               860 	ld	(hl),#0xff
+   07C1 21r8Dr01            861 	ld	hl,#(_level01Tile + 0x0025)
+   07C4 36 00               862 	ld	(hl),#0x00
+   07C6 21r8Er01            863 	ld	hl,#(_level01Tile + 0x0026)
+   07C9 36 FF               864 	ld	(hl),#0xff
+   07CB 21r8Fr01            865 	ld	hl,#(_level01Tile + 0x0027)
+   07CE 36 00               866 	ld	(hl),#0x00
+   07D0 21r90r01            867 	ld	hl,#(_level01Tile + 0x0028)
+   07D3 36 FF               868 	ld	(hl),#0xff
+   07D5 21r91r01            869 	ld	hl,#(_level01Tile + 0x0029)
+   07D8 36 00               870 	ld	(hl),#0x00
+   07DA 21r92r01            871 	ld	hl,#(_level01Tile + 0x002a)
+   07DD 36 FF               872 	ld	(hl),#0xff
+   07DF 21r93r01            873 	ld	hl,#(_level01Tile + 0x002b)
+   07E2 36 00               874 	ld	(hl),#0x00
+   07E4 21r94r01            875 	ld	hl,#(_level01Tile + 0x002c)
+   07E7 36 FF               876 	ld	(hl),#0xff
+   07E9 21r95r01            877 	ld	hl,#(_level01Tile + 0x002d)
+   07EC 36 00               878 	ld	(hl),#0x00
+   07EE 21r96r01            879 	ld	hl,#(_level01Tile + 0x002e)
+   07F1 36 FF               880 	ld	(hl),#0xff
+   07F3 21r97r01            881 	ld	hl,#(_level01Tile + 0x002f)
+   07F6 36 00               882 	ld	(hl),#0x00
+   07F8 21r98r01            883 	ld	hl,#(_level01Tile + 0x0030)
+   07FB 36 00               884 	ld	(hl),#0x00
+   07FD 21r99r01            885 	ld	hl,#(_level01Tile + 0x0031)
+   0800 36 FF               886 	ld	(hl),#0xff
+   0802 21r9Ar01            887 	ld	hl,#(_level01Tile + 0x0032)
+   0805 36 FE               888 	ld	(hl),#0xfe
+   0807 21r9Br01            889 	ld	hl,#(_level01Tile + 0x0033)
+   080A 36 01               890 	ld	(hl),#0x01
+   080C 21r9Cr01            891 	ld	hl,#(_level01Tile + 0x0034)
+   080F 36 FE               892 	ld	(hl),#0xfe
+   0811 21r9Dr01            893 	ld	hl,#(_level01Tile + 0x0035)
+   0814 36 01               894 	ld	(hl),#0x01
+   0816 21r9Er01            895 	ld	hl,#(_level01Tile + 0x0036)
+   0819 36 FE               896 	ld	(hl),#0xfe
+   081B 21r9Fr01            897 	ld	hl,#(_level01Tile + 0x0037)
+   081E 36 01               898 	ld	(hl),#0x01
+   0820 21rA0r01            899 	ld	hl,#(_level01Tile + 0x0038)
+   0823 36 FE               900 	ld	(hl),#0xfe
+   0825 21rA1r01            901 	ld	hl,#(_level01Tile + 0x0039)
+   0828 36 01               902 	ld	(hl),#0x01
+   082A 21rA2r01            903 	ld	hl,#(_level01Tile + 0x003a)
+   082D 36 FE               904 	ld	(hl),#0xfe
+   082F 21rA3r01            905 	ld	hl,#(_level01Tile + 0x003b)
+   0832 36 01               906 	ld	(hl),#0x01
+   0834 21rA4r01            907 	ld	hl,#(_level01Tile + 0x003c)
+   0837 36 FE               908 	ld	(hl),#0xfe
+   0839 21rA5r01            909 	ld	hl,#(_level01Tile + 0x003d)
+   083C 36 01               910 	ld	(hl),#0x01
+   083E 21rA6r01            911 	ld	hl,#(_level01Tile + 0x003e)
+   0841 36 FE               912 	ld	(hl),#0xfe
+   0843 21rA7r01            913 	ld	hl,#(_level01Tile + 0x003f)
+   0846 36 01               914 	ld	(hl),#0x01
+   0848 21rA8r01            915 	ld	hl,#(_level01Tile + 0x0040)
+   084B 36 7F               916 	ld	(hl),#0x7f
+   084D 21rA9r01            917 	ld	hl,#(_level01Tile + 0x0041)
+   0850 36 80               918 	ld	(hl),#0x80
+   0852 21rAAr01            919 	ld	hl,#(_level01Tile + 0x0042)
+   0855 36 7F               920 	ld	(hl),#0x7f
+   0857 21rABr01            921 	ld	hl,#(_level01Tile + 0x0043)
+   085A 36 80               922 	ld	(hl),#0x80
+   085C 21rACr01            923 	ld	hl,#(_level01Tile + 0x0044)
+   085F 36 7F               924 	ld	(hl),#0x7f
+   0861 21rADr01            925 	ld	hl,#(_level01Tile + 0x0045)
+   0864 36 80               926 	ld	(hl),#0x80
+   0866 21rAEr01            927 	ld	hl,#(_level01Tile + 0x0046)
+   0869 36 7F               928 	ld	(hl),#0x7f
+   086B 21rAFr01            929 	ld	hl,#(_level01Tile + 0x0047)
+   086E 36 80               930 	ld	(hl),#0x80
+   0870 21rB0r01            931 	ld	hl,#(_level01Tile + 0x0048)
+   0873 36 7F               932 	ld	(hl),#0x7f
+   0875 21rB1r01            933 	ld	hl,#(_level01Tile + 0x0049)
+   0878 36 80               934 	ld	(hl),#0x80
+   087A 21rB2r01            935 	ld	hl,#(_level01Tile + 0x004a)
+   087D 36 7F               936 	ld	(hl),#0x7f
+   087F 21rB3r01            937 	ld	hl,#(_level01Tile + 0x004b)
+   0882 36 80               938 	ld	(hl),#0x80
+   0884 21rB4r01            939 	ld	hl,#(_level01Tile + 0x004c)
+   0887 36 7F               940 	ld	(hl),#0x7f
+   0889 21rB5r01            941 	ld	hl,#(_level01Tile + 0x004d)
+   088C 36 80               942 	ld	(hl),#0x80
+   088E 21rB6r01            943 	ld	hl,#(_level01Tile + 0x004e)
+   0891 36 7F               944 	ld	(hl),#0x7f
+   0893 21rB7r01            945 	ld	hl,#(_level01Tile + 0x004f)
+   0896 36 80               946 	ld	(hl),#0x80
+   0898 21rB8r01            947 	ld	hl,#(_level01Tile + 0x0050)
+   089B 36 FE               948 	ld	(hl),#0xfe
+   089D 21rB9r01            949 	ld	hl,#(_level01Tile + 0x0051)
+   08A0 36 01               950 	ld	(hl),#0x01
+   08A2 21rBAr01            951 	ld	hl,#(_level01Tile + 0x0052)
+   08A5 36 FE               952 	ld	(hl),#0xfe
+   08A7 21rBBr01            953 	ld	hl,#(_level01Tile + 0x0053)
+   08AA 36 01               954 	ld	(hl),#0x01
+   08AC 21rBCr01            955 	ld	hl,#(_level01Tile + 0x0054)
+   08AF 36 FE               956 	ld	(hl),#0xfe
+   08B1 21rBDr01            957 	ld	hl,#(_level01Tile + 0x0055)
+   08B4 36 01               958 	ld	(hl),#0x01
+   08B6 21rBEr01            959 	ld	hl,#(_level01Tile + 0x0056)
+   08B9 36 FE               960 	ld	(hl),#0xfe
+   08BB 21rBFr01            961 	ld	hl,#(_level01Tile + 0x0057)
+   08BE 36 01               962 	ld	(hl),#0x01
+   08C0 21rC0r01            963 	ld	hl,#(_level01Tile + 0x0058)
+   08C3 36 FE               964 	ld	(hl),#0xfe
+   08C5 21rC1r01            965 	ld	hl,#(_level01Tile + 0x0059)
+   08C8 36 01               966 	ld	(hl),#0x01
+   08CA 21rC2r01            967 	ld	hl,#(_level01Tile + 0x005a)
+   08CD 36 FE               968 	ld	(hl),#0xfe
+   08CF 21rC3r01            969 	ld	hl,#(_level01Tile + 0x005b)
+   08D2 36 01               970 	ld	(hl),#0x01
+   08D4 21rC4r01            971 	ld	hl,#(_level01Tile + 0x005c)
+   08D7 36 FE               972 	ld	(hl),#0xfe
+   08D9 21rC5r01            973 	ld	hl,#(_level01Tile + 0x005d)
+   08DC 36 01               974 	ld	(hl),#0x01
+   08DE 21rC6r01            975 	ld	hl,#(_level01Tile + 0x005e)
+   08E1 36 FE               976 	ld	(hl),#0xfe
+   08E3 21rC7r01            977 	ld	hl,#(_level01Tile + 0x005f)
+   08E6 36 01               978 	ld	(hl),#0x01
+   08E8 21rC8r01            979 	ld	hl,#(_level01Tile + 0x0060)
+   08EB 36 7F               980 	ld	(hl),#0x7f
+   08ED 21rC9r01            981 	ld	hl,#(_level01Tile + 0x0061)
+   08F0 36 80               982 	ld	(hl),#0x80
+   08F2 21rCAr01            983 	ld	hl,#(_level01Tile + 0x0062)
+   08F5 36 FF               984 	ld	(hl),#0xff
+   08F7 21rCBr01            985 	ld	hl,#(_level01Tile + 0x0063)
+   08FA 36 00               986 	ld	(hl),#0x00
+   08FC 21rCCr01            987 	ld	hl,#(_level01Tile + 0x0064)
+   08FF 36 FF               988 	ld	(hl),#0xff
+   0901 21rCDr01            989 	ld	hl,#(_level01Tile + 0x0065)
+   0904 36 00               990 	ld	(hl),#0x00
+   0906 21rCEr01            991 	ld	hl,#(_level01Tile + 0x0066)
+   0909 36 FF               992 	ld	(hl),#0xff
+   090B 21rCFr01            993 	ld	hl,#(_level01Tile + 0x0067)
+   090E 36 00               994 	ld	(hl),#0x00
+   0910 21rD0r01            995 	ld	hl,#(_level01Tile + 0x0068)
+   0913 36 FF               996 	ld	(hl),#0xff
+   0915 21rD1r01            997 	ld	hl,#(_level01Tile + 0x0069)
+   0918 36 00               998 	ld	(hl),#0x00
+   091A 21rD2r01            999 	ld	hl,#(_level01Tile + 0x006a)
+   091D 36 FF              1000 	ld	(hl),#0xff
+   091F 21rD3r01           1001 	ld	hl,#(_level01Tile + 0x006b)
+   0922 36 00              1002 	ld	(hl),#0x00
+   0924 21rD4r01           1003 	ld	hl,#(_level01Tile + 0x006c)
+   0927 36 FF              1004 	ld	(hl),#0xff
+   0929 21rD5r01           1005 	ld	hl,#(_level01Tile + 0x006d)
+   092C 36 00              1006 	ld	(hl),#0x00
+   092E 21rD6r01           1007 	ld	hl,#(_level01Tile + 0x006e)
+   0931 36 FF              1008 	ld	(hl),#0xff
+   0933 21rD7r01           1009 	ld	hl,#(_level01Tile + 0x006f)
+   0936 36 00              1010 	ld	(hl),#0x00
+   0938 21rD8r01           1011 	ld	hl,#(_level01Tile + 0x0070)
+   093B 36 FE              1012 	ld	(hl),#0xfe
+   093D 21rD9r01           1013 	ld	hl,#(_level01Tile + 0x0071)
+   0940 36 01              1014 	ld	(hl),#0x01
+   0942 21rDAr01           1015 	ld	hl,#(_level01Tile + 0x0072)
+   0945 36 FF              1016 	ld	(hl),#0xff
+   0947 21rDBr01           1017 	ld	hl,#(_level01Tile + 0x0073)
+   094A 36 00              1018 	ld	(hl),#0x00
+   094C 21rDCr01           1019 	ld	hl,#(_level01Tile + 0x0074)
+   094F 36 FF              1020 	ld	(hl),#0xff
+   0951 21rDDr01           1021 	ld	hl,#(_level01Tile + 0x0075)
+   0954 36 00              1022 	ld	(hl),#0x00
+   0956 21rDEr01           1023 	ld	hl,#(_level01Tile + 0x0076)
+   0959 36 FF              1024 	ld	(hl),#0xff
+   095B 21rDFr01           1025 	ld	hl,#(_level01Tile + 0x0077)
+   095E 36 00              1026 	ld	(hl),#0x00
+   0960 21rE0r01           1027 	ld	hl,#(_level01Tile + 0x0078)
+   0963 36 FF              1028 	ld	(hl),#0xff
+   0965 21rE1r01           1029 	ld	hl,#(_level01Tile + 0x0079)
+   0968 36 00              1030 	ld	(hl),#0x00
+   096A 21rE2r01           1031 	ld	hl,#(_level01Tile + 0x007a)
+   096D 36 FF              1032 	ld	(hl),#0xff
+   096F 21rE3r01           1033 	ld	hl,#(_level01Tile + 0x007b)
+   0972 36 00              1034 	ld	(hl),#0x00
+   0974 21rE4r01           1035 	ld	hl,#(_level01Tile + 0x007c)
+   0977 36 FF              1036 	ld	(hl),#0xff
+   0979 21rE5r01           1037 	ld	hl,#(_level01Tile + 0x007d)
+   097C 36 00              1038 	ld	(hl),#0x00
+   097E 21rE6r01           1039 	ld	hl,#(_level01Tile + 0x007e)
+   0981 36 FF              1040 	ld	(hl),#0xff
+   0983 21rE7r01           1041 	ld	hl,#(_level01Tile + 0x007f)
+   0986 36 00              1042 	ld	(hl),#0x00
+   0988 21rE8r01           1043 	ld	hl,#(_level01Tile + 0x0080)
+   098B 36 FF              1044 	ld	(hl),#0xff
+   098D 21rE9r01           1045 	ld	hl,#(_level01Tile + 0x0081)
+   0990 36 00              1046 	ld	(hl),#0x00
+   0992 21rEAr01           1047 	ld	hl,#(_level01Tile + 0x0082)
+   0995 36 FF              1048 	ld	(hl),#0xff
+   0997 21rEBr01           1049 	ld	hl,#(_level01Tile + 0x0083)
+   099A 36 00              1050 	ld	(hl),#0x00
+   099C 21rECr01           1051 	ld	hl,#(_level01Tile + 0x0084)
+   099F 36 FF              1052 	ld	(hl),#0xff
+   09A1 21rEDr01           1053 	ld	hl,#(_level01Tile + 0x0085)
+   09A4 36 00              1054 	ld	(hl),#0x00
+   09A6 21rEEr01           1055 	ld	hl,#(_level01Tile + 0x0086)
+   09A9 36 FF              1056 	ld	(hl),#0xff
+   09AB 21rEFr01           1057 	ld	hl,#(_level01Tile + 0x0087)
+   09AE 36 00              1058 	ld	(hl),#0x00
+   09B0 21rF0r01           1059 	ld	hl,#(_level01Tile + 0x0088)
+   09B3 36 FF              1060 	ld	(hl),#0xff
+   09B5 21rF1r01           1061 	ld	hl,#(_level01Tile + 0x0089)
+   09B8 36 00              1062 	ld	(hl),#0x00
+   09BA 21rF2r01           1063 	ld	hl,#(_level01Tile + 0x008a)
+   09BD 36 FF              1064 	ld	(hl),#0xff
+   09BF 21rF3r01           1065 	ld	hl,#(_level01Tile + 0x008b)
+   09C2 36 00              1066 	ld	(hl),#0x00
+   09C4 21rF4r01           1067 	ld	hl,#(_level01Tile + 0x008c)
+   09C7 36 FF              1068 	ld	(hl),#0xff
+   09C9 21rF5r01           1069 	ld	hl,#(_level01Tile + 0x008d)
+   09CC 36 00              1070 	ld	(hl),#0x00
+   09CE 21rF6r01           1071 	ld	hl,#(_level01Tile + 0x008e)
+   09D1 36 FF              1072 	ld	(hl),#0xff
+   09D3 21rF7r01           1073 	ld	hl,#(_level01Tile + 0x008f)
+   09D6 36 00              1074 	ld	(hl),#0x00
+                           1075 ;playerSprite.c:26: unsigned char playerSprite[] =
+   09D8 21rF8r01           1076 	ld	hl,#_playerSprite
+   09DB 36 00              1077 	ld	(hl),#0x00
+   09DD 21rF9r01           1078 	ld	hl,#(_playerSprite + 0x0001)
+   09E0 36 00              1079 	ld	(hl),#0x00
+   09E2 21rFAr01           1080 	ld	hl,#(_playerSprite + 0x0002)
+   09E5 36 00              1081 	ld	(hl),#0x00
+   09E7 21rFBr01           1082 	ld	hl,#(_playerSprite + 0x0003)
+   09EA 36 00              1083 	ld	(hl),#0x00
+   09EC 21rFCr01           1084 	ld	hl,#(_playerSprite + 0x0004)
+   09EF 36 00              1085 	ld	(hl),#0x00
+   09F1 21rFDr01           1086 	ld	hl,#(_playerSprite + 0x0005)
+   09F4 36 00              1087 	ld	(hl),#0x00
+   09F6 21rFEr01           1088 	ld	hl,#(_playerSprite + 0x0006)
+   09F9 36 00              1089 	ld	(hl),#0x00
+   09FB 21rFFr01           1090 	ld	hl,#(_playerSprite + 0x0007)
+   09FE 36 00              1091 	ld	(hl),#0x00
+   0A00 21r00r02           1092 	ld	hl,#(_playerSprite + 0x0008)
+   0A03 36 00              1093 	ld	(hl),#0x00
+   0A05 21r01r02           1094 	ld	hl,#(_playerSprite + 0x0009)
+   0A08 36 00              1095 	ld	(hl),#0x00
+   0A0A 21r02r02           1096 	ld	hl,#(_playerSprite + 0x000a)
+   0A0D 36 00              1097 	ld	(hl),#0x00
+   0A0F 21r03r02           1098 	ld	hl,#(_playerSprite + 0x000b)
+   0A12 36 00              1099 	ld	(hl),#0x00
+   0A14 21r04r02           1100 	ld	hl,#(_playerSprite + 0x000c)
+   0A17 36 00              1101 	ld	(hl),#0x00
+   0A19 21r05r02           1102 	ld	hl,#(_playerSprite + 0x000d)
+   0A1C 36 00              1103 	ld	(hl),#0x00
+   0A1E 21r06r02           1104 	ld	hl,#(_playerSprite + 0x000e)
+   0A21 36 00              1105 	ld	(hl),#0x00
+   0A23 21r07r02           1106 	ld	hl,#(_playerSprite + 0x000f)
+   0A26 36 00              1107 	ld	(hl),#0x00
+   0A28 21r08r02           1108 	ld	hl,#(_playerSprite + 0x0010)
+   0A2B 36 FF              1109 	ld	(hl),#0xff
+   0A2D 21r09r02           1110 	ld	hl,#(_playerSprite + 0x0011)
+   0A30 36 FF              1111 	ld	(hl),#0xff
+   0A32 21r0Ar02           1112 	ld	hl,#(_playerSprite + 0x0012)
+   0A35 36 FF              1113 	ld	(hl),#0xff
+   0A37 21r0Br02           1114 	ld	hl,#(_playerSprite + 0x0013)
+   0A3A 36 80              1115 	ld	(hl),#0x80
+   0A3C 21r0Cr02           1116 	ld	hl,#(_playerSprite + 0x0014)
+   0A3F 36 FF              1117 	ld	(hl),#0xff
+   0A41 21r0Dr02           1118 	ld	hl,#(_playerSprite + 0x0015)
+   0A44 36 80              1119 	ld	(hl),#0x80
+   0A46 21r0Er02           1120 	ld	hl,#(_playerSprite + 0x0016)
+   0A49 36 FF              1121 	ld	(hl),#0xff
+   0A4B 21r0Fr02           1122 	ld	hl,#(_playerSprite + 0x0017)
+   0A4E 36 80              1123 	ld	(hl),#0x80
+   0A50 21r10r02           1124 	ld	hl,#(_playerSprite + 0x0018)
+   0A53 36 FF              1125 	ld	(hl),#0xff
+   0A55 21r11r02           1126 	ld	hl,#(_playerSprite + 0x0019)
+   0A58 36 80              1127 	ld	(hl),#0x80
+   0A5A 21r12r02           1128 	ld	hl,#(_playerSprite + 0x001a)
+   0A5D 36 FF              1129 	ld	(hl),#0xff
+   0A5F 21r13r02           1130 	ld	hl,#(_playerSprite + 0x001b)
+   0A62 36 80              1131 	ld	(hl),#0x80
+   0A64 21r14r02           1132 	ld	hl,#(_playerSprite + 0x001c)
+   0A67 36 FF              1133 	ld	(hl),#0xff
+   0A69 21r15r02           1134 	ld	hl,#(_playerSprite + 0x001d)
+   0A6C 36 80              1135 	ld	(hl),#0x80
+   0A6E 21r16r02           1136 	ld	hl,#(_playerSprite + 0x001e)
+   0A71 36 FF              1137 	ld	(hl),#0xff
+   0A73 21r17r02           1138 	ld	hl,#(_playerSprite + 0x001f)
+   0A76 36 80              1139 	ld	(hl),#0x80
+   0A78 21r18r02           1140 	ld	hl,#(_playerSprite + 0x0020)
+   0A7B 36 FF              1141 	ld	(hl),#0xff
+   0A7D 21r19r02           1142 	ld	hl,#(_playerSprite + 0x0021)
+   0A80 36 FF              1143 	ld	(hl),#0xff
+   0A82 21r1Ar02           1144 	ld	hl,#(_playerSprite + 0x0022)
+   0A85 36 FF              1145 	ld	(hl),#0xff
+   0A87 21r1Br02           1146 	ld	hl,#(_playerSprite + 0x0023)
+   0A8A 36 01              1147 	ld	(hl),#0x01
+   0A8C 21r1Cr02           1148 	ld	hl,#(_playerSprite + 0x0024)
+   0A8F 36 FF              1149 	ld	(hl),#0xff
+   0A91 21r1Dr02           1150 	ld	hl,#(_playerSprite + 0x0025)
+   0A94 36 01              1151 	ld	(hl),#0x01
+   0A96 21r1Er02           1152 	ld	hl,#(_playerSprite + 0x0026)
+   0A99 36 FF              1153 	ld	(hl),#0xff
+   0A9B 21r1Fr02           1154 	ld	hl,#(_playerSprite + 0x0027)
+   0A9E 36 01              1155 	ld	(hl),#0x01
+   0AA0 21r20r02           1156 	ld	hl,#(_playerSprite + 0x0028)
+   0AA3 36 FF              1157 	ld	(hl),#0xff
+   0AA5 21r21r02           1158 	ld	hl,#(_playerSprite + 0x0029)
+   0AA8 36 01              1159 	ld	(hl),#0x01
+   0AAA 21r22r02           1160 	ld	hl,#(_playerSprite + 0x002a)
+   0AAD 36 FF              1161 	ld	(hl),#0xff
+   0AAF 21r23r02           1162 	ld	hl,#(_playerSprite + 0x002b)
+   0AB2 36 01              1163 	ld	(hl),#0x01
+   0AB4 21r24r02           1164 	ld	hl,#(_playerSprite + 0x002c)
+   0AB7 36 FF              1165 	ld	(hl),#0xff
+   0AB9 21r25r02           1166 	ld	hl,#(_playerSprite + 0x002d)
+   0ABC 36 01              1167 	ld	(hl),#0x01
+   0ABE 21r26r02           1168 	ld	hl,#(_playerSprite + 0x002e)
+   0AC1 36 FF              1169 	ld	(hl),#0xff
+   0AC3 21r27r02           1170 	ld	hl,#(_playerSprite + 0x002f)
+   0AC6 36 01              1171 	ld	(hl),#0x01
+   0AC8 21r28r02           1172 	ld	hl,#(_playerSprite + 0x0030)
+   0ACB 36 FF              1173 	ld	(hl),#0xff
+   0ACD 21r29r02           1174 	ld	hl,#(_playerSprite + 0x0031)
+   0AD0 36 80              1175 	ld	(hl),#0x80
+   0AD2 21r2Ar02           1176 	ld	hl,#(_playerSprite + 0x0032)
+   0AD5 36 FF              1177 	ld	(hl),#0xff
+   0AD7 21r2Br02           1178 	ld	hl,#(_playerSprite + 0x0033)
+   0ADA 36 80              1179 	ld	(hl),#0x80
+   0ADC 21r2Cr02           1180 	ld	hl,#(_playerSprite + 0x0034)
+   0ADF 36 FF              1181 	ld	(hl),#0xff
+   0AE1 21r2Dr02           1182 	ld	hl,#(_playerSprite + 0x0035)
+   0AE4 36 80              1183 	ld	(hl),#0x80
+   0AE6 21r2Er02           1184 	ld	hl,#(_playerSprite + 0x0036)
+   0AE9 36 FF              1185 	ld	(hl),#0xff
+   0AEB 21r2Fr02           1186 	ld	hl,#(_playerSprite + 0x0037)
+   0AEE 36 80              1187 	ld	(hl),#0x80
+   0AF0 21r30r02           1188 	ld	hl,#(_playerSprite + 0x0038)
+   0AF3 36 FF              1189 	ld	(hl),#0xff
+   0AF5 21r31r02           1190 	ld	hl,#(_playerSprite + 0x0039)
+   0AF8 36 80              1191 	ld	(hl),#0x80
+   0AFA 21r32r02           1192 	ld	hl,#(_playerSprite + 0x003a)
+   0AFD 36 FF              1193 	ld	(hl),#0xff
+   0AFF 21r33r02           1194 	ld	hl,#(_playerSprite + 0x003b)
+   0B02 36 80              1195 	ld	(hl),#0x80
+   0B04 21r34r02           1196 	ld	hl,#(_playerSprite + 0x003c)
+   0B07 36 FF              1197 	ld	(hl),#0xff
+   0B09 21r35r02           1198 	ld	hl,#(_playerSprite + 0x003d)
+   0B0C 36 80              1199 	ld	(hl),#0x80
+   0B0E 21r36r02           1200 	ld	hl,#(_playerSprite + 0x003e)
+   0B11 36 FF              1201 	ld	(hl),#0xff
+   0B13 21r37r02           1202 	ld	hl,#(_playerSprite + 0x003f)
+   0B16 36 FF              1203 	ld	(hl),#0xff
+   0B18 21r38r02           1204 	ld	hl,#(_playerSprite + 0x0040)
+   0B1B 36 FF              1205 	ld	(hl),#0xff
+   0B1D 21r39r02           1206 	ld	hl,#(_playerSprite + 0x0041)
+   0B20 36 01              1207 	ld	(hl),#0x01
+   0B22 21r3Ar02           1208 	ld	hl,#(_playerSprite + 0x0042)
+   0B25 36 FF              1209 	ld	(hl),#0xff
+   0B27 21r3Br02           1210 	ld	hl,#(_playerSprite + 0x0043)
+   0B2A 36 01              1211 	ld	(hl),#0x01
+   0B2C 21r3Cr02           1212 	ld	hl,#(_playerSprite + 0x0044)
+   0B2F 36 FF              1213 	ld	(hl),#0xff
+   0B31 21r3Dr02           1214 	ld	hl,#(_playerSprite + 0x0045)
+   0B34 36 01              1215 	ld	(hl),#0x01
+   0B36 21r3Er02           1216 	ld	hl,#(_playerSprite + 0x0046)
+   0B39 36 FF              1217 	ld	(hl),#0xff
+   0B3B 21r3Fr02           1218 	ld	hl,#(_playerSprite + 0x0047)
+   0B3E 36 01              1219 	ld	(hl),#0x01
+   0B40 21r40r02           1220 	ld	hl,#(_playerSprite + 0x0048)
+   0B43 36 FF              1221 	ld	(hl),#0xff
+   0B45 21r41r02           1222 	ld	hl,#(_playerSprite + 0x0049)
+   0B48 36 01              1223 	ld	(hl),#0x01
+   0B4A 21r42r02           1224 	ld	hl,#(_playerSprite + 0x004a)
+   0B4D 36 FF              1225 	ld	(hl),#0xff
+   0B4F 21r43r02           1226 	ld	hl,#(_playerSprite + 0x004b)
+   0B52 36 01              1227 	ld	(hl),#0x01
+   0B54 21r44r02           1228 	ld	hl,#(_playerSprite + 0x004c)
+   0B57 36 FF              1229 	ld	(hl),#0xff
+   0B59 21r45r02           1230 	ld	hl,#(_playerSprite + 0x004d)
+   0B5C 36 01              1231 	ld	(hl),#0x01
+   0B5E 21r46r02           1232 	ld	hl,#(_playerSprite + 0x004e)
+   0B61 36 FF              1233 	ld	(hl),#0xff
+   0B63 21r47r02           1234 	ld	hl,#(_playerSprite + 0x004f)
+   0B66 36 FF              1235 	ld	(hl),#0xff
+                           1236 ;--------------------------------------------------------
+                           1237 ; Home
+                           1238 ;--------------------------------------------------------
+                           1239 	.area _HOME
+                           1240 	.area _HOME
+                           1241 ;--------------------------------------------------------
+                           1242 ; code
+                           1243 ;--------------------------------------------------------
+                           1244 	.area _CODE
+                           1245 ;main.c:13: void performantDelay(UINT8 numloops)
+                           1246 ;	---------------------------------
+                           1247 ; Function performantDelay
+                           1248 ; ---------------------------------
+   0000                    1249 _performantDelay::
+                           1250 ;main.c:16: for(i=0;i < numloops;i++)
+   0000 0E 00              1251 	ld	c,#0x00
+   0002                    1252 00103$:
+   0002 79                 1253 	ld	a,c
+   0003 F8 02              1254 	ldhl	sp,#2
+   0005 96                 1255 	sub	a, (hl)
+   0006 D0                 1256 	ret	NC
+                           1257 ;main.c:18: wait_vbl_done();
+   0007 C5                 1258 	push	bc
+   0008 CDr00r00           1259 	call	_wait_vbl_done
+   000B C1                 1260 	pop	bc
+                           1261 ;main.c:16: for(i=0;i < numloops;i++)
+   000C 0C                 1262 	inc	c
+   000D 18 F3              1263 	jr	00103$
+   000F C9                 1264 	ret
+   0010                    1265 _blankMap:
+   0010 00                 1266 	.db #0x00	; 0
+                           1267 ;main.c:23: void updateKeys()
+                           1268 ;	---------------------------------
+                           1269 ; Function updateKeys
+                           1270 ; ---------------------------------
+   0011                    1271 _updateKeys::
+                           1272 ;main.c:25: previousKeys = keys;
+   0011 E5                 1273 	push	hl
+   0012 21r49r02           1274 	ld	hl,#_keys
+   0015 7E                 1275 	ld	a,(hl)
+   0016 21r48r02           1276 	ld	hl,#_previousKeys
+   0019 77                 1277 	ld	(hl),a
+   001A E1                 1278 	pop	hl
+                           1279 ;main.c:26: keys = joypad();
+   001B CDr00r00           1280 	call	_joypad
+   001E 21r49r02           1281 	ld	hl,#_keys
+   0021 73                 1282 	ld	(hl),e
+   0022 C9                 1283 	ret
+                           1284 ;main.c:29: INT8 keyPressed(INT8 K)
+                           1285 ;	---------------------------------
+                           1286 ; Function keyPressed
+                           1287 ; ---------------------------------
+   0023                    1288 _keyPressed::
+                           1289 ;main.c:31: return keys & (K);
+   0023 21r49r02           1290 	ld	hl,#_keys
+   0026 7E                 1291 	ld	a,(hl)
+   0027 F8 02              1292 	ldhl	sp,#2
+   0029 A6                 1293 	and	a, (hl)
+   002A 5F                 1294 	ld	e,a
+   002B C9                 1295 	ret
+                           1296 ;main.c:34: INT8 keyTicked(INT8 K)
+                           1297 ;	---------------------------------
+                           1298 ; Function keyTicked
+                           1299 ; ---------------------------------
+   002C                    1300 _keyTicked::
+                           1301 ;main.c:36: return (keys & (K) && !(previousKeys & (K)));
+   002C 21r49r02           1302 	ld	hl,#_keys
+   002F 7E                 1303 	ld	a,(hl)
+   0030 F8 02              1304 	ldhl	sp,#2
+   0032 A6                 1305 	and	a,(hl)
+   0033 28 09              1306 	jr	Z,00103$
+   0035 21r48r02           1307 	ld	hl,#_previousKeys
+   0038 7E                 1308 	ld	a,(hl)
+   0039 F8 02              1309 	ldhl	sp,#2
+   003B A6                 1310 	and	a,(hl)
+   003C 28 03              1311 	jr	Z,00104$
+   003E                    1312 00103$:
+   003E 1E 00              1313 	ld	e,#0x00
+   0040 C9                 1314 	ret
+   0041                    1315 00104$:
+   0041 1E 01              1316 	ld	e,#0x01
+   0043 C9                 1317 	ret
+                           1318 ;main.c:39: INT8 keyReleased(INT8 K)
+                           1319 ;	---------------------------------
+                           1320 ; Function keyReleased
+                           1321 ; ---------------------------------
+   0044                    1322 _keyReleased::
+                           1323 ;main.c:41: return previousKeys & (K) && !(keys & (K));
+   0044 21r48r02           1324 	ld	hl,#_previousKeys
+   0047 7E                 1325 	ld	a,(hl)
+   0048 F8 02              1326 	ldhl	sp,#2
+   004A A6                 1327 	and	a,(hl)
+   004B 28 09              1328 	jr	Z,00103$
+   004D 21r49r02           1329 	ld	hl,#_keys
+   0050 7E                 1330 	ld	a,(hl)
+   0051 F8 02              1331 	ldhl	sp,#2
+   0053 A6                 1332 	and	a,(hl)
+   0054 28 03              1333 	jr	Z,00104$
+   0056                    1334 00103$:
+   0056 1E 00              1335 	ld	e,#0x00
+   0058 C9                 1336 	ret
+   0059                    1337 00104$:
+   0059 1E 01              1338 	ld	e,#0x01
+   005B C9                 1339 	ret
+                           1340 ;main.c:44: void anyKey()
+                           1341 ;	---------------------------------
+                           1342 ; Function anyKey
+                           1343 ; ---------------------------------
+   005C                    1344 _anyKey::
+                           1345 ;main.c:46: keys;
+   005C C9                 1346 	ret
+                           1347 ;main.c:61: void moveGameCharacter(struct gameCharacter *character, UINT8 x, UINT8 y)
+                           1348 ;	---------------------------------
+                           1349 ; Function moveGameCharacter
+                           1350 ; ---------------------------------
+   005D                    1351 _moveGameCharacter::
+   005D E8 FC              1352 	add	sp, #-4
+                           1353 ;main.c:63: move_sprite(character->spriteId[0],x, y);
+   005F F8 06              1354 	ldhl	sp,#6
+   0061 2A                 1355 	ld	a,(hl+)
+   0062 5E                 1356 	ld	e, (hl)
+   0063 F8 02              1357 	ldhl	sp,#2
+   0065 22                 1358 	ld	(hl+),a
+   0066 73                 1359 	ld	(hl),e
+   0067 2B                 1360 	dec	hl
+   0068 5E                 1361 	ld	e,(hl)
+   0069 23                 1362 	inc	hl
+   006A 56                 1363 	ld	d,(hl)
+   006B 1A                 1364 	ld	a,(de)
+   006C 47                 1365 	ld	b,a
+   006D F8 09              1366 	ldhl	sp,#9
+   006F 7E                 1367 	ld	a,(hl)
+   0070 F5                 1368 	push	af
+   0071 33                 1369 	inc	sp
+   0072 2B                 1370 	dec	hl
+   0073 7E                 1371 	ld	a,(hl)
+   0074 F5                 1372 	push	af
+   0075 33                 1373 	inc	sp
+   0076 C5                 1374 	push	bc
+   0077 33                 1375 	inc	sp
+   0078 CDr00r00           1376 	call	_move_sprite
+   007B E8 03              1377 	add	sp, #3
+                           1378 ;main.c:64: move_sprite(character->spriteId[1],x + 8, y);
+   007D F8 08              1379 	ldhl	sp,#8
+   007F 7E                 1380 	ld	a,(hl)
+   0080 C6 08              1381 	add	a, #0x08
+   0082 F8 01              1382 	ldhl	sp,#1
+   0084 22                 1383 	ld	(hl+),a
+   0085 4E                 1384 	ld	c,(hl)
+   0086 23                 1385 	inc	hl
+   0087 46                 1386 	ld	b,(hl)
+   0088 03                 1387 	inc	bc
+   0089 0A                 1388 	ld	a,(bc)
+   008A 47                 1389 	ld	b,a
+   008B F8 09              1390 	ldhl	sp,#9
+   008D 7E                 1391 	ld	a,(hl)
+   008E F5                 1392 	push	af
+   008F 33                 1393 	inc	sp
+   0090 F8 02              1394 	ldhl	sp,#2
+   0092 7E                 1395 	ld	a,(hl)
+   0093 F5                 1396 	push	af
+   0094 33                 1397 	inc	sp
+   0095 C5                 1398 	push	bc
+   0096 33                 1399 	inc	sp
+   0097 CDr00r00           1400 	call	_move_sprite
+   009A E8 03              1401 	add	sp, #3
+                           1402 ;main.c:65: move_sprite(character->spriteId[2],x, y + 8);
+   009C F8 09              1403 	ldhl	sp,#9
+   009E 7E                 1404 	ld	a,(hl)
+   009F C6 08              1405 	add	a, #0x08
+   00A1 F8 00              1406 	ldhl	sp,#0
+   00A3 77                 1407 	ld	(hl),a
+   00A4 F8 02              1408 	ldhl	sp,#(3 - 1)
+   00A6 4E                 1409 	ld	c,(hl)
+   00A7 23                 1410 	inc	hl
+   00A8 46                 1411 	ld	b,(hl)
+   00A9 03                 1412 	inc	bc
+   00AA 03                 1413 	inc	bc
+   00AB 0A                 1414 	ld	a,(bc)
+   00AC 47                 1415 	ld	b,a
+   00AD F8 00              1416 	ldhl	sp,#0
+   00AF 7E                 1417 	ld	a,(hl)
+   00B0 F5                 1418 	push	af
+   00B1 33                 1419 	inc	sp
+   00B2 F8 09              1420 	ldhl	sp,#9
+   00B4 7E                 1421 	ld	a,(hl)
+   00B5 F5                 1422 	push	af
+   00B6 33                 1423 	inc	sp
+   00B7 C5                 1424 	push	bc
+   00B8 33                 1425 	inc	sp
+   00B9 CDr00r00           1426 	call	_move_sprite
+   00BC E8 03              1427 	add	sp, #3
+                           1428 ;main.c:66: move_sprite(character->spriteId[3],x + 8, y + 8);
+   00BE F8 02              1429 	ldhl	sp,#(3 - 1)
+   00C0 4E                 1430 	ld	c,(hl)
+   00C1 23                 1431 	inc	hl
+   00C2 46                 1432 	ld	b,(hl)
+   00C3 03                 1433 	inc	bc
+   00C4 03                 1434 	inc	bc
+   00C5 03                 1435 	inc	bc
+   00C6 0A                 1436 	ld	a,(bc)
+   00C7 47                 1437 	ld	b,a
+   00C8 F8 00              1438 	ldhl	sp,#0
+   00CA 7E                 1439 	ld	a,(hl)
+   00CB F5                 1440 	push	af
+   00CC 33                 1441 	inc	sp
+   00CD 23                 1442 	inc	hl
+   00CE 7E                 1443 	ld	a,(hl)
+   00CF F5                 1444 	push	af
+   00D0 33                 1445 	inc	sp
+   00D1 C5                 1446 	push	bc
+   00D2 33                 1447 	inc	sp
+   00D3 CDr00r00           1448 	call	_move_sprite
+   00D6 E8 03              1449 	add	sp, #3
+   00D8 E8 04              1450 	add	sp, #4
+   00DA C9                 1451 	ret
+                           1452 ;main.c:71: void setupPlayerSprite()
+                           1453 ;	---------------------------------
+                           1454 ; Function setupPlayerSprite
+                           1455 ; ---------------------------------
+   00DB                    1456 _setupPlayerSprite::
+                           1457 ;main.c:73: set_sprite_data(0, 5, playerSprite);
+   00DB 21rF8r01           1458 	ld	hl,#_playerSprite
+   00DE E5                 1459 	push	hl
+   00DF 21 00 05           1460 	ld	hl,#0x0500
+   00E2 E5                 1461 	push	hl
+   00E3 CDr00r00           1462 	call	_set_sprite_data
+   00E6 E8 04              1463 	add	sp, #4
+                           1464 ;main.c:75: playerSprite01.x = 8;
+   00E8 21r4Fr02           1465 	ld	hl,#(_playerSprite01 + 0x0004)
+   00EB 36 08              1466 	ld	(hl),#0x08
+                           1467 ;main.c:76: playerSprite01.y = 16;
+   00ED 21r50r02           1468 	ld	hl,#(_playerSprite01 + 0x0005)
+   00F0 36 10              1469 	ld	(hl),#0x10
+                           1470 ;main.c:77: playerSprite01.width = 16;
+   00F2 21r51r02           1471 	ld	hl,#(_playerSprite01 + 0x0006)
+   00F5 36 10              1472 	ld	(hl),#0x10
+                           1473 ;main.c:78: playerSprite01.height = 16;
+   00F7 21r52r02           1474 	ld	hl,#(_playerSprite01 + 0x0007)
+   00FA 36 10              1475 	ld	(hl),#0x10
+                           1476 ;main.c:80: set_sprite_tile(1,1);
+   00FC 21 01 01           1477 	ld	hl,#0x0101
+   00FF E5                 1478 	push	hl
+   0100 CDr00r00           1479 	call	_set_sprite_tile
+   0103 E8 02              1480 	add	sp, #2
+                           1481 ;main.c:81: playerSprite01.spriteId[0]=1;
+   0105 21r4Br02           1482 	ld	hl,#_playerSprite01
+   0108 36 01              1483 	ld	(hl),#0x01
+                           1484 ;main.c:82: set_sprite_tile(2,2);
+   010A 21 02 02           1485 	ld	hl,#0x0202
+   010D E5                 1486 	push	hl
+   010E CDr00r00           1487 	call	_set_sprite_tile
+   0111 E8 02              1488 	add	sp, #2
+                           1489 ;main.c:83: playerSprite01.spriteId[1]=2;
+   0113 21r4Cr02           1490 	ld	hl,#(_playerSprite01 + 0x0001)
+   0116 36 02              1491 	ld	(hl),#0x02
+                           1492 ;main.c:84: set_sprite_tile(3,3);
+   0118 21 03 03           1493 	ld	hl,#0x0303
+   011B E5                 1494 	push	hl
+   011C CDr00r00           1495 	call	_set_sprite_tile
+   011F E8 02              1496 	add	sp, #2
+                           1497 ;main.c:85: playerSprite01.spriteId[2]=3;
+   0121 21r4Dr02           1498 	ld	hl,#(_playerSprite01 + 0x0002)
+   0124 36 03              1499 	ld	(hl),#0x03
+                           1500 ;main.c:86: set_sprite_tile(4,4);
+   0126 21 04 04           1501 	ld	hl,#0x0404
+   0129 E5                 1502 	push	hl
+   012A CDr00r00           1503 	call	_set_sprite_tile
+   012D E8 02              1504 	add	sp, #2
+                           1505 ;main.c:87: playerSprite01.spriteId[3]=4;
+   012F 21r4Er02           1506 	ld	hl,#(_playerSprite01 + 0x0003)
+   0132 36 04              1507 	ld	(hl),#0x04
+                           1508 ;main.c:89: moveGameCharacter(&playerSprite01,playerSprite01.x,playerSprite01.y);
+   0134 11r50r02           1509 	ld	de, #(_playerSprite01 + 0x0005) + 0
+   0137 1A                 1510 	ld	a,(de)
+   0138 47                 1511 	ld	b,a
+   0139 11r4Fr02           1512 	ld	de, #(_playerSprite01 + 0x0004) + 0
+   013C 1A                 1513 	ld	a,(de)
+   013D 4F                 1514 	ld	c,a
+   013E C5                 1515 	push	bc
+   013F 33                 1516 	inc	sp
+   0140 79                 1517 	ld	a,c
+   0141 F5                 1518 	push	af
+   0142 33                 1519 	inc	sp
+   0143 21r4Br02           1520 	ld	hl,#_playerSprite01
+   0146 E5                 1521 	push	hl
+   0147 CDr5Dr00           1522 	call	_moveGameCharacter
+   014A E8 04              1523 	add	sp, #4
+   014C C9                 1524 	ret
+                           1525 ;main.c:92: UBYTE canPlayerMove(UINT8 newPlayerX, UINT8 newPlayerY)
+                           1526 ;	---------------------------------
+                           1527 ; Function canPlayerMove
+                           1528 ; ---------------------------------
+   014D                    1529 _canPlayerMove::
+   014D E8 FA              1530 	add	sp, #-6
+                           1531 ;main.c:97: indexTlX = (newPlayerX - 8) / 8;
+   014F F8 08              1532 	ldhl	sp,#8
+   0151 7E                 1533 	ld	a,(hl)
+   0152 F8 02              1534 	ldhl	sp,#2
+   0154 22                 1535 	ld	(hl+),a
+   0155 36 00              1536 	ld	(hl),#0x00
+   0157 2B                 1537 	dec	hl
+   0158 5E                 1538 	ld	e,(hl)
+   0159 23                 1539 	inc	hl
+   015A 56                 1540 	ld	d,(hl)
+   015B 21 08 00           1541 	ld	hl,#0x0008
+   015E 7B                 1542 	ld	a,e
+   015F 95                 1543 	sub	a,l
+   0160 5F                 1544 	ld	e,a
+   0161 7A                 1545 	ld	a,d
+   0162 9C                 1546 	sbc	a,h
+   0163 47                 1547 	ld	b,a
+   0164 4B                 1548 	ld	c,e
+   0165 F8 04              1549 	ldhl	sp,#4
+   0167 71                 1550 	ld	(hl),c
+   0168 23                 1551 	inc	hl
+   0169 70                 1552 	ld	(hl),b
+   016A 3E 00              1553 	ld	a,#0x00
+   016C 5F                 1554 	ld	e,a
+   016D 78                 1555 	ld	a,b
+   016E 57                 1556 	ld	d,a
+   016F CB 78              1557 	bit	7, b
+   0171 28 10              1558 	jr	Z,00103$
+   0173 2B                 1559 	dec	hl
+   0174 2B                 1560 	dec	hl
+   0175 2B                 1561 	dec	hl
+   0176 5E                 1562 	ld	e,(hl)
+   0177 23                 1563 	inc	hl
+   0178 56                 1564 	ld	d,(hl)
+   0179 21 FF FF           1565 	ld	hl,#0xffff
+   017C 19                 1566 	add	hl,de
+   017D 7D                 1567 	ld	a,l
+   017E 54                 1568 	ld	d,h
+   017F F8 04              1569 	ldhl	sp,#4
+   0181 22                 1570 	ld	(hl+),a
+   0182 72                 1571 	ld	(hl),d
+   0183                    1572 00103$:
+   0183 F8 04              1573 	ldhl	sp,#4
+   0185 7E                 1574 	ld	a,(hl)
+   0186 F8 00              1575 	ldhl	sp,#0
+   0188 77                 1576 	ld	(hl),a
+   0189 F8 05              1577 	ldhl	sp,#5
+   018B 7E                 1578 	ld	a,(hl)
+   018C F8 01              1579 	ldhl	sp,#1
+   018E 77                 1580 	ld	(hl),a
+   018F CB 3E              1581 	srl	(hl)
+   0191 2B                 1582 	dec	hl
+   0192 CB 1E              1583 	rr	(hl)
+   0194 23                 1584 	inc	hl
+   0195 CB 3E              1585 	srl	(hl)
+   0197 2B                 1586 	dec	hl
+   0198 CB 1E              1587 	rr	(hl)
+   019A 23                 1588 	inc	hl
+   019B CB 3E              1589 	srl	(hl)
+   019D 2B                 1590 	dec	hl
+   019E CB 1E              1591 	rr	(hl)
+                           1592 ;main.c:98: indexTlY = (newPlayerY - 16) / 8;
+   01A0 F8 09              1593 	ldhl	sp,#9
+   01A2 7E                 1594 	ld	a,(hl)
+   01A3 F8 04              1595 	ldhl	sp,#4
+   01A5 22                 1596 	ld	(hl+),a
+   01A6 36 00              1597 	ld	(hl),#0x00
+   01A8 2B                 1598 	dec	hl
+   01A9 5E                 1599 	ld	e,(hl)
+   01AA 23                 1600 	inc	hl
+   01AB 56                 1601 	ld	d,(hl)
+   01AC 21 10 00           1602 	ld	hl,#0x0010
+   01AF 7B                 1603 	ld	a,e
+   01B0 95                 1604 	sub	a,l
+   01B1 5F                 1605 	ld	e,a
+   01B2 7A                 1606 	ld	a,d
+   01B3 9C                 1607 	sbc	a,h
+   01B4 47                 1608 	ld	b,a
+   01B5 4B                 1609 	ld	c,e
+   01B6 F8 02              1610 	ldhl	sp,#2
+   01B8 71                 1611 	ld	(hl),c
+   01B9 23                 1612 	inc	hl
+   01BA 70                 1613 	ld	(hl),b
+   01BB 3E 00              1614 	ld	a,#0x00
+   01BD 5F                 1615 	ld	e,a
+   01BE 78                 1616 	ld	a,b
+   01BF 57                 1617 	ld	d,a
+   01C0 CB 78              1618 	bit	7, b
+   01C2 28 0E              1619 	jr	Z,00104$
+   01C4 23                 1620 	inc	hl
+   01C5 5E                 1621 	ld	e,(hl)
+   01C6 23                 1622 	inc	hl
+   01C7 56                 1623 	ld	d,(hl)
+   01C8 21 F7 FF           1624 	ld	hl,#0xfff7
+   01CB 19                 1625 	add	hl,de
+   01CC 7D                 1626 	ld	a,l
+   01CD 54                 1627 	ld	d,h
+   01CE F8 02              1628 	ldhl	sp,#2
+   01D0 22                 1629 	ld	(hl+),a
+   01D1 72                 1630 	ld	(hl),d
+   01D2                    1631 00104$:
+   01D2 D1                 1632 	pop	de
+   01D3 C1                 1633 	pop	bc
+   01D4 C5                 1634 	push	bc
+   01D5 D5                 1635 	push	de
+   01D6 CB 38              1636 	srl	b
+   01D8 CB 19              1637 	rr	c
+   01DA CB 38              1638 	srl	b
+   01DC CB 19              1639 	rr	c
+   01DE CB 38              1640 	srl	b
+   01E0 CB 19              1641 	rr	c
+                           1642 ;main.c:99: tileIndexTl = 20 * indexTlY + indexTlX;
+   01E2 69                 1643 	ld	l, c
+   01E3 60                 1644 	ld	h, b
+   01E4 29                 1645 	add	hl, hl
+   01E5 29                 1646 	add	hl, hl
+   01E6 09                 1647 	add	hl, bc
+   01E7 29                 1648 	add	hl, hl
+   01E8 29                 1649 	add	hl, hl
+   01E9 4D                 1650 	ld	c,l
+   01EA 44                 1651 	ld	b,h
+   01EB E1                 1652 	pop	hl
+   01EC E5                 1653 	push	hl
+   01ED 09                 1654 	add	hl,bc
+   01EE 4D                 1655 	ld	c,l
+   01EF 44                 1656 	ld	b,h
+                           1657 ;main.c:101: result = level01Map[tileIndexTl] == blankMap[0];
+   01F0 21r00r00           1658 	ld	hl,#_level01Map
+   01F3 09                 1659 	add	hl,bc
+   01F4 4D                 1660 	ld	c,l
+   01F5 44                 1661 	ld	b,h
+   01F6 0A                 1662 	ld	a,(bc)
+   01F7 4F                 1663 	ld	c,a
+   01F8 11r10r00           1664 	ld	de, #_blankMap + 0
+   01FB 1A                 1665 	ld	a,(de)
+   01FC 47                 1666 	ld	b,a
+   01FD 79                 1667 	ld	a,c
+   01FE 90                 1668 	sub	a, b
+   01FF 20 04              1669 	jr	NZ,00113$
+   0201 3E 01              1670 	ld	a,#0x01
+   0203 18 01              1671 	jr	00114$
+   0205                    1672 00113$:
+   0205 AF                 1673 	xor	a,a
+   0206                    1674 00114$:
+   0206 5F                 1675 	ld	e,a
+                           1676 ;main.c:103: return result;
+   0207 E8 06              1677 	add	sp, #6
+   0209 C9                 1678 	ret
+                           1679 ;main.c:108: void main()
+                           1680 ;	---------------------------------
+                           1681 ; Function main
+                           1682 ; ---------------------------------
+   020A                    1683 _main::
+                           1684 ;main.c:110: setupPlayerSprite();
+   020A CDrDBr00           1685 	call	_setupPlayerSprite
+                           1686 ;main.c:112: set_bkg_data(0, 9, level01Tile);
+   020D 21r68r01           1687 	ld	hl,#_level01Tile
+   0210 E5                 1688 	push	hl
+   0211 21 00 09           1689 	ld	hl,#0x0900
+   0214 E5                 1690 	push	hl
+   0215 CDr00r00           1691 	call	_set_bkg_data
+   0218 E8 04              1692 	add	sp, #4
+                           1693 ;main.c:113: set_bkg_tiles(0, 0, 20, 18, level01Map);
+   021A 21r00r00           1694 	ld	hl,#_level01Map
+   021D E5                 1695 	push	hl
+   021E 21 14 12           1696 	ld	hl,#0x1214
+   0221 E5                 1697 	push	hl
+   0222 21 00 00           1698 	ld	hl,#0x0000
+   0225 E5                 1699 	push	hl
+   0226 CDr00r00           1700 	call	_set_bkg_tiles
+   0229 E8 06              1701 	add	sp, #6
+                           1702 ;main.c:115: SHOW_BKG;
+   022B 11 40 FF           1703 	ld	de,#0xff40
+   022E 1A                 1704 	ld	a,(de)
+   022F 4F                 1705 	ld	c,a
+   0230 06 00              1706 	ld	b,#0x00
+   0232 79                 1707 	ld	a,c
+   0233 CB C7              1708 	set	0, a
+   0235 4F                 1709 	ld	c,a
+   0236 21 40 FF           1710 	ld	hl,#0xff40
+   0239 71                 1711 	ld	(hl),c
+                           1712 ;main.c:116: SHOW_SPRITES;
+   023A 11 40 FF           1713 	ld	de,#0xff40
+   023D 1A                 1714 	ld	a,(de)
+   023E 4F                 1715 	ld	c,a
+   023F 06 00              1716 	ld	b,#0x00
+   0241 79                 1717 	ld	a,c
+   0242 CB CF              1718 	set	1, a
+   0244 4F                 1719 	ld	c,a
+   0245 2E 40              1720 	ld	l, #0x40
+   0247 71                 1721 	ld	(hl),c
+                           1722 ;main.c:117: DISPLAY_ON;
+   0248 11 40 FF           1723 	ld	de,#0xff40
+   024B 1A                 1724 	ld	a,(de)
+   024C 4F                 1725 	ld	c,a
+   024D 06 00              1726 	ld	b,#0x00
+   024F 79                 1727 	ld	a,c
+   0250 CB FF              1728 	set	7, a
+   0252 4F                 1729 	ld	c,a
+   0253 2E 40              1730 	ld	l, #0x40
+   0255 71                 1731 	ld	(hl),c
+                           1732 ;main.c:119: gravity = 2;
+   0256 21r4Ar02           1733 	ld	hl,#_gravity
+   0259 36 02              1734 	ld	(hl),#0x02
+                           1735 ;main.c:121: while(1)
+   025B                    1736 00112$:
+                           1737 ;main.c:123: updateKeys();
+   025B CDr11r00           1738 	call	_updateKeys
+                           1739 ;main.c:125: if(canPlayerMove(playerSprite01.x, playerSprite01.y + 16))
+   025E FAr50r02           1740 	ld	a, (#(_playerSprite01 + 0x0005) + 0)
+   0261 C6 10              1741 	add	a, #0x10
+   0263 47                 1742 	ld	b,a
+   0264 FAr4Fr02           1743 	ld	a, (#(_playerSprite01 + 0x0004) + 0)
+   0267 C5                 1744 	push	bc
+   0268 33                 1745 	inc	sp
+   0269 F5                 1746 	push	af
+   026A 33                 1747 	inc	sp
+   026B CDr4Dr01           1748 	call	_canPlayerMove
+   026E E8 02              1749 	add	sp, #2
+   0270 7B                 1750 	ld	a,e
+   0271 B7                 1751 	or	a, a
+   0272 28 0C              1752 	jr	Z,00102$
+                           1753 ;main.c:127: playerSprite01.y += gravity;
+   0274 FAr50r02           1754 	ld	a, (#(_playerSprite01 + 0x0005) + 0)
+   0277 4F                 1755 	ld	c,a
+   0278 21r4Ar02           1756 	ld	hl,#_gravity
+   027B 86                 1757 	add	a, (hl)
+   027C 11r50r02           1758 	ld	de,#(_playerSprite01 + 0x0005)
+   027F 12                 1759 	ld	(de),a
+   0280                    1760 00102$:
+                           1761 ;main.c:130: if(keyPressed(J_LEFT))
+   0280 3E 02              1762 	ld	a,#0x02
+   0282 F5                 1763 	push	af
+   0283 33                 1764 	inc	sp
+   0284 CDr23r00           1765 	call	_keyPressed
+   0287 33                 1766 	inc	sp
+   0288 7B                 1767 	ld	a,e
+   0289 B7                 1768 	or	a, a
+   028A CArC1r02           1769 	jp	Z,00106$
+                           1770 ;main.c:132: if(canPlayerMove(playerSprite01.x - 1, playerSprite01.y))
+   028D 11r50r02           1771 	ld	de, #(_playerSprite01 + 0x0005) + 0
+   0290 1A                 1772 	ld	a,(de)
+   0291 47                 1773 	ld	b,a
+   0292 FAr4Fr02           1774 	ld	a, (#(_playerSprite01 + 0x0004) + 0)
+   0295 C6 FF              1775 	add	a,#0xff
+   0297 C5                 1776 	push	bc
+   0298 33                 1777 	inc	sp
+   0299 F5                 1778 	push	af
+   029A 33                 1779 	inc	sp
+   029B CDr4Dr01           1780 	call	_canPlayerMove
+   029E E8 02              1781 	add	sp, #2
+   02A0 7B                 1782 	ld	a,e
+   02A1 B7                 1783 	or	a, a
+   02A2 28 1D              1784 	jr	Z,00106$
+                           1785 ;main.c:134: playerSprite01.x -= 2;
+   02A4 FAr4Fr02           1786 	ld	a, (#(_playerSprite01 + 0x0004) + 0)
+   02A7 4F                 1787 	ld	c,a
+   02A8 0D                 1788 	dec	c
+   02A9 0D                 1789 	dec	c
+   02AA 21r4Fr02           1790 	ld	hl,#(_playerSprite01 + 0x0004)
+   02AD 71                 1791 	ld	(hl),c
+                           1792 ;main.c:135: moveGameCharacter(&playerSprite01, playerSprite01.x, playerSprite01.y);
+   02AE 11r50r02           1793 	ld	de, #(_playerSprite01 + 0x0005) + 0
+   02B1 1A                 1794 	ld	a,(de)
+   02B2 47                 1795 	ld	b,a
+   02B3 C5                 1796 	push	bc
+   02B4 33                 1797 	inc	sp
+   02B5 79                 1798 	ld	a,c
+   02B6 F5                 1799 	push	af
+   02B7 33                 1800 	inc	sp
+   02B8 21r4Br02           1801 	ld	hl,#_playerSprite01
+   02BB E5                 1802 	push	hl
+   02BC CDr5Dr00           1803 	call	_moveGameCharacter
+   02BF E8 04              1804 	add	sp, #4
+   02C1                    1805 00106$:
+                           1806 ;main.c:139: if(keyPressed(J_RIGHT))
+   02C1 3E 01              1807 	ld	a,#0x01
+   02C3 F5                 1808 	push	af
+   02C4 33                 1809 	inc	sp
+   02C5 CDr23r00           1810 	call	_keyPressed
+   02C8 33                 1811 	inc	sp
+   02C9 7B                 1812 	ld	a,e
+   02CA B7                 1813 	or	a, a
+   02CB CAr03r03           1814 	jp	Z,00110$
+                           1815 ;main.c:141: if(canPlayerMove(playerSprite01.x + 16, playerSprite01.y))
+   02CE 11r50r02           1816 	ld	de, #(_playerSprite01 + 0x0005) + 0
+   02D1 1A                 1817 	ld	a,(de)
+   02D2 47                 1818 	ld	b,a
+   02D3 FAr4Fr02           1819 	ld	a, (#(_playerSprite01 + 0x0004) + 0)
+   02D6 C6 10              1820 	add	a, #0x10
+   02D8 57                 1821 	ld	d,a
+   02D9 C5                 1822 	push	bc
+   02DA 33                 1823 	inc	sp
+   02DB D5                 1824 	push	de
+   02DC 33                 1825 	inc	sp
+   02DD CDr4Dr01           1826 	call	_canPlayerMove
+   02E0 E8 02              1827 	add	sp, #2
+   02E2 7B                 1828 	ld	a,e
+   02E3 B7                 1829 	or	a, a
+   02E4 28 1D              1830 	jr	Z,00110$
+                           1831 ;main.c:143: playerSprite01.x += 2;
+   02E6 FAr4Fr02           1832 	ld	a, (#(_playerSprite01 + 0x0004) + 0)
+   02E9 4F                 1833 	ld	c,a
+   02EA 0C                 1834 	inc	c
+   02EB 0C                 1835 	inc	c
+   02EC 21r4Fr02           1836 	ld	hl,#(_playerSprite01 + 0x0004)
+   02EF 71                 1837 	ld	(hl),c
+                           1838 ;main.c:144: moveGameCharacter(&playerSprite01, playerSprite01.x, playerSprite01.y);
+   02F0 11r50r02           1839 	ld	de, #(_playerSprite01 + 0x0005) + 0
+   02F3 1A                 1840 	ld	a,(de)
+   02F4 47                 1841 	ld	b,a
+   02F5 C5                 1842 	push	bc
+   02F6 33                 1843 	inc	sp
+   02F7 79                 1844 	ld	a,c
+   02F8 F5                 1845 	push	af
+   02F9 33                 1846 	inc	sp
+   02FA 21r4Br02           1847 	ld	hl,#_playerSprite01
+   02FD E5                 1848 	push	hl
+   02FE CDr5Dr00           1849 	call	_moveGameCharacter
+   0301 E8 04              1850 	add	sp, #4
+   0303                    1851 00110$:
+                           1852 ;main.c:148: performantDelay(1);
+   0303 3E 01              1853 	ld	a,#0x01
+   0305 F5                 1854 	push	af
+   0306 33                 1855 	inc	sp
+   0307 CDr00r00           1856 	call	_performantDelay
+   030A 33                 1857 	inc	sp
+   030B C3r5Br02           1858 	jp	00112$
+   030E C9                 1859 	ret
+                           1860 	.area _CODE
+                           1861 	.area _CABS (ABS)

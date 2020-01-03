@@ -1,0 +1,1202 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.6.0 #9615 (Linux)
+                              4 ;--------------------------------------------------------
+                              5 	.module main
+                              6 	.optsdcc -mgbz80
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _jumpSound
+                             13 	.globl _jump
+                             14 	.globl _wouldHitSurf
+                             15 	.globl _setupBallSprite01
+                             16 	.globl _moveGameCharacter
+                             17 	.globl _gameBallSprite03
+                             18 	.globl _gameBallSprite02
+                             19 	.globl _gameBallSprite01b
+                             20 	.globl _gameBallSprite01a
+                             21 	.globl _performantDelay
+                             22 	.globl _move_sprite
+                             23 	.globl _set_sprite_tile
+                             24 	.globl _set_sprite_data
+                             25 	.globl _wait_vbl_done
+                             26 	.globl _joypad
+                             27 	.globl _ballSprite01
+                             28 	.globl _timerAnimation
+                             29 	.globl _possibleYSurface
+                             30 	.globl _floorYPosition
+                             31 	.globl _currentSpeedY
+                             32 	.globl _gravity
+                             33 	.globl _jumping
+                             34 	.globl _keyPressed_A
+                             35 	.globl _keys
+                             36 	.globl _previousKeys
+                             37 	.globl _ballSprite
+                             38 ;--------------------------------------------------------
+                             39 ; ram data
+                             40 ;--------------------------------------------------------
+                             41 	.area _DATA
+   0000                      42 _ballSprite::
+   0000                      43 	.ds 240
+   00F0                      44 _previousKeys::
+   00F0                      45 	.ds 1
+   00F1                      46 _keys::
+   00F1                      47 	.ds 1
+   00F2                      48 _keyPressed_A::
+   00F2                      49 	.ds 1
+   00F3                      50 _jumping::
+   00F3                      51 	.ds 1
+   00F4                      52 _gravity::
+   00F4                      53 	.ds 1
+   00F5                      54 _currentSpeedY::
+   00F5                      55 	.ds 1
+   00F6                      56 _floorYPosition::
+   00F6                      57 	.ds 1
+   00F7                      58 _possibleYSurface::
+   00F7                      59 	.ds 1
+   00F8                      60 _timerAnimation::
+   00F8                      61 	.ds 1
+   00F9                      62 _ballSprite01::
+   00F9                      63 	.ds 8
+                             64 ;--------------------------------------------------------
+                             65 ; absolute external ram data
+                             66 ;--------------------------------------------------------
+                             67 	.area _DABS (ABS)
+                             68 ;--------------------------------------------------------
+                             69 ; global & static initialisations
+                             70 ;--------------------------------------------------------
+                             71 	.area _HOME
+                             72 	.area _GSINIT
+                             73 	.area _GSFINAL
+                             74 	.area _GSINIT
+                             75 ;ballSprite.c:26: unsigned char ballSprite[] =
+   0000 21r00r00             76 	ld	hl,#_ballSprite
+   0003 36 00                77 	ld	(hl),#0x00
+   0005 21r01r00             78 	ld	hl,#(_ballSprite + 0x0001)
+   0008 36 00                79 	ld	(hl),#0x00
+   000A 21r02r00             80 	ld	hl,#(_ballSprite + 0x0002)
+   000D 36 00                81 	ld	(hl),#0x00
+   000F 21r03r00             82 	ld	hl,#(_ballSprite + 0x0003)
+   0012 36 00                83 	ld	(hl),#0x00
+   0014 21r04r00             84 	ld	hl,#(_ballSprite + 0x0004)
+   0017 36 00                85 	ld	(hl),#0x00
+   0019 21r05r00             86 	ld	hl,#(_ballSprite + 0x0005)
+   001C 36 00                87 	ld	(hl),#0x00
+   001E 21r06r00             88 	ld	hl,#(_ballSprite + 0x0006)
+   0021 36 00                89 	ld	(hl),#0x00
+   0023 21r07r00             90 	ld	hl,#(_ballSprite + 0x0007)
+   0026 36 00                91 	ld	(hl),#0x00
+   0028 21r08r00             92 	ld	hl,#(_ballSprite + 0x0008)
+   002B 36 00                93 	ld	(hl),#0x00
+   002D 21r09r00             94 	ld	hl,#(_ballSprite + 0x0009)
+   0030 36 00                95 	ld	(hl),#0x00
+   0032 21r0Ar00             96 	ld	hl,#(_ballSprite + 0x000a)
+   0035 36 00                97 	ld	(hl),#0x00
+   0037 21r0Br00             98 	ld	hl,#(_ballSprite + 0x000b)
+   003A 36 00                99 	ld	(hl),#0x00
+   003C 21r0Cr00            100 	ld	hl,#(_ballSprite + 0x000c)
+   003F 36 00               101 	ld	(hl),#0x00
+   0041 21r0Dr00            102 	ld	hl,#(_ballSprite + 0x000d)
+   0044 36 00               103 	ld	(hl),#0x00
+   0046 21r0Er00            104 	ld	hl,#(_ballSprite + 0x000e)
+   0049 36 00               105 	ld	(hl),#0x00
+   004B 21r0Fr00            106 	ld	hl,#(_ballSprite + 0x000f)
+   004E 36 00               107 	ld	(hl),#0x00
+   0050 21r10r00            108 	ld	hl,#(_ballSprite + 0x0010)
+   0053 36 00               109 	ld	(hl),#0x00
+   0055 21r11r00            110 	ld	hl,#(_ballSprite + 0x0011)
+   0058 36 00               111 	ld	(hl),#0x00
+   005A 21r12r00            112 	ld	hl,#(_ballSprite + 0x0012)
+   005D 36 00               113 	ld	(hl),#0x00
+   005F 21r13r00            114 	ld	hl,#(_ballSprite + 0x0013)
+   0062 36 00               115 	ld	(hl),#0x00
+   0064 21r14r00            116 	ld	hl,#(_ballSprite + 0x0014)
+   0067 36 00               117 	ld	(hl),#0x00
+   0069 21r15r00            118 	ld	hl,#(_ballSprite + 0x0015)
+   006C 36 00               119 	ld	(hl),#0x00
+   006E 21r16r00            120 	ld	hl,#(_ballSprite + 0x0016)
+   0071 36 00               121 	ld	(hl),#0x00
+   0073 21r17r00            122 	ld	hl,#(_ballSprite + 0x0017)
+   0076 36 00               123 	ld	(hl),#0x00
+   0078 21r18r00            124 	ld	hl,#(_ballSprite + 0x0018)
+   007B 36 07               125 	ld	(hl),#0x07
+   007D 21r19r00            126 	ld	hl,#(_ballSprite + 0x0019)
+   0080 36 07               127 	ld	(hl),#0x07
+   0082 21r1Ar00            128 	ld	hl,#(_ballSprite + 0x001a)
+   0085 36 08               129 	ld	(hl),#0x08
+   0087 21r1Br00            130 	ld	hl,#(_ballSprite + 0x001b)
+   008A 36 0F               131 	ld	(hl),#0x0f
+   008C 21r1Cr00            132 	ld	hl,#(_ballSprite + 0x001c)
+   008F 36 16               133 	ld	(hl),#0x16
+   0091 21r1Dr00            134 	ld	hl,#(_ballSprite + 0x001d)
+   0094 36 19               135 	ld	(hl),#0x19
+   0096 21r1Er00            136 	ld	hl,#(_ballSprite + 0x001e)
+   0099 36 26               137 	ld	(hl),#0x26
+   009B 21r1Fr00            138 	ld	hl,#(_ballSprite + 0x001f)
+   009E 36 39               139 	ld	(hl),#0x39
+   00A0 21r20r00            140 	ld	hl,#(_ballSprite + 0x0020)
+   00A3 36 00               141 	ld	(hl),#0x00
+   00A5 21r21r00            142 	ld	hl,#(_ballSprite + 0x0021)
+   00A8 36 00               143 	ld	(hl),#0x00
+   00AA 21r22r00            144 	ld	hl,#(_ballSprite + 0x0022)
+   00AD 36 00               145 	ld	(hl),#0x00
+   00AF 21r23r00            146 	ld	hl,#(_ballSprite + 0x0023)
+   00B2 36 00               147 	ld	(hl),#0x00
+   00B4 21r24r00            148 	ld	hl,#(_ballSprite + 0x0024)
+   00B7 36 00               149 	ld	(hl),#0x00
+   00B9 21r25r00            150 	ld	hl,#(_ballSprite + 0x0025)
+   00BC 36 00               151 	ld	(hl),#0x00
+   00BE 21r26r00            152 	ld	hl,#(_ballSprite + 0x0026)
+   00C1 36 00               153 	ld	(hl),#0x00
+   00C3 21r27r00            154 	ld	hl,#(_ballSprite + 0x0027)
+   00C6 36 00               155 	ld	(hl),#0x00
+   00C8 21r28r00            156 	ld	hl,#(_ballSprite + 0x0028)
+   00CB 36 E0               157 	ld	(hl),#0xe0
+   00CD 21r29r00            158 	ld	hl,#(_ballSprite + 0x0029)
+   00D0 36 E0               159 	ld	(hl),#0xe0
+   00D2 21r2Ar00            160 	ld	hl,#(_ballSprite + 0x002a)
+   00D5 36 10               161 	ld	(hl),#0x10
+   00D7 21r2Br00            162 	ld	hl,#(_ballSprite + 0x002b)
+   00DA 36 F0               163 	ld	(hl),#0xf0
+   00DC 21r2Cr00            164 	ld	hl,#(_ballSprite + 0x002c)
+   00DF 36 08               165 	ld	(hl),#0x08
+   00E1 21r2Dr00            166 	ld	hl,#(_ballSprite + 0x002d)
+   00E4 36 F8               167 	ld	(hl),#0xf8
+   00E6 21r2Er00            168 	ld	hl,#(_ballSprite + 0x002e)
+   00E9 36 04               169 	ld	(hl),#0x04
+   00EB 21r2Fr00            170 	ld	hl,#(_ballSprite + 0x002f)
+   00EE 36 FC               171 	ld	(hl),#0xfc
+   00F0 21r30r00            172 	ld	hl,#(_ballSprite + 0x0030)
+   00F3 36 20               173 	ld	(hl),#0x20
+   00F5 21r31r00            174 	ld	hl,#(_ballSprite + 0x0031)
+   00F8 36 3F               175 	ld	(hl),#0x3f
+   00FA 21r32r00            176 	ld	hl,#(_ballSprite + 0x0032)
+   00FD 36 20               177 	ld	(hl),#0x20
+   00FF 21r33r00            178 	ld	hl,#(_ballSprite + 0x0033)
+   0102 36 3F               179 	ld	(hl),#0x3f
+   0104 21r34r00            180 	ld	hl,#(_ballSprite + 0x0034)
+   0107 36 20               181 	ld	(hl),#0x20
+   0109 21r35r00            182 	ld	hl,#(_ballSprite + 0x0035)
+   010C 36 3F               183 	ld	(hl),#0x3f
+   010E 21r36r00            184 	ld	hl,#(_ballSprite + 0x0036)
+   0111 36 20               185 	ld	(hl),#0x20
+   0113 21r37r00            186 	ld	hl,#(_ballSprite + 0x0037)
+   0116 36 3F               187 	ld	(hl),#0x3f
+   0118 21r38r00            188 	ld	hl,#(_ballSprite + 0x0038)
+   011B 36 20               189 	ld	(hl),#0x20
+   011D 21r39r00            190 	ld	hl,#(_ballSprite + 0x0039)
+   0120 36 3F               191 	ld	(hl),#0x3f
+   0122 21r3Ar00            192 	ld	hl,#(_ballSprite + 0x003a)
+   0125 36 10               193 	ld	(hl),#0x10
+   0127 21r3Br00            194 	ld	hl,#(_ballSprite + 0x003b)
+   012A 36 1F               195 	ld	(hl),#0x1f
+   012C 21r3Cr00            196 	ld	hl,#(_ballSprite + 0x003c)
+   012F 36 08               197 	ld	(hl),#0x08
+   0131 21r3Dr00            198 	ld	hl,#(_ballSprite + 0x003d)
+   0134 36 0F               199 	ld	(hl),#0x0f
+   0136 21r3Er00            200 	ld	hl,#(_ballSprite + 0x003e)
+   0139 36 07               201 	ld	(hl),#0x07
+   013B 21r3Fr00            202 	ld	hl,#(_ballSprite + 0x003f)
+   013E 36 07               203 	ld	(hl),#0x07
+   0140 21r40r00            204 	ld	hl,#(_ballSprite + 0x0040)
+   0143 36 04               205 	ld	(hl),#0x04
+   0145 21r41r00            206 	ld	hl,#(_ballSprite + 0x0041)
+   0148 36 FC               207 	ld	(hl),#0xfc
+   014A 21r42r00            208 	ld	hl,#(_ballSprite + 0x0042)
+   014D 36 04               209 	ld	(hl),#0x04
+   014F 21r43r00            210 	ld	hl,#(_ballSprite + 0x0043)
+   0152 36 FC               211 	ld	(hl),#0xfc
+   0154 21r44r00            212 	ld	hl,#(_ballSprite + 0x0044)
+   0157 36 04               213 	ld	(hl),#0x04
+   0159 21r45r00            214 	ld	hl,#(_ballSprite + 0x0045)
+   015C 36 FC               215 	ld	(hl),#0xfc
+   015E 21r46r00            216 	ld	hl,#(_ballSprite + 0x0046)
+   0161 36 04               217 	ld	(hl),#0x04
+   0163 21r47r00            218 	ld	hl,#(_ballSprite + 0x0047)
+   0166 36 FC               219 	ld	(hl),#0xfc
+   0168 21r48r00            220 	ld	hl,#(_ballSprite + 0x0048)
+   016B 36 04               221 	ld	(hl),#0x04
+   016D 21r49r00            222 	ld	hl,#(_ballSprite + 0x0049)
+   0170 36 FC               223 	ld	(hl),#0xfc
+   0172 21r4Ar00            224 	ld	hl,#(_ballSprite + 0x004a)
+   0175 36 08               225 	ld	(hl),#0x08
+   0177 21r4Br00            226 	ld	hl,#(_ballSprite + 0x004b)
+   017A 36 F8               227 	ld	(hl),#0xf8
+   017C 21r4Cr00            228 	ld	hl,#(_ballSprite + 0x004c)
+   017F 36 10               229 	ld	(hl),#0x10
+   0181 21r4Dr00            230 	ld	hl,#(_ballSprite + 0x004d)
+   0184 36 F0               231 	ld	(hl),#0xf0
+   0186 21r4Er00            232 	ld	hl,#(_ballSprite + 0x004e)
+   0189 36 E0               233 	ld	(hl),#0xe0
+   018B 21r4Fr00            234 	ld	hl,#(_ballSprite + 0x004f)
+   018E 36 E0               235 	ld	(hl),#0xe0
+   0190 21r50r00            236 	ld	hl,#(_ballSprite + 0x0050)
+   0193 36 00               237 	ld	(hl),#0x00
+   0195 21r51r00            238 	ld	hl,#(_ballSprite + 0x0051)
+   0198 36 00               239 	ld	(hl),#0x00
+   019A 21r52r00            240 	ld	hl,#(_ballSprite + 0x0052)
+   019D 36 00               241 	ld	(hl),#0x00
+   019F 21r53r00            242 	ld	hl,#(_ballSprite + 0x0053)
+   01A2 36 00               243 	ld	(hl),#0x00
+   01A4 21r54r00            244 	ld	hl,#(_ballSprite + 0x0054)
+   01A7 36 00               245 	ld	(hl),#0x00
+   01A9 21r55r00            246 	ld	hl,#(_ballSprite + 0x0055)
+   01AC 36 00               247 	ld	(hl),#0x00
+   01AE 21r56r00            248 	ld	hl,#(_ballSprite + 0x0056)
+   01B1 36 00               249 	ld	(hl),#0x00
+   01B3 21r57r00            250 	ld	hl,#(_ballSprite + 0x0057)
+   01B6 36 00               251 	ld	(hl),#0x00
+   01B8 21r58r00            252 	ld	hl,#(_ballSprite + 0x0058)
+   01BB 36 07               253 	ld	(hl),#0x07
+   01BD 21r59r00            254 	ld	hl,#(_ballSprite + 0x0059)
+   01C0 36 07               255 	ld	(hl),#0x07
+   01C2 21r5Ar00            256 	ld	hl,#(_ballSprite + 0x005a)
+   01C5 36 08               257 	ld	(hl),#0x08
+   01C7 21r5Br00            258 	ld	hl,#(_ballSprite + 0x005b)
+   01CA 36 0F               259 	ld	(hl),#0x0f
+   01CC 21r5Cr00            260 	ld	hl,#(_ballSprite + 0x005c)
+   01CF 36 11               261 	ld	(hl),#0x11
+   01D1 21r5Dr00            262 	ld	hl,#(_ballSprite + 0x005d)
+   01D4 36 1E               263 	ld	(hl),#0x1e
+   01D6 21r5Er00            264 	ld	hl,#(_ballSprite + 0x005e)
+   01D9 36 21               265 	ld	(hl),#0x21
+   01DB 21r5Fr00            266 	ld	hl,#(_ballSprite + 0x005f)
+   01DE 36 3E               267 	ld	(hl),#0x3e
+   01E0 21r60r00            268 	ld	hl,#(_ballSprite + 0x0060)
+   01E3 36 00               269 	ld	(hl),#0x00
+   01E5 21r61r00            270 	ld	hl,#(_ballSprite + 0x0061)
+   01E8 36 00               271 	ld	(hl),#0x00
+   01EA 21r62r00            272 	ld	hl,#(_ballSprite + 0x0062)
+   01ED 36 00               273 	ld	(hl),#0x00
+   01EF 21r63r00            274 	ld	hl,#(_ballSprite + 0x0063)
+   01F2 36 00               275 	ld	(hl),#0x00
+   01F4 21r64r00            276 	ld	hl,#(_ballSprite + 0x0064)
+   01F7 36 00               277 	ld	(hl),#0x00
+   01F9 21r65r00            278 	ld	hl,#(_ballSprite + 0x0065)
+   01FC 36 00               279 	ld	(hl),#0x00
+   01FE 21r66r00            280 	ld	hl,#(_ballSprite + 0x0066)
+   0201 36 00               281 	ld	(hl),#0x00
+   0203 21r67r00            282 	ld	hl,#(_ballSprite + 0x0067)
+   0206 36 00               283 	ld	(hl),#0x00
+   0208 21r68r00            284 	ld	hl,#(_ballSprite + 0x0068)
+   020B 36 E0               285 	ld	(hl),#0xe0
+   020D 21r69r00            286 	ld	hl,#(_ballSprite + 0x0069)
+   0210 36 E0               287 	ld	(hl),#0xe0
+   0212 21r6Ar00            288 	ld	hl,#(_ballSprite + 0x006a)
+   0215 36 90               289 	ld	(hl),#0x90
+   0217 21r6Br00            290 	ld	hl,#(_ballSprite + 0x006b)
+   021A 36 70               291 	ld	(hl),#0x70
+   021C 21r6Cr00            292 	ld	hl,#(_ballSprite + 0x006c)
+   021F 36 88               293 	ld	(hl),#0x88
+   0221 21r6Dr00            294 	ld	hl,#(_ballSprite + 0x006d)
+   0224 36 78               295 	ld	(hl),#0x78
+   0226 21r6Er00            296 	ld	hl,#(_ballSprite + 0x006e)
+   0229 36 04               297 	ld	(hl),#0x04
+   022B 21r6Fr00            298 	ld	hl,#(_ballSprite + 0x006f)
+   022E 36 FC               299 	ld	(hl),#0xfc
+   0230 21r70r00            300 	ld	hl,#(_ballSprite + 0x0070)
+   0233 36 20               301 	ld	(hl),#0x20
+   0235 21r71r00            302 	ld	hl,#(_ballSprite + 0x0071)
+   0238 36 3F               303 	ld	(hl),#0x3f
+   023A 21r72r00            304 	ld	hl,#(_ballSprite + 0x0072)
+   023D 36 20               305 	ld	(hl),#0x20
+   023F 21r73r00            306 	ld	hl,#(_ballSprite + 0x0073)
+   0242 36 3F               307 	ld	(hl),#0x3f
+   0244 21r74r00            308 	ld	hl,#(_ballSprite + 0x0074)
+   0247 36 20               309 	ld	(hl),#0x20
+   0249 21r75r00            310 	ld	hl,#(_ballSprite + 0x0075)
+   024C 36 3F               311 	ld	(hl),#0x3f
+   024E 21r76r00            312 	ld	hl,#(_ballSprite + 0x0076)
+   0251 36 20               313 	ld	(hl),#0x20
+   0253 21r77r00            314 	ld	hl,#(_ballSprite + 0x0077)
+   0256 36 3F               315 	ld	(hl),#0x3f
+   0258 21r78r00            316 	ld	hl,#(_ballSprite + 0x0078)
+   025B 36 20               317 	ld	(hl),#0x20
+   025D 21r79r00            318 	ld	hl,#(_ballSprite + 0x0079)
+   0260 36 3F               319 	ld	(hl),#0x3f
+   0262 21r7Ar00            320 	ld	hl,#(_ballSprite + 0x007a)
+   0265 36 10               321 	ld	(hl),#0x10
+   0267 21r7Br00            322 	ld	hl,#(_ballSprite + 0x007b)
+   026A 36 1F               323 	ld	(hl),#0x1f
+   026C 21r7Cr00            324 	ld	hl,#(_ballSprite + 0x007c)
+   026F 36 08               325 	ld	(hl),#0x08
+   0271 21r7Dr00            326 	ld	hl,#(_ballSprite + 0x007d)
+   0274 36 0F               327 	ld	(hl),#0x0f
+   0276 21r7Er00            328 	ld	hl,#(_ballSprite + 0x007e)
+   0279 36 07               329 	ld	(hl),#0x07
+   027B 21r7Fr00            330 	ld	hl,#(_ballSprite + 0x007f)
+   027E 36 07               331 	ld	(hl),#0x07
+   0280 21r80r00            332 	ld	hl,#(_ballSprite + 0x0080)
+   0283 36 04               333 	ld	(hl),#0x04
+   0285 21r81r00            334 	ld	hl,#(_ballSprite + 0x0081)
+   0288 36 FC               335 	ld	(hl),#0xfc
+   028A 21r82r00            336 	ld	hl,#(_ballSprite + 0x0082)
+   028D 36 04               337 	ld	(hl),#0x04
+   028F 21r83r00            338 	ld	hl,#(_ballSprite + 0x0083)
+   0292 36 FC               339 	ld	(hl),#0xfc
+   0294 21r84r00            340 	ld	hl,#(_ballSprite + 0x0084)
+   0297 36 04               341 	ld	(hl),#0x04
+   0299 21r85r00            342 	ld	hl,#(_ballSprite + 0x0085)
+   029C 36 FC               343 	ld	(hl),#0xfc
+   029E 21r86r00            344 	ld	hl,#(_ballSprite + 0x0086)
+   02A1 36 04               345 	ld	(hl),#0x04
+   02A3 21r87r00            346 	ld	hl,#(_ballSprite + 0x0087)
+   02A6 36 FC               347 	ld	(hl),#0xfc
+   02A8 21r88r00            348 	ld	hl,#(_ballSprite + 0x0088)
+   02AB 36 04               349 	ld	(hl),#0x04
+   02AD 21r89r00            350 	ld	hl,#(_ballSprite + 0x0089)
+   02B0 36 FC               351 	ld	(hl),#0xfc
+   02B2 21r8Ar00            352 	ld	hl,#(_ballSprite + 0x008a)
+   02B5 36 08               353 	ld	(hl),#0x08
+   02B7 21r8Br00            354 	ld	hl,#(_ballSprite + 0x008b)
+   02BA 36 F8               355 	ld	(hl),#0xf8
+   02BC 21r8Cr00            356 	ld	hl,#(_ballSprite + 0x008c)
+   02BF 36 10               357 	ld	(hl),#0x10
+   02C1 21r8Dr00            358 	ld	hl,#(_ballSprite + 0x008d)
+   02C4 36 F0               359 	ld	(hl),#0xf0
+   02C6 21r8Er00            360 	ld	hl,#(_ballSprite + 0x008e)
+   02C9 36 E0               361 	ld	(hl),#0xe0
+   02CB 21r8Fr00            362 	ld	hl,#(_ballSprite + 0x008f)
+   02CE 36 E0               363 	ld	(hl),#0xe0
+   02D0 21r90r00            364 	ld	hl,#(_ballSprite + 0x0090)
+   02D3 36 00               365 	ld	(hl),#0x00
+   02D5 21r91r00            366 	ld	hl,#(_ballSprite + 0x0091)
+   02D8 36 00               367 	ld	(hl),#0x00
+   02DA 21r92r00            368 	ld	hl,#(_ballSprite + 0x0092)
+   02DD 36 01               369 	ld	(hl),#0x01
+   02DF 21r93r00            370 	ld	hl,#(_ballSprite + 0x0093)
+   02E2 36 01               371 	ld	(hl),#0x01
+   02E4 21r94r00            372 	ld	hl,#(_ballSprite + 0x0094)
+   02E7 36 02               373 	ld	(hl),#0x02
+   02E9 21r95r00            374 	ld	hl,#(_ballSprite + 0x0095)
+   02EC 36 03               375 	ld	(hl),#0x03
+   02EE 21r96r00            376 	ld	hl,#(_ballSprite + 0x0096)
+   02F1 36 05               377 	ld	(hl),#0x05
+   02F3 21r97r00            378 	ld	hl,#(_ballSprite + 0x0097)
+   02F6 36 06               379 	ld	(hl),#0x06
+   02F8 21r98r00            380 	ld	hl,#(_ballSprite + 0x0098)
+   02FB 36 07               381 	ld	(hl),#0x07
+   02FD 21r99r00            382 	ld	hl,#(_ballSprite + 0x0099)
+   0300 36 04               383 	ld	(hl),#0x04
+   0302 21r9Ar00            384 	ld	hl,#(_ballSprite + 0x009a)
+   0305 36 08               385 	ld	(hl),#0x08
+   0307 21r9Br00            386 	ld	hl,#(_ballSprite + 0x009b)
+   030A 36 0F               387 	ld	(hl),#0x0f
+   030C 21r9Cr00            388 	ld	hl,#(_ballSprite + 0x009c)
+   030F 36 08               389 	ld	(hl),#0x08
+   0311 21r9Dr00            390 	ld	hl,#(_ballSprite + 0x009d)
+   0314 36 0F               391 	ld	(hl),#0x0f
+   0316 21r9Er00            392 	ld	hl,#(_ballSprite + 0x009e)
+   0319 36 08               393 	ld	(hl),#0x08
+   031B 21r9Fr00            394 	ld	hl,#(_ballSprite + 0x009f)
+   031E 36 0F               395 	ld	(hl),#0x0f
+   0320 21rA0r00            396 	ld	hl,#(_ballSprite + 0x00a0)
+   0323 36 00               397 	ld	(hl),#0x00
+   0325 21rA1r00            398 	ld	hl,#(_ballSprite + 0x00a1)
+   0328 36 00               399 	ld	(hl),#0x00
+   032A 21rA2r00            400 	ld	hl,#(_ballSprite + 0x00a2)
+   032D 36 80               401 	ld	(hl),#0x80
+   032F 21rA3r00            402 	ld	hl,#(_ballSprite + 0x00a3)
+   0332 36 80               403 	ld	(hl),#0x80
+   0334 21rA4r00            404 	ld	hl,#(_ballSprite + 0x00a4)
+   0337 36 40               405 	ld	(hl),#0x40
+   0339 21rA5r00            406 	ld	hl,#(_ballSprite + 0x00a5)
+   033C 36 C0               407 	ld	(hl),#0xc0
+   033E 21rA6r00            408 	ld	hl,#(_ballSprite + 0x00a6)
+   0341 36 20               409 	ld	(hl),#0x20
+   0343 21rA7r00            410 	ld	hl,#(_ballSprite + 0x00a7)
+   0346 36 E0               411 	ld	(hl),#0xe0
+   0348 21rA8r00            412 	ld	hl,#(_ballSprite + 0x00a8)
+   034B 36 20               413 	ld	(hl),#0x20
+   034D 21rA9r00            414 	ld	hl,#(_ballSprite + 0x00a9)
+   0350 36 E0               415 	ld	(hl),#0xe0
+   0352 21rAAr00            416 	ld	hl,#(_ballSprite + 0x00aa)
+   0355 36 10               417 	ld	(hl),#0x10
+   0357 21rABr00            418 	ld	hl,#(_ballSprite + 0x00ab)
+   035A 36 F0               419 	ld	(hl),#0xf0
+   035C 21rACr00            420 	ld	hl,#(_ballSprite + 0x00ac)
+   035F 36 10               421 	ld	(hl),#0x10
+   0361 21rADr00            422 	ld	hl,#(_ballSprite + 0x00ad)
+   0364 36 F0               423 	ld	(hl),#0xf0
+   0366 21rAEr00            424 	ld	hl,#(_ballSprite + 0x00ae)
+   0369 36 10               425 	ld	(hl),#0x10
+   036B 21rAFr00            426 	ld	hl,#(_ballSprite + 0x00af)
+   036E 36 F0               427 	ld	(hl),#0xf0
+   0370 21rB0r00            428 	ld	hl,#(_ballSprite + 0x00b0)
+   0373 36 08               429 	ld	(hl),#0x08
+   0375 21rB1r00            430 	ld	hl,#(_ballSprite + 0x00b1)
+   0378 36 0F               431 	ld	(hl),#0x0f
+   037A 21rB2r00            432 	ld	hl,#(_ballSprite + 0x00b2)
+   037D 36 08               433 	ld	(hl),#0x08
+   037F 21rB3r00            434 	ld	hl,#(_ballSprite + 0x00b3)
+   0382 36 0F               435 	ld	(hl),#0x0f
+   0384 21rB4r00            436 	ld	hl,#(_ballSprite + 0x00b4)
+   0387 36 08               437 	ld	(hl),#0x08
+   0389 21rB5r00            438 	ld	hl,#(_ballSprite + 0x00b5)
+   038C 36 0F               439 	ld	(hl),#0x0f
+   038E 21rB6r00            440 	ld	hl,#(_ballSprite + 0x00b6)
+   0391 36 08               441 	ld	(hl),#0x08
+   0393 21rB7r00            442 	ld	hl,#(_ballSprite + 0x00b7)
+   0396 36 0F               443 	ld	(hl),#0x0f
+   0398 21rB8r00            444 	ld	hl,#(_ballSprite + 0x00b8)
+   039B 36 04               445 	ld	(hl),#0x04
+   039D 21rB9r00            446 	ld	hl,#(_ballSprite + 0x00b9)
+   03A0 36 07               447 	ld	(hl),#0x07
+   03A2 21rBAr00            448 	ld	hl,#(_ballSprite + 0x00ba)
+   03A5 36 04               449 	ld	(hl),#0x04
+   03A7 21rBBr00            450 	ld	hl,#(_ballSprite + 0x00bb)
+   03AA 36 07               451 	ld	(hl),#0x07
+   03AC 21rBCr00            452 	ld	hl,#(_ballSprite + 0x00bc)
+   03AF 36 02               453 	ld	(hl),#0x02
+   03B1 21rBDr00            454 	ld	hl,#(_ballSprite + 0x00bd)
+   03B4 36 03               455 	ld	(hl),#0x03
+   03B6 21rBEr00            456 	ld	hl,#(_ballSprite + 0x00be)
+   03B9 36 01               457 	ld	(hl),#0x01
+   03BB 21rBFr00            458 	ld	hl,#(_ballSprite + 0x00bf)
+   03BE 36 01               459 	ld	(hl),#0x01
+   03C0 21rC0r00            460 	ld	hl,#(_ballSprite + 0x00c0)
+   03C3 36 10               461 	ld	(hl),#0x10
+   03C5 21rC1r00            462 	ld	hl,#(_ballSprite + 0x00c1)
+   03C8 36 F0               463 	ld	(hl),#0xf0
+   03CA 21rC2r00            464 	ld	hl,#(_ballSprite + 0x00c2)
+   03CD 36 10               465 	ld	(hl),#0x10
+   03CF 21rC3r00            466 	ld	hl,#(_ballSprite + 0x00c3)
+   03D2 36 F0               467 	ld	(hl),#0xf0
+   03D4 21rC4r00            468 	ld	hl,#(_ballSprite + 0x00c4)
+   03D7 36 10               469 	ld	(hl),#0x10
+   03D9 21rC5r00            470 	ld	hl,#(_ballSprite + 0x00c5)
+   03DC 36 F0               471 	ld	(hl),#0xf0
+   03DE 21rC6r00            472 	ld	hl,#(_ballSprite + 0x00c6)
+   03E1 36 10               473 	ld	(hl),#0x10
+   03E3 21rC7r00            474 	ld	hl,#(_ballSprite + 0x00c7)
+   03E6 36 F0               475 	ld	(hl),#0xf0
+   03E8 21rC8r00            476 	ld	hl,#(_ballSprite + 0x00c8)
+   03EB 36 20               477 	ld	(hl),#0x20
+   03ED 21rC9r00            478 	ld	hl,#(_ballSprite + 0x00c9)
+   03F0 36 E0               479 	ld	(hl),#0xe0
+   03F2 21rCAr00            480 	ld	hl,#(_ballSprite + 0x00ca)
+   03F5 36 20               481 	ld	(hl),#0x20
+   03F7 21rCBr00            482 	ld	hl,#(_ballSprite + 0x00cb)
+   03FA 36 E0               483 	ld	(hl),#0xe0
+   03FC 21rCCr00            484 	ld	hl,#(_ballSprite + 0x00cc)
+   03FF 36 40               485 	ld	(hl),#0x40
+   0401 21rCDr00            486 	ld	hl,#(_ballSprite + 0x00cd)
+   0404 36 C0               487 	ld	(hl),#0xc0
+   0406 21rCEr00            488 	ld	hl,#(_ballSprite + 0x00ce)
+   0409 36 80               489 	ld	(hl),#0x80
+   040B 21rCFr00            490 	ld	hl,#(_ballSprite + 0x00cf)
+   040E 36 80               491 	ld	(hl),#0x80
+   0410 21rD0r00            492 	ld	hl,#(_ballSprite + 0x00d0)
+   0413 36 03               493 	ld	(hl),#0x03
+   0415 21rD1r00            494 	ld	hl,#(_ballSprite + 0x00d1)
+   0418 36 03               495 	ld	(hl),#0x03
+   041A 21rD2r00            496 	ld	hl,#(_ballSprite + 0x00d2)
+   041D 36 0C               497 	ld	(hl),#0x0c
+   041F 21rD3r00            498 	ld	hl,#(_ballSprite + 0x00d3)
+   0422 36 0F               499 	ld	(hl),#0x0f
+   0424 21rD4r00            500 	ld	hl,#(_ballSprite + 0x00d4)
+   0427 36 36               501 	ld	(hl),#0x36
+   0429 21rD5r00            502 	ld	hl,#(_ballSprite + 0x00d5)
+   042C 36 39               503 	ld	(hl),#0x39
+   042E 21rD6r00            504 	ld	hl,#(_ballSprite + 0x00d6)
+   0431 36 4E               505 	ld	(hl),#0x4e
+   0433 21rD7r00            506 	ld	hl,#(_ballSprite + 0x00d7)
+   0436 36 71               507 	ld	(hl),#0x71
+   0438 21rD8r00            508 	ld	hl,#(_ballSprite + 0x00d8)
+   043B 36 80               509 	ld	(hl),#0x80
+   043D 21rD9r00            510 	ld	hl,#(_ballSprite + 0x00d9)
+   0440 36 FF               511 	ld	(hl),#0xff
+   0442 21rDAr00            512 	ld	hl,#(_ballSprite + 0x00da)
+   0445 36 80               513 	ld	(hl),#0x80
+   0447 21rDBr00            514 	ld	hl,#(_ballSprite + 0x00db)
+   044A 36 FF               515 	ld	(hl),#0xff
+   044C 21rDCr00            516 	ld	hl,#(_ballSprite + 0x00dc)
+   044F 36 40               517 	ld	(hl),#0x40
+   0451 21rDDr00            518 	ld	hl,#(_ballSprite + 0x00dd)
+   0454 36 7F               519 	ld	(hl),#0x7f
+   0456 21rDEr00            520 	ld	hl,#(_ballSprite + 0x00de)
+   0459 36 3F               521 	ld	(hl),#0x3f
+   045B 21rDFr00            522 	ld	hl,#(_ballSprite + 0x00df)
+   045E 36 3F               523 	ld	(hl),#0x3f
+   0460 21rE0r00            524 	ld	hl,#(_ballSprite + 0x00e0)
+   0463 36 C0               525 	ld	(hl),#0xc0
+   0465 21rE1r00            526 	ld	hl,#(_ballSprite + 0x00e1)
+   0468 36 C0               527 	ld	(hl),#0xc0
+   046A 21rE2r00            528 	ld	hl,#(_ballSprite + 0x00e2)
+   046D 36 30               529 	ld	(hl),#0x30
+   046F 21rE3r00            530 	ld	hl,#(_ballSprite + 0x00e3)
+   0472 36 F0               531 	ld	(hl),#0xf0
+   0474 21rE4r00            532 	ld	hl,#(_ballSprite + 0x00e4)
+   0477 36 0C               533 	ld	(hl),#0x0c
+   0479 21rE5r00            534 	ld	hl,#(_ballSprite + 0x00e5)
+   047C 36 FC               535 	ld	(hl),#0xfc
+   047E 21rE6r00            536 	ld	hl,#(_ballSprite + 0x00e6)
+   0481 36 02               537 	ld	(hl),#0x02
+   0483 21rE7r00            538 	ld	hl,#(_ballSprite + 0x00e7)
+   0486 36 FE               539 	ld	(hl),#0xfe
+   0488 21rE8r00            540 	ld	hl,#(_ballSprite + 0x00e8)
+   048B 36 01               541 	ld	(hl),#0x01
+   048D 21rE9r00            542 	ld	hl,#(_ballSprite + 0x00e9)
+   0490 36 FF               543 	ld	(hl),#0xff
+   0492 21rEAr00            544 	ld	hl,#(_ballSprite + 0x00ea)
+   0495 36 01               545 	ld	(hl),#0x01
+   0497 21rEBr00            546 	ld	hl,#(_ballSprite + 0x00eb)
+   049A 36 FF               547 	ld	(hl),#0xff
+   049C 21rECr00            548 	ld	hl,#(_ballSprite + 0x00ec)
+   049F 36 02               549 	ld	(hl),#0x02
+   04A1 21rEDr00            550 	ld	hl,#(_ballSprite + 0x00ed)
+   04A4 36 FE               551 	ld	(hl),#0xfe
+   04A6 21rEEr00            552 	ld	hl,#(_ballSprite + 0x00ee)
+   04A9 36 FC               553 	ld	(hl),#0xfc
+   04AB 21rEFr00            554 	ld	hl,#(_ballSprite + 0x00ef)
+   04AE 36 FC               555 	ld	(hl),#0xfc
+                            556 ;keys.c:3: UBYTE previousKeys = 0;
+   04B0 21rF0r00            557 	ld	hl,#_previousKeys
+   04B3 36 00               558 	ld	(hl),#0x00
+                            559 ;keys.c:4: UBYTE keys = 0;
+   04B5 21rF1r00            560 	ld	hl,#_keys
+   04B8 36 00               561 	ld	(hl),#0x00
+                            562 ;main.c:9: INT8 gravity = -2;
+   04BA 21rF4r00            563 	ld	hl,#_gravity
+   04BD 36 FE               564 	ld	(hl),#0xfe
+                            565 ;main.c:11: UINT8 floorYPosition = 136;
+   04BF 21rF6r00            566 	ld	hl,#_floorYPosition
+   04C2 36 88               567 	ld	(hl),#0x88
+                            568 ;--------------------------------------------------------
+                            569 ; Home
+                            570 ;--------------------------------------------------------
+                            571 	.area _HOME
+                            572 	.area _HOME
+                            573 ;--------------------------------------------------------
+                            574 ; code
+                            575 ;--------------------------------------------------------
+                            576 	.area _CODE
+                            577 ;main.c:16: void performantDelay(UINT8 numloops)
+                            578 ;	---------------------------------
+                            579 ; Function performantDelay
+                            580 ; ---------------------------------
+   0000                     581 _performantDelay::
+                            582 ;main.c:19: for(i=0;i < numloops;i++)
+   0000 0E 00               583 	ld	c,#0x00
+   0002                     584 00103$:
+   0002 79                  585 	ld	a,c
+   0003 F8 02               586 	ldhl	sp,#2
+   0005 96                  587 	sub	a, (hl)
+   0006 D0                  588 	ret	NC
+                            589 ;main.c:21: wait_vbl_done();
+   0007 C5                  590 	push	bc
+   0008 CDr00r00            591 	call	_wait_vbl_done
+   000B C1                  592 	pop	bc
+                            593 ;main.c:19: for(i=0;i < numloops;i++)
+   000C 0C                  594 	inc	c
+   000D 18 F3               595 	jr	00103$
+   000F C9                  596 	ret
+                            597 ;main.c:37: void gameBallSprite01a()//ball sprite rest A
+                            598 ;	---------------------------------
+                            599 ; Function gameBallSprite01a
+                            600 ; ---------------------------------
+   0010                     601 _gameBallSprite01a::
+                            602 ;main.c:39: set_sprite_tile(1, 1);
+   0010 21 01 01            603 	ld	hl,#0x0101
+   0013 E5                  604 	push	hl
+   0014 CDr00r00            605 	call	_set_sprite_tile
+   0017 E8 02               606 	add	sp, #2
+                            607 ;main.c:40: set_sprite_tile(2, 2);
+   0019 21 02 02            608 	ld	hl,#0x0202
+   001C E5                  609 	push	hl
+   001D CDr00r00            610 	call	_set_sprite_tile
+   0020 E8 02               611 	add	sp, #2
+                            612 ;main.c:41: set_sprite_tile(3, 3);
+   0022 21 03 03            613 	ld	hl,#0x0303
+   0025 E5                  614 	push	hl
+   0026 CDr00r00            615 	call	_set_sprite_tile
+   0029 E8 02               616 	add	sp, #2
+                            617 ;main.c:42: set_sprite_tile(4, 4);
+   002B 21 04 04            618 	ld	hl,#0x0404
+   002E E5                  619 	push	hl
+   002F CDr00r00            620 	call	_set_sprite_tile
+   0032 E8 02               621 	add	sp, #2
+   0034 C9                  622 	ret
+                            623 ;main.c:44: void gameBallSprite01b()//ball sprite rest B
+                            624 ;	---------------------------------
+                            625 ; Function gameBallSprite01b
+                            626 ; ---------------------------------
+   0035                     627 _gameBallSprite01b::
+                            628 ;main.c:47: set_sprite_tile(1, 5);
+   0035 21 01 05            629 	ld	hl,#0x0501
+   0038 E5                  630 	push	hl
+   0039 CDr00r00            631 	call	_set_sprite_tile
+   003C E8 02               632 	add	sp, #2
+                            633 ;main.c:48: set_sprite_tile(2, 6);
+   003E 21 02 06            634 	ld	hl,#0x0602
+   0041 E5                  635 	push	hl
+   0042 CDr00r00            636 	call	_set_sprite_tile
+   0045 E8 02               637 	add	sp, #2
+                            638 ;main.c:49: set_sprite_tile(3, 7);
+   0047 21 03 07            639 	ld	hl,#0x0703
+   004A E5                  640 	push	hl
+   004B CDr00r00            641 	call	_set_sprite_tile
+   004E E8 02               642 	add	sp, #2
+                            643 ;main.c:50: set_sprite_tile(4, 8);
+   0050 21 04 08            644 	ld	hl,#0x0804
+   0053 E5                  645 	push	hl
+   0054 CDr00r00            646 	call	_set_sprite_tile
+   0057 E8 02               647 	add	sp, #2
+   0059 C9                  648 	ret
+                            649 ;main.c:53: void gameBallSprite02()//ball sprite stretched
+                            650 ;	---------------------------------
+                            651 ; Function gameBallSprite02
+                            652 ; ---------------------------------
+   005A                     653 _gameBallSprite02::
+                            654 ;main.c:55: set_sprite_tile(1, 9);
+   005A 21 01 09            655 	ld	hl,#0x0901
+   005D E5                  656 	push	hl
+   005E CDr00r00            657 	call	_set_sprite_tile
+   0061 E8 02               658 	add	sp, #2
+                            659 ;main.c:56: set_sprite_tile(2, 10);
+   0063 21 02 0A            660 	ld	hl,#0x0a02
+   0066 E5                  661 	push	hl
+   0067 CDr00r00            662 	call	_set_sprite_tile
+   006A E8 02               663 	add	sp, #2
+                            664 ;main.c:57: set_sprite_tile(3, 11);
+   006C 21 03 0B            665 	ld	hl,#0x0b03
+   006F E5                  666 	push	hl
+   0070 CDr00r00            667 	call	_set_sprite_tile
+   0073 E8 02               668 	add	sp, #2
+                            669 ;main.c:58: set_sprite_tile(4, 12);
+   0075 21 04 0C            670 	ld	hl,#0x0c04
+   0078 E5                  671 	push	hl
+   0079 CDr00r00            672 	call	_set_sprite_tile
+   007C E8 02               673 	add	sp, #2
+   007E C9                  674 	ret
+                            675 ;main.c:61: void gameBallSprite03()//ball sprite squashed
+                            676 ;	---------------------------------
+                            677 ; Function gameBallSprite03
+                            678 ; ---------------------------------
+   007F                     679 _gameBallSprite03::
+                            680 ;main.c:63: set_sprite_tile(1, 0);
+   007F 21 01 00            681 	ld	hl,#0x0001
+   0082 E5                  682 	push	hl
+   0083 CDr00r00            683 	call	_set_sprite_tile
+   0086 E8 02               684 	add	sp, #2
+                            685 ;main.c:64: set_sprite_tile(2, 0);
+   0088 21 02 00            686 	ld	hl,#0x0002
+   008B E5                  687 	push	hl
+   008C CDr00r00            688 	call	_set_sprite_tile
+   008F E8 02               689 	add	sp, #2
+                            690 ;main.c:65: set_sprite_tile(3, 13);
+   0091 21 03 0D            691 	ld	hl,#0x0d03
+   0094 E5                  692 	push	hl
+   0095 CDr00r00            693 	call	_set_sprite_tile
+   0098 E8 02               694 	add	sp, #2
+                            695 ;main.c:66: set_sprite_tile(4, 14);
+   009A 21 04 0E            696 	ld	hl,#0x0e04
+   009D E5                  697 	push	hl
+   009E CDr00r00            698 	call	_set_sprite_tile
+   00A1 E8 02               699 	add	sp, #2
+   00A3 C9                  700 	ret
+                            701 ;main.c:70: void moveGameCharacter(struct gameCharacter *character, UINT8 x, UINT8 y)
+                            702 ;	---------------------------------
+                            703 ; Function moveGameCharacter
+                            704 ; ---------------------------------
+   00A4                     705 _moveGameCharacter::
+   00A4 E8 FC               706 	add	sp, #-4
+                            707 ;main.c:72: move_sprite(character->spriteId[0],x, y);
+   00A6 F8 06               708 	ldhl	sp,#6
+   00A8 2A                  709 	ld	a,(hl+)
+   00A9 5E                  710 	ld	e, (hl)
+   00AA F8 02               711 	ldhl	sp,#2
+   00AC 22                  712 	ld	(hl+),a
+   00AD 73                  713 	ld	(hl),e
+   00AE 2B                  714 	dec	hl
+   00AF 5E                  715 	ld	e,(hl)
+   00B0 23                  716 	inc	hl
+   00B1 56                  717 	ld	d,(hl)
+   00B2 1A                  718 	ld	a,(de)
+   00B3 47                  719 	ld	b,a
+   00B4 F8 09               720 	ldhl	sp,#9
+   00B6 7E                  721 	ld	a,(hl)
+   00B7 F5                  722 	push	af
+   00B8 33                  723 	inc	sp
+   00B9 2B                  724 	dec	hl
+   00BA 7E                  725 	ld	a,(hl)
+   00BB F5                  726 	push	af
+   00BC 33                  727 	inc	sp
+   00BD C5                  728 	push	bc
+   00BE 33                  729 	inc	sp
+   00BF CDr00r00            730 	call	_move_sprite
+   00C2 E8 03               731 	add	sp, #3
+                            732 ;main.c:73: move_sprite(character->spriteId[1],x + 8, y);
+   00C4 F8 08               733 	ldhl	sp,#8
+   00C6 7E                  734 	ld	a,(hl)
+   00C7 C6 08               735 	add	a, #0x08
+   00C9 F8 01               736 	ldhl	sp,#1
+   00CB 22                  737 	ld	(hl+),a
+   00CC 4E                  738 	ld	c,(hl)
+   00CD 23                  739 	inc	hl
+   00CE 46                  740 	ld	b,(hl)
+   00CF 03                  741 	inc	bc
+   00D0 0A                  742 	ld	a,(bc)
+   00D1 47                  743 	ld	b,a
+   00D2 F8 09               744 	ldhl	sp,#9
+   00D4 7E                  745 	ld	a,(hl)
+   00D5 F5                  746 	push	af
+   00D6 33                  747 	inc	sp
+   00D7 F8 02               748 	ldhl	sp,#2
+   00D9 7E                  749 	ld	a,(hl)
+   00DA F5                  750 	push	af
+   00DB 33                  751 	inc	sp
+   00DC C5                  752 	push	bc
+   00DD 33                  753 	inc	sp
+   00DE CDr00r00            754 	call	_move_sprite
+   00E1 E8 03               755 	add	sp, #3
+                            756 ;main.c:74: move_sprite(character->spriteId[2],x, y + 8);
+   00E3 F8 09               757 	ldhl	sp,#9
+   00E5 7E                  758 	ld	a,(hl)
+   00E6 C6 08               759 	add	a, #0x08
+   00E8 F8 00               760 	ldhl	sp,#0
+   00EA 77                  761 	ld	(hl),a
+   00EB F8 02               762 	ldhl	sp,#(3 - 1)
+   00ED 4E                  763 	ld	c,(hl)
+   00EE 23                  764 	inc	hl
+   00EF 46                  765 	ld	b,(hl)
+   00F0 03                  766 	inc	bc
+   00F1 03                  767 	inc	bc
+   00F2 0A                  768 	ld	a,(bc)
+   00F3 47                  769 	ld	b,a
+   00F4 F8 00               770 	ldhl	sp,#0
+   00F6 7E                  771 	ld	a,(hl)
+   00F7 F5                  772 	push	af
+   00F8 33                  773 	inc	sp
+   00F9 F8 09               774 	ldhl	sp,#9
+   00FB 7E                  775 	ld	a,(hl)
+   00FC F5                  776 	push	af
+   00FD 33                  777 	inc	sp
+   00FE C5                  778 	push	bc
+   00FF 33                  779 	inc	sp
+   0100 CDr00r00            780 	call	_move_sprite
+   0103 E8 03               781 	add	sp, #3
+                            782 ;main.c:75: move_sprite(character->spriteId[3],x + 8, y + 8);
+   0105 F8 02               783 	ldhl	sp,#(3 - 1)
+   0107 4E                  784 	ld	c,(hl)
+   0108 23                  785 	inc	hl
+   0109 46                  786 	ld	b,(hl)
+   010A 03                  787 	inc	bc
+   010B 03                  788 	inc	bc
+   010C 03                  789 	inc	bc
+   010D 0A                  790 	ld	a,(bc)
+   010E 47                  791 	ld	b,a
+   010F F8 00               792 	ldhl	sp,#0
+   0111 7E                  793 	ld	a,(hl)
+   0112 F5                  794 	push	af
+   0113 33                  795 	inc	sp
+   0114 23                  796 	inc	hl
+   0115 7E                  797 	ld	a,(hl)
+   0116 F5                  798 	push	af
+   0117 33                  799 	inc	sp
+   0118 C5                  800 	push	bc
+   0119 33                  801 	inc	sp
+   011A CDr00r00            802 	call	_move_sprite
+   011D E8 03               803 	add	sp, #3
+   011F E8 04               804 	add	sp, #4
+   0121 C9                  805 	ret
+                            806 ;main.c:79: void setupBallSprite01()
+                            807 ;	---------------------------------
+                            808 ; Function setupBallSprite01
+                            809 ; ---------------------------------
+   0122                     810 _setupBallSprite01::
+                            811 ;main.c:81: set_sprite_data(0, 15, ballSprite);
+   0122 21r00r00            812 	ld	hl,#_ballSprite
+   0125 E5                  813 	push	hl
+   0126 21 00 0F            814 	ld	hl,#0x0f00
+   0129 E5                  815 	push	hl
+   012A CDr00r00            816 	call	_set_sprite_data
+   012D E8 04               817 	add	sp, #4
+                            818 ;main.c:83: ballSprite01.x=16;
+   012F 21rFDr00            819 	ld	hl,#(_ballSprite01 + 0x0004)
+   0132 36 10               820 	ld	(hl),#0x10
+                            821 ;main.c:84: ballSprite01.y = floorYPosition;
+   0134 11rFEr00            822 	ld	de,#(_ballSprite01 + 0x0005)
+   0137 21rF6r00            823 	ld	hl,#_floorYPosition
+   013A 7E                  824 	ld	a,(hl)
+   013B 12                  825 	ld	(de),a
+                            826 ;main.c:85: ballSprite01.width=16;
+   013C 21rFFr00            827 	ld	hl,#(_ballSprite01 + 0x0006)
+   013F 36 10               828 	ld	(hl),#0x10
+                            829 ;main.c:86: ballSprite01.height=16;
+   0141 21r00r01            830 	ld	hl,#(_ballSprite01 + 0x0007)
+   0144 36 10               831 	ld	(hl),#0x10
+                            832 ;main.c:88: set_sprite_tile(1,1);
+   0146 21 01 01            833 	ld	hl,#0x0101
+   0149 E5                  834 	push	hl
+   014A CDr00r00            835 	call	_set_sprite_tile
+   014D E8 02               836 	add	sp, #2
+                            837 ;main.c:89: ballSprite01.spriteId[0]=1;
+   014F 21rF9r00            838 	ld	hl,#_ballSprite01
+   0152 36 01               839 	ld	(hl),#0x01
+                            840 ;main.c:90: set_sprite_tile(2,2);
+   0154 21 02 02            841 	ld	hl,#0x0202
+   0157 E5                  842 	push	hl
+   0158 CDr00r00            843 	call	_set_sprite_tile
+   015B E8 02               844 	add	sp, #2
+                            845 ;main.c:91: ballSprite01.spriteId[1]=2;
+   015D 21rFAr00            846 	ld	hl,#(_ballSprite01 + 0x0001)
+   0160 36 02               847 	ld	(hl),#0x02
+                            848 ;main.c:92: set_sprite_tile(3,3);
+   0162 21 03 03            849 	ld	hl,#0x0303
+   0165 E5                  850 	push	hl
+   0166 CDr00r00            851 	call	_set_sprite_tile
+   0169 E8 02               852 	add	sp, #2
+                            853 ;main.c:93: ballSprite01.spriteId[2]=3;
+   016B 21rFBr00            854 	ld	hl,#(_ballSprite01 + 0x0002)
+   016E 36 03               855 	ld	(hl),#0x03
+                            856 ;main.c:94: set_sprite_tile(4,4);
+   0170 21 04 04            857 	ld	hl,#0x0404
+   0173 E5                  858 	push	hl
+   0174 CDr00r00            859 	call	_set_sprite_tile
+   0177 E8 02               860 	add	sp, #2
+                            861 ;main.c:95: ballSprite01.spriteId[3]=4;
+   0179 21rFCr00            862 	ld	hl,#(_ballSprite01 + 0x0003)
+   017C 36 04               863 	ld	(hl),#0x04
+                            864 ;main.c:97: moveGameCharacter(&ballSprite01,ballSprite01.x,ballSprite01.y);
+   017E 11rFEr00            865 	ld	de, #(_ballSprite01 + 0x0005) + 0
+   0181 1A                  866 	ld	a,(de)
+   0182 47                  867 	ld	b,a
+   0183 11rFDr00            868 	ld	de, #(_ballSprite01 + 0x0004) + 0
+   0186 1A                  869 	ld	a,(de)
+   0187 4F                  870 	ld	c,a
+   0188 C5                  871 	push	bc
+   0189 33                  872 	inc	sp
+   018A 79                  873 	ld	a,c
+   018B F5                  874 	push	af
+   018C 33                  875 	inc	sp
+   018D 21rF9r00            876 	ld	hl,#_ballSprite01
+   0190 E5                  877 	push	hl
+   0191 CDrA4r00            878 	call	_moveGameCharacter
+   0194 E8 04               879 	add	sp, #4
+   0196 C9                  880 	ret
+                            881 ;main.c:100: INT8 wouldHitSurf(UINT8 projectedYPosition)
+                            882 ;	---------------------------------
+                            883 ; Function wouldHitSurf
+                            884 ; ---------------------------------
+   0197                     885 _wouldHitSurf::
+                            886 ;main.c:102: if(projectedYPosition >= floorYPosition){
+   0197 F8 02               887 	ldhl	sp,#2
+   0199 7E                  888 	ld	a,(hl)
+   019A 21rF6r00            889 	ld	hl,#_floorYPosition
+   019D 96                  890 	sub	a, (hl)
+   019E 38 02               891 	jr	C,00102$
+                            892 ;main.c:103: return floorYPosition;
+   01A0 5E                  893 	ld	e,(hl)
+   01A1 C9                  894 	ret
+   01A2                     895 00102$:
+                            896 ;main.c:105: return -1;
+   01A2 1E FF               897 	ld	e,#0xff
+   01A4 C9                  898 	ret
+                            899 ;main.c:109: void jump()
+                            900 ;	---------------------------------
+                            901 ; Function jump
+                            902 ; ---------------------------------
+   01A5                     903 _jump::
+                            904 ;main.c:111: if(jumping == 0)
+   01A5 21rF3r00            905 	ld	hl,#_jumping
+   01A8 7E                  906 	ld	a,(hl)
+   01A9 B7                  907 	or	a, a
+   01AA 20 07               908 	jr	NZ,00102$
+                            909 ;main.c:113: jumping = 1;
+   01AC 36 01               910 	ld	(hl),#0x01
+                            911 ;main.c:114: currentSpeedY = 10;
+   01AE 21rF5r00            912 	ld	hl,#_currentSpeedY
+   01B1 36 0A               913 	ld	(hl),#0x0a
+   01B3                     914 00102$:
+                            915 ;main.c:117: currentSpeedY = currentSpeedY + gravity;
+   01B3 21rF5r00            916 	ld	hl,#_currentSpeedY
+   01B6 4E                  917 	ld	c,(hl)
+   01B7 79                  918 	ld	a,c
+   01B8 21rF4r00            919 	ld	hl,#_gravity
+   01BB 86                  920 	add	a, (hl)
+   01BC 21rF5r00            921 	ld	hl,#_currentSpeedY
+   01BF 77                  922 	ld	(hl),a
+                            923 ;main.c:119: ballSprite01.y -= currentSpeedY;
+   01C0 11rFEr00            924 	ld	de, #(_ballSprite01 + 0x0005) + 0
+   01C3 1A                  925 	ld	a,(de)
+   01C4 4F                  926 	ld	c,a
+   01C5 96                  927 	sub	a, (hl)
+   01C6 47                  928 	ld	b,a
+   01C7 21rFEr00            929 	ld	hl,#(_ballSprite01 + 0x0005)
+   01CA 70                  930 	ld	(hl),b
+                            931 ;main.c:121: possibleYSurface = wouldHitSurf(ballSprite01.y);
+   01CB C5                  932 	push	bc
+   01CC 33                  933 	inc	sp
+   01CD CDr97r01            934 	call	_wouldHitSurf
+   01D0 33                  935 	inc	sp
+   01D1 21rF7r00            936 	ld	hl,#_possibleYSurface
+   01D4 73                  937 	ld	(hl),e
+                            938 ;main.c:127: moveGameCharacter(&ballSprite01,ballSprite01.x, possibleYSurface);
+   01D5 01rFDr00            939 	ld	bc,#_ballSprite01 + 4
+   01D8 0A                  940 	ld	a,(bc)
+   01D9 47                  941 	ld	b,a
+                            942 ;main.c:124: if(possibleYSurface == floorYPosition)
+   01DA 7E                  943 	ld	a,(hl)
+   01DB 21rF6r00            944 	ld	hl,#_floorYPosition
+   01DE 96                  945 	sub	a, (hl)
+   01DF 20 17               946 	jr	NZ,00104$
+                            947 ;main.c:126: jumping = 0;
+   01E1 21rF3r00            948 	ld	hl,#_jumping
+   01E4 36 00               949 	ld	(hl),#0x00
+                            950 ;main.c:127: moveGameCharacter(&ballSprite01,ballSprite01.x, possibleYSurface);
+   01E6 21rF7r00            951 	ld	hl,#_possibleYSurface
+   01E9 7E                  952 	ld	a,(hl)
+   01EA F5                  953 	push	af
+   01EB 33                  954 	inc	sp
+   01EC C5                  955 	push	bc
+   01ED 33                  956 	inc	sp
+   01EE 21rF9r00            957 	ld	hl,#_ballSprite01
+   01F1 E5                  958 	push	hl
+   01F2 CDrA4r00            959 	call	_moveGameCharacter
+   01F5 E8 04               960 	add	sp, #4
+   01F7 C9                  961 	ret
+   01F8                     962 00104$:
+                            963 ;main.c:132: moveGameCharacter(&ballSprite01,ballSprite01.x,ballSprite01.y);
+   01F8 11rFEr00            964 	ld	de, #(_ballSprite01 + 0x0005) + 0
+   01FB 1A                  965 	ld	a,(de)
+   01FC 4F                  966 	ld	c,a
+   01FD F5                  967 	push	af
+   01FE 33                  968 	inc	sp
+   01FF C5                  969 	push	bc
+   0200 33                  970 	inc	sp
+   0201 21rF9r00            971 	ld	hl,#_ballSprite01
+   0204 E5                  972 	push	hl
+   0205 CDrA4r00            973 	call	_moveGameCharacter
+   0208 E8 04               974 	add	sp, #4
+   020A C9                  975 	ret
+                            976 ;main.c:138: void jumpSound()
+                            977 ;	---------------------------------
+                            978 ; Function jumpSound
+                            979 ; ---------------------------------
+   020B                     980 _jumpSound::
+                            981 ;main.c:140: NR10_REG = 0x16;
+   020B 21 10 FF            982 	ld	hl,#0xff10
+   020E 36 16               983 	ld	(hl),#0x16
+                            984 ;main.c:141: NR11_REG = 0x40;
+   0210 2E 11               985 	ld	l, #0x11
+   0212 36 40               986 	ld	(hl),#0x40
+                            987 ;main.c:142: NR12_REG = 0x73;
+   0214 2E 12               988 	ld	l, #0x12
+   0216 36 73               989 	ld	(hl),#0x73
+                            990 ;main.c:143: NR13_REG = 0x00;
+   0218 2E 13               991 	ld	l, #0x13
+   021A 36 00               992 	ld	(hl),#0x00
+                            993 ;main.c:144: NR14_REG = 0xC3;
+   021C 2E 14               994 	ld	l, #0x14
+   021E 36 C3               995 	ld	(hl),#0xc3
+   0220 C9                  996 	ret
+                            997 ;main.c:146: void main()
+                            998 ;	---------------------------------
+                            999 ; Function main
+                           1000 ; ---------------------------------
+   0221                    1001 _main::
+                           1002 ;main.c:149: setupBallSprite01();
+   0221 CDr22r01           1003 	call	_setupBallSprite01
+                           1004 ;main.c:152: jumping = 0;
+   0224 21rF3r00           1005 	ld	hl,#_jumping
+   0227 36 00              1006 	ld	(hl),#0x00
+                           1007 ;main.c:155: NR52_REG = 0x80;
+   0229 21 26 FF           1008 	ld	hl,#0xff26
+   022C 36 80              1009 	ld	(hl),#0x80
+                           1010 ;main.c:156: NR50_REG = 0x77;
+   022E 2E 24              1011 	ld	l, #0x24
+   0230 36 77              1012 	ld	(hl),#0x77
+                           1013 ;main.c:157: NR51_REG = 0xFF;
+   0232 2E 25              1014 	ld	l, #0x25
+   0234 36 FF              1015 	ld	(hl),#0xff
+                           1016 ;main.c:159: keyPressed_A = 1;
+   0236 21rF2r00           1017 	ld	hl,#_keyPressed_A
+   0239 36 01              1018 	ld	(hl),#0x01
+                           1019 ;main.c:162: DISPLAY_ON;
+   023B 11 40 FF           1020 	ld	de,#0xff40
+   023E 1A                 1021 	ld	a,(de)
+   023F 4F                 1022 	ld	c,a
+   0240 06 00              1023 	ld	b,#0x00
+   0242 79                 1024 	ld	a,c
+   0243 CB FF              1025 	set	7, a
+   0245 4F                 1026 	ld	c,a
+   0246 21 40 FF           1027 	ld	hl,#0xff40
+   0249 71                 1028 	ld	(hl),c
+                           1029 ;main.c:163: SHOW_SPRITES;
+   024A 11 40 FF           1030 	ld	de,#0xff40
+   024D 1A                 1031 	ld	a,(de)
+   024E 4F                 1032 	ld	c,a
+   024F 06 00              1033 	ld	b,#0x00
+   0251 79                 1034 	ld	a,c
+   0252 CB CF              1035 	set	1, a
+   0254 4F                 1036 	ld	c,a
+   0255 2E 40              1037 	ld	l, #0x40
+   0257 71                 1038 	ld	(hl),c
+                           1039 ;main.c:164: SHOW_BKG;
+   0258 11 40 FF           1040 	ld	de,#0xff40
+   025B 1A                 1041 	ld	a,(de)
+   025C 4F                 1042 	ld	c,a
+   025D 06 00              1043 	ld	b,#0x00
+   025F 79                 1044 	ld	a,c
+   0260 CB C7              1045 	set	0, a
+   0262 4F                 1046 	ld	c,a
+   0263 2E 40              1047 	ld	l, #0x40
+   0265 71                 1048 	ld	(hl),c
+                           1049 ;main.c:166: timerAnimation = 0;
+   0266 21rF8r00           1050 	ld	hl,#_timerAnimation
+   0269 36 00              1051 	ld	(hl),#0x00
+                           1052 ;main.c:168: while(1)
+   026B                    1053 00128$:
+                           1054 ;main.c:171: UPDATE_KEYS();
+   026B E5                 1055 	push	hl
+   026C 21rF1r00           1056 	ld	hl,#_keys
+   026F 7E                 1057 	ld	a,(hl)
+   0270 21rF0r00           1058 	ld	hl,#_previousKeys
+   0273 77                 1059 	ld	(hl),a
+   0274 E1                 1060 	pop	hl
+   0275 CDr00r00           1061 	call	_joypad
+   0278 21rF1r00           1062 	ld	hl,#_keys
+   027B 73                 1063 	ld	(hl),e
+                           1064 ;main.c:172: gameBallSprite01a();
+   027C CDr10r00           1065 	call	_gameBallSprite01a
+                           1066 ;main.c:174: if((KEY_TICKED(J_A) || jumping == 1) && keyPressed_A == 1)
+   027F 21rF1r00           1067 	ld	hl,#_keys
+   0282 4E                 1068 	ld	c,(hl)
+   0283 06 00              1069 	ld	b,#0x00
+   0285 CB 61              1070 	bit	4, c
+   0287 28 0A              1071 	jr	Z,00109$
+   0289 21rF0r00           1072 	ld	hl,#_previousKeys
+   028C 4E                 1073 	ld	c,(hl)
+   028D 06 00              1074 	ld	b,#0x00
+   028F CB 61              1075 	bit	4, c
+   0291 28 07              1076 	jr	Z,00110$
+   0293                    1077 00109$:
+   0293 21rF3r00           1078 	ld	hl,#_jumping
+   0296 7E                 1079 	ld	a,(hl)
+   0297 3D                 1080 	dec	a
+   0298 20 21              1081 	jr	NZ,00106$
+   029A                    1082 00110$:
+   029A 21rF2r00           1083 	ld	hl,#_keyPressed_A
+   029D 7E                 1084 	ld	a,(hl)
+   029E 3D                 1085 	dec	a
+   029F 20 1A              1086 	jr	NZ,00106$
+                           1087 ;main.c:177: gameBallSprite02();//sprite for stretched ball
+   02A1 CDr5Ar00           1088 	call	_gameBallSprite02
+                           1089 ;main.c:178: jump();	
+   02A4 CDrA5r01           1090 	call	_jump
+                           1091 ;main.c:179: jumpSound();
+   02A7 CDr0Br02           1092 	call	_jumpSound
+                           1093 ;main.c:180: if(jumping == 0)
+   02AA 21rF3r00           1094 	ld	hl,#_jumping
+   02AD 7E                 1095 	ld	a,(hl)
+   02AE B7                 1096 	or	a, a
+   02AF 20 17              1097 	jr	NZ,00107$
+                           1098 ;main.c:182: keyPressed_A = 0;
+   02B1 21rF2r00           1099 	ld	hl,#_keyPressed_A
+   02B4 36 00              1100 	ld	(hl),#0x00
+                           1101 ;main.c:183: gameBallSprite03();
+   02B6 CDr7Fr00           1102 	call	_gameBallSprite03
+   02B9 18 0D              1103 	jr	00107$
+   02BB                    1104 00106$:
+                           1105 ;main.c:187: else if(joypad() != J_A)
+   02BB CDr00r00           1106 	call	_joypad
+   02BE 7B                 1107 	ld	a,e
+   02BF D6 10              1108 	sub	a, #0x10
+   02C1 28 05              1109 	jr	Z,00107$
+                           1110 ;main.c:189: keyPressed_A = 1;
+   02C3 21rF2r00           1111 	ld	hl,#_keyPressed_A
+   02C6 36 01              1112 	ld	(hl),#0x01
+   02C8                    1113 00107$:
+                           1114 ;main.c:193: if(KEY_PRESSED(J_RIGHT))
+   02C8 21rF1r00           1115 	ld	hl,#_keys
+   02CB 4E                 1116 	ld	c,(hl)
+   02CC 06 00              1117 	ld	b,#0x00
+   02CE CB 41              1118 	bit	0, c
+   02D0 CAr39r03           1119 	jp	Z,00126$
+                           1120 ;main.c:196: ballSprite01.x += 3;
+   02D3 FArFDr00           1121 	ld	a, (#(_ballSprite01 + 0x0004) + 0)
+   02D6 4F                 1122 	ld	c,a
+   02D7 0C                 1123 	inc	c
+   02D8 0C                 1124 	inc	c
+   02D9 0C                 1125 	inc	c
+   02DA 21rFDr00           1126 	ld	hl,#(_ballSprite01 + 0x0004)
+   02DD 71                 1127 	ld	(hl),c
+                           1128 ;main.c:197: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
+   02DE 11rFEr00           1129 	ld	de, #(_ballSprite01 + 0x0005) + 0
+   02E1 1A                 1130 	ld	a,(de)
+   02E2 47                 1131 	ld	b,a
+   02E3 C5                 1132 	push	bc
+   02E4 33                 1133 	inc	sp
+   02E5 79                 1134 	ld	a,c
+   02E6 F5                 1135 	push	af
+   02E7 33                 1136 	inc	sp
+   02E8 21rF9r00           1137 	ld	hl,#_ballSprite01
+   02EB E5                 1138 	push	hl
+   02EC CDrA4r00           1139 	call	_moveGameCharacter
+   02EF E8 04              1140 	add	sp, #4
+                           1141 ;main.c:198: if(timerAnimation == 1)
+   02F1 21rF8r00           1142 	ld	hl,#_timerAnimation
+   02F4 7E                 1143 	ld	a,(hl)
+   02F5 3D                 1144 	dec	a
+   02F6 20 05              1145 	jr	NZ,00114$
+                           1146 ;main.c:200: gameBallSprite01a();
+   02F8 CDr10r00           1147 	call	_gameBallSprite01a
+   02FB 18 0B              1148 	jr	00115$
+   02FD                    1149 00114$:
+                           1150 ;main.c:202: else if(timerAnimation == 2)
+   02FD 21rF8r00           1151 	ld	hl,#_timerAnimation
+   0300 7E                 1152 	ld	a,(hl)
+   0301 D6 02              1153 	sub	a, #0x02
+   0303 20 03              1154 	jr	NZ,00115$
+                           1155 ;main.c:204: gameBallSprite01b();
+   0305 CDr35r00           1156 	call	_gameBallSprite01b
+   0308                    1157 00115$:
+                           1158 ;main.c:206: if(jumping == 1)
+   0308 21rF3r00           1159 	ld	hl,#_jumping
+   030B 7E                 1160 	ld	a,(hl)
+   030C 3D                 1161 	dec	a
+   030D 20 05              1162 	jr	NZ,00123$
+                           1163 ;main.c:208: gameBallSprite02();
+   030F CDr5Ar00           1164 	call	_gameBallSprite02
+   0312 18 21              1165 	jr	00124$
+   0314                    1166 00123$:
+                           1167 ;main.c:210: else if(jumping == 0 && timerAnimation == 10)
+   0314 21rF3r00           1168 	ld	hl,#_jumping
+   0317 7E                 1169 	ld	a,(hl)
+   0318 B7                 1170 	or	a, a
+   0319 20 0D              1171 	jr	NZ,00119$
+   031B 21rF8r00           1172 	ld	hl,#_timerAnimation
+   031E 7E                 1173 	ld	a,(hl)
+   031F D6 0A              1174 	sub	a, #0x0a
+   0321 20 05              1175 	jr	NZ,00119$
+                           1176 ;main.c:212: gameBallSprite03();
+   0323 CDr7Fr00           1177 	call	_gameBallSprite03
+   0326 18 0D              1178 	jr	00124$
+   0328                    1179 00119$:
+                           1180 ;main.c:214: else if(timerAnimation == 12)
+   0328 21rF8r00           1181 	ld	hl,#_timerAnimation
+   032B 7E                 1182 	ld	a,(hl)
+   032C D6 0C              1183 	sub	a, #0x0c
+   032E 20 05              1184 	jr	NZ,00124$
+                           1185 ;main.c:216: timerAnimation = 0;
+   0330 21rF8r00           1186 	ld	hl,#_timerAnimation
+   0333 36 00              1187 	ld	(hl),#0x00
+   0335                    1188 00124$:
+                           1189 ;main.c:218: timerAnimation++;
+   0335 21rF8r00           1190 	ld	hl,#_timerAnimation
+   0338 34                 1191 	inc	(hl)
+   0339                    1192 00126$:
+                           1193 ;main.c:220: performantDelay(2);
+   0339 3E 02              1194 	ld	a,#0x02
+   033B F5                 1195 	push	af
+   033C 33                 1196 	inc	sp
+   033D CDr00r00           1197 	call	_performantDelay
+   0340 33                 1198 	inc	sp
+   0341 C3r6Br02           1199 	jp	00128$
+   0344 C9                 1200 	ret
+                           1201 	.area _CODE
+                           1202 	.area _CABS (ABS)

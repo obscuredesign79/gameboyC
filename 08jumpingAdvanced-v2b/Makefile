@@ -1,0 +1,20 @@
+BIN=~/develop/gbdk-n-master/bin
+OBJ=./obj
+
+
+
+build:
+	mkdir -p $(OBJ)
+	$(BIN)/gbdk-n-compile.sh main.c -o $(OBJ)/main.rel
+	$(BIN)/gbdk-n-link.sh $(OBJ)/main.rel -o $(OBJ)/main.ihx
+	$(BIN)/gbdk-n-make-rom.sh $(OBJ)/main.ihx gameRom.gb
+
+clean:
+	rm -rf $(OBJ)
+	rm -f gameRom.gb
+
+run:
+	visualboyadvance-m gameRom.gb
+
+runbgb:
+	wine bgb gameRom.gb

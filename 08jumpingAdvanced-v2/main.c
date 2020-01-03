@@ -1,18 +1,16 @@
 #include <stdio.h>
 #include <gb/gb.h>
 #include "ballSprite.c"//16x16 sprite with animation
+#include "keys.c"
 
 //global variables
 BYTE keyPressed_A;
-BYTE keyPressed_RIGHT;
 BYTE jumping;
-BYTE gravity = -2;
-UBYTE currentSpeedY;
-UBYTE floorYPosition = 136;
-UBYTE possibleYSurface;
-UBYTE timer = 0;
-UBYTE jPad;
-BYTE result;
+INT8 gravity = -2;
+UINT8 currentSpeedY;
+UINT8 floorYPosition = 136;
+UINT8 possibleYSurface;
+INT8 timerAnimation;
 
 //performance delay to free up CPU
 void performantDelay(UINT8 numloops)
@@ -34,19 +32,25 @@ struct gameCharacter
 	UINT8 height;
 };
 
-//inializes gameCharacter to ballSprite01
 struct gameCharacter ballSprite01;
 
-//cycle through tiles for animation
-void gameBallAnimRollLoop()//looping ball moving animation.(highlight jitters)
+void gameBallSprite01a()//ball sprite rest A
 {
+	set_sprite_tile(1, 1);
+	set_sprite_tile(2, 2);
+	set_sprite_tile(3, 3);
+	set_sprite_tile(4, 4);
+}
+void gameBallSprite01b()//ball sprite rest B
+{
+
 	set_sprite_tile(1, 5);
 	set_sprite_tile(2, 6);
 	set_sprite_tile(3, 7);
 	set_sprite_tile(4, 8);
 }
 
-void gameBallStaticStretched()//static ball stretch
+void gameBallSprite02()//ball sprite stretched
 {
 	set_sprite_tile(1, 9);
 	set_sprite_tile(2, 10);
@@ -54,25 +58,12 @@ void gameBallStaticStretched()//static ball stretch
 	set_sprite_tile(4, 12);
 }
 
-void gameBallStaticRest()//static ball rest
+void gameBallSprite03()//ball sprite squashed
 {
-	set_sprite_tile(1, 1);
-	set_sprite_tile(2, 2);
-	set_sprite_tile(3, 3);
-	set_sprite_tile(4, 4);
-}
-void gameBallAnimSquashed(UINT8 numloops)//static ball squashed
-{
-	UINT8 i;
-	for(i=0;i < numloops;i++)
-	{
-		set_sprite_tile(1, 0);
-		set_sprite_tile(2, 0);
-		set_sprite_tile(3, 13);
-		set_sprite_tile(4, 14);
-	}
-
-	gameBallStaticRest();
+	set_sprite_tile(1, 0);
+	set_sprite_tile(2, 0);
+	set_sprite_tile(3, 13);
+	set_sprite_tile(4, 14);
 }
 
 //moving a 16x16 metaSprite in unison
@@ -122,6 +113,7 @@ void jump()
 		jumping = 1;
 		currentSpeedY = 10;
 	}
+
 	currentSpeedY = currentSpeedY + gravity;
 
 	ballSprite01.y -= currentSpeedY;
@@ -141,26 +133,6 @@ void jump()
 	}
 }
 
-INT8 keyTicked(UINT8 jPad)
-{
-	
-	if(jPad == J_A)
-	{
-				
-		result = 1;
-
-	}
-	else if(jPad != J_A)
-	{
-		if(jPad == J_A)
-		{
-			result = 0;
-		}
-	}
-
-	return result;
-
-}
 
 //jump sound
 void jumpSound()
@@ -185,25 +157,30 @@ void main()
 	NR51_REG = 0xFF;
 
 	keyPressed_A = 1;
-	jPad = joypad();
 
 
 	DISPLAY_ON;
 	SHOW_SPRITES;
+	SHOW_BKG;
+
+	timerAnimation = 0;
 
 	while(1)
 	{
+//		printf("%d", timerAnimation);
+		UPDATE_KEYS();
+		gameBallSprite01a();
 
-		if((joypad() & J_A || jumping == 1) && keyPressed_A == 1)
+		if((KEY_TICKED(J_A) || jumping == 1) && keyPressed_A == 1)
 		{
 				
+			gameBallSprite02();//sprite for stretched ball
 			jump();	
 			jumpSound();
-			gameBallStaticStretched();//sprite for stretched ball
 			if(jumping == 0)
 			{
-				gameBallAnimSquashed(500);//hold squashed sprite for a period of time using for loops
 				keyPressed_A = 0;
+				gameBallSprite03();
 			}
 		}
 
@@ -213,28 +190,33 @@ void main()
 		}
 
 				
-		if((joypad() & J_RIGHT) && keyPressed_RIGHT == 1)
+		if(KEY_PRESSED(J_RIGHT))
 		{
 
 			ballSprite01.x += 3;
 			moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
-			gameBallAnimRollLoop();
-			if(jumping == 0)
+			if(timerAnimation == 1)
 			{
-				keyPressed_A = 1;
+				gameBallSprite01a();
 			}
-			if(joypad() == 16)
+			else if(timerAnimation == 2)
 			{
-				keyPressed_A = 1;
+				gameBallSprite01b();
 			}
-
-
+			if(jumping == 1)
+			{
+				gameBallSprite02();
+			}
+			else if(jumping == 0 && timerAnimation == 10)
+			{
+				gameBallSprite03();
+			}
+			else if(timerAnimation == 12)
+			{
+				timerAnimation = 0;
+			}
+			timerAnimation++;
 		}
-		else if(joypad() != J_RIGHT)
-		{
-			keyPressed_RIGHT = 1;
-		}
-
 		performantDelay(2);
 	}
 

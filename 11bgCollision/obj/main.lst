@@ -1,0 +1,1459 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.6.0 #9615 (Linux)
+                              4 ;--------------------------------------------------------
+                              5 	.module main
+                              6 	.optsdcc -mgbz80
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _animateSprite
+                             13 	.globl _canPlayerMove
+                             14 	.globl _performantdelay
+                             15 	.globl _scroll_sprite
+                             16 	.globl _move_sprite
+                             17 	.globl _set_sprite_tile
+                             18 	.globl _set_sprite_data
+                             19 	.globl _set_bkg_tiles
+                             20 	.globl _set_bkg_data
+                             21 	.globl _wait_vbl_done
+                             22 	.globl _joypad
+                             23 	.globl _playerlocation
+                             24 	.globl _Snail
+                             25 	.globl _MazeMap
+                             26 	.globl _MazeSprites
+                             27 	.globl _blankmap
+                             28 ;--------------------------------------------------------
+                             29 ; ram data
+                             30 ;--------------------------------------------------------
+                             31 	.area _DATA
+   0000                      32 _MazeSprites::
+   0000                      33 	.ds 64
+   0040                      34 _MazeMap::
+   0040                      35 	.ds 360
+   01A8                      36 _Snail::
+   01A8                      37 	.ds 16
+   01B8                      38 _playerlocation::
+   01B8                      39 	.ds 2
+                             40 ;--------------------------------------------------------
+                             41 ; absolute external ram data
+                             42 ;--------------------------------------------------------
+                             43 	.area _DABS (ABS)
+                             44 ;--------------------------------------------------------
+                             45 ; global & static initialisations
+                             46 ;--------------------------------------------------------
+                             47 	.area _HOME
+                             48 	.area _GSINIT
+                             49 	.area _GSFINAL
+                             50 	.area _GSINIT
+                             51 ;MazeSprites.c:26: unsigned char MazeSprites[] =
+   0000 21r00r00             52 	ld	hl,#_MazeSprites
+   0003 36 00                53 	ld	(hl),#0x00
+   0005 21r01r00             54 	ld	hl,#(_MazeSprites + 0x0001)
+   0008 36 00                55 	ld	(hl),#0x00
+   000A 21r02r00             56 	ld	hl,#(_MazeSprites + 0x0002)
+   000D 36 00                57 	ld	(hl),#0x00
+   000F 21r03r00             58 	ld	hl,#(_MazeSprites + 0x0003)
+   0012 36 00                59 	ld	(hl),#0x00
+   0014 21r04r00             60 	ld	hl,#(_MazeSprites + 0x0004)
+   0017 36 00                61 	ld	(hl),#0x00
+   0019 21r05r00             62 	ld	hl,#(_MazeSprites + 0x0005)
+   001C 36 00                63 	ld	(hl),#0x00
+   001E 21r06r00             64 	ld	hl,#(_MazeSprites + 0x0006)
+   0021 36 00                65 	ld	(hl),#0x00
+   0023 21r07r00             66 	ld	hl,#(_MazeSprites + 0x0007)
+   0026 36 00                67 	ld	(hl),#0x00
+   0028 21r08r00             68 	ld	hl,#(_MazeSprites + 0x0008)
+   002B 36 00                69 	ld	(hl),#0x00
+   002D 21r09r00             70 	ld	hl,#(_MazeSprites + 0x0009)
+   0030 36 00                71 	ld	(hl),#0x00
+   0032 21r0Ar00             72 	ld	hl,#(_MazeSprites + 0x000a)
+   0035 36 00                73 	ld	(hl),#0x00
+   0037 21r0Br00             74 	ld	hl,#(_MazeSprites + 0x000b)
+   003A 36 00                75 	ld	(hl),#0x00
+   003C 21r0Cr00             76 	ld	hl,#(_MazeSprites + 0x000c)
+   003F 36 00                77 	ld	(hl),#0x00
+   0041 21r0Dr00             78 	ld	hl,#(_MazeSprites + 0x000d)
+   0044 36 00                79 	ld	(hl),#0x00
+   0046 21r0Er00             80 	ld	hl,#(_MazeSprites + 0x000e)
+   0049 36 00                81 	ld	(hl),#0x00
+   004B 21r0Fr00             82 	ld	hl,#(_MazeSprites + 0x000f)
+   004E 36 00                83 	ld	(hl),#0x00
+   0050 21r10r00             84 	ld	hl,#(_MazeSprites + 0x0010)
+   0053 36 7E                85 	ld	(hl),#0x7e
+   0055 21r11r00             86 	ld	hl,#(_MazeSprites + 0x0011)
+   0058 36 7E                87 	ld	(hl),#0x7e
+   005A 21r12r00             88 	ld	hl,#(_MazeSprites + 0x0012)
+   005D 36 DF                89 	ld	(hl),#0xdf
+   005F 21r13r00             90 	ld	hl,#(_MazeSprites + 0x0013)
+   0062 36 E3                91 	ld	(hl),#0xe3
+   0064 21r14r00             92 	ld	hl,#(_MazeSprites + 0x0014)
+   0067 36 B7                93 	ld	(hl),#0xb7
+   0069 21r15r00             94 	ld	hl,#(_MazeSprites + 0x0015)
+   006C 36 C9                95 	ld	(hl),#0xc9
+   006E 21r16r00             96 	ld	hl,#(_MazeSprites + 0x0016)
+   0071 36 AB                97 	ld	(hl),#0xab
+   0073 21r17r00             98 	ld	hl,#(_MazeSprites + 0x0017)
+   0076 36 D5                99 	ld	(hl),#0xd5
+   0078 21r18r00            100 	ld	hl,#(_MazeSprites + 0x0018)
+   007B 36 97               101 	ld	(hl),#0x97
+   007D 21r19r00            102 	ld	hl,#(_MazeSprites + 0x0019)
+   0080 36 E9               103 	ld	(hl),#0xe9
+   0082 21r1Ar00            104 	ld	hl,#(_MazeSprites + 0x001a)
+   0085 36 AB               105 	ld	(hl),#0xab
+   0087 21r1Br00            106 	ld	hl,#(_MazeSprites + 0x001b)
+   008A 36 D5               107 	ld	(hl),#0xd5
+   008C 21r1Cr00            108 	ld	hl,#(_MazeSprites + 0x001c)
+   008F 36 C7               109 	ld	(hl),#0xc7
+   0091 21r1Dr00            110 	ld	hl,#(_MazeSprites + 0x001d)
+   0094 36 FB               111 	ld	(hl),#0xfb
+   0096 21r1Er00            112 	ld	hl,#(_MazeSprites + 0x001e)
+   0099 36 7E               113 	ld	(hl),#0x7e
+   009B 21r1Fr00            114 	ld	hl,#(_MazeSprites + 0x001f)
+   009E 36 7E               115 	ld	(hl),#0x7e
+   00A0 21r20r00            116 	ld	hl,#(_MazeSprites + 0x0020)
+   00A3 36 18               117 	ld	(hl),#0x18
+   00A5 21r21r00            118 	ld	hl,#(_MazeSprites + 0x0021)
+   00A8 36 18               119 	ld	(hl),#0x18
+   00AA 21r22r00            120 	ld	hl,#(_MazeSprites + 0x0022)
+   00AD 36 76               121 	ld	(hl),#0x76
+   00AF 21r23r00            122 	ld	hl,#(_MazeSprites + 0x0023)
+   00B2 36 6E               123 	ld	(hl),#0x6e
+   00B4 21r24r00            124 	ld	hl,#(_MazeSprites + 0x0024)
+   00B7 36 D7               125 	ld	(hl),#0xd7
+   00B9 21r25r00            126 	ld	hl,#(_MazeSprites + 0x0025)
+   00BC 36 EB               127 	ld	(hl),#0xeb
+   00BE 21r26r00            128 	ld	hl,#(_MazeSprites + 0x0026)
+   00C1 36 D5               129 	ld	(hl),#0xd5
+   00C3 21r27r00            130 	ld	hl,#(_MazeSprites + 0x0027)
+   00C6 36 AB               131 	ld	(hl),#0xab
+   00C8 21r28r00            132 	ld	hl,#(_MazeSprites + 0x0028)
+   00CB 36 D5               133 	ld	(hl),#0xd5
+   00CD 21r29r00            134 	ld	hl,#(_MazeSprites + 0x0029)
+   00D0 36 AB               135 	ld	(hl),#0xab
+   00D2 21r2Ar00            136 	ld	hl,#(_MazeSprites + 0x002a)
+   00D5 36 D5               137 	ld	(hl),#0xd5
+   00D7 21r2Br00            138 	ld	hl,#(_MazeSprites + 0x002b)
+   00DA 36 AB               139 	ld	(hl),#0xab
+   00DC 21r2Cr00            140 	ld	hl,#(_MazeSprites + 0x002c)
+   00DF 36 D5               141 	ld	(hl),#0xd5
+   00E1 21r2Dr00            142 	ld	hl,#(_MazeSprites + 0x002d)
+   00E4 36 AB               143 	ld	(hl),#0xab
+   00E6 21r2Er00            144 	ld	hl,#(_MazeSprites + 0x002e)
+   00E9 36 D5               145 	ld	(hl),#0xd5
+   00EB 21r2Fr00            146 	ld	hl,#(_MazeSprites + 0x002f)
+   00EE 36 AB               147 	ld	(hl),#0xab
+   00F0 21r30r00            148 	ld	hl,#(_MazeSprites + 0x0030)
+   00F3 36 00               149 	ld	(hl),#0x00
+   00F5 21r31r00            150 	ld	hl,#(_MazeSprites + 0x0031)
+   00F8 36 38               151 	ld	(hl),#0x38
+   00FA 21r32r00            152 	ld	hl,#(_MazeSprites + 0x0032)
+   00FD 36 28               153 	ld	(hl),#0x28
+   00FF 21r33r00            154 	ld	hl,#(_MazeSprites + 0x0033)
+   0102 36 44               155 	ld	(hl),#0x44
+   0104 21r34r00            156 	ld	hl,#(_MazeSprites + 0x0034)
+   0107 36 28               157 	ld	(hl),#0x28
+   0109 21r35r00            158 	ld	hl,#(_MazeSprites + 0x0035)
+   010C 36 44               159 	ld	(hl),#0x44
+   010E 21r36r00            160 	ld	hl,#(_MazeSprites + 0x0036)
+   0111 36 00               161 	ld	(hl),#0x00
+   0113 21r37r00            162 	ld	hl,#(_MazeSprites + 0x0037)
+   0116 36 38               163 	ld	(hl),#0x38
+   0118 21r38r00            164 	ld	hl,#(_MazeSprites + 0x0038)
+   011B 36 00               165 	ld	(hl),#0x00
+   011D 21r39r00            166 	ld	hl,#(_MazeSprites + 0x0039)
+   0120 36 10               167 	ld	(hl),#0x10
+   0122 21r3Ar00            168 	ld	hl,#(_MazeSprites + 0x003a)
+   0125 36 00               169 	ld	(hl),#0x00
+   0127 21r3Br00            170 	ld	hl,#(_MazeSprites + 0x003b)
+   012A 36 18               171 	ld	(hl),#0x18
+   012C 21r3Cr00            172 	ld	hl,#(_MazeSprites + 0x003c)
+   012F 36 00               173 	ld	(hl),#0x00
+   0131 21r3Dr00            174 	ld	hl,#(_MazeSprites + 0x003d)
+   0134 36 10               175 	ld	(hl),#0x10
+   0136 21r3Er00            176 	ld	hl,#(_MazeSprites + 0x003e)
+   0139 36 00               177 	ld	(hl),#0x00
+   013B 21r3Fr00            178 	ld	hl,#(_MazeSprites + 0x003f)
+   013E 36 1C               179 	ld	(hl),#0x1c
+                            180 ;MazeMap.c:25: unsigned char MazeMap[] =
+   0140 21r40r00            181 	ld	hl,#_MazeMap
+   0143 36 01               182 	ld	(hl),#0x01
+   0145 21r41r00            183 	ld	hl,#(_MazeMap + 0x0001)
+   0148 36 01               184 	ld	(hl),#0x01
+   014A 21r42r00            185 	ld	hl,#(_MazeMap + 0x0002)
+   014D 36 01               186 	ld	(hl),#0x01
+   014F 21r43r00            187 	ld	hl,#(_MazeMap + 0x0003)
+   0152 36 01               188 	ld	(hl),#0x01
+   0154 21r44r00            189 	ld	hl,#(_MazeMap + 0x0004)
+   0157 36 01               190 	ld	(hl),#0x01
+   0159 21r45r00            191 	ld	hl,#(_MazeMap + 0x0005)
+   015C 36 01               192 	ld	(hl),#0x01
+   015E 21r46r00            193 	ld	hl,#(_MazeMap + 0x0006)
+   0161 36 01               194 	ld	(hl),#0x01
+   0163 21r47r00            195 	ld	hl,#(_MazeMap + 0x0007)
+   0166 36 01               196 	ld	(hl),#0x01
+   0168 21r48r00            197 	ld	hl,#(_MazeMap + 0x0008)
+   016B 36 01               198 	ld	(hl),#0x01
+   016D 21r49r00            199 	ld	hl,#(_MazeMap + 0x0009)
+   0170 36 01               200 	ld	(hl),#0x01
+   0172 21r4Ar00            201 	ld	hl,#(_MazeMap + 0x000a)
+   0175 36 01               202 	ld	(hl),#0x01
+   0177 21r4Br00            203 	ld	hl,#(_MazeMap + 0x000b)
+   017A 36 01               204 	ld	(hl),#0x01
+   017C 21r4Cr00            205 	ld	hl,#(_MazeMap + 0x000c)
+   017F 36 01               206 	ld	(hl),#0x01
+   0181 21r4Dr00            207 	ld	hl,#(_MazeMap + 0x000d)
+   0184 36 01               208 	ld	(hl),#0x01
+   0186 21r4Er00            209 	ld	hl,#(_MazeMap + 0x000e)
+   0189 36 01               210 	ld	(hl),#0x01
+   018B 21r4Fr00            211 	ld	hl,#(_MazeMap + 0x000f)
+   018E 36 01               212 	ld	(hl),#0x01
+   0190 21r50r00            213 	ld	hl,#(_MazeMap + 0x0010)
+   0193 36 01               214 	ld	(hl),#0x01
+   0195 21r51r00            215 	ld	hl,#(_MazeMap + 0x0011)
+   0198 36 01               216 	ld	(hl),#0x01
+   019A 21r52r00            217 	ld	hl,#(_MazeMap + 0x0012)
+   019D 36 01               218 	ld	(hl),#0x01
+   019F 21r53r00            219 	ld	hl,#(_MazeMap + 0x0013)
+   01A2 36 01               220 	ld	(hl),#0x01
+   01A4 21r54r00            221 	ld	hl,#(_MazeMap + 0x0014)
+   01A7 36 01               222 	ld	(hl),#0x01
+   01A9 21r55r00            223 	ld	hl,#(_MazeMap + 0x0015)
+   01AC 36 00               224 	ld	(hl),#0x00
+   01AE 21r56r00            225 	ld	hl,#(_MazeMap + 0x0016)
+   01B1 36 01               226 	ld	(hl),#0x01
+   01B3 21r57r00            227 	ld	hl,#(_MazeMap + 0x0017)
+   01B6 36 00               228 	ld	(hl),#0x00
+   01B8 21r58r00            229 	ld	hl,#(_MazeMap + 0x0018)
+   01BB 36 00               230 	ld	(hl),#0x00
+   01BD 21r59r00            231 	ld	hl,#(_MazeMap + 0x0019)
+   01C0 36 00               232 	ld	(hl),#0x00
+   01C2 21r5Ar00            233 	ld	hl,#(_MazeMap + 0x001a)
+   01C5 36 00               234 	ld	(hl),#0x00
+   01C7 21r5Br00            235 	ld	hl,#(_MazeMap + 0x001b)
+   01CA 36 00               236 	ld	(hl),#0x00
+   01CC 21r5Cr00            237 	ld	hl,#(_MazeMap + 0x001c)
+   01CF 36 00               238 	ld	(hl),#0x00
+   01D1 21r5Dr00            239 	ld	hl,#(_MazeMap + 0x001d)
+   01D4 36 00               240 	ld	(hl),#0x00
+   01D6 21r5Er00            241 	ld	hl,#(_MazeMap + 0x001e)
+   01D9 36 00               242 	ld	(hl),#0x00
+   01DB 21r5Fr00            243 	ld	hl,#(_MazeMap + 0x001f)
+   01DE 36 00               244 	ld	(hl),#0x00
+   01E0 21r60r00            245 	ld	hl,#(_MazeMap + 0x0020)
+   01E3 36 00               246 	ld	(hl),#0x00
+   01E5 21r61r00            247 	ld	hl,#(_MazeMap + 0x0021)
+   01E8 36 00               248 	ld	(hl),#0x00
+   01EA 21r62r00            249 	ld	hl,#(_MazeMap + 0x0022)
+   01ED 36 00               250 	ld	(hl),#0x00
+   01EF 21r63r00            251 	ld	hl,#(_MazeMap + 0x0023)
+   01F2 36 00               252 	ld	(hl),#0x00
+   01F4 21r64r00            253 	ld	hl,#(_MazeMap + 0x0024)
+   01F7 36 00               254 	ld	(hl),#0x00
+   01F9 21r65r00            255 	ld	hl,#(_MazeMap + 0x0025)
+   01FC 36 00               256 	ld	(hl),#0x00
+   01FE 21r66r00            257 	ld	hl,#(_MazeMap + 0x0026)
+   0201 36 00               258 	ld	(hl),#0x00
+   0203 21r67r00            259 	ld	hl,#(_MazeMap + 0x0027)
+   0206 36 01               260 	ld	(hl),#0x01
+   0208 21r68r00            261 	ld	hl,#(_MazeMap + 0x0028)
+   020B 36 01               262 	ld	(hl),#0x01
+   020D 21r69r00            263 	ld	hl,#(_MazeMap + 0x0029)
+   0210 36 00               264 	ld	(hl),#0x00
+   0212 21r6Ar00            265 	ld	hl,#(_MazeMap + 0x002a)
+   0215 36 01               266 	ld	(hl),#0x01
+   0217 21r6Br00            267 	ld	hl,#(_MazeMap + 0x002b)
+   021A 36 00               268 	ld	(hl),#0x00
+   021C 21r6Cr00            269 	ld	hl,#(_MazeMap + 0x002c)
+   021F 36 01               270 	ld	(hl),#0x01
+   0221 21r6Dr00            271 	ld	hl,#(_MazeMap + 0x002d)
+   0224 36 01               272 	ld	(hl),#0x01
+   0226 21r6Er00            273 	ld	hl,#(_MazeMap + 0x002e)
+   0229 36 01               274 	ld	(hl),#0x01
+   022B 21r6Fr00            275 	ld	hl,#(_MazeMap + 0x002f)
+   022E 36 01               276 	ld	(hl),#0x01
+   0230 21r70r00            277 	ld	hl,#(_MazeMap + 0x0030)
+   0233 36 01               278 	ld	(hl),#0x01
+   0235 21r71r00            279 	ld	hl,#(_MazeMap + 0x0031)
+   0238 36 01               280 	ld	(hl),#0x01
+   023A 21r72r00            281 	ld	hl,#(_MazeMap + 0x0032)
+   023D 36 00               282 	ld	(hl),#0x00
+   023F 21r73r00            283 	ld	hl,#(_MazeMap + 0x0033)
+   0242 36 01               284 	ld	(hl),#0x01
+   0244 21r74r00            285 	ld	hl,#(_MazeMap + 0x0034)
+   0247 36 01               286 	ld	(hl),#0x01
+   0249 21r75r00            287 	ld	hl,#(_MazeMap + 0x0035)
+   024C 36 01               288 	ld	(hl),#0x01
+   024E 21r76r00            289 	ld	hl,#(_MazeMap + 0x0036)
+   0251 36 01               290 	ld	(hl),#0x01
+   0253 21r77r00            291 	ld	hl,#(_MazeMap + 0x0037)
+   0256 36 01               292 	ld	(hl),#0x01
+   0258 21r78r00            293 	ld	hl,#(_MazeMap + 0x0038)
+   025B 36 01               294 	ld	(hl),#0x01
+   025D 21r79r00            295 	ld	hl,#(_MazeMap + 0x0039)
+   0260 36 01               296 	ld	(hl),#0x01
+   0262 21r7Ar00            297 	ld	hl,#(_MazeMap + 0x003a)
+   0265 36 00               298 	ld	(hl),#0x00
+   0267 21r7Br00            299 	ld	hl,#(_MazeMap + 0x003b)
+   026A 36 01               300 	ld	(hl),#0x01
+   026C 21r7Cr00            301 	ld	hl,#(_MazeMap + 0x003c)
+   026F 36 01               302 	ld	(hl),#0x01
+   0271 21r7Dr00            303 	ld	hl,#(_MazeMap + 0x003d)
+   0274 36 00               304 	ld	(hl),#0x00
+   0276 21r7Er00            305 	ld	hl,#(_MazeMap + 0x003e)
+   0279 36 01               306 	ld	(hl),#0x01
+   027B 21r7Fr00            307 	ld	hl,#(_MazeMap + 0x003f)
+   027E 36 00               308 	ld	(hl),#0x00
+   0280 21r80r00            309 	ld	hl,#(_MazeMap + 0x0040)
+   0283 36 01               310 	ld	(hl),#0x01
+   0285 21r81r00            311 	ld	hl,#(_MazeMap + 0x0041)
+   0288 36 00               312 	ld	(hl),#0x00
+   028A 21r82r00            313 	ld	hl,#(_MazeMap + 0x0042)
+   028D 36 00               314 	ld	(hl),#0x00
+   028F 21r83r00            315 	ld	hl,#(_MazeMap + 0x0043)
+   0292 36 00               316 	ld	(hl),#0x00
+   0294 21r84r00            317 	ld	hl,#(_MazeMap + 0x0044)
+   0297 36 00               318 	ld	(hl),#0x00
+   0299 21r85r00            319 	ld	hl,#(_MazeMap + 0x0045)
+   029C 36 01               320 	ld	(hl),#0x01
+   029E 21r86r00            321 	ld	hl,#(_MazeMap + 0x0046)
+   02A1 36 00               322 	ld	(hl),#0x00
+   02A3 21r87r00            323 	ld	hl,#(_MazeMap + 0x0047)
+   02A6 36 01               324 	ld	(hl),#0x01
+   02A8 21r88r00            325 	ld	hl,#(_MazeMap + 0x0048)
+   02AB 36 00               326 	ld	(hl),#0x00
+   02AD 21r89r00            327 	ld	hl,#(_MazeMap + 0x0049)
+   02B0 36 00               328 	ld	(hl),#0x00
+   02B2 21r8Ar00            329 	ld	hl,#(_MazeMap + 0x004a)
+   02B5 36 00               330 	ld	(hl),#0x00
+   02B7 21r8Br00            331 	ld	hl,#(_MazeMap + 0x004b)
+   02BA 36 00               332 	ld	(hl),#0x00
+   02BC 21r8Cr00            333 	ld	hl,#(_MazeMap + 0x004c)
+   02BF 36 00               334 	ld	(hl),#0x00
+   02C1 21r8Dr00            335 	ld	hl,#(_MazeMap + 0x004d)
+   02C4 36 01               336 	ld	(hl),#0x01
+   02C6 21r8Er00            337 	ld	hl,#(_MazeMap + 0x004e)
+   02C9 36 00               338 	ld	(hl),#0x00
+   02CB 21r8Fr00            339 	ld	hl,#(_MazeMap + 0x004f)
+   02CE 36 01               340 	ld	(hl),#0x01
+   02D0 21r90r00            341 	ld	hl,#(_MazeMap + 0x0050)
+   02D3 36 01               342 	ld	(hl),#0x01
+   02D5 21r91r00            343 	ld	hl,#(_MazeMap + 0x0051)
+   02D8 36 00               344 	ld	(hl),#0x00
+   02DA 21r92r00            345 	ld	hl,#(_MazeMap + 0x0052)
+   02DD 36 01               346 	ld	(hl),#0x01
+   02DF 21r93r00            347 	ld	hl,#(_MazeMap + 0x0053)
+   02E2 36 00               348 	ld	(hl),#0x00
+   02E4 21r94r00            349 	ld	hl,#(_MazeMap + 0x0054)
+   02E7 36 01               350 	ld	(hl),#0x01
+   02E9 21r95r00            351 	ld	hl,#(_MazeMap + 0x0055)
+   02EC 36 00               352 	ld	(hl),#0x00
+   02EE 21r96r00            353 	ld	hl,#(_MazeMap + 0x0056)
+   02F1 36 01               354 	ld	(hl),#0x01
+   02F3 21r97r00            355 	ld	hl,#(_MazeMap + 0x0057)
+   02F6 36 01               356 	ld	(hl),#0x01
+   02F8 21r98r00            357 	ld	hl,#(_MazeMap + 0x0058)
+   02FB 36 01               358 	ld	(hl),#0x01
+   02FD 21r99r00            359 	ld	hl,#(_MazeMap + 0x0059)
+   0300 36 01               360 	ld	(hl),#0x01
+   0302 21r9Ar00            361 	ld	hl,#(_MazeMap + 0x005a)
+   0305 36 00               362 	ld	(hl),#0x00
+   0307 21r9Br00            363 	ld	hl,#(_MazeMap + 0x005b)
+   030A 36 01               364 	ld	(hl),#0x01
+   030C 21r9Cr00            365 	ld	hl,#(_MazeMap + 0x005c)
+   030F 36 00               366 	ld	(hl),#0x00
+   0311 21r9Dr00            367 	ld	hl,#(_MazeMap + 0x005d)
+   0314 36 01               368 	ld	(hl),#0x01
+   0316 21r9Er00            369 	ld	hl,#(_MazeMap + 0x005e)
+   0319 36 01               370 	ld	(hl),#0x01
+   031B 21r9Fr00            371 	ld	hl,#(_MazeMap + 0x005f)
+   031E 36 01               372 	ld	(hl),#0x01
+   0320 21rA0r00            373 	ld	hl,#(_MazeMap + 0x0060)
+   0323 36 01               374 	ld	(hl),#0x01
+   0325 21rA1r00            375 	ld	hl,#(_MazeMap + 0x0061)
+   0328 36 01               376 	ld	(hl),#0x01
+   032A 21rA2r00            377 	ld	hl,#(_MazeMap + 0x0062)
+   032D 36 00               378 	ld	(hl),#0x00
+   032F 21rA3r00            379 	ld	hl,#(_MazeMap + 0x0063)
+   0332 36 01               380 	ld	(hl),#0x01
+   0334 21rA4r00            381 	ld	hl,#(_MazeMap + 0x0064)
+   0337 36 01               382 	ld	(hl),#0x01
+   0339 21rA5r00            383 	ld	hl,#(_MazeMap + 0x0065)
+   033C 36 00               384 	ld	(hl),#0x00
+   033E 21rA6r00            385 	ld	hl,#(_MazeMap + 0x0066)
+   0341 36 01               386 	ld	(hl),#0x01
+   0343 21rA7r00            387 	ld	hl,#(_MazeMap + 0x0067)
+   0346 36 00               388 	ld	(hl),#0x00
+   0348 21rA8r00            389 	ld	hl,#(_MazeMap + 0x0068)
+   034B 36 01               390 	ld	(hl),#0x01
+   034D 21rA9r00            391 	ld	hl,#(_MazeMap + 0x0069)
+   0350 36 00               392 	ld	(hl),#0x00
+   0352 21rAAr00            393 	ld	hl,#(_MazeMap + 0x006a)
+   0355 36 00               394 	ld	(hl),#0x00
+   0357 21rABr00            395 	ld	hl,#(_MazeMap + 0x006b)
+   035A 36 00               396 	ld	(hl),#0x00
+   035C 21rACr00            397 	ld	hl,#(_MazeMap + 0x006c)
+   035F 36 00               398 	ld	(hl),#0x00
+   0361 21rADr00            399 	ld	hl,#(_MazeMap + 0x006d)
+   0364 36 00               400 	ld	(hl),#0x00
+   0366 21rAEr00            401 	ld	hl,#(_MazeMap + 0x006e)
+   0369 36 00               402 	ld	(hl),#0x00
+   036B 21rAFr00            403 	ld	hl,#(_MazeMap + 0x006f)
+   036E 36 01               404 	ld	(hl),#0x01
+   0370 21rB0r00            405 	ld	hl,#(_MazeMap + 0x0070)
+   0373 36 00               406 	ld	(hl),#0x00
+   0375 21rB1r00            407 	ld	hl,#(_MazeMap + 0x0071)
+   0378 36 00               408 	ld	(hl),#0x00
+   037A 21rB2r00            409 	ld	hl,#(_MazeMap + 0x0072)
+   037D 36 00               410 	ld	(hl),#0x00
+   037F 21rB3r00            411 	ld	hl,#(_MazeMap + 0x0073)
+   0382 36 00               412 	ld	(hl),#0x00
+   0384 21rB4r00            413 	ld	hl,#(_MazeMap + 0x0074)
+   0387 36 00               414 	ld	(hl),#0x00
+   0389 21rB5r00            415 	ld	hl,#(_MazeMap + 0x0075)
+   038C 36 00               416 	ld	(hl),#0x00
+   038E 21rB6r00            417 	ld	hl,#(_MazeMap + 0x0076)
+   0391 36 00               418 	ld	(hl),#0x00
+   0393 21rB7r00            419 	ld	hl,#(_MazeMap + 0x0077)
+   0396 36 01               420 	ld	(hl),#0x01
+   0398 21rB8r00            421 	ld	hl,#(_MazeMap + 0x0078)
+   039B 36 01               422 	ld	(hl),#0x01
+   039D 21rB9r00            423 	ld	hl,#(_MazeMap + 0x0079)
+   03A0 36 00               424 	ld	(hl),#0x00
+   03A2 21rBAr00            425 	ld	hl,#(_MazeMap + 0x007a)
+   03A5 36 01               426 	ld	(hl),#0x01
+   03A7 21rBBr00            427 	ld	hl,#(_MazeMap + 0x007b)
+   03AA 36 00               428 	ld	(hl),#0x00
+   03AC 21rBCr00            429 	ld	hl,#(_MazeMap + 0x007c)
+   03AF 36 01               430 	ld	(hl),#0x01
+   03B1 21rBDr00            431 	ld	hl,#(_MazeMap + 0x007d)
+   03B4 36 00               432 	ld	(hl),#0x00
+   03B6 21rBEr00            433 	ld	hl,#(_MazeMap + 0x007e)
+   03B9 36 01               434 	ld	(hl),#0x01
+   03BB 21rBFr00            435 	ld	hl,#(_MazeMap + 0x007f)
+   03BE 36 01               436 	ld	(hl),#0x01
+   03C0 21rC0r00            437 	ld	hl,#(_MazeMap + 0x0080)
+   03C3 36 01               438 	ld	(hl),#0x01
+   03C5 21rC1r00            439 	ld	hl,#(_MazeMap + 0x0081)
+   03C8 36 01               440 	ld	(hl),#0x01
+   03CA 21rC2r00            441 	ld	hl,#(_MazeMap + 0x0082)
+   03CD 36 01               442 	ld	(hl),#0x01
+   03CF 21rC3r00            443 	ld	hl,#(_MazeMap + 0x0083)
+   03D2 36 01               444 	ld	(hl),#0x01
+   03D4 21rC4r00            445 	ld	hl,#(_MazeMap + 0x0084)
+   03D7 36 00               446 	ld	(hl),#0x00
+   03D9 21rC5r00            447 	ld	hl,#(_MazeMap + 0x0085)
+   03DC 36 01               448 	ld	(hl),#0x01
+   03DE 21rC6r00            449 	ld	hl,#(_MazeMap + 0x0086)
+   03E1 36 01               450 	ld	(hl),#0x01
+   03E3 21rC7r00            451 	ld	hl,#(_MazeMap + 0x0087)
+   03E6 36 01               452 	ld	(hl),#0x01
+   03E8 21rC8r00            453 	ld	hl,#(_MazeMap + 0x0088)
+   03EB 36 01               454 	ld	(hl),#0x01
+   03ED 21rC9r00            455 	ld	hl,#(_MazeMap + 0x0089)
+   03F0 36 01               456 	ld	(hl),#0x01
+   03F2 21rCAr00            457 	ld	hl,#(_MazeMap + 0x008a)
+   03F5 36 01               458 	ld	(hl),#0x01
+   03F7 21rCBr00            459 	ld	hl,#(_MazeMap + 0x008b)
+   03FA 36 01               460 	ld	(hl),#0x01
+   03FC 21rCCr00            461 	ld	hl,#(_MazeMap + 0x008c)
+   03FF 36 01               462 	ld	(hl),#0x01
+   0401 21rCDr00            463 	ld	hl,#(_MazeMap + 0x008d)
+   0404 36 00               464 	ld	(hl),#0x00
+   0406 21rCEr00            465 	ld	hl,#(_MazeMap + 0x008e)
+   0409 36 01               466 	ld	(hl),#0x01
+   040B 21rCFr00            467 	ld	hl,#(_MazeMap + 0x008f)
+   040E 36 00               468 	ld	(hl),#0x00
+   0410 21rD0r00            469 	ld	hl,#(_MazeMap + 0x0090)
+   0413 36 01               470 	ld	(hl),#0x01
+   0415 21rD1r00            471 	ld	hl,#(_MazeMap + 0x0091)
+   0418 36 00               472 	ld	(hl),#0x00
+   041A 21rD2r00            473 	ld	hl,#(_MazeMap + 0x0092)
+   041D 36 01               474 	ld	(hl),#0x01
+   041F 21rD3r00            475 	ld	hl,#(_MazeMap + 0x0093)
+   0422 36 00               476 	ld	(hl),#0x00
+   0424 21rD4r00            477 	ld	hl,#(_MazeMap + 0x0094)
+   0427 36 00               478 	ld	(hl),#0x00
+   0429 21rD5r00            479 	ld	hl,#(_MazeMap + 0x0095)
+   042C 36 00               480 	ld	(hl),#0x00
+   042E 21rD6r00            481 	ld	hl,#(_MazeMap + 0x0096)
+   0431 36 00               482 	ld	(hl),#0x00
+   0433 21rD7r00            483 	ld	hl,#(_MazeMap + 0x0097)
+   0436 36 00               484 	ld	(hl),#0x00
+   0438 21rD8r00            485 	ld	hl,#(_MazeMap + 0x0098)
+   043B 36 00               486 	ld	(hl),#0x00
+   043D 21rD9r00            487 	ld	hl,#(_MazeMap + 0x0099)
+   0440 36 01               488 	ld	(hl),#0x01
+   0442 21rDAr00            489 	ld	hl,#(_MazeMap + 0x009a)
+   0445 36 00               490 	ld	(hl),#0x00
+   0447 21rDBr00            491 	ld	hl,#(_MazeMap + 0x009b)
+   044A 36 00               492 	ld	(hl),#0x00
+   044C 21rDCr00            493 	ld	hl,#(_MazeMap + 0x009c)
+   044F 36 00               494 	ld	(hl),#0x00
+   0451 21rDDr00            495 	ld	hl,#(_MazeMap + 0x009d)
+   0454 36 00               496 	ld	(hl),#0x00
+   0456 21rDEr00            497 	ld	hl,#(_MazeMap + 0x009e)
+   0459 36 00               498 	ld	(hl),#0x00
+   045B 21rDFr00            499 	ld	hl,#(_MazeMap + 0x009f)
+   045E 36 01               500 	ld	(hl),#0x01
+   0460 21rE0r00            501 	ld	hl,#(_MazeMap + 0x00a0)
+   0463 36 01               502 	ld	(hl),#0x01
+   0465 21rE1r00            503 	ld	hl,#(_MazeMap + 0x00a1)
+   0468 36 00               504 	ld	(hl),#0x00
+   046A 21rE2r00            505 	ld	hl,#(_MazeMap + 0x00a2)
+   046D 36 00               506 	ld	(hl),#0x00
+   046F 21rE3r00            507 	ld	hl,#(_MazeMap + 0x00a3)
+   0472 36 00               508 	ld	(hl),#0x00
+   0474 21rE4r00            509 	ld	hl,#(_MazeMap + 0x00a4)
+   0477 36 01               510 	ld	(hl),#0x01
+   0479 21rE5r00            511 	ld	hl,#(_MazeMap + 0x00a5)
+   047C 36 00               512 	ld	(hl),#0x00
+   047E 21rE6r00            513 	ld	hl,#(_MazeMap + 0x00a6)
+   0481 36 01               514 	ld	(hl),#0x01
+   0483 21rE7r00            515 	ld	hl,#(_MazeMap + 0x00a7)
+   0486 36 00               516 	ld	(hl),#0x00
+   0488 21rE8r00            517 	ld	hl,#(_MazeMap + 0x00a8)
+   048B 36 01               518 	ld	(hl),#0x01
+   048D 21rE9r00            519 	ld	hl,#(_MazeMap + 0x00a9)
+   0490 36 01               520 	ld	(hl),#0x01
+   0492 21rEAr00            521 	ld	hl,#(_MazeMap + 0x00aa)
+   0495 36 01               522 	ld	(hl),#0x01
+   0497 21rEBr00            523 	ld	hl,#(_MazeMap + 0x00ab)
+   049A 36 01               524 	ld	(hl),#0x01
+   049C 21rECr00            525 	ld	hl,#(_MazeMap + 0x00ac)
+   049F 36 01               526 	ld	(hl),#0x01
+   04A1 21rEDr00            527 	ld	hl,#(_MazeMap + 0x00ad)
+   04A4 36 01               528 	ld	(hl),#0x01
+   04A6 21rEEr00            529 	ld	hl,#(_MazeMap + 0x00ae)
+   04A9 36 00               530 	ld	(hl),#0x00
+   04AB 21rEFr00            531 	ld	hl,#(_MazeMap + 0x00af)
+   04AE 36 01               532 	ld	(hl),#0x01
+   04B0 21rF0r00            533 	ld	hl,#(_MazeMap + 0x00b0)
+   04B3 36 01               534 	ld	(hl),#0x01
+   04B5 21rF1r00            535 	ld	hl,#(_MazeMap + 0x00b1)
+   04B8 36 01               536 	ld	(hl),#0x01
+   04BA 21rF2r00            537 	ld	hl,#(_MazeMap + 0x00b2)
+   04BD 36 00               538 	ld	(hl),#0x00
+   04BF 21rF3r00            539 	ld	hl,#(_MazeMap + 0x00b3)
+   04C2 36 01               540 	ld	(hl),#0x01
+   04C4 21rF4r00            541 	ld	hl,#(_MazeMap + 0x00b4)
+   04C7 36 01               542 	ld	(hl),#0x01
+   04C9 21rF5r00            543 	ld	hl,#(_MazeMap + 0x00b5)
+   04CC 36 01               544 	ld	(hl),#0x01
+   04CE 21rF6r00            545 	ld	hl,#(_MazeMap + 0x00b6)
+   04D1 36 01               546 	ld	(hl),#0x01
+   04D3 21rF7r00            547 	ld	hl,#(_MazeMap + 0x00b7)
+   04D6 36 01               548 	ld	(hl),#0x01
+   04D8 21rF8r00            549 	ld	hl,#(_MazeMap + 0x00b8)
+   04DB 36 01               550 	ld	(hl),#0x01
+   04DD 21rF9r00            551 	ld	hl,#(_MazeMap + 0x00b9)
+   04E0 36 00               552 	ld	(hl),#0x00
+   04E2 21rFAr00            553 	ld	hl,#(_MazeMap + 0x00ba)
+   04E5 36 01               554 	ld	(hl),#0x01
+   04E7 21rFBr00            555 	ld	hl,#(_MazeMap + 0x00bb)
+   04EA 36 00               556 	ld	(hl),#0x00
+   04EC 21rFCr00            557 	ld	hl,#(_MazeMap + 0x00bc)
+   04EF 36 01               558 	ld	(hl),#0x01
+   04F1 21rFDr00            559 	ld	hl,#(_MazeMap + 0x00bd)
+   04F4 36 00               560 	ld	(hl),#0x00
+   04F6 21rFEr00            561 	ld	hl,#(_MazeMap + 0x00be)
+   04F9 36 00               562 	ld	(hl),#0x00
+   04FB 21rFFr00            563 	ld	hl,#(_MazeMap + 0x00bf)
+   04FE 36 00               564 	ld	(hl),#0x00
+   0500 21r00r01            565 	ld	hl,#(_MazeMap + 0x00c0)
+   0503 36 00               566 	ld	(hl),#0x00
+   0505 21r01r01            567 	ld	hl,#(_MazeMap + 0x00c1)
+   0508 36 00               568 	ld	(hl),#0x00
+   050A 21r02r01            569 	ld	hl,#(_MazeMap + 0x00c2)
+   050D 36 00               570 	ld	(hl),#0x00
+   050F 21r03r01            571 	ld	hl,#(_MazeMap + 0x00c3)
+   0512 36 01               572 	ld	(hl),#0x01
+   0514 21r04r01            573 	ld	hl,#(_MazeMap + 0x00c4)
+   0517 36 00               574 	ld	(hl),#0x00
+   0519 21r05r01            575 	ld	hl,#(_MazeMap + 0x00c5)
+   051C 36 01               576 	ld	(hl),#0x01
+   051E 21r06r01            577 	ld	hl,#(_MazeMap + 0x00c6)
+   0521 36 00               578 	ld	(hl),#0x00
+   0523 21r07r01            579 	ld	hl,#(_MazeMap + 0x00c7)
+   0526 36 01               580 	ld	(hl),#0x01
+   0528 21r08r01            581 	ld	hl,#(_MazeMap + 0x00c8)
+   052B 36 01               582 	ld	(hl),#0x01
+   052D 21r09r01            583 	ld	hl,#(_MazeMap + 0x00c9)
+   0530 36 00               584 	ld	(hl),#0x00
+   0532 21r0Ar01            585 	ld	hl,#(_MazeMap + 0x00ca)
+   0535 36 00               586 	ld	(hl),#0x00
+   0537 21r0Br01            587 	ld	hl,#(_MazeMap + 0x00cb)
+   053A 36 00               588 	ld	(hl),#0x00
+   053C 21r0Cr01            589 	ld	hl,#(_MazeMap + 0x00cc)
+   053F 36 00               590 	ld	(hl),#0x00
+   0541 21r0Dr01            591 	ld	hl,#(_MazeMap + 0x00cd)
+   0544 36 00               592 	ld	(hl),#0x00
+   0546 21r0Er01            593 	ld	hl,#(_MazeMap + 0x00ce)
+   0549 36 01               594 	ld	(hl),#0x01
+   054B 21r0Fr01            595 	ld	hl,#(_MazeMap + 0x00cf)
+   054E 36 00               596 	ld	(hl),#0x00
+   0550 21r10r01            597 	ld	hl,#(_MazeMap + 0x00d0)
+   0553 36 01               598 	ld	(hl),#0x01
+   0555 21r11r01            599 	ld	hl,#(_MazeMap + 0x00d1)
+   0558 36 00               600 	ld	(hl),#0x00
+   055A 21r12r01            601 	ld	hl,#(_MazeMap + 0x00d2)
+   055D 36 01               602 	ld	(hl),#0x01
+   055F 21r13r01            603 	ld	hl,#(_MazeMap + 0x00d3)
+   0562 36 01               604 	ld	(hl),#0x01
+   0564 21r14r01            605 	ld	hl,#(_MazeMap + 0x00d4)
+   0567 36 01               606 	ld	(hl),#0x01
+   0569 21r15r01            607 	ld	hl,#(_MazeMap + 0x00d5)
+   056C 36 01               608 	ld	(hl),#0x01
+   056E 21r16r01            609 	ld	hl,#(_MazeMap + 0x00d6)
+   0571 36 01               610 	ld	(hl),#0x01
+   0573 21r17r01            611 	ld	hl,#(_MazeMap + 0x00d7)
+   0576 36 01               612 	ld	(hl),#0x01
+   0578 21r18r01            613 	ld	hl,#(_MazeMap + 0x00d8)
+   057B 36 00               614 	ld	(hl),#0x00
+   057D 21r19r01            615 	ld	hl,#(_MazeMap + 0x00d9)
+   0580 36 01               616 	ld	(hl),#0x01
+   0582 21r1Ar01            617 	ld	hl,#(_MazeMap + 0x00da)
+   0585 36 00               618 	ld	(hl),#0x00
+   0587 21r1Br01            619 	ld	hl,#(_MazeMap + 0x00db)
+   058A 36 01               620 	ld	(hl),#0x01
+   058C 21r1Cr01            621 	ld	hl,#(_MazeMap + 0x00dc)
+   058F 36 01               622 	ld	(hl),#0x01
+   0591 21r1Dr01            623 	ld	hl,#(_MazeMap + 0x00dd)
+   0594 36 00               624 	ld	(hl),#0x00
+   0596 21r1Er01            625 	ld	hl,#(_MazeMap + 0x00de)
+   0599 36 01               626 	ld	(hl),#0x01
+   059B 21r1Fr01            627 	ld	hl,#(_MazeMap + 0x00df)
+   059E 36 01               628 	ld	(hl),#0x01
+   05A0 21r20r01            629 	ld	hl,#(_MazeMap + 0x00e0)
+   05A3 36 01               630 	ld	(hl),#0x01
+   05A5 21r21r01            631 	ld	hl,#(_MazeMap + 0x00e1)
+   05A8 36 01               632 	ld	(hl),#0x01
+   05AA 21r22r01            633 	ld	hl,#(_MazeMap + 0x00e2)
+   05AD 36 01               634 	ld	(hl),#0x01
+   05AF 21r23r01            635 	ld	hl,#(_MazeMap + 0x00e3)
+   05B2 36 00               636 	ld	(hl),#0x00
+   05B4 21r24r01            637 	ld	hl,#(_MazeMap + 0x00e4)
+   05B7 36 01               638 	ld	(hl),#0x01
+   05B9 21r25r01            639 	ld	hl,#(_MazeMap + 0x00e5)
+   05BC 36 00               640 	ld	(hl),#0x00
+   05BE 21r26r01            641 	ld	hl,#(_MazeMap + 0x00e6)
+   05C1 36 01               642 	ld	(hl),#0x01
+   05C3 21r27r01            643 	ld	hl,#(_MazeMap + 0x00e7)
+   05C6 36 00               644 	ld	(hl),#0x00
+   05C8 21r28r01            645 	ld	hl,#(_MazeMap + 0x00e8)
+   05CB 36 00               646 	ld	(hl),#0x00
+   05CD 21r29r01            647 	ld	hl,#(_MazeMap + 0x00e9)
+   05D0 36 00               648 	ld	(hl),#0x00
+   05D2 21r2Ar01            649 	ld	hl,#(_MazeMap + 0x00ea)
+   05D5 36 00               650 	ld	(hl),#0x00
+   05D7 21r2Br01            651 	ld	hl,#(_MazeMap + 0x00eb)
+   05DA 36 00               652 	ld	(hl),#0x00
+   05DC 21r2Cr01            653 	ld	hl,#(_MazeMap + 0x00ec)
+   05DF 36 00               654 	ld	(hl),#0x00
+   05E1 21r2Dr01            655 	ld	hl,#(_MazeMap + 0x00ed)
+   05E4 36 01               656 	ld	(hl),#0x01
+   05E6 21r2Er01            657 	ld	hl,#(_MazeMap + 0x00ee)
+   05E9 36 00               658 	ld	(hl),#0x00
+   05EB 21r2Fr01            659 	ld	hl,#(_MazeMap + 0x00ef)
+   05EE 36 01               660 	ld	(hl),#0x01
+   05F0 21r30r01            661 	ld	hl,#(_MazeMap + 0x00f0)
+   05F3 36 01               662 	ld	(hl),#0x01
+   05F5 21r31r01            663 	ld	hl,#(_MazeMap + 0x00f1)
+   05F8 36 00               664 	ld	(hl),#0x00
+   05FA 21r32r01            665 	ld	hl,#(_MazeMap + 0x00f2)
+   05FD 36 01               666 	ld	(hl),#0x01
+   05FF 21r33r01            667 	ld	hl,#(_MazeMap + 0x00f3)
+   0602 36 00               668 	ld	(hl),#0x00
+   0604 21r34r01            669 	ld	hl,#(_MazeMap + 0x00f4)
+   0607 36 00               670 	ld	(hl),#0x00
+   0609 21r35r01            671 	ld	hl,#(_MazeMap + 0x00f5)
+   060C 36 00               672 	ld	(hl),#0x00
+   060E 21r36r01            673 	ld	hl,#(_MazeMap + 0x00f6)
+   0611 36 00               674 	ld	(hl),#0x00
+   0613 21r37r01            675 	ld	hl,#(_MazeMap + 0x00f7)
+   0616 36 00               676 	ld	(hl),#0x00
+   0618 21r38r01            677 	ld	hl,#(_MazeMap + 0x00f8)
+   061B 36 01               678 	ld	(hl),#0x01
+   061D 21r39r01            679 	ld	hl,#(_MazeMap + 0x00f9)
+   0620 36 00               680 	ld	(hl),#0x00
+   0622 21r3Ar01            681 	ld	hl,#(_MazeMap + 0x00fa)
+   0625 36 01               682 	ld	(hl),#0x01
+   0627 21r3Br01            683 	ld	hl,#(_MazeMap + 0x00fb)
+   062A 36 00               684 	ld	(hl),#0x00
+   062C 21r3Cr01            685 	ld	hl,#(_MazeMap + 0x00fc)
+   062F 36 01               686 	ld	(hl),#0x01
+   0631 21r3Dr01            687 	ld	hl,#(_MazeMap + 0x00fd)
+   0634 36 01               688 	ld	(hl),#0x01
+   0636 21r3Er01            689 	ld	hl,#(_MazeMap + 0x00fe)
+   0639 36 01               690 	ld	(hl),#0x01
+   063B 21r3Fr01            691 	ld	hl,#(_MazeMap + 0x00ff)
+   063E 36 01               692 	ld	(hl),#0x01
+   0640 21r40r01            693 	ld	hl,#(_MazeMap + 0x0100)
+   0643 36 01               694 	ld	(hl),#0x01
+   0645 21r41r01            695 	ld	hl,#(_MazeMap + 0x0101)
+   0648 36 01               696 	ld	(hl),#0x01
+   064A 21r42r01            697 	ld	hl,#(_MazeMap + 0x0102)
+   064D 36 00               698 	ld	(hl),#0x00
+   064F 21r43r01            699 	ld	hl,#(_MazeMap + 0x0103)
+   0652 36 01               700 	ld	(hl),#0x01
+   0654 21r44r01            701 	ld	hl,#(_MazeMap + 0x0104)
+   0657 36 01               702 	ld	(hl),#0x01
+   0659 21r45r01            703 	ld	hl,#(_MazeMap + 0x0105)
+   065C 36 00               704 	ld	(hl),#0x00
+   065E 21r46r01            705 	ld	hl,#(_MazeMap + 0x0106)
+   0661 36 01               706 	ld	(hl),#0x01
+   0663 21r47r01            707 	ld	hl,#(_MazeMap + 0x0107)
+   0666 36 02               708 	ld	(hl),#0x02
+   0668 21r48r01            709 	ld	hl,#(_MazeMap + 0x0108)
+   066B 36 01               710 	ld	(hl),#0x01
+   066D 21r49r01            711 	ld	hl,#(_MazeMap + 0x0109)
+   0670 36 01               712 	ld	(hl),#0x01
+   0672 21r4Ar01            713 	ld	hl,#(_MazeMap + 0x010a)
+   0675 36 01               714 	ld	(hl),#0x01
+   0677 21r4Br01            715 	ld	hl,#(_MazeMap + 0x010b)
+   067A 36 01               716 	ld	(hl),#0x01
+   067C 21r4Cr01            717 	ld	hl,#(_MazeMap + 0x010c)
+   067F 36 01               718 	ld	(hl),#0x01
+   0681 21r4Dr01            719 	ld	hl,#(_MazeMap + 0x010d)
+   0684 36 00               720 	ld	(hl),#0x00
+   0686 21r4Er01            721 	ld	hl,#(_MazeMap + 0x010e)
+   0689 36 01               722 	ld	(hl),#0x01
+   068B 21r4Fr01            723 	ld	hl,#(_MazeMap + 0x010f)
+   068E 36 00               724 	ld	(hl),#0x00
+   0690 21r50r01            725 	ld	hl,#(_MazeMap + 0x0110)
+   0693 36 01               726 	ld	(hl),#0x01
+   0695 21r51r01            727 	ld	hl,#(_MazeMap + 0x0111)
+   0698 36 00               728 	ld	(hl),#0x00
+   069A 21r52r01            729 	ld	hl,#(_MazeMap + 0x0112)
+   069D 36 00               730 	ld	(hl),#0x00
+   069F 21r53r01            731 	ld	hl,#(_MazeMap + 0x0113)
+   06A2 36 00               732 	ld	(hl),#0x00
+   06A4 21r54r01            733 	ld	hl,#(_MazeMap + 0x0114)
+   06A7 36 00               734 	ld	(hl),#0x00
+   06A9 21r55r01            735 	ld	hl,#(_MazeMap + 0x0115)
+   06AC 36 00               736 	ld	(hl),#0x00
+   06AE 21r56r01            737 	ld	hl,#(_MazeMap + 0x0116)
+   06B1 36 00               738 	ld	(hl),#0x00
+   06B3 21r57r01            739 	ld	hl,#(_MazeMap + 0x0117)
+   06B6 36 01               740 	ld	(hl),#0x01
+   06B8 21r58r01            741 	ld	hl,#(_MazeMap + 0x0118)
+   06BB 36 01               742 	ld	(hl),#0x01
+   06BD 21r59r01            743 	ld	hl,#(_MazeMap + 0x0119)
+   06C0 36 00               744 	ld	(hl),#0x00
+   06C2 21r5Ar01            745 	ld	hl,#(_MazeMap + 0x011a)
+   06C5 36 01               746 	ld	(hl),#0x01
+   06C7 21r5Br01            747 	ld	hl,#(_MazeMap + 0x011b)
+   06CA 36 00               748 	ld	(hl),#0x00
+   06CC 21r5Cr01            749 	ld	hl,#(_MazeMap + 0x011c)
+   06CF 36 01               750 	ld	(hl),#0x01
+   06D1 21r5Dr01            751 	ld	hl,#(_MazeMap + 0x011d)
+   06D4 36 00               752 	ld	(hl),#0x00
+   06D6 21r5Er01            753 	ld	hl,#(_MazeMap + 0x011e)
+   06D9 36 00               754 	ld	(hl),#0x00
+   06DB 21r5Fr01            755 	ld	hl,#(_MazeMap + 0x011f)
+   06DE 36 00               756 	ld	(hl),#0x00
+   06E0 21r60r01            757 	ld	hl,#(_MazeMap + 0x0120)
+   06E3 36 00               758 	ld	(hl),#0x00
+   06E5 21r61r01            759 	ld	hl,#(_MazeMap + 0x0121)
+   06E8 36 00               760 	ld	(hl),#0x00
+   06EA 21r62r01            761 	ld	hl,#(_MazeMap + 0x0122)
+   06ED 36 01               762 	ld	(hl),#0x01
+   06EF 21r63r01            763 	ld	hl,#(_MazeMap + 0x0123)
+   06F2 36 00               764 	ld	(hl),#0x00
+   06F4 21r64r01            765 	ld	hl,#(_MazeMap + 0x0124)
+   06F7 36 01               766 	ld	(hl),#0x01
+   06F9 21r65r01            767 	ld	hl,#(_MazeMap + 0x0125)
+   06FC 36 00               768 	ld	(hl),#0x00
+   06FE 21r66r01            769 	ld	hl,#(_MazeMap + 0x0126)
+   0701 36 00               770 	ld	(hl),#0x00
+   0703 21r67r01            771 	ld	hl,#(_MazeMap + 0x0127)
+   0706 36 00               772 	ld	(hl),#0x00
+   0708 21r68r01            773 	ld	hl,#(_MazeMap + 0x0128)
+   070B 36 00               774 	ld	(hl),#0x00
+   070D 21r69r01            775 	ld	hl,#(_MazeMap + 0x0129)
+   0710 36 01               776 	ld	(hl),#0x01
+   0712 21r6Ar01            777 	ld	hl,#(_MazeMap + 0x012a)
+   0715 36 00               778 	ld	(hl),#0x00
+   0717 21r6Br01            779 	ld	hl,#(_MazeMap + 0x012b)
+   071A 36 01               780 	ld	(hl),#0x01
+   071C 21r6Cr01            781 	ld	hl,#(_MazeMap + 0x012c)
+   071F 36 01               782 	ld	(hl),#0x01
+   0721 21r6Dr01            783 	ld	hl,#(_MazeMap + 0x012d)
+   0724 36 00               784 	ld	(hl),#0x00
+   0726 21r6Er01            785 	ld	hl,#(_MazeMap + 0x012e)
+   0729 36 01               786 	ld	(hl),#0x01
+   072B 21r6Fr01            787 	ld	hl,#(_MazeMap + 0x012f)
+   072E 36 00               788 	ld	(hl),#0x00
+   0730 21r70r01            789 	ld	hl,#(_MazeMap + 0x0130)
+   0733 36 01               790 	ld	(hl),#0x01
+   0735 21r71r01            791 	ld	hl,#(_MazeMap + 0x0131)
+   0738 36 01               792 	ld	(hl),#0x01
+   073A 21r72r01            793 	ld	hl,#(_MazeMap + 0x0132)
+   073D 36 01               794 	ld	(hl),#0x01
+   073F 21r73r01            795 	ld	hl,#(_MazeMap + 0x0133)
+   0742 36 01               796 	ld	(hl),#0x01
+   0744 21r74r01            797 	ld	hl,#(_MazeMap + 0x0134)
+   0747 36 01               798 	ld	(hl),#0x01
+   0749 21r75r01            799 	ld	hl,#(_MazeMap + 0x0135)
+   074C 36 01               800 	ld	(hl),#0x01
+   074E 21r76r01            801 	ld	hl,#(_MazeMap + 0x0136)
+   0751 36 01               802 	ld	(hl),#0x01
+   0753 21r77r01            803 	ld	hl,#(_MazeMap + 0x0137)
+   0756 36 00               804 	ld	(hl),#0x00
+   0758 21r78r01            805 	ld	hl,#(_MazeMap + 0x0138)
+   075B 36 01               806 	ld	(hl),#0x01
+   075D 21r79r01            807 	ld	hl,#(_MazeMap + 0x0139)
+   0760 36 01               808 	ld	(hl),#0x01
+   0762 21r7Ar01            809 	ld	hl,#(_MazeMap + 0x013a)
+   0765 36 01               810 	ld	(hl),#0x01
+   0767 21r7Br01            811 	ld	hl,#(_MazeMap + 0x013b)
+   076A 36 01               812 	ld	(hl),#0x01
+   076C 21r7Cr01            813 	ld	hl,#(_MazeMap + 0x013c)
+   076F 36 01               814 	ld	(hl),#0x01
+   0771 21r7Dr01            815 	ld	hl,#(_MazeMap + 0x013d)
+   0774 36 01               816 	ld	(hl),#0x01
+   0776 21r7Er01            817 	ld	hl,#(_MazeMap + 0x013e)
+   0779 36 00               818 	ld	(hl),#0x00
+   077B 21r7Fr01            819 	ld	hl,#(_MazeMap + 0x013f)
+   077E 36 01               820 	ld	(hl),#0x01
+   0780 21r80r01            821 	ld	hl,#(_MazeMap + 0x0140)
+   0783 36 01               822 	ld	(hl),#0x01
+   0785 21r81r01            823 	ld	hl,#(_MazeMap + 0x0141)
+   0788 36 03               824 	ld	(hl),#0x03
+   078A 21r82r01            825 	ld	hl,#(_MazeMap + 0x0142)
+   078D 36 01               826 	ld	(hl),#0x01
+   078F 21r83r01            827 	ld	hl,#(_MazeMap + 0x0143)
+   0792 36 00               828 	ld	(hl),#0x00
+   0794 21r84r01            829 	ld	hl,#(_MazeMap + 0x0144)
+   0797 36 00               830 	ld	(hl),#0x00
+   0799 21r85r01            831 	ld	hl,#(_MazeMap + 0x0145)
+   079C 36 00               832 	ld	(hl),#0x00
+   079E 21r86r01            833 	ld	hl,#(_MazeMap + 0x0146)
+   07A1 36 00               834 	ld	(hl),#0x00
+   07A3 21r87r01            835 	ld	hl,#(_MazeMap + 0x0147)
+   07A6 36 00               836 	ld	(hl),#0x00
+   07A8 21r88r01            837 	ld	hl,#(_MazeMap + 0x0148)
+   07AB 36 00               838 	ld	(hl),#0x00
+   07AD 21r89r01            839 	ld	hl,#(_MazeMap + 0x0149)
+   07B0 36 00               840 	ld	(hl),#0x00
+   07B2 21r8Ar01            841 	ld	hl,#(_MazeMap + 0x014a)
+   07B5 36 00               842 	ld	(hl),#0x00
+   07B7 21r8Br01            843 	ld	hl,#(_MazeMap + 0x014b)
+   07BA 36 00               844 	ld	(hl),#0x00
+   07BC 21r8Cr01            845 	ld	hl,#(_MazeMap + 0x014c)
+   07BF 36 00               846 	ld	(hl),#0x00
+   07C1 21r8Dr01            847 	ld	hl,#(_MazeMap + 0x014d)
+   07C4 36 00               848 	ld	(hl),#0x00
+   07C6 21r8Er01            849 	ld	hl,#(_MazeMap + 0x014e)
+   07C9 36 00               850 	ld	(hl),#0x00
+   07CB 21r8Fr01            851 	ld	hl,#(_MazeMap + 0x014f)
+   07CE 36 00               852 	ld	(hl),#0x00
+   07D0 21r90r01            853 	ld	hl,#(_MazeMap + 0x0150)
+   07D3 36 00               854 	ld	(hl),#0x00
+   07D5 21r91r01            855 	ld	hl,#(_MazeMap + 0x0151)
+   07D8 36 00               856 	ld	(hl),#0x00
+   07DA 21r92r01            857 	ld	hl,#(_MazeMap + 0x0152)
+   07DD 36 00               858 	ld	(hl),#0x00
+   07DF 21r93r01            859 	ld	hl,#(_MazeMap + 0x0153)
+   07E2 36 00               860 	ld	(hl),#0x00
+   07E4 21r94r01            861 	ld	hl,#(_MazeMap + 0x0154)
+   07E7 36 01               862 	ld	(hl),#0x01
+   07E9 21r95r01            863 	ld	hl,#(_MazeMap + 0x0155)
+   07EC 36 01               864 	ld	(hl),#0x01
+   07EE 21r96r01            865 	ld	hl,#(_MazeMap + 0x0156)
+   07F1 36 01               866 	ld	(hl),#0x01
+   07F3 21r97r01            867 	ld	hl,#(_MazeMap + 0x0157)
+   07F6 36 01               868 	ld	(hl),#0x01
+   07F8 21r98r01            869 	ld	hl,#(_MazeMap + 0x0158)
+   07FB 36 01               870 	ld	(hl),#0x01
+   07FD 21r99r01            871 	ld	hl,#(_MazeMap + 0x0159)
+   0800 36 01               872 	ld	(hl),#0x01
+   0802 21r9Ar01            873 	ld	hl,#(_MazeMap + 0x015a)
+   0805 36 01               874 	ld	(hl),#0x01
+   0807 21r9Br01            875 	ld	hl,#(_MazeMap + 0x015b)
+   080A 36 01               876 	ld	(hl),#0x01
+   080C 21r9Cr01            877 	ld	hl,#(_MazeMap + 0x015c)
+   080F 36 01               878 	ld	(hl),#0x01
+   0811 21r9Dr01            879 	ld	hl,#(_MazeMap + 0x015d)
+   0814 36 01               880 	ld	(hl),#0x01
+   0816 21r9Er01            881 	ld	hl,#(_MazeMap + 0x015e)
+   0819 36 01               882 	ld	(hl),#0x01
+   081B 21r9Fr01            883 	ld	hl,#(_MazeMap + 0x015f)
+   081E 36 01               884 	ld	(hl),#0x01
+   0820 21rA0r01            885 	ld	hl,#(_MazeMap + 0x0160)
+   0823 36 01               886 	ld	(hl),#0x01
+   0825 21rA1r01            887 	ld	hl,#(_MazeMap + 0x0161)
+   0828 36 01               888 	ld	(hl),#0x01
+   082A 21rA2r01            889 	ld	hl,#(_MazeMap + 0x0162)
+   082D 36 01               890 	ld	(hl),#0x01
+   082F 21rA3r01            891 	ld	hl,#(_MazeMap + 0x0163)
+   0832 36 01               892 	ld	(hl),#0x01
+   0834 21rA4r01            893 	ld	hl,#(_MazeMap + 0x0164)
+   0837 36 01               894 	ld	(hl),#0x01
+   0839 21rA5r01            895 	ld	hl,#(_MazeMap + 0x0165)
+   083C 36 01               896 	ld	(hl),#0x01
+   083E 21rA6r01            897 	ld	hl,#(_MazeMap + 0x0166)
+   0841 36 01               898 	ld	(hl),#0x01
+   0843 21rA7r01            899 	ld	hl,#(_MazeMap + 0x0167)
+   0846 36 01               900 	ld	(hl),#0x01
+                            901 ;Snail.c:26: unsigned char Snail[] =
+   0848 21rA8r01            902 	ld	hl,#_Snail
+   084B 36 00               903 	ld	(hl),#0x00
+   084D 21rA9r01            904 	ld	hl,#(_Snail + 0x0001)
+   0850 36 00               905 	ld	(hl),#0x00
+   0852 21rAAr01            906 	ld	hl,#(_Snail + 0x0002)
+   0855 36 00               907 	ld	(hl),#0x00
+   0857 21rABr01            908 	ld	hl,#(_Snail + 0x0003)
+   085A 36 00               909 	ld	(hl),#0x00
+   085C 21rACr01            910 	ld	hl,#(_Snail + 0x0004)
+   085F 36 30               911 	ld	(hl),#0x30
+   0861 21rADr01            912 	ld	hl,#(_Snail + 0x0005)
+   0864 36 30               913 	ld	(hl),#0x30
+   0866 21rAEr01            914 	ld	hl,#(_Snail + 0x0006)
+   0869 36 78               915 	ld	(hl),#0x78
+   086B 21rAFr01            916 	ld	hl,#(_Snail + 0x0007)
+   086E 36 78               917 	ld	(hl),#0x78
+   0870 21rB0r01            918 	ld	hl,#(_Snail + 0x0008)
+   0873 36 7A               919 	ld	(hl),#0x7a
+   0875 21rB1r01            920 	ld	hl,#(_Snail + 0x0009)
+   0878 36 78               921 	ld	(hl),#0x78
+   087A 21rB2r01            922 	ld	hl,#(_Snail + 0x000a)
+   087D 36 7C               923 	ld	(hl),#0x7c
+   087F 21rB3r01            924 	ld	hl,#(_Snail + 0x000b)
+   0882 36 7A               925 	ld	(hl),#0x7a
+   0884 21rB4r01            926 	ld	hl,#(_Snail + 0x000c)
+   0887 36 3E               927 	ld	(hl),#0x3e
+   0889 21rB5r01            928 	ld	hl,#(_Snail + 0x000d)
+   088C 36 30               929 	ld	(hl),#0x30
+   088E 21rB6r01            930 	ld	hl,#(_Snail + 0x000e)
+   0891 36 00               931 	ld	(hl),#0x00
+   0893 21rB7r01            932 	ld	hl,#(_Snail + 0x000f)
+   0896 36 00               933 	ld	(hl),#0x00
+                            934 ;--------------------------------------------------------
+                            935 ; Home
+                            936 ;--------------------------------------------------------
+                            937 	.area _HOME
+                            938 	.area _HOME
+                            939 ;--------------------------------------------------------
+                            940 ; code
+                            941 ;--------------------------------------------------------
+                            942 	.area _CODE
+                            943 ;main.c:10: void performantdelay(UINT8 numloops){
+                            944 ;	---------------------------------
+                            945 ; Function performantdelay
+                            946 ; ---------------------------------
+   0000                     947 _performantdelay::
+                            948 ;main.c:12: for(i = 0; i < numloops; i++){
+   0000 0E 00               949 	ld	c,#0x00
+   0002                     950 00103$:
+   0002 79                  951 	ld	a,c
+   0003 F8 02               952 	ldhl	sp,#2
+   0005 96                  953 	sub	a, (hl)
+   0006 D0                  954 	ret	NC
+                            955 ;main.c:13: wait_vbl_done();
+   0007 C5                  956 	push	bc
+   0008 CDr00r00            957 	call	_wait_vbl_done
+   000B C1                  958 	pop	bc
+                            959 ;main.c:12: for(i = 0; i < numloops; i++){
+   000C 0C                  960 	inc	c
+   000D 18 F3               961 	jr	00103$
+   000F C9                  962 	ret
+   0010                     963 _blankmap:
+   0010 00                  964 	.db #0x00	; 0
+                            965 ;main.c:17: UBYTE canPlayerMove(UINT8 newPlayerX, UINT8 newPlayerY){
+                            966 ;	---------------------------------
+                            967 ; Function canPlayerMove
+                            968 ; ---------------------------------
+   0011                     969 _canPlayerMove::
+   0011 E8 FA               970 	add	sp, #-6
+                            971 ;main.c:22: indexTLx = (newPlayerX - 8) / 8;
+   0013 F8 08               972 	ldhl	sp,#8
+   0015 7E                  973 	ld	a,(hl)
+   0016 F8 02               974 	ldhl	sp,#2
+   0018 22                  975 	ld	(hl+),a
+   0019 36 00               976 	ld	(hl),#0x00
+   001B 2B                  977 	dec	hl
+   001C 5E                  978 	ld	e,(hl)
+   001D 23                  979 	inc	hl
+   001E 56                  980 	ld	d,(hl)
+   001F 21 08 00            981 	ld	hl,#0x0008
+   0022 7B                  982 	ld	a,e
+   0023 95                  983 	sub	a,l
+   0024 5F                  984 	ld	e,a
+   0025 7A                  985 	ld	a,d
+   0026 9C                  986 	sbc	a,h
+   0027 47                  987 	ld	b,a
+   0028 4B                  988 	ld	c,e
+   0029 F8 04               989 	ldhl	sp,#4
+   002B 71                  990 	ld	(hl),c
+   002C 23                  991 	inc	hl
+   002D 70                  992 	ld	(hl),b
+   002E 3E 00               993 	ld	a,#0x00
+   0030 5F                  994 	ld	e,a
+   0031 78                  995 	ld	a,b
+   0032 57                  996 	ld	d,a
+   0033 CB 78               997 	bit	7, b
+   0035 28 10               998 	jr	Z,00103$
+   0037 2B                  999 	dec	hl
+   0038 2B                 1000 	dec	hl
+   0039 2B                 1001 	dec	hl
+   003A 5E                 1002 	ld	e,(hl)
+   003B 23                 1003 	inc	hl
+   003C 56                 1004 	ld	d,(hl)
+   003D 21 FF FF           1005 	ld	hl,#0xffff
+   0040 19                 1006 	add	hl,de
+   0041 7D                 1007 	ld	a,l
+   0042 54                 1008 	ld	d,h
+   0043 F8 04              1009 	ldhl	sp,#4
+   0045 22                 1010 	ld	(hl+),a
+   0046 72                 1011 	ld	(hl),d
+   0047                    1012 00103$:
+   0047 F8 04              1013 	ldhl	sp,#4
+   0049 7E                 1014 	ld	a,(hl)
+   004A F8 00              1015 	ldhl	sp,#0
+   004C 77                 1016 	ld	(hl),a
+   004D F8 05              1017 	ldhl	sp,#5
+   004F 7E                 1018 	ld	a,(hl)
+   0050 F8 01              1019 	ldhl	sp,#1
+   0052 77                 1020 	ld	(hl),a
+   0053 CB 3E              1021 	srl	(hl)
+   0055 2B                 1022 	dec	hl
+   0056 CB 1E              1023 	rr	(hl)
+   0058 23                 1024 	inc	hl
+   0059 CB 3E              1025 	srl	(hl)
+   005B 2B                 1026 	dec	hl
+   005C CB 1E              1027 	rr	(hl)
+   005E 23                 1028 	inc	hl
+   005F CB 3E              1029 	srl	(hl)
+   0061 2B                 1030 	dec	hl
+   0062 CB 1E              1031 	rr	(hl)
+                           1032 ;main.c:23: indexTLy = (newPlayerY - 16) / 8;
+   0064 F8 09              1033 	ldhl	sp,#9
+   0066 7E                 1034 	ld	a,(hl)
+   0067 F8 04              1035 	ldhl	sp,#4
+   0069 22                 1036 	ld	(hl+),a
+   006A 36 00              1037 	ld	(hl),#0x00
+   006C 2B                 1038 	dec	hl
+   006D 5E                 1039 	ld	e,(hl)
+   006E 23                 1040 	inc	hl
+   006F 56                 1041 	ld	d,(hl)
+   0070 21 10 00           1042 	ld	hl,#0x0010
+   0073 7B                 1043 	ld	a,e
+   0074 95                 1044 	sub	a,l
+   0075 5F                 1045 	ld	e,a
+   0076 7A                 1046 	ld	a,d
+   0077 9C                 1047 	sbc	a,h
+   0078 47                 1048 	ld	b,a
+   0079 4B                 1049 	ld	c,e
+   007A F8 02              1050 	ldhl	sp,#2
+   007C 71                 1051 	ld	(hl),c
+   007D 23                 1052 	inc	hl
+   007E 70                 1053 	ld	(hl),b
+   007F 3E 00              1054 	ld	a,#0x00
+   0081 5F                 1055 	ld	e,a
+   0082 78                 1056 	ld	a,b
+   0083 57                 1057 	ld	d,a
+   0084 CB 78              1058 	bit	7, b
+   0086 28 0E              1059 	jr	Z,00104$
+   0088 23                 1060 	inc	hl
+   0089 5E                 1061 	ld	e,(hl)
+   008A 23                 1062 	inc	hl
+   008B 56                 1063 	ld	d,(hl)
+   008C 21 F7 FF           1064 	ld	hl,#0xfff7
+   008F 19                 1065 	add	hl,de
+   0090 7D                 1066 	ld	a,l
+   0091 54                 1067 	ld	d,h
+   0092 F8 02              1068 	ldhl	sp,#2
+   0094 22                 1069 	ld	(hl+),a
+   0095 72                 1070 	ld	(hl),d
+   0096                    1071 00104$:
+   0096 D1                 1072 	pop	de
+   0097 C1                 1073 	pop	bc
+   0098 C5                 1074 	push	bc
+   0099 D5                 1075 	push	de
+   009A CB 38              1076 	srl	b
+   009C CB 19              1077 	rr	c
+   009E CB 38              1078 	srl	b
+   00A0 CB 19              1079 	rr	c
+   00A2 CB 38              1080 	srl	b
+   00A4 CB 19              1081 	rr	c
+                           1082 ;main.c:24: tileIndexTL = 20 * indexTLy + indexTLx;
+   00A6 69                 1083 	ld	l, c
+   00A7 60                 1084 	ld	h, b
+   00A8 29                 1085 	add	hl, hl
+   00A9 29                 1086 	add	hl, hl
+   00AA 09                 1087 	add	hl, bc
+   00AB 29                 1088 	add	hl, hl
+   00AC 29                 1089 	add	hl, hl
+   00AD 4D                 1090 	ld	c,l
+   00AE 44                 1091 	ld	b,h
+   00AF E1                 1092 	pop	hl
+   00B0 E5                 1093 	push	hl
+   00B1 09                 1094 	add	hl,bc
+   00B2 4D                 1095 	ld	c,l
+   00B3 44                 1096 	ld	b,h
+                           1097 ;main.c:26: result = MazeMap[tileIndexTL] == blankmap[0];
+   00B4 21r40r00           1098 	ld	hl,#_MazeMap
+   00B7 09                 1099 	add	hl,bc
+   00B8 4D                 1100 	ld	c,l
+   00B9 44                 1101 	ld	b,h
+   00BA 0A                 1102 	ld	a,(bc)
+   00BB 4F                 1103 	ld	c,a
+   00BC 11r10r00           1104 	ld	de, #_blankmap + 0
+   00BF 1A                 1105 	ld	a,(de)
+   00C0 47                 1106 	ld	b,a
+   00C1 79                 1107 	ld	a,c
+   00C2 90                 1108 	sub	a, b
+   00C3 20 04              1109 	jr	NZ,00113$
+   00C5 3E 01              1110 	ld	a,#0x01
+   00C7 18 01              1111 	jr	00114$
+   00C9                    1112 00113$:
+   00C9 AF                 1113 	xor	a,a
+   00CA                    1114 00114$:
+   00CA 5F                 1115 	ld	e,a
+                           1116 ;main.c:28: return result;
+   00CB E8 06              1117 	add	sp, #6
+   00CD C9                 1118 	ret
+                           1119 ;main.c:31: void animateSprite(UINT8 spriteIndex, INT8 moveX, INT8 moveY){
+                           1120 ;	---------------------------------
+                           1121 ; Function animateSprite
+                           1122 ; ---------------------------------
+   00CE                    1123 _animateSprite::
+                           1124 ;main.c:32: while(moveX!=0){
+   00CE                    1125 00101$:
+   00CE F8 03              1126 	ldhl	sp,#3
+   00D0 7E                 1127 	ld	a,(hl)
+   00D1 B7                 1128 	or	a, a
+   00D2 CAr0Er01           1129 	jp	Z,00104$
+                           1130 ;main.c:33: scroll_sprite(spriteIndex, moveX < 0 ? -1 : 1, 0);
+   00D5 3E 00              1131 	ld	a,#0x00
+   00D7 5F                 1132 	ld	e,a
+   00D8 7E                 1133 	ld	a,(hl)
+   00D9 57                 1134 	ld	d,a
+   00DA 7E                 1135 	ld	a,(hl)
+   00DB 07                 1136 	rlca
+   00DC E6 01              1137 	and	a,#0x01
+   00DE 4F                 1138 	ld	c,a
+   00DF B7                 1139 	or	a, a
+   00E0 28 04              1140 	jr	Z,00109$
+   00E2 06 FF              1141 	ld	b,#0xff
+   00E4 18 02              1142 	jr	00110$
+   00E6                    1143 00109$:
+   00E6 06 01              1144 	ld	b,#0x01
+   00E8                    1145 00110$:
+   00E8 C5                 1146 	push	bc
+   00E9 AF                 1147 	xor	a, a
+   00EA F5                 1148 	push	af
+   00EB 33                 1149 	inc	sp
+   00EC C5                 1150 	push	bc
+   00ED 33                 1151 	inc	sp
+   00EE F8 06              1152 	ldhl	sp,#6
+   00F0 7E                 1153 	ld	a,(hl)
+   00F1 F5                 1154 	push	af
+   00F2 33                 1155 	inc	sp
+   00F3 CDr00r00           1156 	call	_scroll_sprite
+   00F6 E8 03              1157 	add	sp, #3
+   00F8 C1                 1158 	pop	bc
+                           1159 ;main.c:34: moveX += (moveX < 0 ? 2 : -2);
+   00F9 79                 1160 	ld	a,c
+   00FA B7                 1161 	or	a, a
+   00FB 28 04              1162 	jr	Z,00111$
+   00FD 0E 02              1163 	ld	c,#0x02
+   00FF 18 02              1164 	jr	00112$
+   0101                    1165 00111$:
+   0101 0E FE              1166 	ld	c,#0xfe
+   0103                    1167 00112$:
+   0103 F8 03              1168 	ldhl	sp,#3
+   0105 7E                 1169 	ld	a,(hl)
+   0106 81                 1170 	add	a, c
+   0107 77                 1171 	ld	(hl),a
+                           1172 ;main.c:35: wait_vbl_done();
+   0108 CDr00r00           1173 	call	_wait_vbl_done
+   010B C3rCEr00           1174 	jp	00101$
+                           1175 ;main.c:37: while(moveY!=0){
+   010E                    1176 00104$:
+   010E F8 04              1177 	ldhl	sp,#4
+   0110 7E                 1178 	ld	a,(hl)
+   0111 B7                 1179 	or	a, a
+   0112 C8                 1180 	ret	Z
+                           1181 ;main.c:38: scroll_sprite(spriteIndex, 0, moveY < 0 ? -1 : 1);
+   0113 3E 00              1182 	ld	a,#0x00
+   0115 5F                 1183 	ld	e,a
+   0116 7E                 1184 	ld	a,(hl)
+   0117 57                 1185 	ld	d,a
+   0118 7E                 1186 	ld	a,(hl)
+   0119 07                 1187 	rlca
+   011A E6 01              1188 	and	a,#0x01
+   011C 4F                 1189 	ld	c,a
+   011D B7                 1190 	or	a, a
+   011E 28 04              1191 	jr	Z,00113$
+   0120 06 FF              1192 	ld	b,#0xff
+   0122 18 02              1193 	jr	00114$
+   0124                    1194 00113$:
+   0124 06 01              1195 	ld	b,#0x01
+   0126                    1196 00114$:
+   0126 C5                 1197 	push	bc
+   0127 C5                 1198 	push	bc
+   0128 33                 1199 	inc	sp
+   0129 AF                 1200 	xor	a, a
+   012A F5                 1201 	push	af
+   012B 33                 1202 	inc	sp
+   012C F8 06              1203 	ldhl	sp,#6
+   012E 7E                 1204 	ld	a,(hl)
+   012F F5                 1205 	push	af
+   0130 33                 1206 	inc	sp
+   0131 CDr00r00           1207 	call	_scroll_sprite
+   0134 E8 03              1208 	add	sp, #3
+   0136 C1                 1209 	pop	bc
+                           1210 ;main.c:39: moveY += (moveY < 0 ? 1 : -1);
+   0137 79                 1211 	ld	a,c
+   0138 B7                 1212 	or	a, a
+   0139 28 04              1213 	jr	Z,00115$
+   013B 0E 01              1214 	ld	c,#0x01
+   013D 18 02              1215 	jr	00116$
+   013F                    1216 00115$:
+   013F 0E FF              1217 	ld	c,#0xff
+   0141                    1218 00116$:
+   0141 F8 04              1219 	ldhl	sp,#4
+   0143 7E                 1220 	ld	a,(hl)
+   0144 81                 1221 	add	a, c
+   0145 77                 1222 	ld	(hl),a
+                           1223 ;main.c:40: wait_vbl_done();
+   0146 CDr00r00           1224 	call	_wait_vbl_done
+   0149 C3r0Er01           1225 	jp	00104$
+   014C C9                 1226 	ret
+                           1227 ;main.c:46: void main(){
+                           1228 ;	---------------------------------
+                           1229 ; Function main
+                           1230 ; ---------------------------------
+   014D                    1231 _main::
+                           1232 ;main.c:48: set_bkg_data(0, 4, MazeSprites);
+   014D 21r00r00           1233 	ld	hl,#_MazeSprites
+   0150 E5                 1234 	push	hl
+   0151 21 00 04           1235 	ld	hl,#0x0400
+   0154 E5                 1236 	push	hl
+   0155 CDr00r00           1237 	call	_set_bkg_data
+   0158 E8 04              1238 	add	sp, #4
+                           1239 ;main.c:49: set_bkg_tiles(0, 0, 20, 18, MazeMap);
+   015A 21r40r00           1240 	ld	hl,#_MazeMap
+   015D E5                 1241 	push	hl
+   015E 21 14 12           1242 	ld	hl,#0x1214
+   0161 E5                 1243 	push	hl
+   0162 21 00 00           1244 	ld	hl,#0x0000
+   0165 E5                 1245 	push	hl
+   0166 CDr00r00           1246 	call	_set_bkg_tiles
+   0169 E8 06              1247 	add	sp, #6
+                           1248 ;main.c:51: set_sprite_data(0, 1, Snail);   /* defines the sprite data */
+   016B 21rA8r01           1249 	ld	hl,#_Snail
+   016E E5                 1250 	push	hl
+   016F 21 00 01           1251 	ld	hl,#0x0100
+   0172 E5                 1252 	push	hl
+   0173 CDr00r00           1253 	call	_set_sprite_data
+   0176 E8 04              1254 	add	sp, #4
+                           1255 ;main.c:52: set_sprite_tile(0,0);            /* defines the tiles numbers */
+   0178 21 00 00           1256 	ld	hl,#0x0000
+   017B E5                 1257 	push	hl
+   017C CDr00r00           1258 	call	_set_sprite_tile
+   017F E8 02              1259 	add	sp, #2
+                           1260 ;main.c:54: playerlocation[0] = 16;
+   0181 21rB8r01           1261 	ld	hl,#_playerlocation
+   0184 36 10              1262 	ld	(hl),#0x10
+                           1263 ;main.c:55: playerlocation[1] = 24;
+   0186 21rB9r01           1264 	ld	hl,#(_playerlocation + 0x0001)
+   0189 36 18              1265 	ld	(hl),#0x18
+                           1266 ;main.c:57: move_sprite(0,playerlocation[0],playerlocation[1]);
+   018B 11rB9r01           1267 	ld	de, #(_playerlocation + 0x0001) + 0
+   018E 1A                 1268 	ld	a,(de)
+   018F 47                 1269 	ld	b,a
+   0190 FArB8r01           1270 	ld	a, (#_playerlocation + 0)
+   0193 C5                 1271 	push	bc
+   0194 33                 1272 	inc	sp
+   0195 F5                 1273 	push	af
+   0196 33                 1274 	inc	sp
+   0197 AF                 1275 	xor	a, a
+   0198 F5                 1276 	push	af
+   0199 33                 1277 	inc	sp
+   019A CDr00r00           1278 	call	_move_sprite
+   019D E8 03              1279 	add	sp, #3
+                           1280 ;main.c:60: SHOW_SPRITES;
+   019F 11 40 FF           1281 	ld	de,#0xff40
+   01A2 1A                 1282 	ld	a,(de)
+   01A3 4F                 1283 	ld	c,a
+   01A4 06 00              1284 	ld	b,#0x00
+   01A6 79                 1285 	ld	a,c
+   01A7 CB CF              1286 	set	1, a
+   01A9 4F                 1287 	ld	c,a
+   01AA 21 40 FF           1288 	ld	hl,#0xff40
+   01AD 71                 1289 	ld	(hl),c
+                           1290 ;main.c:61: SHOW_BKG;
+   01AE 11 40 FF           1291 	ld	de,#0xff40
+   01B1 1A                 1292 	ld	a,(de)
+   01B2 4F                 1293 	ld	c,a
+   01B3 06 00              1294 	ld	b,#0x00
+   01B5 79                 1295 	ld	a,c
+   01B6 CB C7              1296 	set	0, a
+   01B8 4F                 1297 	ld	c,a
+   01B9 2E 40              1298 	ld	l, #0x40
+   01BB 71                 1299 	ld	(hl),c
+                           1300 ;main.c:62: DISPLAY_ON;
+   01BC 11 40 FF           1301 	ld	de,#0xff40
+   01BF 1A                 1302 	ld	a,(de)
+   01C0 4F                 1303 	ld	c,a
+   01C1 06 00              1304 	ld	b,#0x00
+   01C3 79                 1305 	ld	a,c
+   01C4 CB FF              1306 	set	7, a
+   01C6 4F                 1307 	ld	c,a
+   01C7 2E 40              1308 	ld	l, #0x40
+   01C9 71                 1309 	ld	(hl),c
+                           1310 ;main.c:64: while(1){
+   01CA                    1311 00121$:
+                           1312 ;main.c:65: if(joypad() & J_LEFT){
+   01CA CDr00r00           1313 	call	_joypad
+   01CD 0E 00              1314 	ld	c,#0x00
+   01CF CB 4B              1315 	bit	1, e
+   01D1 28 30              1316 	jr	Z,00118$
+                           1317 ;main.c:66: if(canPlayerMove(playerlocation[0]-8, playerlocation[1])){
+   01D3 11rB9r01           1318 	ld	de, #(_playerlocation + 0x0001) + 0
+   01D6 1A                 1319 	ld	a,(de)
+   01D7 47                 1320 	ld	b,a
+   01D8 FArB8r01           1321 	ld	a, (#_playerlocation + 0)
+   01DB C6 F8              1322 	add	a,#0xf8
+   01DD C5                 1323 	push	bc
+   01DE 33                 1324 	inc	sp
+   01DF F5                 1325 	push	af
+   01E0 33                 1326 	inc	sp
+   01E1 CDr11r00           1327 	call	_canPlayerMove
+   01E4 E8 02              1328 	add	sp, #2
+   01E6 7B                 1329 	ld	a,e
+   01E7 B7                 1330 	or	a, a
+   01E8 CArA8r02           1331 	jp	Z,00119$
+                           1332 ;main.c:67: playerlocation[0] -= 8;
+   01EB FArB8r01           1333 	ld	a, (#_playerlocation + 0)
+   01EE C6 F8              1334 	add	a,#0xf8
+   01F0 11rB8r01           1335 	ld	de,#_playerlocation
+   01F3 12                 1336 	ld	(de),a
+                           1337 ;main.c:68: animateSprite(0,-8,0);
+   01F4 21 F8 00           1338 	ld	hl,#0x00f8
+   01F7 E5                 1339 	push	hl
+   01F8 AF                 1340 	xor	a, a
+   01F9 F5                 1341 	push	af
+   01FA 33                 1342 	inc	sp
+   01FB CDrCEr00           1343 	call	_animateSprite
+   01FE E8 03              1344 	add	sp, #3
+   0200 C3rA8r02           1345 	jp	00119$
+   0203                    1346 00118$:
+                           1347 ;main.c:72: else if(joypad() & J_RIGHT){
+   0203 CDr00r00           1348 	call	_joypad
+   0206 0E 00              1349 	ld	c,#0x00
+   0208 CB 43              1350 	bit	0, e
+   020A 28 31              1351 	jr	Z,00115$
+                           1352 ;main.c:73: if(canPlayerMove(playerlocation[0]+8, playerlocation[1])){
+   020C 11rB9r01           1353 	ld	de, #(_playerlocation + 0x0001) + 0
+   020F 1A                 1354 	ld	a,(de)
+   0210 47                 1355 	ld	b,a
+   0211 FArB8r01           1356 	ld	a, (#_playerlocation + 0)
+   0214 C6 08              1357 	add	a, #0x08
+   0216 57                 1358 	ld	d,a
+   0217 C5                 1359 	push	bc
+   0218 33                 1360 	inc	sp
+   0219 D5                 1361 	push	de
+   021A 33                 1362 	inc	sp
+   021B CDr11r00           1363 	call	_canPlayerMove
+   021E E8 02              1364 	add	sp, #2
+   0220 7B                 1365 	ld	a,e
+   0221 B7                 1366 	or	a, a
+   0222 CArA8r02           1367 	jp	Z,00119$
+                           1368 ;main.c:74: playerlocation[0] += 8;
+   0225 FArB8r01           1369 	ld	a, (#_playerlocation + 0)
+   0228 C6 08              1370 	add	a, #0x08
+   022A 11rB8r01           1371 	ld	de,#_playerlocation
+   022D 12                 1372 	ld	(de),a
+                           1373 ;main.c:75: animateSprite(0,8,0);
+   022E 21 08 00           1374 	ld	hl,#0x0008
+   0231 E5                 1375 	push	hl
+   0232 AF                 1376 	xor	a, a
+   0233 F5                 1377 	push	af
+   0234 33                 1378 	inc	sp
+   0235 CDrCEr00           1379 	call	_animateSprite
+   0238 E8 03              1380 	add	sp, #3
+   023A C3rA8r02           1381 	jp	00119$
+   023D                    1382 00115$:
+                           1383 ;main.c:78: else if(joypad() & J_UP){
+   023D CDr00r00           1384 	call	_joypad
+   0240 0E 00              1385 	ld	c,#0x00
+   0242 CB 53              1386 	bit	2, e
+   0244 28 2E              1387 	jr	Z,00112$
+                           1388 ;main.c:79: if(canPlayerMove(playerlocation[0], playerlocation[1]-8)){
+   0246 FArB9r01           1389 	ld	a, (#(_playerlocation + 0x0001) + 0)
+   0249 C6 F8              1390 	add	a,#0xf8
+   024B 47                 1391 	ld	b,a
+   024C FArB8r01           1392 	ld	a, (#_playerlocation + 0)
+   024F C5                 1393 	push	bc
+   0250 33                 1394 	inc	sp
+   0251 F5                 1395 	push	af
+   0252 33                 1396 	inc	sp
+   0253 CDr11r00           1397 	call	_canPlayerMove
+   0256 E8 02              1398 	add	sp, #2
+   0258 7B                 1399 	ld	a,e
+   0259 B7                 1400 	or	a, a
+   025A CArA8r02           1401 	jp	Z,00119$
+                           1402 ;main.c:80: playerlocation[1] -= 8;
+   025D FArB9r01           1403 	ld	a, (#(_playerlocation + 0x0001) + 0)
+   0260 C6 F8              1404 	add	a,#0xf8
+   0262 11rB9r01           1405 	ld	de,#(_playerlocation + 0x0001)
+   0265 12                 1406 	ld	(de),a
+                           1407 ;main.c:81: animateSprite(0,0,-8);
+   0266 21 00 F8           1408 	ld	hl,#0xf800
+   0269 E5                 1409 	push	hl
+   026A AF                 1410 	xor	a, a
+   026B F5                 1411 	push	af
+   026C 33                 1412 	inc	sp
+   026D CDrCEr00           1413 	call	_animateSprite
+   0270 E8 03              1414 	add	sp, #3
+   0272 18 34              1415 	jr	00119$
+   0274                    1416 00112$:
+                           1417 ;main.c:84: else if(joypad() & J_DOWN){
+   0274 CDr00r00           1418 	call	_joypad
+   0277 0E 00              1419 	ld	c,#0x00
+   0279 CB 5B              1420 	bit	3, e
+   027B 28 2B              1421 	jr	Z,00119$
+                           1422 ;main.c:85: if(canPlayerMove(playerlocation[0], playerlocation[1]+8)){
+   027D FArB9r01           1423 	ld	a, (#(_playerlocation + 0x0001) + 0)
+   0280 C6 08              1424 	add	a, #0x08
+   0282 47                 1425 	ld	b,a
+   0283 FArB8r01           1426 	ld	a, (#_playerlocation + 0)
+   0286 C5                 1427 	push	bc
+   0287 33                 1428 	inc	sp
+   0288 F5                 1429 	push	af
+   0289 33                 1430 	inc	sp
+   028A CDr11r00           1431 	call	_canPlayerMove
+   028D E8 02              1432 	add	sp, #2
+   028F 7B                 1433 	ld	a,e
+   0290 B7                 1434 	or	a, a
+   0291 28 15              1435 	jr	Z,00119$
+                           1436 ;main.c:86: playerlocation[1] += 8;
+   0293 FArB9r01           1437 	ld	a, (#(_playerlocation + 0x0001) + 0)
+   0296 C6 08              1438 	add	a, #0x08
+   0298 11rB9r01           1439 	ld	de,#(_playerlocation + 0x0001)
+   029B 12                 1440 	ld	(de),a
+                           1441 ;main.c:87: animateSprite(0,0,8);
+   029C 21 00 08           1442 	ld	hl,#0x0800
+   029F E5                 1443 	push	hl
+   02A0 AF                 1444 	xor	a, a
+   02A1 F5                 1445 	push	af
+   02A2 33                 1446 	inc	sp
+   02A3 CDrCEr00           1447 	call	_animateSprite
+   02A6 E8 03              1448 	add	sp, #3
+   02A8                    1449 00119$:
+                           1450 ;main.c:91: performantdelay(6);
+   02A8 3E 06              1451 	ld	a,#0x06
+   02AA F5                 1452 	push	af
+   02AB 33                 1453 	inc	sp
+   02AC CDr00r00           1454 	call	_performantdelay
+   02AF 33                 1455 	inc	sp
+   02B0 C3rCAr01           1456 	jp	00121$
+   02B3 C9                 1457 	ret
+                           1458 	.area _CODE
+                           1459 	.area _CABS (ABS)

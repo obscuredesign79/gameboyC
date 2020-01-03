@@ -557,13 +557,13 @@
    04A9 36 FC               557 	ld	(hl),#0xfc
    04AB 21rEFr00            558 	ld	hl,#(_ballSprite + 0x00ef)
    04AE 36 FC               559 	ld	(hl),#0xfc
-                            560 ;main.c:9: INT8 gravity = -2;
+                            560 ;main.c:9: BYTE gravity = -2;
    04B0 21rF3r00            561 	ld	hl,#_gravity
    04B3 36 FE               562 	ld	(hl),#0xfe
-                            563 ;main.c:11: UINT8 floorYPosition = 136;
+                            563 ;main.c:11: UBYTE floorYPosition = 136;
    04B5 21rF5r00            564 	ld	hl,#_floorYPosition
    04B8 36 88               565 	ld	(hl),#0x88
-                            566 ;main.c:13: UINT8 timer = 0;
+                            566 ;main.c:13: UBYTE timer = 0;
    04BA 21rF7r00            567 	ld	hl,#_timer
    04BD 36 00               568 	ld	(hl),#0x00
                             569 ;--------------------------------------------------------
@@ -1096,8 +1096,8 @@
    0298 2E 40              1096 	ld	l, #0x40
    029A 71                 1097 	ld	(hl),c
                            1098 ;main.c:194: while(1)
-   029B                    1099 00124$:
-                           1100 ;main.c:198: if((joypad() & J_A || jumping == 1) && keyPressed_A == 1)
+   029B                    1099 00121$:
+                           1100 ;main.c:197: if((joypad() & J_A || jumping == 1) && keyPressed_A == 1)
    029B CDr00r00           1101 	call	_joypad
    029E 0E 00              1102 	ld	c,#0x00
    02A0 CB 63              1103 	bit	4, e
@@ -1111,38 +1111,38 @@
    02AE 7E                 1111 	ld	a,(hl)
    02AF 3D                 1112 	dec	a
    02B0 20 1F              1113 	jr	NZ,00106$
-                           1114 ;main.c:201: jump();	
+                           1114 ;main.c:200: jump();	
    02B2 CDrBBr01           1115 	call	_jump
-                           1116 ;main.c:202: jumpSound();
+                           1116 ;main.c:201: jumpSound();
    02B5 CDr47r02           1117 	call	_jumpSound
-                           1118 ;main.c:203: gameBallStaticStretched();
+                           1118 ;main.c:202: gameBallStaticStretched();//sprite for stretched ball
    02B8 CDr35r00           1119 	call	_gameBallStaticStretched
-                           1120 ;main.c:204: if(jumping == 0)
+                           1120 ;main.c:203: if(jumping == 0)
    02BB 21rF2r00           1121 	ld	hl,#_jumping
    02BE 7E                 1122 	ld	a,(hl)
    02BF B7                 1123 	or	a, a
    02C0 20 1C              1124 	jr	NZ,00107$
-                           1125 ;main.c:206: gameBallAnimSquashed(500);
+                           1125 ;main.c:205: gameBallAnimSquashed(500);//hold squashed sprite for a period of time using for loops
    02C2 3E F4              1126 	ld	a,#0xf4
    02C4 F5                 1127 	push	af
    02C5 33                 1128 	inc	sp
    02C6 CDr7Fr00           1129 	call	_gameBallAnimSquashed
    02C9 33                 1130 	inc	sp
-                           1131 ;main.c:207: keyPressed_A = 0;
+                           1131 ;main.c:206: keyPressed_A = 0;
    02CA 21rF0r00           1132 	ld	hl,#_keyPressed_A
    02CD 36 00              1133 	ld	(hl),#0x00
    02CF 18 0D              1134 	jr	00107$
    02D1                    1135 00106$:
-                           1136 ;main.c:211: else if(joypad() != J_A)
+                           1136 ;main.c:210: else if(joypad() != J_A)
    02D1 CDr00r00           1137 	call	_joypad
    02D4 7B                 1138 	ld	a,e
    02D5 D6 10              1139 	sub	a, #0x10
    02D7 28 05              1140 	jr	Z,00107$
-                           1141 ;main.c:213: keyPressed_A = 1;
+                           1141 ;main.c:212: keyPressed_A = 1;
    02D9 21rF0r00           1142 	ld	hl,#_keyPressed_A
    02DC 36 01              1143 	ld	(hl),#0x01
    02DE                    1144 00107$:
-                           1145 ;main.c:217: if((joypad() & J_RIGHT) && keyPressed_RIGHT == 1)
+                           1145 ;main.c:216: if((joypad() & J_RIGHT) && keyPressed_RIGHT == 1)
    02DE CDr00r00           1146 	call	_joypad
    02E1 0E 00              1147 	ld	c,#0x00
    02E3 CB 43              1148 	bit	0, e
@@ -1151,7 +1151,7 @@
    02EB 7E                 1151 	ld	a,(hl)
    02EC 3D                 1152 	dec	a
    02ED C2r2Cr03           1153 	jp	NZ,00117$
-                           1154 ;main.c:220: ballSprite01.x += 3;
+                           1154 ;main.c:219: ballSprite01.x += 3;
    02F0 FArFEr00           1155 	ld	a, (#(_ballSprite01 + 0x0004) + 0)
    02F3 4F                 1156 	ld	c,a
    02F4 0C                 1157 	inc	c
@@ -1159,7 +1159,7 @@
    02F6 0C                 1159 	inc	c
    02F7 21rFEr00           1160 	ld	hl,#(_ballSprite01 + 0x0004)
    02FA 71                 1161 	ld	(hl),c
-                           1162 ;main.c:221: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
+                           1162 ;main.c:220: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
    02FB 11rFFr00           1163 	ld	de, #(_ballSprite01 + 0x0005) + 0
    02FE 1A                 1164 	ld	a,(de)
    02FF 47                 1165 	ld	b,a
@@ -1172,49 +1172,42 @@
    0308 E5                 1172 	push	hl
    0309 CDrBAr00           1173 	call	_moveGameCharacter
    030C E8 04              1174 	add	sp, #4
-                           1175 ;main.c:222: gameBallAnimRollLoop();
+                           1175 ;main.c:221: gameBallAnimRollLoop();
    030E CDr10r00           1176 	call	_gameBallAnimRollLoop
-                           1177 ;main.c:223: if(jumping == 0)
+                           1177 ;main.c:222: if(jumping == 0)
    0311 21rF2r00           1178 	ld	hl,#_jumping
    0314 7E                 1179 	ld	a,(hl)
    0315 B7                 1180 	or	a, a
    0316 20 05              1181 	jr	NZ,00111$
-                           1182 ;main.c:225: keyPressed_A = 1;
+                           1182 ;main.c:224: keyPressed_A = 1;
    0318 21rF0r00           1183 	ld	hl,#_keyPressed_A
    031B 36 01              1184 	ld	(hl),#0x01
    031D                    1185 00111$:
-                           1186 ;main.c:227: if(joypad() == 16)
+                           1186 ;main.c:226: if(joypad() == 16)
    031D CDr00r00           1187 	call	_joypad
    0320 7B                 1188 	ld	a,e
    0321 D6 10              1189 	sub	a, #0x10
    0323 20 12              1190 	jr	NZ,00118$
-                           1191 ;main.c:229: keyPressed_A = 1;
+                           1191 ;main.c:228: keyPressed_A = 1;
    0325 21rF0r00           1192 	ld	hl,#_keyPressed_A
    0328 36 01              1193 	ld	(hl),#0x01
    032A 18 0B              1194 	jr	00118$
    032C                    1195 00117$:
-                           1196 ;main.c:234: else if(joypad() != J_RIGHT)
+                           1196 ;main.c:233: else if(joypad() != J_RIGHT)
    032C CDr00r00           1197 	call	_joypad
    032F 1D                 1198 	dec	e
    0330 28 05              1199 	jr	Z,00118$
-                           1200 ;main.c:236: keyPressed_RIGHT = 1;
+                           1200 ;main.c:235: keyPressed_RIGHT = 1;
    0332 21rF1r00           1201 	ld	hl,#_keyPressed_RIGHT
    0335 36 01              1202 	ld	(hl),#0x01
    0337                    1203 00118$:
-                           1204 ;main.c:238: if((joypad() == J_A) && (joypad() == J_RIGHT))
-   0337 CDr00r00           1205 	call	_joypad
-   033A 7B                 1206 	ld	a,e
-   033B D6 10              1207 	sub	a, #0x10
-   033D 20 03              1208 	jr	NZ,00121$
-   033F CDr00r00           1209 	call	_joypad
-   0342                    1210 00121$:
-                           1211 ;main.c:242: performantDelay(2);
-   0342 3E 02              1212 	ld	a,#0x02
-   0344 F5                 1213 	push	af
-   0345 33                 1214 	inc	sp
-   0346 CDr00r00           1215 	call	_performantDelay
-   0349 33                 1216 	inc	sp
-   034A C3r9Br02           1217 	jp	00124$
-   034D C9                 1218 	ret
-                           1219 	.area _CODE
-                           1220 	.area _CABS (ABS)
+                           1204 ;main.c:238: performantDelay(2);
+   0337 3E 02              1205 	ld	a,#0x02
+   0339 F5                 1206 	push	af
+   033A 33                 1207 	inc	sp
+   033B CDr00r00           1208 	call	_performantDelay
+   033E 33                 1209 	inc	sp
+   033F C3r9Br02           1210 	jp	00121$
+   0342 C9                 1211 	ret
+                           1212 	.area _CODE
+                           1213 	.area _CABS (ABS)

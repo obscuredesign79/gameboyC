@@ -1,0 +1,66 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 1.
+Hexadecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  2710 L
+    .__.ABS.                                                    =  0000 G
+    .__.CPU.                                                    =  0000 L
+    .__.H$L.                                                    =  0000 L
+  0 _anyKey                                                        005C GR
+  0 _ballAfterJumpMoving                                           0385 GR
+  0 _ballMoveX                                                     032E GR
+  1 _ballSprite                                                    0000 GR
+  1 _ballSprite01                                                  0293 GR
+  0 _blankMap                                                      0010 GR
+  0 _canPlayerMove                                                 01E4 GR
+  1 _currentSpeedY                                                 0290 GR
+  1 _floorYPosition                                                028D GR
+  0 _gameBallSprite01a                                             005D GR
+  0 _gameBallSprite01b                                             0082 GR
+  0 _gameBallSprite02                                              00A7 GR
+  0 _gameBallSprite03                                              00CC GR
+  1 _gravity                                                       028C GR
+    _joypad                                                        **** GX
+  0 _jump                                                          02C4 GR
+  0 _jumpSound                                                     02A0 GR
+  1 _jumping                                                       028B GR
+  0 _keyPressed                                                    0023 GR
+  1 _keyPressed_A                                                  0288 GR
+  1 _keyPressed_LEFT                                               028A GR
+  1 _keyPressed_RIGHT                                              0289 GR
+  0 _keyReleased                                                   0044 GR
+  0 _keyTicked                                                     002C GR
+  1 _keys                                                          0292 GR
+  1 _levelMap                                                      0120 GR
+  1 _levelTile                                                     00F0 GR
+  0 _main                                                          03AD GR
+  0 _moveGameCharacter                                             00F1 GR
+    _move_sprite                                                   **** GX
+  0 _performantDelay                                               0000 GR
+  1 _possibleYSurface                                              028E GR
+  1 _previousKeys                                                  0291 GR
+    _set_bkg_data                                                  **** GX
+    _set_bkg_tiles                                                 **** GX
+    _set_sprite_data                                               **** GX
+    _set_sprite_tile                                               **** GX
+  0 _setupBallSprite01                                             016F GR
+  1 _timerAnimation                                                028F GR
+  0 _updateKeys                                                    0011 GR
+    _wait_vbl_done                                                 **** GX
+  0 _wouldHitSurf                                                  02B6 GR
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 2.
+Hexadecimal [16-Bits]
+
+Area Table
+
+   0 _CODE                                      size  550   flags    0
+   1 _DATA                                      size  29B   flags    0
+   2 _DABS                                      size    0   flags    8
+   3 _HOME                                      size    0   flags    0
+   4 _GSINIT                                    size  CB2   flags    0
+   5 _GSFINAL                                   size    0   flags    0
+   6 _CABS                                      size    0   flags    8
+
