@@ -2016,34 +2016,50 @@ _jump::
 	add	a, (hl)
 	ld	hl,#_currentSpeedY
 	ld	(hl),a
-;main.c:177: ballSprite01.y -= currentSpeedY;
+;main.c:177: if(canPlayerMove(ballSprite01.x, ballSprite01.y - 2))
+	ld	a, (#(_ballSprite01 + 0x0005) + 0)
+	ld	b,a
+	dec	b
+	dec	b
+	ld	a, (#(_ballSprite01 + 0x0004) + 0)
+	push	bc
+	inc	sp
+	push	af
+	inc	sp
+	call	_canPlayerMove
+	add	sp, #2
+	ld	a,e
+	or	a, a
+	ret	Z
+;main.c:179: ballSprite01.y -= currentSpeedY;
 	ld	de, #(_ballSprite01 + 0x0005) + 0
 	ld	a,(de)
 	ld	c,a
+	ld	hl,#_currentSpeedY
 	sub	a, (hl)
 	ld	b,a
 	ld	hl,#(_ballSprite01 + 0x0005)
 	ld	(hl),b
-;main.c:179: possibleYSurface = wouldHitSurf(ballSprite01.y);
+;main.c:181: possibleYSurface = wouldHitSurf(ballSprite01.y);
 	push	bc
 	inc	sp
 	call	_wouldHitSurf
 	inc	sp
 	ld	hl,#_possibleYSurface
 	ld	(hl),e
-;main.c:185: moveGameCharacter(&ballSprite01,ballSprite01.x, possibleYSurface);
-	ld	bc,#_ballSprite01 + 4
-	ld	a,(bc)
+;main.c:177: if(canPlayerMove(ballSprite01.x, ballSprite01.y - 2))
+	ld	de, #(_ballSprite01 + 0x0004) + 0
+	ld	a,(de)
 	ld	b,a
-;main.c:182: if(possibleYSurface == floorYPosition)
+;main.c:184: if(possibleYSurface == floorYPosition)
 	ld	a,(hl)
 	ld	hl,#_floorYPosition
 	sub	a, (hl)
 	jr	NZ,00104$
-;main.c:184: jumping = 0;
+;main.c:186: jumping = 0;
 	ld	hl,#_jumping
 	ld	(hl),#0x00
-;main.c:185: moveGameCharacter(&ballSprite01,ballSprite01.x, possibleYSurface);
+;main.c:187: moveGameCharacter(&ballSprite01,ballSprite01.x, possibleYSurface);
 	ld	hl,#_possibleYSurface
 	ld	a,(hl)
 	push	af
@@ -2056,7 +2072,7 @@ _jump::
 	add	sp, #4
 	ret
 00104$:
-;main.c:190: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
+;main.c:192: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
 	ld	de, #(_ballSprite01 + 0x0005) + 0
 	ld	a,(de)
 	ld	c,a
@@ -2069,35 +2085,35 @@ _jump::
 	call	_moveGameCharacter
 	add	sp, #4
 	ret
-;main.c:195: void ballMoveX(UINT8 direction)
+;main.c:198: void ballMoveX(UINT8 direction)
 ;	---------------------------------
 ; Function ballMoveX
 ; ---------------------------------
 _ballMoveX::
-;main.c:197: if(direction == 1)
+;main.c:200: if(direction == 1)
 	ldhl	sp,#2
 	ld	a,(hl)
 	dec	a
 	jr	NZ,00104$
-;main.c:199: ballSprite01.x += 3;
+;main.c:202: ballSprite01.x += 3;
 	ld	de,#_ballSprite01+4
 	ld	a,(de)
 	add	a, #0x03
 	ld	(de),a
 	jr	00105$
 00104$:
-;main.c:201: else if(direction == 0)
+;main.c:204: else if(direction == 0)
 	ldhl	sp,#2
 	ld	a,(hl)
 	or	a, a
 	jr	NZ,00105$
-;main.c:203: ballSprite01.x -= 3;
+;main.c:206: ballSprite01.x -= 3;
 	ld	a, (#(_ballSprite01 + 0x0004) + 0)
 	add	a,#0xfd
 	ld	de,#(_ballSprite01 + 0x0004)
 	ld	(de),a
 00105$:
-;main.c:205: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
+;main.c:208: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
 	ld	de, #(_ballSprite01 + 0x0005) + 0
 	ld	a,(de)
 	ld	c,a
@@ -2113,82 +2129,82 @@ _ballMoveX::
 	push	hl
 	call	_moveGameCharacter
 	add	sp, #4
-;main.c:206: if(timerAnimation == 1)
+;main.c:209: if(timerAnimation == 1)
 	ld	hl,#_timerAnimation
 	ld	a,(hl)
 	dec	a
 	jr	NZ,00109$
-;main.c:208: gameBallSprite01a();
+;main.c:211: gameBallSprite01a();
 	call	_gameBallSprite01a
 	jr	00110$
 00109$:
-;main.c:210: else if(timerAnimation == 2)
+;main.c:213: else if(timerAnimation == 2)
 	ld	hl,#_timerAnimation
 	ld	a,(hl)
 	sub	a, #0x02
 	jr	NZ,00110$
-;main.c:212: gameBallSprite01b();
+;main.c:215: gameBallSprite01b();
 	call	_gameBallSprite01b
-;main.c:213: timerAnimation = 0;
+;main.c:216: timerAnimation = 0;
 	ld	hl,#_timerAnimation
 	ld	(hl),#0x00
 00110$:
-;main.c:215: timerAnimation++;
+;main.c:218: timerAnimation++;
 	ld	hl,#_timerAnimation
 	inc	(hl)
 	ret
-;main.c:219: void ballAfterJumpMoving(UINT8 direction)
+;main.c:222: void ballAfterJumpMoving(UINT8 direction)
 ;	---------------------------------
 ; Function ballAfterJumpMoving
 ; ---------------------------------
 _ballAfterJumpMoving::
-;main.c:222: if(jumping == 0)
+;main.c:225: if(jumping == 0)
 	ld	hl,#_jumping
 	ld	a,(hl)
 	or	a, a
 	ret	NZ
-;main.c:224: gameBallSprite03();
+;main.c:227: gameBallSprite03();
 	call	_gameBallSprite03
-;main.c:225: performantDelay(2);
+;main.c:228: performantDelay(2);
 	ld	a,#0x02
 	push	af
 	inc	sp
 	call	_performantDelay
 	inc	sp
-;main.c:226: if(direction == 0)
+;main.c:229: if(direction == 0)
 	ldhl	sp,#2
 	ld	a,(hl)
 	or	a, a
 	jr	NZ,00104$
-;main.c:228: keyPressed_LEFT = 0;
+;main.c:231: keyPressed_LEFT = 0;
 	ld	hl,#_keyPressed_LEFT
 	ld	(hl),#0x00
 	ret
 00104$:
-;main.c:230: else if(direction == 1)
+;main.c:233: else if(direction == 1)
 	ldhl	sp,#2
 	ld	a,(hl)
 	dec	a
 	ret	NZ
-;main.c:232: keyPressed_RIGHT = 0;
+;main.c:235: keyPressed_RIGHT = 0;
 	ld	hl,#_keyPressed_RIGHT
 	ld	(hl),#0x00
 	ret
-;main.c:239: void main()
+;main.c:242: void main()
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
 _main::
-;main.c:242: setupBallSprite01();
+;main.c:245: setupBallSprite01();
 	call	_setupBallSprite01
-;main.c:245: set_bkg_data(0, 2, levelTile);
+;main.c:248: set_bkg_data(0, 2, levelTile);
 	ld	hl,#_levelTile
 	push	hl
 	ld	hl,#0x0200
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;main.c:246: set_bkg_tiles(0, 0, 20, 18, levelMap);
+;main.c:249: set_bkg_tiles(0, 0, 20, 18, levelMap);
 	ld	hl,#_levelMap
 	push	hl
 	ld	hl,#0x1214
@@ -2197,28 +2213,28 @@ _main::
 	push	hl
 	call	_set_bkg_tiles
 	add	sp, #6
-;main.c:249: jumping = 0;
+;main.c:252: jumping = 0;
 	ld	hl,#_jumping
 	ld	(hl),#0x00
-;main.c:252: NR52_REG = 0x80;
+;main.c:255: NR52_REG = 0x80;
 	ld	hl,#0xff26
 	ld	(hl),#0x80
-;main.c:253: NR50_REG = 0x77;
+;main.c:256: NR50_REG = 0x77;
 	ld	l, #0x24
 	ld	(hl),#0x77
-;main.c:254: NR51_REG = 0xFF;
+;main.c:257: NR51_REG = 0xFF;
 	ld	l, #0x25
 	ld	(hl),#0xff
-;main.c:256: keyPressed_A = 1;
+;main.c:259: keyPressed_A = 1;
 	ld	hl,#_keyPressed_A
 	ld	(hl),#0x01
-;main.c:257: keyPressed_LEFT = 1;
+;main.c:260: keyPressed_LEFT = 1;
 	ld	hl,#_keyPressed_LEFT
 	ld	(hl),#0x01
-;main.c:258: keyPressed_RIGHT = 1;
+;main.c:261: keyPressed_RIGHT = 1;
 	ld	hl,#_keyPressed_RIGHT
 	ld	(hl),#0x01
-;main.c:261: SHOW_BKG;
+;main.c:264: SHOW_BKG;
 	ld	de,#0xff40
 	ld	a,(de)
 	ld	c,a
@@ -2228,7 +2244,7 @@ _main::
 	ld	c,a
 	ld	hl,#0xff40
 	ld	(hl),c
-;main.c:262: SHOW_SPRITES;
+;main.c:265: SHOW_SPRITES;
 	ld	de,#0xff40
 	ld	a,(de)
 	ld	c,a
@@ -2238,7 +2254,7 @@ _main::
 	ld	c,a
 	ld	l, #0x40
 	ld	(hl),c
-;main.c:263: DISPLAY_ON;
+;main.c:266: DISPLAY_ON;
 	ld	de,#0xff40
 	ld	a,(de)
 	ld	c,a
@@ -2248,16 +2264,16 @@ _main::
 	ld	c,a
 	ld	l, #0x40
 	ld	(hl),c
-;main.c:265: timerAnimation = 0;
+;main.c:268: timerAnimation = 0;
 	ld	hl,#_timerAnimation
 	ld	(hl),#0x00
-;main.c:267: while(1)
+;main.c:270: while(1)
 00131$:
-;main.c:269: updateKeys();
+;main.c:272: updateKeys();
 	call	_updateKeys
-;main.c:270: gameBallSprite01a();
+;main.c:273: gameBallSprite01a();
 	call	_gameBallSprite01a
-;main.c:272: if(canPlayerMove(ballSprite01.x, ballSprite01.y + 16))
+;main.c:275: if(canPlayerMove(ballSprite01.x, ballSprite01.y + 16))
 	ld	a, (#(_ballSprite01 + 0x0005) + 0)
 	add	a, #0x10
 	ld	b,a
@@ -2271,14 +2287,14 @@ _main::
 	ld	a,e
 	or	a, a
 	jr	Z,00104$
-;main.c:274: ballSprite01.y += gravity;
+;main.c:277: ballSprite01.y += gravity;
 	ld	a, (#(_ballSprite01 + 0x0005) + 0)
 	ld	c,a
 	ld	hl,#_gravity
 	add	a, (hl)
 	ld	de,#(_ballSprite01 + 0x0005)
 	ld	(de),a
-;main.c:275: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
+;main.c:278: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
 	ld	de, #(_ballSprite01 + 0x0005) + 0
 	ld	a,(de)
 	ld	c,a
@@ -2294,7 +2310,7 @@ _main::
 	push	hl
 	call	_moveGameCharacter
 	add	sp, #4
-;main.c:277: if(keyTicked(J_A))
+;main.c:280: if(keyTicked(J_A))
 	ld	a,#0x10
 	push	af
 	inc	sp
@@ -2303,10 +2319,10 @@ _main::
 	ld	a,e
 	or	a, a
 	jr	Z,00104$
-;main.c:279: jumpSound();
+;main.c:282: jumpSound();
 	call	_jumpSound
 00104$:
-;main.c:283: if((keyTicked(J_A) || jumping == 1) && keyPressed_A == 1)
+;main.c:286: if((keyTicked(J_A) || jumping == 1) && keyPressed_A == 1)
 	ld	a,#0x10
 	push	af
 	inc	sp
@@ -2324,25 +2340,25 @@ _main::
 	ld	a,(hl)
 	dec	a
 	jr	NZ,00110$
-;main.c:286: gameBallSprite02();//sprite for stretched ball
+;main.c:289: gameBallSprite02();//sprite for stretched ball
 	call	_gameBallSprite02
-;main.c:287: jump(15);	
+;main.c:290: jump(15);	
 	ld	a,#0x0f
 	push	af
 	inc	sp
 	call	_jump
 	inc	sp
-;main.c:288: if(jumping == 0)
+;main.c:291: if(jumping == 0)
 	ld	hl,#_jumping
 	ld	a,(hl)
 	or	a, a
 	jr	NZ,00111$
-;main.c:290: keyPressed_A = 0;
+;main.c:293: keyPressed_A = 0;
 	ld	hl,#_keyPressed_A
 	ld	(hl),#0x00
-;main.c:291: gameBallSprite03();
+;main.c:294: gameBallSprite03();
 	call	_gameBallSprite03
-;main.c:292: performantDelay(2);
+;main.c:295: performantDelay(2);
 	ld	a,#0x02
 	push	af
 	inc	sp
@@ -2350,7 +2366,7 @@ _main::
 	inc	sp
 	jr	00111$
 00110$:
-;main.c:296: else if(!(keyReleased(J_A)))
+;main.c:299: else if(!(keyReleased(J_A)))
 	ld	a,#0x10
 	push	af
 	inc	sp
@@ -2359,11 +2375,11 @@ _main::
 	ld	a,e
 	or	a, a
 	jr	NZ,00111$
-;main.c:298: keyPressed_A = 1;
+;main.c:301: keyPressed_A = 1;
 	ld	hl,#_keyPressed_A
 	ld	(hl),#0x01
 00111$:
-;main.c:301: if(keyPressed(J_LEFT))
+;main.c:304: if(keyPressed(J_LEFT))
 	ld	a,#0x02
 	push	af
 	inc	sp
@@ -2372,7 +2388,7 @@ _main::
 	ld	a,e
 	or	a, a
 	jr	Z,00121$
-;main.c:303: if(canPlayerMove(ballSprite01.x - 1, ballSprite01.y))
+;main.c:306: if(canPlayerMove(ballSprite01.x - 1, ballSprite01.y))
 	ld	de, #(_ballSprite01 + 0x0005) + 0
 	ld	a,(de)
 	ld	b,a
@@ -2387,20 +2403,20 @@ _main::
 	ld	a,e
 	or	a, a
 	jr	Z,00122$
-;main.c:306: ballMoveX(0);// 1 for moving to right 0 for moving left
+;main.c:309: ballMoveX(0);// 1 for moving to right 0 for moving left
 	xor	a, a
 	push	af
 	inc	sp
 	call	_ballMoveX
 	inc	sp
-;main.c:307: if(jumping == 1)
+;main.c:310: if(jumping == 1)
 	ld	hl,#_jumping
 	ld	a,(hl)
 	dec	a
 	jr	NZ,00122$
-;main.c:309: gameBallSprite02();
+;main.c:312: gameBallSprite02();
 	call	_gameBallSprite02
-;main.c:310: ballAfterJumpMoving(0);
+;main.c:313: ballAfterJumpMoving(0);
 	xor	a, a
 	push	af
 	inc	sp
@@ -2408,7 +2424,7 @@ _main::
 	inc	sp
 	jr	00122$
 00121$:
-;main.c:314: else if(!(keyReleased(J_LEFT)))
+;main.c:317: else if(!(keyReleased(J_LEFT)))
 	ld	a,#0x02
 	push	af
 	inc	sp
@@ -2417,11 +2433,11 @@ _main::
 	ld	a,e
 	or	a, a
 	jr	NZ,00122$
-;main.c:316: keyPressed_LEFT = 1;
+;main.c:319: keyPressed_LEFT = 1;
 	ld	hl,#_keyPressed_LEFT
 	ld	(hl),#0x01
 00122$:
-;main.c:319: if(keyPressed(J_RIGHT))
+;main.c:322: if(keyPressed(J_RIGHT))
 	ld	a,#0x01
 	push	af
 	inc	sp
@@ -2430,20 +2446,20 @@ _main::
 	ld	a,e
 	or	a, a
 	jr	Z,00128$
-;main.c:322: ballMoveX(1);// 1 for moving to right 0 for moving left
+;main.c:325: ballMoveX(1);// 1 for moving to right 0 for moving left
 	ld	a,#0x01
 	push	af
 	inc	sp
 	call	_ballMoveX
 	inc	sp
-;main.c:323: if(jumping == 1)
+;main.c:326: if(jumping == 1)
 	ld	hl,#_jumping
 	ld	a,(hl)
 	dec	a
 	jr	NZ,00129$
-;main.c:325: gameBallSprite02();
+;main.c:328: gameBallSprite02();
 	call	_gameBallSprite02
-;main.c:326: ballAfterJumpMoving(1);
+;main.c:329: ballAfterJumpMoving(1);
 	ld	a,#0x01
 	push	af
 	inc	sp
@@ -2451,7 +2467,7 @@ _main::
 	inc	sp
 	jr	00129$
 00128$:
-;main.c:329: else if(!(keyReleased(J_RIGHT)))
+;main.c:332: else if(!(keyReleased(J_RIGHT)))
 	ld	a,#0x01
 	push	af
 	inc	sp
@@ -2460,11 +2476,11 @@ _main::
 	ld	a,e
 	or	a, a
 	jr	NZ,00129$
-;main.c:331: keyPressed_RIGHT = 1;
+;main.c:334: keyPressed_RIGHT = 1;
 	ld	hl,#_keyPressed_RIGHT
 	ld	(hl),#0x01
 00129$:
-;main.c:334: performantDelay(2);
+;main.c:337: performantDelay(2);
 	ld	a,#0x02
 	push	af
 	inc	sp

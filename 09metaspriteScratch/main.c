@@ -1,5 +1,7 @@
 #include <gb/gb.h>
-#include "gameSprite.c"
+#include "gameTile.c"
+UINT8 i;
+UINT8 j;
 
 void performantDelay(UINT8 numloops){
 
@@ -9,29 +11,26 @@ void performantDelay(UINT8 numloops){
 	}
 }
 
-void main(){
-	set_sprite_data(0, 5, sprite);
 
-	set_sprite_tile(1, 1);
-	set_sprite_tile(2, 2);
+void main(){
+	set_sprite_data(0, 5, gameTile);
+
+	set_sprite_tile(0, 1);
+	set_sprite_tile(1, 2);
 	
-	set_sprite_tile(3, 3);
-	set_sprite_tile(4, 4);
+	set_sprite_tile(2, 3);
+	set_sprite_tile(3, 4);
 	
-	move_sprite(1, 75, 75);
-	move_sprite(2, 75, 75+8);
+	move_sprite(0, 75, 75);
+	move_sprite(1, 75 + 8, 75);
+	move_sprite(2, 75, 75 + 8);
+	move_sprite(3, 75 + 8, 75 + 8);
 
 
 	SHOW_SPRITES;
 
 	while(1){
-		set_sprite_tile(1, 3);
-		set_sprite_tile(2, 4);
-		performantDelay(5);
-
-		set_sprite_tile(1, 1);
-		set_sprite_tile(2, 2);
-		performantDelay(5);
+		performantDelay(1);
 	
 	}
 }

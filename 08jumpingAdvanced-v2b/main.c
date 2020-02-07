@@ -174,20 +174,23 @@ void jump(UINT8 setSpeedY)
 
 	currentSpeedY = currentSpeedY + gravity;
 
-	ballSprite01.y -= currentSpeedY;
-
-	possibleYSurface = wouldHitSurf(ballSprite01.y);
-
-
-	if(possibleYSurface == floorYPosition)
+	if(canPlayerMove(ballSprite01.x, ballSprite01.y - 2))
 	{
-		jumping = 0;
-		moveGameCharacter(&ballSprite01,ballSprite01.x, possibleYSurface);
+		ballSprite01.y -= currentSpeedY;
 
-	}
-	else
-	{
-		moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
+		possibleYSurface = wouldHitSurf(ballSprite01.y);
+
+
+		if(possibleYSurface == floorYPosition)
+		{
+			jumping = 0;
+			moveGameCharacter(&ballSprite01,ballSprite01.x, possibleYSurface);
+
+		}
+		else
+		{
+			moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
+		}
 	}
 }
 

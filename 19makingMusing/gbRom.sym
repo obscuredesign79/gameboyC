@@ -1,0 +1,135 @@
+; no$gmb format .sym file
+; Generated automagically by ASxxxx linker V01.75 (SDK 3.0.0)
+; Area: .  .ABS.
+00:0000 s__HEADER
+00:0000 .init
+00:0200 s__CODE
+00:0431 s__HOME
+00:05DD s__BASE
+00:05DD s__LIT
+00:05DD s__GSINIT
+00:0609 s__GSINITTAIL
+00:060A s__GSFINAL
+01:4000 s__CODE_1
+01:4000 s__CODE_2
+00:C000 .OAM
+00:C0A0 s__DATA
+00:C0E8 s__BSS
+00:C141 s__HEAP
+00:C141 s__BSEG
+00:C141 s__ISEG
+00:C141 s__XSEG
+00:C141 s__OVERLAY
+00:E000 .STACK
+00:FF80 .refresh_OAM
+; Area: _CODE
+00:0200 _main
+00:022F gbt_get_pattern_ptr
+00:024C _gbt_play
+00:0307 _gbt_pause
+00:0313 _gbt_loop
+00:031A _gbt_stop
+00:0325 _gbt_enable_channels
+00:032C _gbt_update
+; Area: _HEADER
+00:01D2 _exit
+; Area: _HOME
+00:0431 .set_mode
+00:0441 .remove_VBL
+00:0447 .remove_LCD
+00:044D .remove_TIM
+00:0453 .remove_SIO
+00:0459 .remove_JOY
+00:045F .add_VBL
+00:0465 .add_LCD
+00:046B .add_TIM
+00:0471 .add_SIO
+00:0477 .add_JOY
+00:047D .remove_int
+00:049D .add_int
+00:04B9 .wait_vbl_done
+00:04B9 _wait_vbl_done
+00:04D0 _display_off
+00:04D0 .display_off
+00:04F1 .serial_IO
+00:0520 _mode
+00:0529 _get_mode
+00:052E _enable_interrupts
+00:0530 _disable_interrupts
+00:0532 _reset
+00:0532 .reset
+00:0538 _set_interrupts
+00:0543 _remove_VBL
+00:054E _remove_LCD
+00:0559 _remove_TIM
+00:0564 _remove_SIO
+00:056F _remove_JOY
+00:057A _add_VBL
+00:0585 _add_LCD
+00:0590 _add_TIM
+00:059B _add_SIO
+00:05A6 _add_JOY
+00:05B1 _clock
+00:05BA __printTStates
+00:05BB banked_call
+00:05D4 banked_ret
+; Area: _BASE
+; Area: _LIT
+; Area: _GSINIT
+00:05DD gsinit
+; Area: _GSINITTAIL
+; Area: _GSFINAL
+; Area: _DATA
+00:C0A0 _song_Data
+00:C0A8 gbt_playing
+00:C0A9 gbt_song
+00:C0AB gbt_bank
+00:C0AC gbt_speed
+00:C0AD gbt_temp_play_data
+00:C0B9 gbt_loop_enabled
+00:C0BA gbt_ticks_elapsed
+00:C0BB gbt_current_step
+00:C0BC gbt_current_pattern
+00:C0BD gbt_current_step_data_ptr
+00:C0BF gbt_channels_enabled
+00:C0C0 gbt_pan
+00:C0C4 gbt_vol
+00:C0C8 gbt_instr
+00:C0CC gbt_freq
+00:C0D2 gbt_channel3_loaded_instrument
+00:C0D3 gbt_arpeggio_freq_index
+00:C0DC gbt_arpeggio_enabled
+00:C0DF gbt_arpeggio_tick
+00:C0E2 gbt_cut_note_tick
+00:C0E6 gbt_have_to_stop_next_step
+00:C0E7 gbt_update_pattern_pointers
+; Area: _BSS
+00:C0E8 __cpu
+00:C0E9 .mode
+00:C0EA __io_out
+00:C0EB __io_in
+00:C0EC __io_status
+00:C0ED .vbl_done
+00:C0EE __current_bank
+00:C0EF _sys_time
+00:C0EF .sys_time
+00:C0F1 .int_0x40
+00:C101 .int_0x48
+00:C111 .int_0x50
+00:C121 .int_0x58
+00:C131 .int_0x60
+; Area: _HEAP
+00:C141 _malloc_heap_start
+; Area: _OVERLAY
+; Area: _ISEG
+; Area: _BSEG
+; Area: _XSEG
+; Area: _CODE_2
+01:4000 _song0
+; Area: _CODE_1
+01:412C gbt_channel_1_handle
+01:4283 gbt_channel_2_handle
+01:43D6 gbt_channel_3_handle
+01:4548 gbt_channel_4_handle
+01:4638 gbt_update_bank1
+01:4654 gbt_update_effects_bank1

@@ -2016,461 +2016,477 @@
    02DE 86                 2016 	add	a, (hl)
    02DF 21r90r02           2017 	ld	hl,#_currentSpeedY
    02E2 77                 2018 	ld	(hl),a
-                           2019 ;main.c:177: ballSprite01.y -= currentSpeedY;
-   02E3 11r98r02           2020 	ld	de, #(_ballSprite01 + 0x0005) + 0
-   02E6 1A                 2021 	ld	a,(de)
-   02E7 4F                 2022 	ld	c,a
-   02E8 96                 2023 	sub	a, (hl)
-   02E9 47                 2024 	ld	b,a
-   02EA 21r98r02           2025 	ld	hl,#(_ballSprite01 + 0x0005)
-   02ED 70                 2026 	ld	(hl),b
-                           2027 ;main.c:179: possibleYSurface = wouldHitSurf(ballSprite01.y);
-   02EE C5                 2028 	push	bc
-   02EF 33                 2029 	inc	sp
-   02F0 CDrB6r02           2030 	call	_wouldHitSurf
-   02F3 33                 2031 	inc	sp
-   02F4 21r8Er02           2032 	ld	hl,#_possibleYSurface
-   02F7 73                 2033 	ld	(hl),e
-                           2034 ;main.c:185: moveGameCharacter(&ballSprite01,ballSprite01.x, possibleYSurface);
-   02F8 01r97r02           2035 	ld	bc,#_ballSprite01 + 4
-   02FB 0A                 2036 	ld	a,(bc)
-   02FC 47                 2037 	ld	b,a
-                           2038 ;main.c:182: if(possibleYSurface == floorYPosition)
-   02FD 7E                 2039 	ld	a,(hl)
-   02FE 21r8Dr02           2040 	ld	hl,#_floorYPosition
-   0301 96                 2041 	sub	a, (hl)
-   0302 20 17              2042 	jr	NZ,00104$
-                           2043 ;main.c:184: jumping = 0;
-   0304 21r8Br02           2044 	ld	hl,#_jumping
-   0307 36 00              2045 	ld	(hl),#0x00
-                           2046 ;main.c:185: moveGameCharacter(&ballSprite01,ballSprite01.x, possibleYSurface);
-   0309 21r8Er02           2047 	ld	hl,#_possibleYSurface
-   030C 7E                 2048 	ld	a,(hl)
-   030D F5                 2049 	push	af
-   030E 33                 2050 	inc	sp
-   030F C5                 2051 	push	bc
-   0310 33                 2052 	inc	sp
-   0311 21r93r02           2053 	ld	hl,#_ballSprite01
-   0314 E5                 2054 	push	hl
-   0315 CDrF1r00           2055 	call	_moveGameCharacter
-   0318 E8 04              2056 	add	sp, #4
-   031A C9                 2057 	ret
-   031B                    2058 00104$:
-                           2059 ;main.c:190: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
-   031B 11r98r02           2060 	ld	de, #(_ballSprite01 + 0x0005) + 0
-   031E 1A                 2061 	ld	a,(de)
-   031F 4F                 2062 	ld	c,a
-   0320 F5                 2063 	push	af
-   0321 33                 2064 	inc	sp
-   0322 C5                 2065 	push	bc
-   0323 33                 2066 	inc	sp
-   0324 21r93r02           2067 	ld	hl,#_ballSprite01
-   0327 E5                 2068 	push	hl
-   0328 CDrF1r00           2069 	call	_moveGameCharacter
-   032B E8 04              2070 	add	sp, #4
-   032D C9                 2071 	ret
-                           2072 ;main.c:195: void ballMoveX(UINT8 direction)
-                           2073 ;	---------------------------------
-                           2074 ; Function ballMoveX
-                           2075 ; ---------------------------------
-   032E                    2076 _ballMoveX::
-                           2077 ;main.c:197: if(direction == 1)
-   032E F8 02              2078 	ldhl	sp,#2
-   0330 7E                 2079 	ld	a,(hl)
-   0331 3D                 2080 	dec	a
-   0332 20 09              2081 	jr	NZ,00104$
-                           2082 ;main.c:199: ballSprite01.x += 3;
-   0334 11r97r02           2083 	ld	de,#_ballSprite01+4
-   0337 1A                 2084 	ld	a,(de)
-   0338 C6 03              2085 	add	a, #0x03
-   033A 12                 2086 	ld	(de),a
-   033B 18 0F              2087 	jr	00105$
-   033D                    2088 00104$:
-                           2089 ;main.c:201: else if(direction == 0)
-   033D F8 02              2090 	ldhl	sp,#2
-   033F 7E                 2091 	ld	a,(hl)
-   0340 B7                 2092 	or	a, a
-   0341 20 09              2093 	jr	NZ,00105$
-                           2094 ;main.c:203: ballSprite01.x -= 3;
-   0343 FAr97r02           2095 	ld	a, (#(_ballSprite01 + 0x0004) + 0)
-   0346 C6 FD              2096 	add	a,#0xfd
-   0348 11r97r02           2097 	ld	de,#(_ballSprite01 + 0x0004)
-   034B 12                 2098 	ld	(de),a
-   034C                    2099 00105$:
-                           2100 ;main.c:205: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
-   034C 11r98r02           2101 	ld	de, #(_ballSprite01 + 0x0005) + 0
-   034F 1A                 2102 	ld	a,(de)
-   0350 4F                 2103 	ld	c,a
-   0351 11r97r02           2104 	ld	de, #(_ballSprite01 + 0x0004) + 0
-   0354 1A                 2105 	ld	a,(de)
-   0355 47                 2106 	ld	b,a
-   0356 79                 2107 	ld	a,c
-   0357 F5                 2108 	push	af
-   0358 33                 2109 	inc	sp
-   0359 C5                 2110 	push	bc
-   035A 33                 2111 	inc	sp
-   035B 21r93r02           2112 	ld	hl,#_ballSprite01
-   035E E5                 2113 	push	hl
-   035F CDrF1r00           2114 	call	_moveGameCharacter
-   0362 E8 04              2115 	add	sp, #4
-                           2116 ;main.c:206: if(timerAnimation == 1)
-   0364 21r8Fr02           2117 	ld	hl,#_timerAnimation
-   0367 7E                 2118 	ld	a,(hl)
-   0368 3D                 2119 	dec	a
-   0369 20 05              2120 	jr	NZ,00109$
-                           2121 ;main.c:208: gameBallSprite01a();
-   036B CDr5Dr00           2122 	call	_gameBallSprite01a
-   036E 18 10              2123 	jr	00110$
-   0370                    2124 00109$:
-                           2125 ;main.c:210: else if(timerAnimation == 2)
-   0370 21r8Fr02           2126 	ld	hl,#_timerAnimation
-   0373 7E                 2127 	ld	a,(hl)
-   0374 D6 02              2128 	sub	a, #0x02
-   0376 20 08              2129 	jr	NZ,00110$
-                           2130 ;main.c:212: gameBallSprite01b();
-   0378 CDr82r00           2131 	call	_gameBallSprite01b
-                           2132 ;main.c:213: timerAnimation = 0;
-   037B 21r8Fr02           2133 	ld	hl,#_timerAnimation
-   037E 36 00              2134 	ld	(hl),#0x00
-   0380                    2135 00110$:
-                           2136 ;main.c:215: timerAnimation++;
-   0380 21r8Fr02           2137 	ld	hl,#_timerAnimation
-   0383 34                 2138 	inc	(hl)
-   0384 C9                 2139 	ret
-                           2140 ;main.c:219: void ballAfterJumpMoving(UINT8 direction)
-                           2141 ;	---------------------------------
-                           2142 ; Function ballAfterJumpMoving
-                           2143 ; ---------------------------------
-   0385                    2144 _ballAfterJumpMoving::
-                           2145 ;main.c:222: if(jumping == 0)
-   0385 21r8Br02           2146 	ld	hl,#_jumping
-   0388 7E                 2147 	ld	a,(hl)
-   0389 B7                 2148 	or	a, a
-   038A C0                 2149 	ret	NZ
-                           2150 ;main.c:224: gameBallSprite03();
-   038B CDrCCr00           2151 	call	_gameBallSprite03
-                           2152 ;main.c:225: performantDelay(2);
-   038E 3E 02              2153 	ld	a,#0x02
-   0390 F5                 2154 	push	af
-   0391 33                 2155 	inc	sp
-   0392 CDr00r00           2156 	call	_performantDelay
-   0395 33                 2157 	inc	sp
-                           2158 ;main.c:226: if(direction == 0)
-   0396 F8 02              2159 	ldhl	sp,#2
-   0398 7E                 2160 	ld	a,(hl)
-   0399 B7                 2161 	or	a, a
-   039A 20 06              2162 	jr	NZ,00104$
-                           2163 ;main.c:228: keyPressed_LEFT = 0;
-   039C 21r8Ar02           2164 	ld	hl,#_keyPressed_LEFT
-   039F 36 00              2165 	ld	(hl),#0x00
-   03A1 C9                 2166 	ret
-   03A2                    2167 00104$:
-                           2168 ;main.c:230: else if(direction == 1)
-   03A2 F8 02              2169 	ldhl	sp,#2
-   03A4 7E                 2170 	ld	a,(hl)
-   03A5 3D                 2171 	dec	a
-   03A6 C0                 2172 	ret	NZ
-                           2173 ;main.c:232: keyPressed_RIGHT = 0;
-   03A7 21r89r02           2174 	ld	hl,#_keyPressed_RIGHT
-   03AA 36 00              2175 	ld	(hl),#0x00
-   03AC C9                 2176 	ret
-                           2177 ;main.c:239: void main()
-                           2178 ;	---------------------------------
-                           2179 ; Function main
-                           2180 ; ---------------------------------
-   03AD                    2181 _main::
-                           2182 ;main.c:242: setupBallSprite01();
-   03AD CDr6Fr01           2183 	call	_setupBallSprite01
-                           2184 ;main.c:245: set_bkg_data(0, 2, levelTile);
-   03B0 21rF0r00           2185 	ld	hl,#_levelTile
-   03B3 E5                 2186 	push	hl
-   03B4 21 00 02           2187 	ld	hl,#0x0200
-   03B7 E5                 2188 	push	hl
-   03B8 CDr00r00           2189 	call	_set_bkg_data
-   03BB E8 04              2190 	add	sp, #4
-                           2191 ;main.c:246: set_bkg_tiles(0, 0, 20, 18, levelMap);
-   03BD 21r20r01           2192 	ld	hl,#_levelMap
-   03C0 E5                 2193 	push	hl
-   03C1 21 14 12           2194 	ld	hl,#0x1214
-   03C4 E5                 2195 	push	hl
-   03C5 21 00 00           2196 	ld	hl,#0x0000
-   03C8 E5                 2197 	push	hl
-   03C9 CDr00r00           2198 	call	_set_bkg_tiles
-   03CC E8 06              2199 	add	sp, #6
-                           2200 ;main.c:249: jumping = 0;
-   03CE 21r8Br02           2201 	ld	hl,#_jumping
-   03D1 36 00              2202 	ld	(hl),#0x00
-                           2203 ;main.c:252: NR52_REG = 0x80;
-   03D3 21 26 FF           2204 	ld	hl,#0xff26
-   03D6 36 80              2205 	ld	(hl),#0x80
-                           2206 ;main.c:253: NR50_REG = 0x77;
-   03D8 2E 24              2207 	ld	l, #0x24
-   03DA 36 77              2208 	ld	(hl),#0x77
-                           2209 ;main.c:254: NR51_REG = 0xFF;
-   03DC 2E 25              2210 	ld	l, #0x25
-   03DE 36 FF              2211 	ld	(hl),#0xff
-                           2212 ;main.c:256: keyPressed_A = 1;
-   03E0 21r88r02           2213 	ld	hl,#_keyPressed_A
-   03E3 36 01              2214 	ld	(hl),#0x01
-                           2215 ;main.c:257: keyPressed_LEFT = 1;
-   03E5 21r8Ar02           2216 	ld	hl,#_keyPressed_LEFT
-   03E8 36 01              2217 	ld	(hl),#0x01
-                           2218 ;main.c:258: keyPressed_RIGHT = 1;
-   03EA 21r89r02           2219 	ld	hl,#_keyPressed_RIGHT
-   03ED 36 01              2220 	ld	(hl),#0x01
-                           2221 ;main.c:261: SHOW_BKG;
-   03EF 11 40 FF           2222 	ld	de,#0xff40
-   03F2 1A                 2223 	ld	a,(de)
-   03F3 4F                 2224 	ld	c,a
-   03F4 06 00              2225 	ld	b,#0x00
-   03F6 79                 2226 	ld	a,c
-   03F7 CB C7              2227 	set	0, a
-   03F9 4F                 2228 	ld	c,a
-   03FA 21 40 FF           2229 	ld	hl,#0xff40
-   03FD 71                 2230 	ld	(hl),c
-                           2231 ;main.c:262: SHOW_SPRITES;
-   03FE 11 40 FF           2232 	ld	de,#0xff40
-   0401 1A                 2233 	ld	a,(de)
-   0402 4F                 2234 	ld	c,a
-   0403 06 00              2235 	ld	b,#0x00
-   0405 79                 2236 	ld	a,c
-   0406 CB CF              2237 	set	1, a
-   0408 4F                 2238 	ld	c,a
-   0409 2E 40              2239 	ld	l, #0x40
-   040B 71                 2240 	ld	(hl),c
-                           2241 ;main.c:263: DISPLAY_ON;
-   040C 11 40 FF           2242 	ld	de,#0xff40
-   040F 1A                 2243 	ld	a,(de)
-   0410 4F                 2244 	ld	c,a
-   0411 06 00              2245 	ld	b,#0x00
-   0413 79                 2246 	ld	a,c
-   0414 CB FF              2247 	set	7, a
-   0416 4F                 2248 	ld	c,a
-   0417 2E 40              2249 	ld	l, #0x40
-   0419 71                 2250 	ld	(hl),c
-                           2251 ;main.c:265: timerAnimation = 0;
-   041A 21r8Fr02           2252 	ld	hl,#_timerAnimation
-   041D 36 00              2253 	ld	(hl),#0x00
-                           2254 ;main.c:267: while(1)
-   041F                    2255 00131$:
-                           2256 ;main.c:269: updateKeys();
-   041F CDr11r00           2257 	call	_updateKeys
-                           2258 ;main.c:270: gameBallSprite01a();
-   0422 CDr5Dr00           2259 	call	_gameBallSprite01a
-                           2260 ;main.c:272: if(canPlayerMove(ballSprite01.x, ballSprite01.y + 16))
-   0425 FAr98r02           2261 	ld	a, (#(_ballSprite01 + 0x0005) + 0)
-   0428 C6 10              2262 	add	a, #0x10
-   042A 47                 2263 	ld	b,a
-   042B FAr97r02           2264 	ld	a, (#(_ballSprite01 + 0x0004) + 0)
-   042E C5                 2265 	push	bc
-   042F 33                 2266 	inc	sp
-   0430 F5                 2267 	push	af
-   0431 33                 2268 	inc	sp
-   0432 CDrE4r01           2269 	call	_canPlayerMove
-   0435 E8 02              2270 	add	sp, #2
-   0437 7B                 2271 	ld	a,e
-   0438 B7                 2272 	or	a, a
-   0439 28 33              2273 	jr	Z,00104$
-                           2274 ;main.c:274: ballSprite01.y += gravity;
-   043B FAr98r02           2275 	ld	a, (#(_ballSprite01 + 0x0005) + 0)
-   043E 4F                 2276 	ld	c,a
-   043F 21r8Cr02           2277 	ld	hl,#_gravity
-   0442 86                 2278 	add	a, (hl)
-   0443 11r98r02           2279 	ld	de,#(_ballSprite01 + 0x0005)
-   0446 12                 2280 	ld	(de),a
-                           2281 ;main.c:275: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
-   0447 11r98r02           2282 	ld	de, #(_ballSprite01 + 0x0005) + 0
-   044A 1A                 2283 	ld	a,(de)
-   044B 4F                 2284 	ld	c,a
-   044C 11r97r02           2285 	ld	de, #(_ballSprite01 + 0x0004) + 0
-   044F 1A                 2286 	ld	a,(de)
-   0450 47                 2287 	ld	b,a
-   0451 79                 2288 	ld	a,c
-   0452 F5                 2289 	push	af
-   0453 33                 2290 	inc	sp
-   0454 C5                 2291 	push	bc
-   0455 33                 2292 	inc	sp
-   0456 21r93r02           2293 	ld	hl,#_ballSprite01
-   0459 E5                 2294 	push	hl
-   045A CDrF1r00           2295 	call	_moveGameCharacter
-   045D E8 04              2296 	add	sp, #4
-                           2297 ;main.c:277: if(keyTicked(J_A))
-   045F 3E 10              2298 	ld	a,#0x10
-   0461 F5                 2299 	push	af
-   0462 33                 2300 	inc	sp
-   0463 CDr2Cr00           2301 	call	_keyTicked
-   0466 33                 2302 	inc	sp
-   0467 7B                 2303 	ld	a,e
-   0468 B7                 2304 	or	a, a
-   0469 28 03              2305 	jr	Z,00104$
-                           2306 ;main.c:279: jumpSound();
-   046B CDrA0r02           2307 	call	_jumpSound
-   046E                    2308 00104$:
-                           2309 ;main.c:283: if((keyTicked(J_A) || jumping == 1) && keyPressed_A == 1)
-   046E 3E 10              2310 	ld	a,#0x10
-   0470 F5                 2311 	push	af
-   0471 33                 2312 	inc	sp
-   0472 CDr2Cr00           2313 	call	_keyTicked
-   0475 33                 2314 	inc	sp
-   0476 7B                 2315 	ld	a,e
-   0477 B7                 2316 	or	a, a
-   0478 20 07              2317 	jr	NZ,00113$
-   047A 21r8Br02           2318 	ld	hl,#_jumping
-   047D 7E                 2319 	ld	a,(hl)
-   047E 3D                 2320 	dec	a
-   047F 20 2B              2321 	jr	NZ,00110$
-   0481                    2322 00113$:
-   0481 21r88r02           2323 	ld	hl,#_keyPressed_A
-   0484 7E                 2324 	ld	a,(hl)
-   0485 3D                 2325 	dec	a
-   0486 20 24              2326 	jr	NZ,00110$
-                           2327 ;main.c:286: gameBallSprite02();//sprite for stretched ball
-   0488 CDrA7r00           2328 	call	_gameBallSprite02
-                           2329 ;main.c:287: jump(15);	
-   048B 3E 0F              2330 	ld	a,#0x0f
-   048D F5                 2331 	push	af
-   048E 33                 2332 	inc	sp
-   048F CDrC4r02           2333 	call	_jump
-   0492 33                 2334 	inc	sp
-                           2335 ;main.c:288: if(jumping == 0)
-   0493 21r8Br02           2336 	ld	hl,#_jumping
-   0496 7E                 2337 	ld	a,(hl)
-   0497 B7                 2338 	or	a, a
-   0498 20 23              2339 	jr	NZ,00111$
-                           2340 ;main.c:290: keyPressed_A = 0;
-   049A 21r88r02           2341 	ld	hl,#_keyPressed_A
-   049D 36 00              2342 	ld	(hl),#0x00
-                           2343 ;main.c:291: gameBallSprite03();
-   049F CDrCCr00           2344 	call	_gameBallSprite03
-                           2345 ;main.c:292: performantDelay(2);
-   04A2 3E 02              2346 	ld	a,#0x02
-   04A4 F5                 2347 	push	af
-   04A5 33                 2348 	inc	sp
-   04A6 CDr00r00           2349 	call	_performantDelay
-   04A9 33                 2350 	inc	sp
-   04AA 18 11              2351 	jr	00111$
-   04AC                    2352 00110$:
-                           2353 ;main.c:296: else if(!(keyReleased(J_A)))
-   04AC 3E 10              2354 	ld	a,#0x10
-   04AE F5                 2355 	push	af
-   04AF 33                 2356 	inc	sp
-   04B0 CDr44r00           2357 	call	_keyReleased
-   04B3 33                 2358 	inc	sp
-   04B4 7B                 2359 	ld	a,e
-   04B5 B7                 2360 	or	a, a
-   04B6 20 05              2361 	jr	NZ,00111$
-                           2362 ;main.c:298: keyPressed_A = 1;
-   04B8 21r88r02           2363 	ld	hl,#_keyPressed_A
-   04BB 36 01              2364 	ld	(hl),#0x01
-   04BD                    2365 00111$:
-                           2366 ;main.c:301: if(keyPressed(J_LEFT))
-   04BD 3E 02              2367 	ld	a,#0x02
-   04BF F5                 2368 	push	af
-   04C0 33                 2369 	inc	sp
-   04C1 CDr23r00           2370 	call	_keyPressed
-   04C4 33                 2371 	inc	sp
-   04C5 7B                 2372 	ld	a,e
-   04C6 B7                 2373 	or	a, a
-   04C7 28 31              2374 	jr	Z,00121$
-                           2375 ;main.c:303: if(canPlayerMove(ballSprite01.x - 1, ballSprite01.y))
-   04C9 11r98r02           2376 	ld	de, #(_ballSprite01 + 0x0005) + 0
-   04CC 1A                 2377 	ld	a,(de)
-   04CD 47                 2378 	ld	b,a
-   04CE FAr97r02           2379 	ld	a, (#(_ballSprite01 + 0x0004) + 0)
-   04D1 C6 FF              2380 	add	a,#0xff
-   04D3 C5                 2381 	push	bc
-   04D4 33                 2382 	inc	sp
-   04D5 F5                 2383 	push	af
-   04D6 33                 2384 	inc	sp
-   04D7 CDrE4r01           2385 	call	_canPlayerMove
-   04DA E8 02              2386 	add	sp, #2
-   04DC 7B                 2387 	ld	a,e
-   04DD B7                 2388 	or	a, a
-   04DE 28 2B              2389 	jr	Z,00122$
-                           2390 ;main.c:306: ballMoveX(0);// 1 for moving to right 0 for moving left
-   04E0 AF                 2391 	xor	a, a
-   04E1 F5                 2392 	push	af
-   04E2 33                 2393 	inc	sp
-   04E3 CDr2Er03           2394 	call	_ballMoveX
-   04E6 33                 2395 	inc	sp
-                           2396 ;main.c:307: if(jumping == 1)
-   04E7 21r8Br02           2397 	ld	hl,#_jumping
-   04EA 7E                 2398 	ld	a,(hl)
-   04EB 3D                 2399 	dec	a
-   04EC 20 1D              2400 	jr	NZ,00122$
-                           2401 ;main.c:309: gameBallSprite02();
-   04EE CDrA7r00           2402 	call	_gameBallSprite02
-                           2403 ;main.c:310: ballAfterJumpMoving(0);
-   04F1 AF                 2404 	xor	a, a
-   04F2 F5                 2405 	push	af
-   04F3 33                 2406 	inc	sp
-   04F4 CDr85r03           2407 	call	_ballAfterJumpMoving
-   04F7 33                 2408 	inc	sp
-   04F8 18 11              2409 	jr	00122$
-   04FA                    2410 00121$:
-                           2411 ;main.c:314: else if(!(keyReleased(J_LEFT)))
-   04FA 3E 02              2412 	ld	a,#0x02
-   04FC F5                 2413 	push	af
-   04FD 33                 2414 	inc	sp
-   04FE CDr44r00           2415 	call	_keyReleased
-   0501 33                 2416 	inc	sp
-   0502 7B                 2417 	ld	a,e
-   0503 B7                 2418 	or	a, a
-   0504 20 05              2419 	jr	NZ,00122$
-                           2420 ;main.c:316: keyPressed_LEFT = 1;
-   0506 21r8Ar02           2421 	ld	hl,#_keyPressed_LEFT
-   0509 36 01              2422 	ld	(hl),#0x01
-   050B                    2423 00122$:
-                           2424 ;main.c:319: if(keyPressed(J_RIGHT))
-   050B 3E 01              2425 	ld	a,#0x01
-   050D F5                 2426 	push	af
-   050E 33                 2427 	inc	sp
-   050F CDr23r00           2428 	call	_keyPressed
-   0512 33                 2429 	inc	sp
-   0513 7B                 2430 	ld	a,e
-   0514 B7                 2431 	or	a, a
-   0515 28 1C              2432 	jr	Z,00128$
-                           2433 ;main.c:322: ballMoveX(1);// 1 for moving to right 0 for moving left
-   0517 3E 01              2434 	ld	a,#0x01
-   0519 F5                 2435 	push	af
-   051A 33                 2436 	inc	sp
-   051B CDr2Er03           2437 	call	_ballMoveX
-   051E 33                 2438 	inc	sp
-                           2439 ;main.c:323: if(jumping == 1)
-   051F 21r8Br02           2440 	ld	hl,#_jumping
-   0522 7E                 2441 	ld	a,(hl)
-   0523 3D                 2442 	dec	a
-   0524 20 1E              2443 	jr	NZ,00129$
-                           2444 ;main.c:325: gameBallSprite02();
-   0526 CDrA7r00           2445 	call	_gameBallSprite02
-                           2446 ;main.c:326: ballAfterJumpMoving(1);
-   0529 3E 01              2447 	ld	a,#0x01
-   052B F5                 2448 	push	af
-   052C 33                 2449 	inc	sp
-   052D CDr85r03           2450 	call	_ballAfterJumpMoving
-   0530 33                 2451 	inc	sp
-   0531 18 11              2452 	jr	00129$
-   0533                    2453 00128$:
-                           2454 ;main.c:329: else if(!(keyReleased(J_RIGHT)))
-   0533 3E 01              2455 	ld	a,#0x01
-   0535 F5                 2456 	push	af
-   0536 33                 2457 	inc	sp
-   0537 CDr44r00           2458 	call	_keyReleased
-   053A 33                 2459 	inc	sp
-   053B 7B                 2460 	ld	a,e
-   053C B7                 2461 	or	a, a
-   053D 20 05              2462 	jr	NZ,00129$
-                           2463 ;main.c:331: keyPressed_RIGHT = 1;
-   053F 21r89r02           2464 	ld	hl,#_keyPressed_RIGHT
-   0542 36 01              2465 	ld	(hl),#0x01
-   0544                    2466 00129$:
-                           2467 ;main.c:334: performantDelay(2);
-   0544 3E 02              2468 	ld	a,#0x02
-   0546 F5                 2469 	push	af
-   0547 33                 2470 	inc	sp
-   0548 CDr00r00           2471 	call	_performantDelay
-   054B 33                 2472 	inc	sp
-   054C C3r1Fr04           2473 	jp	00131$
-   054F C9                 2474 	ret
-                           2475 	.area _CODE
-                           2476 	.area _CABS (ABS)
+                           2019 ;main.c:177: if(canPlayerMove(ballSprite01.x, ballSprite01.y - 2))
+   02E3 FAr98r02           2020 	ld	a, (#(_ballSprite01 + 0x0005) + 0)
+   02E6 47                 2021 	ld	b,a
+   02E7 05                 2022 	dec	b
+   02E8 05                 2023 	dec	b
+   02E9 FAr97r02           2024 	ld	a, (#(_ballSprite01 + 0x0004) + 0)
+   02EC C5                 2025 	push	bc
+   02ED 33                 2026 	inc	sp
+   02EE F5                 2027 	push	af
+   02EF 33                 2028 	inc	sp
+   02F0 CDrE4r01           2029 	call	_canPlayerMove
+   02F3 E8 02              2030 	add	sp, #2
+   02F5 7B                 2031 	ld	a,e
+   02F6 B7                 2032 	or	a, a
+   02F7 C8                 2033 	ret	Z
+                           2034 ;main.c:179: ballSprite01.y -= currentSpeedY;
+   02F8 11r98r02           2035 	ld	de, #(_ballSprite01 + 0x0005) + 0
+   02FB 1A                 2036 	ld	a,(de)
+   02FC 4F                 2037 	ld	c,a
+   02FD 21r90r02           2038 	ld	hl,#_currentSpeedY
+   0300 96                 2039 	sub	a, (hl)
+   0301 47                 2040 	ld	b,a
+   0302 21r98r02           2041 	ld	hl,#(_ballSprite01 + 0x0005)
+   0305 70                 2042 	ld	(hl),b
+                           2043 ;main.c:181: possibleYSurface = wouldHitSurf(ballSprite01.y);
+   0306 C5                 2044 	push	bc
+   0307 33                 2045 	inc	sp
+   0308 CDrB6r02           2046 	call	_wouldHitSurf
+   030B 33                 2047 	inc	sp
+   030C 21r8Er02           2048 	ld	hl,#_possibleYSurface
+   030F 73                 2049 	ld	(hl),e
+                           2050 ;main.c:177: if(canPlayerMove(ballSprite01.x, ballSprite01.y - 2))
+   0310 11r97r02           2051 	ld	de, #(_ballSprite01 + 0x0004) + 0
+   0313 1A                 2052 	ld	a,(de)
+   0314 47                 2053 	ld	b,a
+                           2054 ;main.c:184: if(possibleYSurface == floorYPosition)
+   0315 7E                 2055 	ld	a,(hl)
+   0316 21r8Dr02           2056 	ld	hl,#_floorYPosition
+   0319 96                 2057 	sub	a, (hl)
+   031A 20 17              2058 	jr	NZ,00104$
+                           2059 ;main.c:186: jumping = 0;
+   031C 21r8Br02           2060 	ld	hl,#_jumping
+   031F 36 00              2061 	ld	(hl),#0x00
+                           2062 ;main.c:187: moveGameCharacter(&ballSprite01,ballSprite01.x, possibleYSurface);
+   0321 21r8Er02           2063 	ld	hl,#_possibleYSurface
+   0324 7E                 2064 	ld	a,(hl)
+   0325 F5                 2065 	push	af
+   0326 33                 2066 	inc	sp
+   0327 C5                 2067 	push	bc
+   0328 33                 2068 	inc	sp
+   0329 21r93r02           2069 	ld	hl,#_ballSprite01
+   032C E5                 2070 	push	hl
+   032D CDrF1r00           2071 	call	_moveGameCharacter
+   0330 E8 04              2072 	add	sp, #4
+   0332 C9                 2073 	ret
+   0333                    2074 00104$:
+                           2075 ;main.c:192: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
+   0333 11r98r02           2076 	ld	de, #(_ballSprite01 + 0x0005) + 0
+   0336 1A                 2077 	ld	a,(de)
+   0337 4F                 2078 	ld	c,a
+   0338 F5                 2079 	push	af
+   0339 33                 2080 	inc	sp
+   033A C5                 2081 	push	bc
+   033B 33                 2082 	inc	sp
+   033C 21r93r02           2083 	ld	hl,#_ballSprite01
+   033F E5                 2084 	push	hl
+   0340 CDrF1r00           2085 	call	_moveGameCharacter
+   0343 E8 04              2086 	add	sp, #4
+   0345 C9                 2087 	ret
+                           2088 ;main.c:198: void ballMoveX(UINT8 direction)
+                           2089 ;	---------------------------------
+                           2090 ; Function ballMoveX
+                           2091 ; ---------------------------------
+   0346                    2092 _ballMoveX::
+                           2093 ;main.c:200: if(direction == 1)
+   0346 F8 02              2094 	ldhl	sp,#2
+   0348 7E                 2095 	ld	a,(hl)
+   0349 3D                 2096 	dec	a
+   034A 20 09              2097 	jr	NZ,00104$
+                           2098 ;main.c:202: ballSprite01.x += 3;
+   034C 11r97r02           2099 	ld	de,#_ballSprite01+4
+   034F 1A                 2100 	ld	a,(de)
+   0350 C6 03              2101 	add	a, #0x03
+   0352 12                 2102 	ld	(de),a
+   0353 18 0F              2103 	jr	00105$
+   0355                    2104 00104$:
+                           2105 ;main.c:204: else if(direction == 0)
+   0355 F8 02              2106 	ldhl	sp,#2
+   0357 7E                 2107 	ld	a,(hl)
+   0358 B7                 2108 	or	a, a
+   0359 20 09              2109 	jr	NZ,00105$
+                           2110 ;main.c:206: ballSprite01.x -= 3;
+   035B FAr97r02           2111 	ld	a, (#(_ballSprite01 + 0x0004) + 0)
+   035E C6 FD              2112 	add	a,#0xfd
+   0360 11r97r02           2113 	ld	de,#(_ballSprite01 + 0x0004)
+   0363 12                 2114 	ld	(de),a
+   0364                    2115 00105$:
+                           2116 ;main.c:208: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
+   0364 11r98r02           2117 	ld	de, #(_ballSprite01 + 0x0005) + 0
+   0367 1A                 2118 	ld	a,(de)
+   0368 4F                 2119 	ld	c,a
+   0369 11r97r02           2120 	ld	de, #(_ballSprite01 + 0x0004) + 0
+   036C 1A                 2121 	ld	a,(de)
+   036D 47                 2122 	ld	b,a
+   036E 79                 2123 	ld	a,c
+   036F F5                 2124 	push	af
+   0370 33                 2125 	inc	sp
+   0371 C5                 2126 	push	bc
+   0372 33                 2127 	inc	sp
+   0373 21r93r02           2128 	ld	hl,#_ballSprite01
+   0376 E5                 2129 	push	hl
+   0377 CDrF1r00           2130 	call	_moveGameCharacter
+   037A E8 04              2131 	add	sp, #4
+                           2132 ;main.c:209: if(timerAnimation == 1)
+   037C 21r8Fr02           2133 	ld	hl,#_timerAnimation
+   037F 7E                 2134 	ld	a,(hl)
+   0380 3D                 2135 	dec	a
+   0381 20 05              2136 	jr	NZ,00109$
+                           2137 ;main.c:211: gameBallSprite01a();
+   0383 CDr5Dr00           2138 	call	_gameBallSprite01a
+   0386 18 10              2139 	jr	00110$
+   0388                    2140 00109$:
+                           2141 ;main.c:213: else if(timerAnimation == 2)
+   0388 21r8Fr02           2142 	ld	hl,#_timerAnimation
+   038B 7E                 2143 	ld	a,(hl)
+   038C D6 02              2144 	sub	a, #0x02
+   038E 20 08              2145 	jr	NZ,00110$
+                           2146 ;main.c:215: gameBallSprite01b();
+   0390 CDr82r00           2147 	call	_gameBallSprite01b
+                           2148 ;main.c:216: timerAnimation = 0;
+   0393 21r8Fr02           2149 	ld	hl,#_timerAnimation
+   0396 36 00              2150 	ld	(hl),#0x00
+   0398                    2151 00110$:
+                           2152 ;main.c:218: timerAnimation++;
+   0398 21r8Fr02           2153 	ld	hl,#_timerAnimation
+   039B 34                 2154 	inc	(hl)
+   039C C9                 2155 	ret
+                           2156 ;main.c:222: void ballAfterJumpMoving(UINT8 direction)
+                           2157 ;	---------------------------------
+                           2158 ; Function ballAfterJumpMoving
+                           2159 ; ---------------------------------
+   039D                    2160 _ballAfterJumpMoving::
+                           2161 ;main.c:225: if(jumping == 0)
+   039D 21r8Br02           2162 	ld	hl,#_jumping
+   03A0 7E                 2163 	ld	a,(hl)
+   03A1 B7                 2164 	or	a, a
+   03A2 C0                 2165 	ret	NZ
+                           2166 ;main.c:227: gameBallSprite03();
+   03A3 CDrCCr00           2167 	call	_gameBallSprite03
+                           2168 ;main.c:228: performantDelay(2);
+   03A6 3E 02              2169 	ld	a,#0x02
+   03A8 F5                 2170 	push	af
+   03A9 33                 2171 	inc	sp
+   03AA CDr00r00           2172 	call	_performantDelay
+   03AD 33                 2173 	inc	sp
+                           2174 ;main.c:229: if(direction == 0)
+   03AE F8 02              2175 	ldhl	sp,#2
+   03B0 7E                 2176 	ld	a,(hl)
+   03B1 B7                 2177 	or	a, a
+   03B2 20 06              2178 	jr	NZ,00104$
+                           2179 ;main.c:231: keyPressed_LEFT = 0;
+   03B4 21r8Ar02           2180 	ld	hl,#_keyPressed_LEFT
+   03B7 36 00              2181 	ld	(hl),#0x00
+   03B9 C9                 2182 	ret
+   03BA                    2183 00104$:
+                           2184 ;main.c:233: else if(direction == 1)
+   03BA F8 02              2185 	ldhl	sp,#2
+   03BC 7E                 2186 	ld	a,(hl)
+   03BD 3D                 2187 	dec	a
+   03BE C0                 2188 	ret	NZ
+                           2189 ;main.c:235: keyPressed_RIGHT = 0;
+   03BF 21r89r02           2190 	ld	hl,#_keyPressed_RIGHT
+   03C2 36 00              2191 	ld	(hl),#0x00
+   03C4 C9                 2192 	ret
+                           2193 ;main.c:242: void main()
+                           2194 ;	---------------------------------
+                           2195 ; Function main
+                           2196 ; ---------------------------------
+   03C5                    2197 _main::
+                           2198 ;main.c:245: setupBallSprite01();
+   03C5 CDr6Fr01           2199 	call	_setupBallSprite01
+                           2200 ;main.c:248: set_bkg_data(0, 2, levelTile);
+   03C8 21rF0r00           2201 	ld	hl,#_levelTile
+   03CB E5                 2202 	push	hl
+   03CC 21 00 02           2203 	ld	hl,#0x0200
+   03CF E5                 2204 	push	hl
+   03D0 CDr00r00           2205 	call	_set_bkg_data
+   03D3 E8 04              2206 	add	sp, #4
+                           2207 ;main.c:249: set_bkg_tiles(0, 0, 20, 18, levelMap);
+   03D5 21r20r01           2208 	ld	hl,#_levelMap
+   03D8 E5                 2209 	push	hl
+   03D9 21 14 12           2210 	ld	hl,#0x1214
+   03DC E5                 2211 	push	hl
+   03DD 21 00 00           2212 	ld	hl,#0x0000
+   03E0 E5                 2213 	push	hl
+   03E1 CDr00r00           2214 	call	_set_bkg_tiles
+   03E4 E8 06              2215 	add	sp, #6
+                           2216 ;main.c:252: jumping = 0;
+   03E6 21r8Br02           2217 	ld	hl,#_jumping
+   03E9 36 00              2218 	ld	(hl),#0x00
+                           2219 ;main.c:255: NR52_REG = 0x80;
+   03EB 21 26 FF           2220 	ld	hl,#0xff26
+   03EE 36 80              2221 	ld	(hl),#0x80
+                           2222 ;main.c:256: NR50_REG = 0x77;
+   03F0 2E 24              2223 	ld	l, #0x24
+   03F2 36 77              2224 	ld	(hl),#0x77
+                           2225 ;main.c:257: NR51_REG = 0xFF;
+   03F4 2E 25              2226 	ld	l, #0x25
+   03F6 36 FF              2227 	ld	(hl),#0xff
+                           2228 ;main.c:259: keyPressed_A = 1;
+   03F8 21r88r02           2229 	ld	hl,#_keyPressed_A
+   03FB 36 01              2230 	ld	(hl),#0x01
+                           2231 ;main.c:260: keyPressed_LEFT = 1;
+   03FD 21r8Ar02           2232 	ld	hl,#_keyPressed_LEFT
+   0400 36 01              2233 	ld	(hl),#0x01
+                           2234 ;main.c:261: keyPressed_RIGHT = 1;
+   0402 21r89r02           2235 	ld	hl,#_keyPressed_RIGHT
+   0405 36 01              2236 	ld	(hl),#0x01
+                           2237 ;main.c:264: SHOW_BKG;
+   0407 11 40 FF           2238 	ld	de,#0xff40
+   040A 1A                 2239 	ld	a,(de)
+   040B 4F                 2240 	ld	c,a
+   040C 06 00              2241 	ld	b,#0x00
+   040E 79                 2242 	ld	a,c
+   040F CB C7              2243 	set	0, a
+   0411 4F                 2244 	ld	c,a
+   0412 21 40 FF           2245 	ld	hl,#0xff40
+   0415 71                 2246 	ld	(hl),c
+                           2247 ;main.c:265: SHOW_SPRITES;
+   0416 11 40 FF           2248 	ld	de,#0xff40
+   0419 1A                 2249 	ld	a,(de)
+   041A 4F                 2250 	ld	c,a
+   041B 06 00              2251 	ld	b,#0x00
+   041D 79                 2252 	ld	a,c
+   041E CB CF              2253 	set	1, a
+   0420 4F                 2254 	ld	c,a
+   0421 2E 40              2255 	ld	l, #0x40
+   0423 71                 2256 	ld	(hl),c
+                           2257 ;main.c:266: DISPLAY_ON;
+   0424 11 40 FF           2258 	ld	de,#0xff40
+   0427 1A                 2259 	ld	a,(de)
+   0428 4F                 2260 	ld	c,a
+   0429 06 00              2261 	ld	b,#0x00
+   042B 79                 2262 	ld	a,c
+   042C CB FF              2263 	set	7, a
+   042E 4F                 2264 	ld	c,a
+   042F 2E 40              2265 	ld	l, #0x40
+   0431 71                 2266 	ld	(hl),c
+                           2267 ;main.c:268: timerAnimation = 0;
+   0432 21r8Fr02           2268 	ld	hl,#_timerAnimation
+   0435 36 00              2269 	ld	(hl),#0x00
+                           2270 ;main.c:270: while(1)
+   0437                    2271 00131$:
+                           2272 ;main.c:272: updateKeys();
+   0437 CDr11r00           2273 	call	_updateKeys
+                           2274 ;main.c:273: gameBallSprite01a();
+   043A CDr5Dr00           2275 	call	_gameBallSprite01a
+                           2276 ;main.c:275: if(canPlayerMove(ballSprite01.x, ballSprite01.y + 16))
+   043D FAr98r02           2277 	ld	a, (#(_ballSprite01 + 0x0005) + 0)
+   0440 C6 10              2278 	add	a, #0x10
+   0442 47                 2279 	ld	b,a
+   0443 FAr97r02           2280 	ld	a, (#(_ballSprite01 + 0x0004) + 0)
+   0446 C5                 2281 	push	bc
+   0447 33                 2282 	inc	sp
+   0448 F5                 2283 	push	af
+   0449 33                 2284 	inc	sp
+   044A CDrE4r01           2285 	call	_canPlayerMove
+   044D E8 02              2286 	add	sp, #2
+   044F 7B                 2287 	ld	a,e
+   0450 B7                 2288 	or	a, a
+   0451 28 33              2289 	jr	Z,00104$
+                           2290 ;main.c:277: ballSprite01.y += gravity;
+   0453 FAr98r02           2291 	ld	a, (#(_ballSprite01 + 0x0005) + 0)
+   0456 4F                 2292 	ld	c,a
+   0457 21r8Cr02           2293 	ld	hl,#_gravity
+   045A 86                 2294 	add	a, (hl)
+   045B 11r98r02           2295 	ld	de,#(_ballSprite01 + 0x0005)
+   045E 12                 2296 	ld	(de),a
+                           2297 ;main.c:278: moveGameCharacter(&ballSprite01, ballSprite01.x, ballSprite01.y);
+   045F 11r98r02           2298 	ld	de, #(_ballSprite01 + 0x0005) + 0
+   0462 1A                 2299 	ld	a,(de)
+   0463 4F                 2300 	ld	c,a
+   0464 11r97r02           2301 	ld	de, #(_ballSprite01 + 0x0004) + 0
+   0467 1A                 2302 	ld	a,(de)
+   0468 47                 2303 	ld	b,a
+   0469 79                 2304 	ld	a,c
+   046A F5                 2305 	push	af
+   046B 33                 2306 	inc	sp
+   046C C5                 2307 	push	bc
+   046D 33                 2308 	inc	sp
+   046E 21r93r02           2309 	ld	hl,#_ballSprite01
+   0471 E5                 2310 	push	hl
+   0472 CDrF1r00           2311 	call	_moveGameCharacter
+   0475 E8 04              2312 	add	sp, #4
+                           2313 ;main.c:280: if(keyTicked(J_A))
+   0477 3E 10              2314 	ld	a,#0x10
+   0479 F5                 2315 	push	af
+   047A 33                 2316 	inc	sp
+   047B CDr2Cr00           2317 	call	_keyTicked
+   047E 33                 2318 	inc	sp
+   047F 7B                 2319 	ld	a,e
+   0480 B7                 2320 	or	a, a
+   0481 28 03              2321 	jr	Z,00104$
+                           2322 ;main.c:282: jumpSound();
+   0483 CDrA0r02           2323 	call	_jumpSound
+   0486                    2324 00104$:
+                           2325 ;main.c:286: if((keyTicked(J_A) || jumping == 1) && keyPressed_A == 1)
+   0486 3E 10              2326 	ld	a,#0x10
+   0488 F5                 2327 	push	af
+   0489 33                 2328 	inc	sp
+   048A CDr2Cr00           2329 	call	_keyTicked
+   048D 33                 2330 	inc	sp
+   048E 7B                 2331 	ld	a,e
+   048F B7                 2332 	or	a, a
+   0490 20 07              2333 	jr	NZ,00113$
+   0492 21r8Br02           2334 	ld	hl,#_jumping
+   0495 7E                 2335 	ld	a,(hl)
+   0496 3D                 2336 	dec	a
+   0497 20 2B              2337 	jr	NZ,00110$
+   0499                    2338 00113$:
+   0499 21r88r02           2339 	ld	hl,#_keyPressed_A
+   049C 7E                 2340 	ld	a,(hl)
+   049D 3D                 2341 	dec	a
+   049E 20 24              2342 	jr	NZ,00110$
+                           2343 ;main.c:289: gameBallSprite02();//sprite for stretched ball
+   04A0 CDrA7r00           2344 	call	_gameBallSprite02
+                           2345 ;main.c:290: jump(15);	
+   04A3 3E 0F              2346 	ld	a,#0x0f
+   04A5 F5                 2347 	push	af
+   04A6 33                 2348 	inc	sp
+   04A7 CDrC4r02           2349 	call	_jump
+   04AA 33                 2350 	inc	sp
+                           2351 ;main.c:291: if(jumping == 0)
+   04AB 21r8Br02           2352 	ld	hl,#_jumping
+   04AE 7E                 2353 	ld	a,(hl)
+   04AF B7                 2354 	or	a, a
+   04B0 20 23              2355 	jr	NZ,00111$
+                           2356 ;main.c:293: keyPressed_A = 0;
+   04B2 21r88r02           2357 	ld	hl,#_keyPressed_A
+   04B5 36 00              2358 	ld	(hl),#0x00
+                           2359 ;main.c:294: gameBallSprite03();
+   04B7 CDrCCr00           2360 	call	_gameBallSprite03
+                           2361 ;main.c:295: performantDelay(2);
+   04BA 3E 02              2362 	ld	a,#0x02
+   04BC F5                 2363 	push	af
+   04BD 33                 2364 	inc	sp
+   04BE CDr00r00           2365 	call	_performantDelay
+   04C1 33                 2366 	inc	sp
+   04C2 18 11              2367 	jr	00111$
+   04C4                    2368 00110$:
+                           2369 ;main.c:299: else if(!(keyReleased(J_A)))
+   04C4 3E 10              2370 	ld	a,#0x10
+   04C6 F5                 2371 	push	af
+   04C7 33                 2372 	inc	sp
+   04C8 CDr44r00           2373 	call	_keyReleased
+   04CB 33                 2374 	inc	sp
+   04CC 7B                 2375 	ld	a,e
+   04CD B7                 2376 	or	a, a
+   04CE 20 05              2377 	jr	NZ,00111$
+                           2378 ;main.c:301: keyPressed_A = 1;
+   04D0 21r88r02           2379 	ld	hl,#_keyPressed_A
+   04D3 36 01              2380 	ld	(hl),#0x01
+   04D5                    2381 00111$:
+                           2382 ;main.c:304: if(keyPressed(J_LEFT))
+   04D5 3E 02              2383 	ld	a,#0x02
+   04D7 F5                 2384 	push	af
+   04D8 33                 2385 	inc	sp
+   04D9 CDr23r00           2386 	call	_keyPressed
+   04DC 33                 2387 	inc	sp
+   04DD 7B                 2388 	ld	a,e
+   04DE B7                 2389 	or	a, a
+   04DF 28 31              2390 	jr	Z,00121$
+                           2391 ;main.c:306: if(canPlayerMove(ballSprite01.x - 1, ballSprite01.y))
+   04E1 11r98r02           2392 	ld	de, #(_ballSprite01 + 0x0005) + 0
+   04E4 1A                 2393 	ld	a,(de)
+   04E5 47                 2394 	ld	b,a
+   04E6 FAr97r02           2395 	ld	a, (#(_ballSprite01 + 0x0004) + 0)
+   04E9 C6 FF              2396 	add	a,#0xff
+   04EB C5                 2397 	push	bc
+   04EC 33                 2398 	inc	sp
+   04ED F5                 2399 	push	af
+   04EE 33                 2400 	inc	sp
+   04EF CDrE4r01           2401 	call	_canPlayerMove
+   04F2 E8 02              2402 	add	sp, #2
+   04F4 7B                 2403 	ld	a,e
+   04F5 B7                 2404 	or	a, a
+   04F6 28 2B              2405 	jr	Z,00122$
+                           2406 ;main.c:309: ballMoveX(0);// 1 for moving to right 0 for moving left
+   04F8 AF                 2407 	xor	a, a
+   04F9 F5                 2408 	push	af
+   04FA 33                 2409 	inc	sp
+   04FB CDr46r03           2410 	call	_ballMoveX
+   04FE 33                 2411 	inc	sp
+                           2412 ;main.c:310: if(jumping == 1)
+   04FF 21r8Br02           2413 	ld	hl,#_jumping
+   0502 7E                 2414 	ld	a,(hl)
+   0503 3D                 2415 	dec	a
+   0504 20 1D              2416 	jr	NZ,00122$
+                           2417 ;main.c:312: gameBallSprite02();
+   0506 CDrA7r00           2418 	call	_gameBallSprite02
+                           2419 ;main.c:313: ballAfterJumpMoving(0);
+   0509 AF                 2420 	xor	a, a
+   050A F5                 2421 	push	af
+   050B 33                 2422 	inc	sp
+   050C CDr9Dr03           2423 	call	_ballAfterJumpMoving
+   050F 33                 2424 	inc	sp
+   0510 18 11              2425 	jr	00122$
+   0512                    2426 00121$:
+                           2427 ;main.c:317: else if(!(keyReleased(J_LEFT)))
+   0512 3E 02              2428 	ld	a,#0x02
+   0514 F5                 2429 	push	af
+   0515 33                 2430 	inc	sp
+   0516 CDr44r00           2431 	call	_keyReleased
+   0519 33                 2432 	inc	sp
+   051A 7B                 2433 	ld	a,e
+   051B B7                 2434 	or	a, a
+   051C 20 05              2435 	jr	NZ,00122$
+                           2436 ;main.c:319: keyPressed_LEFT = 1;
+   051E 21r8Ar02           2437 	ld	hl,#_keyPressed_LEFT
+   0521 36 01              2438 	ld	(hl),#0x01
+   0523                    2439 00122$:
+                           2440 ;main.c:322: if(keyPressed(J_RIGHT))
+   0523 3E 01              2441 	ld	a,#0x01
+   0525 F5                 2442 	push	af
+   0526 33                 2443 	inc	sp
+   0527 CDr23r00           2444 	call	_keyPressed
+   052A 33                 2445 	inc	sp
+   052B 7B                 2446 	ld	a,e
+   052C B7                 2447 	or	a, a
+   052D 28 1C              2448 	jr	Z,00128$
+                           2449 ;main.c:325: ballMoveX(1);// 1 for moving to right 0 for moving left
+   052F 3E 01              2450 	ld	a,#0x01
+   0531 F5                 2451 	push	af
+   0532 33                 2452 	inc	sp
+   0533 CDr46r03           2453 	call	_ballMoveX
+   0536 33                 2454 	inc	sp
+                           2455 ;main.c:326: if(jumping == 1)
+   0537 21r8Br02           2456 	ld	hl,#_jumping
+   053A 7E                 2457 	ld	a,(hl)
+   053B 3D                 2458 	dec	a
+   053C 20 1E              2459 	jr	NZ,00129$
+                           2460 ;main.c:328: gameBallSprite02();
+   053E CDrA7r00           2461 	call	_gameBallSprite02
+                           2462 ;main.c:329: ballAfterJumpMoving(1);
+   0541 3E 01              2463 	ld	a,#0x01
+   0543 F5                 2464 	push	af
+   0544 33                 2465 	inc	sp
+   0545 CDr9Dr03           2466 	call	_ballAfterJumpMoving
+   0548 33                 2467 	inc	sp
+   0549 18 11              2468 	jr	00129$
+   054B                    2469 00128$:
+                           2470 ;main.c:332: else if(!(keyReleased(J_RIGHT)))
+   054B 3E 01              2471 	ld	a,#0x01
+   054D F5                 2472 	push	af
+   054E 33                 2473 	inc	sp
+   054F CDr44r00           2474 	call	_keyReleased
+   0552 33                 2475 	inc	sp
+   0553 7B                 2476 	ld	a,e
+   0554 B7                 2477 	or	a, a
+   0555 20 05              2478 	jr	NZ,00129$
+                           2479 ;main.c:334: keyPressed_RIGHT = 1;
+   0557 21r89r02           2480 	ld	hl,#_keyPressed_RIGHT
+   055A 36 01              2481 	ld	(hl),#0x01
+   055C                    2482 00129$:
+                           2483 ;main.c:337: performantDelay(2);
+   055C 3E 02              2484 	ld	a,#0x02
+   055E F5                 2485 	push	af
+   055F 33                 2486 	inc	sp
+   0560 CDr00r00           2487 	call	_performantDelay
+   0563 33                 2488 	inc	sp
+   0564 C3r37r04           2489 	jp	00131$
+   0567 C9                 2490 	ret
+                           2491 	.area _CODE
+                           2492 	.area _CABS (ABS)

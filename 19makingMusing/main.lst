@@ -1,0 +1,147 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : FreeWare ANSI-C Compiler
+                              3 ; Version 2.3.1 Sat Dec 14 19:30:42 2019
+                              4 
+                              5 ;--------------------------------------------------------
+                              6 	.module lcc189350
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 ;--------------------------------------------------------
+                             13 ; special function registers
+                             14 ;--------------------------------------------------------
+                             15 ;--------------------------------------------------------
+                             16 ; special function bits 
+                             17 ;--------------------------------------------------------
+                             18 ;--------------------------------------------------------
+                             19 ; internal ram data
+                             20 ;--------------------------------------------------------
+                             21 	.area _DATA
+                             22 ;--------------------------------------------------------
+                             23 ; overlayable items in internal ram 
+                             24 ;--------------------------------------------------------
+                             25 	.area _OVERLAY
+                             26 ;--------------------------------------------------------
+                             27 ; indirectly addressable internal ram data
+                             28 ;--------------------------------------------------------
+                             29 	.area _ISEG
+                             30 ;--------------------------------------------------------
+                             31 ; bit data
+                             32 ;--------------------------------------------------------
+                             33 	.area _BSEG
+                             34 ;--------------------------------------------------------
+                             35 ; external ram data
+                             36 ;--------------------------------------------------------
+                             37 	.area _XSEG
+                             38 ;--------------------------------------------------------
+                             39 ; global & static initialisations
+                             40 ;--------------------------------------------------------
+                             41 	.area _GSINIT
+                             42 	.area _GSFINAL
+                             43 	.area _GSINIT
+                             44 ;--------------------------------------------------------
+                             45 ; Home
+                             46 ;--------------------------------------------------------
+                             47 	.area _HOME
+                             48 	.area _CODE
+                             49 ;--------------------------------------------------------
+                             50 ; code
+                             51 ;--------------------------------------------------------
+                             52 	.area _CODE
+                             53 ;	main.c 7
+                             54 ;	genLabel
+                             55 ;	genFunction
+                             56 ;	---------------------------------
+                             57 ; Function main
+                             58 ; ---------------------------------
+   0000                      59 ___main_start:
+   0000                      60 _main:
+                             61 	
+                             62 ;	main.c 9
+                             63 ;	genCall
+                             64 ; _saveRegsForCall: sendSetSize: 0 deInUse: 0 bcInUse: 0 deSending: 0
+   0000 CD 00 00             65 	call	_disable_interrupts
+                             66 ;	main.c 11
+                             67 ;	genIpush
+                             68 ; _saveRegsForCall: sendSetSize: 0 deInUse: 0 bcInUse: 0 deSending: 0
+   0003 21 02 07             69 	ld	hl,#0x0702
+   0006 E5                   70 	push	hl
+                             71 ;	genIpush
+   0007 21 00 00             72 	ld	hl,#_song_Data
+   000A E5                   73 	push	hl
+                             74 ;	genCall
+   000B CD 00 00             75 	call	_gbt_play
+   000E E8 04                76 	lda	sp,4(sp)
+                             77 ;	main.c 12
+                             78 ;	genIpush
+                             79 ; _saveRegsForCall: sendSetSize: 0 deInUse: 0 bcInUse: 0 deSending: 0
+   0010 3E 01                80 	ld	a,#0x01
+   0012 F5                   81 	push	af
+   0013 33                   82 	inc	sp
+                             83 ;	genCall
+   0014 CD 00 00             84 	call	_gbt_loop
+   0017 E8 01                85 	lda	sp,1(sp)
+                             86 ;	main.c 14
+                             87 ;	genIpush
+                             88 ; _saveRegsForCall: sendSetSize: 0 deInUse: 0 bcInUse: 0 deSending: 0
+   0019 3E 01                89 	ld	a,#0x01
+   001B F5                   90 	push	af
+   001C 33                   91 	inc	sp
+                             92 ;	genCall
+   001D CD 00 00             93 	call	_set_interrupts
+   0020 E8 01                94 	lda	sp,1(sp)
+                             95 ;	main.c 15
+                             96 ;	genCall
+                             97 ; _saveRegsForCall: sendSetSize: 0 deInUse: 0 bcInUse: 0 deSending: 0
+   0022 CD 00 00             98 	call	_enable_interrupts
+                             99 ;	main.c 17
+                            100 ;	genLabel
+   0025                     101 00102$:
+                            102 ;	main.c 19
+                            103 ;	genCall
+                            104 ; _saveRegsForCall: sendSetSize: 0 deInUse: 0 bcInUse: 0 deSending: 0
+   0025 CD 00 00            105 	call	_wait_vbl_done
+                            106 ;	main.c 23
+                            107 ;	genCall
+                            108 ; _saveRegsForCall: sendSetSize: 0 deInUse: 0 bcInUse: 0 deSending: 0
+   0028 CD 00 00            109 	call	_gbt_update
+                            110 ;	genGoto
+   002B C3 25 00            111 	jp	00102$
+                            112 ;	genLabel
+   002E                     113 00104$:
+                            114 ;	genEndFunction
+                            115 	
+   002E C9                  116 	ret
+   002F                     117 ___main_end:
+                            118 	.area _CODE
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 1.
+
+Symbol Table
+
+  0 ___main_end                        002F R
+  0 ___main_start                      0000 R
+    _disable_interrupts                **** GX
+    _enable_interrupts                 **** GX
+    _gbt_loop                          **** GX
+    _gbt_play                          **** GX
+    _gbt_update                        **** GX
+  0 _main                              0000 GR
+    _set_interrupts                    **** GX
+    _song_Data                         **** GX
+    _wait_vbl_done                     **** GX
+
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 2.
+
+Area Table
+
+   0 _CODE                              size   2F   flags 0
+   1 _DATA                              size    0   flags 0
+   2 _OVERLAY                           size    0   flags 0
+   3 _ISEG                              size    0   flags 0
+   4 _BSEG                              size    0   flags 0
+   5 _XSEG                              size    0   flags 0
+   6 _GSINIT                            size    0   flags 0
+   7 _GSFINAL                           size    0   flags 0
+   8 _HOME                              size    0   flags 0

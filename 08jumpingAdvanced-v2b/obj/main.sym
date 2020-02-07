@@ -8,8 +8,8 @@ Symbol Table
     .__.CPU.                                                    =  0000 L
     .__.H$L.                                                    =  0000 L
   0 _anyKey                                                        005C GR
-  0 _ballAfterJumpMoving                                           0385 GR
-  0 _ballMoveX                                                     032E GR
+  0 _ballAfterJumpMoving                                           039D GR
+  0 _ballMoveX                                                     0346 GR
   1 _ballSprite                                                    0000 GR
   1 _ballSprite01                                                  0293 GR
   0 _blankMap                                                      0010 GR
@@ -34,7 +34,7 @@ Symbol Table
   1 _keys                                                          0292 GR
   1 _levelMap                                                      0120 GR
   1 _levelTile                                                     00F0 GR
-  0 _main                                                          03AD GR
+  0 _main                                                          03C5 GR
   0 _moveGameCharacter                                             00F1 GR
     _move_sprite                                                   **** GX
   0 _performantDelay                                               0000 GR
@@ -56,7 +56,7 @@ Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE                                      size  550   flags    0
+   0 _CODE                                      size  568   flags    0
    1 _DATA                                      size  29B   flags    0
    2 _DABS                                      size    0   flags    8
    3 _HOME                                      size    0   flags    0

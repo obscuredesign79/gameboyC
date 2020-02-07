@@ -7,12 +7,14 @@ Symbol Table
     .__.ABS.                                                    =  0000 G
     .__.CPU.                                                    =  0000 L
     .__.H$L.                                                    =  0000 L
+  1 _gameTile                                                      0000 GR
+  1 _i                                                             0060 GR
+  1 _j                                                             0061 GR
   0 _main                                                          0010 GR
     _move_sprite                                                   **** GX
   0 _performantDelay                                               0000 GR
     _set_sprite_data                                               **** GX
     _set_sprite_tile                                               **** GX
-  1 _sprite                                                        0000 GR
     _wait_vbl_done                                                 **** GX
 
 
@@ -21,11 +23,11 @@ Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE                                      size   A1   flags    0
-   1 _DATA                                      size   50   flags    0
+   0 _CODE                                      size   8E   flags    0
+   1 _DATA                                      size   62   flags    0
    2 _DABS                                      size    0   flags    8
    3 _HOME                                      size    0   flags    0
-   4 _GSINIT                                    size  190   flags    0
+   4 _GSINIT                                    size  1E0   flags    0
    5 _GSFINAL                                   size    0   flags    0
    6 _CABS                                      size    0   flags    8
 
